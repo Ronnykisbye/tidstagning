@@ -226,30 +226,7 @@
             </div>
         </section>
 
-        /* ======================================================
-           AFSNIT 06B – KALENDER NAVIGATION (FOR < OG > KNAPPER)
-           ====================================================== */
-        
-        function initCalendarNavigation() {
-            const prevBtn = document.getElementById("prevMonthBtn");
-            const nextBtn = document.getElementById("nextMonthBtn");
-        
-            if (prevBtn) {
-                prevBtn.addEventListener("click", () => {
-                    calendarMonth.setMonth(calendarMonth.getMonth() - 1);
-                    renderCalendar();
-                });
-            }
-        
-            if (nextBtn) {
-                nextBtn.addEventListener("click", () => {
-                    calendarMonth.setMonth(calendarMonth.getMonth() + 1);
-                    renderCalendar();
-                });
-            }
-        }
-
-        
+     
         <!-- AFSNIT 07 – DETALJERET TID -->
         <section id="timeTrackingPage" class="page">
             <h2 data-i18n="time_title">Tidsregistrering</h2>
