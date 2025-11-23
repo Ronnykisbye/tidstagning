@@ -26,7 +26,6 @@ function saveData() {
 }
 
 // ====== NAVIGATION ======
-
 function showPage(pageId) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("visible"));
     const page = document.getElementById(pageId);
@@ -36,6 +35,13 @@ function showPage(pageId) {
     const nav = document.querySelector(`.sidebar li[data-page="${pageId}"]`);
     if (nav) nav.classList.add("active");
 }
+
+document.querySelectorAll(".sidebar li").forEach(li => {
+    li.addEventListener("click", () => {
+        showPage(li.dataset.page);
+    });
+});
+
 
 // ====== RENDERING FUNCTIONS ======
 
