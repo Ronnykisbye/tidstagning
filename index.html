@@ -56,12 +56,12 @@
             </div>
 
             <div class="topbar-right">
-                <!-- Language buttons -->
+                <!-- Language buttons (desktop) -->
                 <div class="lang-switcher">
-                    <button class="lang-btn" data-lang="da" title="Dansk">🇩🇰</button>
-                    <button class="lang-btn" data-lang="en" title="English">🇬🇧</button>
-                    <button class="lang-btn" data-lang="lt" title="Lietuvių">🇱🇹</button>
-                    <button class="lang-btn" data-lang="de" title="Deutsch">🇩🇪</button>
+                    <button class="lang-btn" data-lang="da" title="Dansk">DK</button>
+                    <button class="lang-btn" data-lang="en" title="English">GB</button>
+                    <button class="lang-btn" data-lang="lt" title="Lietuvių">LT</button>
+                    <button class="lang-btn" data-lang="de" title="Deutsch">DE</button>
                 </div>
 
                 <!-- Theme toggle -->
@@ -71,37 +71,86 @@
             </div>
         </header>
 
-        <!-- CONTENT -->
+        <!-- DASHBOARD / FORSIDE -->
         <section id="dashboardPage" class="page visible">
-            <h2 data-i18n="dashboard_title">Dashboard</h2>
+            <h2 data-i18n="dashboard_title">Overblik</h2>
+
+            <div class="quick-card">
+                <h3 data-i18n="quick_title">Hurtig tidsregistrering</h3>
+
+                <div class="quick-grid">
+                    <div class="quick-left">
+                        <label>
+                            <span data-i18n="quick_select_customer">Vælg kunde</span>
+                            <select id="quickCustomerSelect"></select>
+                        </label>
+
+                        <div class="quick-employees">
+                            <span class="small-label" data-i18n="quick_select_employees">
+                                Vælg medarbejdere hos kunden i dag
+                            </span>
+                            <div id="quickEmployeeList" class="chip-list"></div>
+                        </div>
+
+                        <div class="quick-mode">
+                            <span class="small-label" data-i18n="quick_time_label">
+                                Vis tid for kunden:
+                            </span>
+                            <label class="mode-option">
+                                <input type="radio" name="quickMode" id="quickModeDay" value="day" checked />
+                                <span data-i18n="quick_mode_today">I dag</span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="quickMode" id="quickModeTotal" value="total" />
+                                <span data-i18n="quick_mode_total">Samlet tid</span>
+                            </label>
+                        </div>
+
+                        <p class="status" data-i18n="quick_hint">
+                            Vælg kunde og én eller flere medarbejdere, og brug Start/Stop-knapperne.
+                        </p>
+                    </div>
+
+                    <div class="quick-right">
+                        <div id="quickTimerDisplay" class="quick-timer">00:00:00</div>
+                        <div class="btn-row quick-buttons">
+                            <button id="quickStartBtn" class="btn" data-i18n="btn_start_timer">Start</button>
+                            <button id="quickStopBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">Stop</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Små tal-oversigter -->
             <div class="cards">
                 <div class="card">
-                    <h3 data-i18n="card_customers">Customers</h3>
+                    <h3 data-i18n="card_customers">Kunder</h3>
                     <p><span id="dashTotalCustomers">0</span></p>
                 </div>
                 <div class="card">
-                    <h3 data-i18n="card_employees">Employees</h3>
+                    <h3 data-i18n="card_employees">Medarbejdere</h3>
                     <p><span id="dashTotalEmployees">0</span></p>
                 </div>
                 <div class="card">
-                    <h3 data-i18n="card_logs_today">Logs today</h3>
+                    <h3 data-i18n="card_logs_today">Logs i dag</h3>
                     <p><span id="dashTodayLogs">0</span></p>
                 </div>
             </div>
         </section>
 
+        <!-- CUSTOMERS -->
         <section id="customersPage" class="page">
-            <h2 data-i18n="customers_title">Customers</h2>
+            <h2 data-i18n="customers_title">Kunder</h2>
 
             <div class="form-grid">
                 <div class="form-card">
-                    <h3 data-i18n="customers_add">Add customer</h3>
+                    <h3 data-i18n="customers_add">Tilføj kunde</h3>
                     <label>
-                        <span data-i18n="label_customer_name">Name</span>
+                        <span data-i18n="label_customer_name">Navn</span>
                         <input id="custName" type="text" />
                     </label>
                     <label>
-                        <span data-i18n="label_customer_phone">Phone</span>
+                        <span data-i18n="label_customer_phone">Telefon</span>
                         <input id="custPhone" type="text" />
                     </label>
                     <label>
@@ -109,39 +158,52 @@
                         <input id="custEmail" type="email" />
                     </label>
                     <label>
-                        <span data-i18n="label_customer_address">Address</span>
+                        <span data-i18n="label_customer_address">Adresse</span>
                         <input id="custAddress" type="text" />
                     </label>
                     <button id="saveCustomerBtn" class="btn" data-i18n="btn_save_customer">
-                        Save customer
+                        Gem kunde
                     </button>
                 </div>
 
                 <div class="table-card">
-                    <h3 data-i18n="customers_list">Customer list</h3>
+                    <h3 data-i18n="customers_list">Kundeliste</h3>
                     <table id="customerTable">
                         <thead>
                         <tr>
-                            <th data-i18n="th_customer_name">Name</th>
-                            <th data-i18n="th_customer_phone">Phone</th>
+                            <th data-i18n="th_customer_name">Navn</th>
+                            <th data-i18n="th_customer_phone">Telefon</th>
                             <th data-i18n="th_customer_email">Email</th>
-                            <th data-i18n="th_customer_address">Address</th>
+                            <th data-i18n="th_customer_address">Adresse</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
+
+            <div class="form-card reset-card">
+                <h3 data-i18n="customers_reset_title">Nulstil tid for kunde</h3>
+                <label>
+                    <span data-i18n="label_reset_customer">Vælg kunde</span>
+                    <select id="resetCustomerSelect"></select>
+                </label>
+                <button id="resetCustomerTimeBtn" class="btn btn-secondary" data-i18n="btn_reset_customer_time">
+                    Nulstil al logget tid
+                </button>
+                <p id="resetCustomerInfo" class="status"></p>
+            </div>
         </section>
 
+        <!-- EMPLOYEES -->
         <section id="employeesPage" class="page">
-            <h2 data-i18n="employees_title">Employees</h2>
+            <h2 data-i18n="employees_title">Medarbejdere</h2>
 
             <div class="form-grid">
                 <div class="form-card">
-                    <h3 data-i18n="employees_add">Add employee</h3>
+                    <h3 data-i18n="employees_add">Tilføj medarbejder</h3>
                     <label>
-                        <span data-i18n="label_employee_name">Name</span>
+                        <span data-i18n="label_employee_name">Navn</span>
                         <input id="empName" type="text" />
                     </label>
                     <label>
@@ -149,25 +211,25 @@
                         <input id="empEmail" type="email" />
                     </label>
                     <label>
-                        <span data-i18n="label_employee_role">Role</span>
+                        <span data-i18n="label_employee_role">Rolle</span>
                         <select id="empRole">
-                            <option value="employee" data-i18n="role_employee">Employee</option>
+                            <option value="employee" data-i18n="role_employee">Medarbejder</option>
                             <option value="admin" data-i18n="role_admin">Admin</option>
                         </select>
                     </label>
                     <button id="saveEmployeeBtn" class="btn" data-i18n="btn_save_employee">
-                        Save employee
+                        Gem medarbejder
                     </button>
                 </div>
 
                 <div class="table-card">
-                    <h3 data-i18n="employees_list">Employee list</h3>
+                    <h3 data-i18n="employees_list">Medarbejderliste</h3>
                     <table id="employeeTable">
                         <thead>
                         <tr>
-                            <th data-i18n="th_employee_name">Name</th>
+                            <th data-i18n="th_employee_name">Navn</th>
                             <th data-i18n="th_employee_email">Email</th>
-                            <th data-i18n="th_employee_role">Role</th>
+                            <th data-i18n="th_employee_role">Rolle</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -176,25 +238,26 @@
             </div>
         </section>
 
+        <!-- TIME TRACKING SIDE (ekstra, hvis man vil se mere) -->
         <section id="timeTrackingPage" class="page">
-            <h2 data-i18n="time_title">Time tracking</h2>
+            <h2 data-i18n="time_title">Tidsregistrering</h2>
 
             <div class="form-grid">
                 <div class="form-card">
                     <h3 data-i18n="time_start_stop">Start / stop timer</h3>
 
                     <label>
-                        <span data-i18n="label_timer_customer">Customer</span>
+                        <span data-i18n="label_timer_customer">Kunde</span>
                         <select id="timerCustomerSelect"></select>
                     </label>
 
                     <label>
-                        <span data-i18n="label_timer_employee">Employee</span>
+                        <span data-i18n="label_timer_employee">Medarbejder</span>
                         <select id="timerEmployeeSelect"></select>
                     </label>
 
                     <p id="timerStatus" class="status">
-                        <span data-i18n="timer_no_active">No active timer</span>
+                        <span data-i18n="timer_no_active">Ingen aktiv timer</span>
                     </p>
 
                     <div class="btn-row">
@@ -208,15 +271,15 @@
                 </div>
 
                 <div class="table-card">
-                    <h3 data-i18n="logs_today_title">Logs today</h3>
+                    <h3 data-i18n="logs_today_title">Dagens logs</h3>
                     <table id="timeLogTable">
                         <thead>
                         <tr>
                             <th data-i18n="th_log_start">Start</th>
-                            <th data-i18n="th_log_end">End</th>
-                            <th data-i18n="th_log_duration">Minutes</th>
-                            <th data-i18n="th_log_customer">Customer</th>
-                            <th data-i18n="th_log_employee">Employee</th>
+                            <th data-i18n="th_log_end">Slut</th>
+                            <th data-i18n="th_log_duration">Minutter</th>
+                            <th data-i18n="th_log_customer">Kunde</th>
+                            <th data-i18n="th_log_employee">Medarbejder</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -225,8 +288,9 @@
             </div>
         </section>
 
+        <!-- SCHEDULE -->
         <section id="schedulePage" class="page">
-            <h2 data-i18n="schedule_title">Schedule & calendar</h2>
+            <h2 data-i18n="schedule_title">Planlægning & kalender</h2>
 
             <div class="calendar-layout">
                 <div class="calendar-card">
@@ -236,38 +300,38 @@
                         <button id="nextMonthBtn" class="icon-btn">›</button>
                     </div>
                     <div class="calendar-weekdays">
-                        <span data-i18n="weekday_mon">Mon</span>
-                        <span data-i18n="weekday_tue">Tue</span>
-                        <span data-i18n="weekday_wed">Wed</span>
-                        <span data-i18n="weekday_thu">Thu</span>
-                        <span data-i18n="weekday_fri">Fri</span>
-                        <span data-i18n="weekday_sat">Sat</span>
-                        <span data-i18n="weekday_sun">Sun</span>
+                        <span data-i18n="weekday_mon">Man</span>
+                        <span data-i18n="weekday_tue">Tir</span>
+                        <span data-i18n="weekday_wed">Ons</span>
+                        <span data-i18n="weekday_thu">Tor</span>
+                        <span data-i18n="weekday_fri">Fre</span>
+                        <span data-i18n="weekday_sat">Lør</span>
+                        <span data-i18n="weekday_sun">Søn</span>
                     </div>
                     <div id="calendarCells" class="calendar-grid"></div>
                 </div>
 
                 <div class="form-card">
-                    <h3 data-i18n="schedule_plan_job">Plan job</h3>
+                    <h3 data-i18n="schedule_plan_job">Planlæg opgave</h3>
 
                     <label>
-                        <span data-i18n="label_plan_date">Date</span>
+                        <span data-i18n="label_plan_date">Dato</span>
                         <input id="planDate" type="date" />
                     </label>
                     <label>
-                        <span data-i18n="label_plan_start">Start time</span>
+                        <span data-i18n="label_plan_start">Starttid</span>
                         <input id="planStart" type="time" />
                     </label>
                     <label>
-                        <span data-i18n="label_plan_duration">Duration (minutes)</span>
+                        <span data-i18n="label_plan_duration">Varighed (minutter)</span>
                         <input id="planDuration" type="number" min="1" />
                     </label>
                     <label>
-                        <span data-i18n="label_plan_customer">Customer</span>
+                        <span data-i18n="label_plan_customer">Kunde</span>
                         <select id="planCustomerSelect"></select>
                     </label>
                     <label>
-                        <span data-i18n="label_plan_employee">Employee</span>
+                        <span data-i18n="label_plan_employee">Medarbejder</span>
                         <select id="planEmployeeSelect"></select>
                     </label>
                     <label>
@@ -276,68 +340,70 @@
                     </label>
 
                     <button id="savePlanBtn" class="btn" data-i18n="btn_save_plan">
-                        Save planned job
+                        Gem planlagt opgave
                     </button>
                 </div>
             </div>
 
             <div class="day-details">
                 <h3 id="selectedDayLabel" data-i18n="schedule_selected_day">
-                    Click a day to see planned jobs.
+                    Klik på en dag for at se opgaver.
                 </h3>
                 <ul id="dayPlanList"></ul>
             </div>
         </section>
 
+        <!-- LOGS PAGE -->
         <section id="logsPage" class="page">
-            <h2 data-i18n="logs_page_title">Logs (all)</h2>
+            <h2 data-i18n="logs_page_title">Logs (alle)</h2>
             <p data-i18n="logs_page_desc">
-                Here you can later add a full log view if desired. For now, use the dashboard and time tracking page.
+                Her kan du senere få et fuldt log-overblik. Brug indtil da dashboard og tidsregistrering.
             </p>
         </section>
 
+        <!-- REPORTS -->
         <section id="reportsPage" class="page">
-            <h2 data-i18n="reports_title">Reports</h2>
+            <h2 data-i18n="reports_title">Rapporter</h2>
 
             <div class="form-grid">
                 <div class="form-card">
                     <h3 data-i18n="reports_filter_title">Filter</h3>
 
                     <label>
-                        <span data-i18n="label_report_date_from">From date</span>
+                        <span data-i18n="label_report_date_from">Fra dato</span>
                         <input id="reportDateFrom" type="date" />
                     </label>
                     <label>
-                        <span data-i18n="label_report_date_to">To date</span>
+                        <span data-i18n="label_report_date_to">Til dato</span>
                         <input id="reportDateTo" type="date" />
                     </label>
                     <label>
-                        <span data-i18n="label_report_customer">Customer</span>
+                        <span data-i18n="label_report_customer">Kunde</span>
                         <select id="reportCustomerSelect"></select>
                     </label>
                     <label>
-                        <span data-i18n="label_report_employee">Employee</span>
+                        <span data-i18n="label_report_employee">Medarbejder</span>
                         <select id="reportEmployeeSelect"></select>
                     </label>
 
                     <button id="runReportBtn" class="btn" data-i18n="btn_run_report">
-                        Run report
+                        Kør rapport
                     </button>
 
                     <p id="reportSummary" class="status"></p>
                 </div>
 
                 <div class="table-card">
-                    <h3 data-i18n="reports_result_title">Result</h3>
+                    <h3 data-i18n="reports_result_title">Resultat</h3>
                     <table id="reportTable">
                         <thead>
                         <tr>
-                            <th data-i18n="th_report_date">Date</th>
+                            <th data-i18n="th_report_date">Dato</th>
                             <th data-i18n="th_report_start">Start</th>
-                            <th data-i18n="th_report_end">End</th>
-                            <th data-i18n="th_report_duration">Minutes</th>
-                            <th data-i18n="th_report_customer">Customer</th>
-                            <th data-i18n="th_report_employee">Employee</th>
+                            <th data-i18n="th_report_end">Slut</th>
+                            <th data-i18n="th_report_duration">Minutter</th>
+                            <th data-i18n="th_report_customer">Kunde</th>
+                            <th data-i18n="th_report_employee">Medarbejder</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -346,10 +412,11 @@
             </div>
         </section>
 
+        <!-- SETTINGS -->
         <section id="settingsPage" class="page">
-            <h2 data-i18n="settings_title">Settings</h2>
+            <h2 data-i18n="settings_title">Indstillinger</h2>
             <p data-i18n="settings_lang_info">
-                You can switch language using the flag buttons in the top bar. The app remembers your choice.
+                Du kan skifte sprog via knapperne i topbaren. Appen husker dit valg.
             </p>
         </section>
     </main>
