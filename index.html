@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenTime Pro</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>GreenTime Pro</h1>
+        <p>Simple time tracking and customer management for small service businesses</p>
+    </header>
+
+    <main>
+        <!-- Customer creation -->
+        <section class="card">
+            <h2>Add customer</h2>
+            <form id="customerForm">
+                <div class="field">
+                    <label for="customerName">Name</label>
+                    <input id="customerName" type="text" required />
+                </div>
+                <div class="field">
+                    <label for="customerPhone">Phone</label>
+                    <input id="customerPhone" type="tel" />
+                </div>
+                <div class="field">
+                    <label for="customerEmail">Email</label>
+                    <input id="customerEmail" type="email" />
+                </div>
+                <div class="field">
+                    <label for="customerAddress">Address</label>
+                    <input id="customerAddress" type="text" />
+                </div>
+                <button type="submit">Save customer</button>
+            </form>
+        </section>
+
+        <!-- Customer list -->
+        <section class="card">
+            <h2>Customer list</h2>
+            <table id="customerTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Time tracking -->
+        <section class="card">
+            <h2>Time tracking</h2>
+            <div class="field">
+                <label for="timerCustomerSelect">Customer</label>
+                <select id="timerCustomerSelect">
+                    <!-- Filled by JS -->
+                </select>
+            </div>
+            <div class="field">
+                <label for="timerEmployeeName">Employee name</label>
+                <input id="timerEmployeeName" type="text" placeholder="Your name" />
+            </div>
+
+            <div id="timerStatus">
+                <p>No active timer</p>
+            </div>
+
+            <div class="button-row">
+                <button id="startTimerBtn">Start</button>
+                <button id="stopTimerBtn" disabled>Stop</button>
+            </div>
+        </section>
+
+        <!-- Time logs -->
+        <section class="card">
+            <h2>Time logs (today)</h2>
+            <table id="timeLogTable">
+                <thead>
+                    <tr>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Duration (min)</th>
+                        <th>Customer</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>Written by ChatGPT for - Kisbye Consulting</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
