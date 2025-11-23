@@ -629,6 +629,8 @@ window.addEventListener("load", () => {
     renderEmployeeTable();
     renderTodayLogs();
     renderCalendar();
+    initCalendarNavigation();
+
 
     initCustomerSave();
     initEmployeeSave();
