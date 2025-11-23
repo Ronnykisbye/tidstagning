@@ -379,3 +379,27 @@ table tr:nth-child(even) td {
         transform: translateX(0);
     }
 }
+
+/* ======================================================
+   AFSNIT 99 – FORCED TABLE HEADER FIX (OVERSKRIVER ALT)
+   ====================================================== */
+
+.page table th {
+    background-color: var(--accent-strong) !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 0.7rem !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+/* Alternativ baggrund hvis du vil have mørk header */
+.page table th.dark-header {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+.page table td {
+    color: var(--text) !important;
+    background-color: var(--bg-card) !important;
+}
