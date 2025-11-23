@@ -88,8 +88,6 @@ function saveAll() {
 
 /* ======================================================
    AFSNIT 03 – SPROG & TEMA
-   (sprog-knapperne virker og husker valg,
-    teksterne kan vi oversætte senere hvis du ønsker)
    ====================================================== */
 
 function initTheme() {
@@ -129,7 +127,7 @@ function initLanguage() {
             currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
             applyLangActiveButton();
-            // Teksterne står allerede på dansk – oversættelser kan tilføjes senere
+            // Teksterne er på dansk – oversættelse kan vi bygge på senere
         });
     });
 }
@@ -157,7 +155,7 @@ function initNavigation() {
         });
     });
 
-    // sørg for at en side er synlig fra start
+    // Standard: tidsregistrering (dashboardPage)
     showPage("dashboardPage");
 }
 
@@ -335,7 +333,7 @@ function initEmployees() {
 
 
 /* ======================================================
-   AFSNIT 07 – QUICK TIMER (FORSIDE)
+   AFSNIT 07 – HJÆLPEFUNKTIONER TIL CHIP-LISTER
    ====================================================== */
 
 function getSelectedIdsFromChipList(containerId) {
@@ -345,11 +343,16 @@ function getSelectedIdsFromChipList(containerId) {
         .map(cb => cb.value);
 }
 
+
+/* ======================================================
+   AFSNIT 08 – QUICK TIMER (FORSIDE)
+   ====================================================== */
+
 function updateQuickTimerDisplay() {
     const display = document.getElementById("quickTimerDisplay");
     if (!display) return;
 
-    // sørg for at CSS-klassen passer til din CSS-fil
+    // sørg for at CSS-klassen bruges (styling er i style.css)
     display.classList.add("quick-timer-display");
 
     if (!quickTimer) {
@@ -445,7 +448,7 @@ function initQuickTimer() {
 
 
 /* ======================================================
-   AFSNIT 08 – DETALJERET TIMER & DAGENS LOGS
+   AFSNIT 09 – DETALJERET TIMER & DAGENS LOGS
    ====================================================== */
 
 function setTimerButtonsState() {
@@ -553,7 +556,7 @@ function initDetailedTimer() {
 
 
 /* ======================================================
-   AFSNIT 09 – NULSTIL TID FOR KUNDE
+   AFSNIT 10 – NULSTIL TID FOR KUNDE
    ====================================================== */
 
 function initCustomerReset() {
@@ -585,7 +588,7 @@ function initCustomerReset() {
 
 
 /* ======================================================
-   AFSNIT 10 – PLANLÆG OPGAVER (MULTI-MEDARBEJDERE)
+   AFSNIT 11 – PLANLÆG OPGAVER (MULTI-MEDARBEJDERE)
    ====================================================== */
 
 function initPlanning() {
@@ -637,8 +640,7 @@ function initPlanning() {
         renderCalendar();
         renderDayDetails();
 
-        // ryd felter
-        // (dato lader vi stå – det giver mening at oprette flere den dag)
+        // ryd felter (dato lader vi stå)
         startInput.value = "";
         durationInput.value = "";
         noteInput.value = "";
@@ -651,7 +653,7 @@ function initPlanning() {
 
 
 /* ======================================================
-   AFSNIT 11 – KALENDER RENDERING (FARVER & NAVIGATION)
+   AFSNIT 12 – KALENDER RENDERING (FARVER & NAVIGATION)
    ====================================================== */
 
 function getPlanCountForDate(dateStr) {
@@ -663,7 +665,7 @@ function renderCalendar() {
     const monthLabel     = document.getElementById("calMonthLabel");
     if (!cellsContainer || !monthLabel) return;
 
-    // Sørg for at vi altid bruger den 1. i måneden i calendarMonth
+    // Brug altid 1. i måneden som reference
     calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
 
     const year  = calendarMonth.getFullYear();
@@ -754,7 +756,7 @@ function initCalendarNavigation() {
 
 
 /* ======================================================
-   AFSNIT 12 – DAGENS OPGAVER (UNDER KALENDER)
+   AFSNIT 13 – DAGENS OPGAVER (UNDER KALENDER)
    ====================================================== */
 
 function renderDayDetails() {
@@ -798,7 +800,7 @@ function renderDayDetails() {
 
 
 /* ======================================================
-   AFSNIT 13 – RAPPORTER
+   AFSNIT 14 – RAPPORTER
    ====================================================== */
 
 function initReports() {
@@ -862,7 +864,7 @@ function initReports() {
 
 
 /* ======================================================
-   AFSNIT 14 – INITIALISERING (ALT STARTER HER)
+   AFSNIT 15 – INITIALISERING (ALT STARTER HER)
    ====================================================== */
 
 window.addEventListener("load", () => {
