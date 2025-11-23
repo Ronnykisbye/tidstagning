@@ -210,6 +210,28 @@ body {
 }
 
 /* ======================================================
+   AFSNIT 6a – KALENDER LAYOUT FIX (PC)
+   ====================================================== */
+
+.calendar-layout {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(90px, 1fr));
+    gap: 0.45rem;
+}
+
+.calendar-grid button,
+.calendar-cell {
+    min-height: 65px;
+    font-size: 1rem;
+}
+
+
+/* ======================================================
    AFSNIT 07 – FORM ELEMENTER
    ====================================================== */
 
