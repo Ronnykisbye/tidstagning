@@ -1,5 +1,5 @@
 /* ======================================================
-   AFSNIT 01 – GLOBAL STATE
+   AFSNIT 01 – GLOBAL STATE & HJÆLPEFUNKTIONER
    ====================================================== */
 
 let customers = [];
@@ -8,75 +8,165 @@ let logs = [];
 let plans = [];
 
 let quickTimer = null;
-let quickInterval = null;
+let quickIntervalId = null;
 
 let activeTimer = null;
 
 let currentLang = "da";
 let currentTheme = "light";
 
-let selectedCalendarDate = null;
-let calendarMonth = new Date();
-// ======================================================
-// ================  LOCAL STORAGE  ======================
-// ======================================================
+let calendarMonth = new Date();       // den måned der vises i kalenderen
+let selectedCalendarDate = null;      // "yyyy-mm-dd" string
 
-function loadAll() {
-    customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
-    logs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
-}
-
-function saveAll() {
-    localStorage.setItem("gtp_customers", JSON.stringify(customers));
-    localStorage.setItem("gtp_employees", JSON.stringify(employees));
-    localStorage.setItem("gtp_logs", JSON.stringify(logs));
-}
-
-
-
-/* ======================================================
-   AFSNIT 02 – LOCAL STORAGE
-   ====================================================== */
-
-function loadAll() {
-    customers = JSON.parse(localStorage.getItem("gt_customers") || "[]");
-    employees = JSON.parse(localStorage.getItem("gt_employees") || "[]");
-    logs = JSON.parse(localStorage.getItem("gt_logs") || "[]");
-    plans = JSON.parse(localStorage.getItem("gt_plans") || "[]");
-    activeTimer = JSON.parse(localStorage.getItem("gt_timer") || "null");
-}
-
-function saveAll() {
-    localStorage.setItem("gt_customers", JSON.stringify(customers));
-    localStorage.setItem("gt_employees", JSON.stringify(employees));
-    localStorage.setItem("gt_logs", JSON.stringify(logs));
-    localStorage.setItem("gt_plans", JSON.stringify(plans));
-    localStorage.setItem("gt_timer", JSON.stringify(activeTimer));
-}
-
-
-/* ======================================================
-   AFSNIT 03 – HJÆLPEFUNKTIONER
-   ====================================================== */
+const STORAGE_KEYS = {
+    customers: "gtp_customers",
+    employees: "gtp_employees",
+    logs: "gtp_logs",
+    plans: "gtp_plans",
+    activeTimer: "gtp_active_timer",
+    quickTimer: "gtp_quick_timer",
+    theme: "gtp_theme",
+    lang: "gtp_lang"
+};
 
 function uuid() {
-    return Date.now().toString() + Math.floor(Math.random() * 9999);
+    return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
-function formatTime(sec) {
+function toDateString(d) {
+    return d.toISOString().slice(0, 10);
+}
+
+function formatTimeFromSeconds(sec) {
     const h = String(Math.floor(sec / 3600)).padStart(2, "0");
     const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
     return `${h}:${m}:${s}`;
 }
 
+function safeParse(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const val = JSON.parse(raw);
+        return val ?? fallback;
+    } catch (e) {
+        console.warn("Kunne ikke parse localStorage for", key, e);
+        return fallback;
+    }
+}
+
 
 /* ======================================================
-   AFSNIT 04 – POPULATE DROPDOWNS
+   AFSNIT 02 – LOCAL STORAGE (LOAD / SAVE)
    ====================================================== */
 
-function populateCustomerSelects() {
+function loadAll() {
+    customers = safeParse(STORAGE_KEYS.customers, []);
+    employees = safeParse(STORAGE_KEYS.employees, []);
+    logs      = safeParse(STORAGE_KEYS.logs, []);
+    plans     = safeParse(STORAGE_KEYS.plans, []);
+
+    activeTimer = safeParse(STORAGE_KEYS.activeTimer, null);
+    quickTimer  = safeParse(STORAGE_KEYS.quickTimer, null);
+
+    currentTheme = safeParse(STORAGE_KEYS.theme, "light");
+    currentLang  = safeParse(STORAGE_KEYS.lang, "da");
+}
+
+function saveAll() {
+    localStorage.setItem(STORAGE_KEYS.customers, JSON.stringify(customers));
+    localStorage.setItem(STORAGE_KEYS.employees, JSON.stringify(employees));
+    localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
+    localStorage.setItem(STORAGE_KEYS.plans, JSON.stringify(plans));
+    localStorage.setItem(STORAGE_KEYS.activeTimer, JSON.stringify(activeTimer));
+    localStorage.setItem(STORAGE_KEYS.quickTimer, JSON.stringify(quickTimer));
+    localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+    localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+}
+
+
+/* ======================================================
+   AFSNIT 03 – SPROG & TEMA
+   (sprog-knapperne virker og husker valg,
+    teksterne kan vi oversætte senere hvis du ønsker)
+   ====================================================== */
+
+function initTheme() {
+    if (!currentTheme) currentTheme = "light";
+    document.documentElement.dataset.theme = currentTheme;
+}
+
+function initThemeToggle() {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        currentTheme = currentTheme === "light" ? "dark" : "light";
+        document.documentElement.dataset.theme = currentTheme;
+        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+    });
+}
+
+function applyLangActiveButton() {
+    const buttons = document.querySelectorAll(".lang-btn");
+    buttons.forEach(btn => {
+        const lang = btn.dataset.lang;
+        btn.classList.toggle("active", lang === currentLang);
+    });
+}
+
+function initLanguage() {
+    if (!currentLang) currentLang = "da";
+
+    applyLangActiveButton();
+
+    const buttons = document.querySelectorAll(".lang-btn");
+    buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const lang = btn.dataset.lang;
+            if (!lang) return;
+            currentLang = lang;
+            localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+            applyLangActiveButton();
+            // Teksterne står allerede på dansk – oversættelser kan tilføjes senere
+        });
+    });
+}
+
+
+/* ======================================================
+   AFSNIT 04 – NAVIGATION MELLEM SIDER
+   ====================================================== */
+
+function initNavigation() {
+    const pages = document.querySelectorAll(".page");
+    const menuItems = document.querySelectorAll(".sidebar li[data-page]");
+
+    function showPage(id) {
+        pages.forEach(p => p.classList.toggle("visible", p.id === id));
+        menuItems.forEach(li => {
+            li.classList.toggle("active", li.dataset.page === id);
+        });
+    }
+
+    menuItems.forEach(li => {
+        li.addEventListener("click", () => {
+            const target = li.dataset.page;
+            if (target) showPage(target);
+        });
+    });
+
+    // sørg for at en side er synlig fra start
+    showPage("dashboardPage");
+}
+
+
+/* ======================================================
+   AFSNIT 05 – KUNDER
+   ====================================================== */
+
+function refreshCustomerSelects() {
     const ids = [
         "quickCustomerSelect",
         "timerCustomerSelect",
@@ -86,227 +176,534 @@ function populateCustomerSelects() {
     ];
 
     ids.forEach(id => {
-        const box = document.getElementById(id);
-        if (!box) return;
-
-        box.innerHTML = `<option value="">Vælg...</option>`;
-
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = `<option value="">Vælg kunde</option>`;
         customers.forEach(c => {
             const opt = document.createElement("option");
             opt.value = c.id;
             opt.textContent = c.name;
-            box.appendChild(opt);
+            el.appendChild(opt);
         });
-    });
-}
-
-function populateEmployeeSelects() {
-    const ids = [
-        "timerEmployeeSelect",
-        "reportEmployeeSelect"
-    ];
-
-    ids.forEach(id => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        sel.innerHTML = "";
-        employees.forEach(e => {
-            const opt = document.createElement("option");
-            opt.value = e.id;
-            opt.textContent = e.name;
-            sel.appendChild(opt);
-        });
-    });
-
-    renderQuickEmployeeChips();
-    renderPlanEmployeeChips();
-}
-
-
-/* ======================================================
-   AFSNIT 05 – QUICK TIMER MED MULTI-MEDARBEJDERE
-   ====================================================== */
-
-function renderQuickEmployeeChips() {
-    const box = document.getElementById("quickEmployeeList");
-    if (!box) return;
-
-    box.innerHTML = "";
-
-    employees.forEach(emp => {
-        const lbl = document.createElement("label");
-        lbl.className = "chip-check";
-        lbl.innerHTML = `
-            <input type="checkbox" value="${emp.id}">
-            <span>${emp.name}</span>
-        `;
-        box.appendChild(lbl);
-    });
-}
-
-function getQuickEmployees() {
-    return Array.from(document.querySelectorAll("#quickEmployeeList input:checked"))
-        .map(x => x.value);
-}
-
-function updateQuickTimerDisplay() {
-    const disp = document.getElementById("quickTimerDisplay");
-    if (!disp) return;
-
-    if (quickTimer) {
-        const diff = Math.floor((Date.now() - new Date(quickTimer.start).getTime()) / 1000);
-        disp.textContent = formatTime(diff);
-    }
-}
-
-function initQuickTimer() {
-    document.getElementById("quickStartBtn").addEventListener("click", () => {
-        const cust = document.getElementById("quickCustomerSelect").value;
-        const emps = getQuickEmployees();
-        if (!cust) return alert("Vælg kunde");
-        if (emps.length === 0) return alert("Vælg medarbejdere");
-
-        quickTimer = {
-            customerId: cust,
-            employeeIds: emps,
-            start: new Date().toISOString()
-        };
-
-        quickInterval = setInterval(updateQuickTimerDisplay, 1000);
-        updateQuickTimerDisplay();
-    });
-
-    document.getElementById("quickStopBtn").addEventListener("click", () => {
-        if (!quickTimer) return;
-
-        const end = new Date();
-        const start = new Date(quickTimer.start);
-
-        const minutes = Math.max(1, Math.round((end - start) / 60000));
-
-        quickTimer.employeeIds.forEach(eid => {
-            const e = employees.find(x => x.id === eid);
-
-            logs.push({
-                id: uuid(),
-                customerId: quickTimer.customerId,
-                employeeId: eid,
-                employee: e ? e.name : "?",
-                startTime: quickTimer.start,
-                endTime: end.toISOString(),
-                duration: minutes
-            });
-        });
-
-        quickTimer = null;
-        clearInterval(quickInterval);
-        updateQuickTimerDisplay();
-        saveAll();
-        renderTodayLogs();
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 06 – KUNDER
-   ====================================================== */
-
-function initCustomerSave() {
-    document.getElementById("saveCustomerBtn")?.addEventListener("click", () => {
-        const name = custName.value.trim();
-        if (!name) return alert("Skriv navn");
-
-        customers.push({
-            id: uuid(),
-            name,
-            phone: custPhone.value,
-            email: custEmail.value,
-            address: custAddress.value
-        });
-
-        saveAll();
-        populateCustomerSelects();
-        renderCustomerTable();
-
-        custName.value = "";
-        custPhone.value = "";
-        custEmail.value = "";
-        custAddress.value = "";
     });
 }
 
 function renderCustomerTable() {
-    const tbody = document.querySelector("#customerTable tbody");
+    const table = document.getElementById("customerTable");
+    if (!table) return;
+    const tbody = table.querySelector("tbody");
     if (!tbody) return;
 
     tbody.innerHTML = "";
-
     customers.forEach(c => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${c.name}</td>
-            <td>${c.phone}</td>
-            <td>${c.email}</td>
-            <td>${c.address}</td>
+            <td>${c.name || ""}</td>
+            <td>${c.phone || ""}</td>
+            <td>${c.email || ""}</td>
+            <td>${c.address || ""}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
+function initCustomers() {
+    const nameInput    = document.getElementById("custName");
+    const phoneInput   = document.getElementById("custPhone");
+    const emailInput   = document.getElementById("custEmail");
+    const addressInput = document.getElementById("custAddress");
+    const saveBtn      = document.getElementById("saveCustomerBtn");
+
+    if (!saveBtn) return;
+
+    saveBtn.addEventListener("click", () => {
+        const name = nameInput.value.trim();
+        if (!name) {
+            alert("Skriv et kundenavn.");
+            return;
+        }
+
+        customers.push({
+            id: uuid(),
+            name,
+            phone: phoneInput.value.trim(),
+            email: emailInput.value.trim(),
+            address: addressInput.value.trim()
+        });
+
+        saveAll();
+        refreshCustomerSelects();
+        renderCustomerTable();
+
+        nameInput.value = "";
+        phoneInput.value = "";
+        emailInput.value = "";
+        addressInput.value = "";
+    });
+}
+
+
 /* ======================================================
-   AFSNIT 06D – KALENDER LOGIK: FARVER EFTER ANTAL OPGAVER
+   AFSNIT 06 – MEDARBEJDERE
    ====================================================== */
 
-function getTasksForDate(dateObj) {
-    const d = dateObj.toISOString().split("T")[0]; // yyyy-mm-dd
+function renderEmployeeTable() {
+    const table = document.getElementById("employeeTable");
+    if (!table) return;
+    const tbody = table.querySelector("tbody");
+    if (!tbody) return;
 
-    // Find alle opgaver på datoen
-    return plans.filter(p => p.date === d);
+    tbody.innerHTML = "";
+    employees.forEach(e => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${e.name || ""}</td>
+            <td>${e.email || ""}</td>
+            <td>${e.role || ""}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderEmployeeChips(targetId) {
+    const box = document.getElementById(targetId);
+    if (!box) return;
+    box.innerHTML = "";
+
+    employees.forEach(emp => {
+        const label = document.createElement("label");
+        label.className = "chip-check";
+        label.innerHTML = `
+            <input type="checkbox" value="${emp.id}">
+            <span>${emp.name}</span>
+        `;
+        box.appendChild(label);
+    });
+}
+
+function refreshEmployeeSelectsAndChips() {
+    // selects
+    const ids = ["timerEmployeeSelect", "reportEmployeeSelect"];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = `<option value="">Vælg medarbejder</option>`;
+        employees.forEach(e => {
+            const opt = document.createElement("option");
+            opt.value = e.id;
+            opt.textContent = e.name;
+            el.appendChild(opt);
+        });
+    });
+
+    // chips
+    renderEmployeeChips("quickEmployeeList");
+    renderEmployeeChips("planEmployeeList");
+}
+
+function initEmployees() {
+    const nameInput  = document.getElementById("empName");
+    const emailInput = document.getElementById("empEmail");
+    const roleSelect = document.getElementById("empRole");
+    const saveBtn    = document.getElementById("saveEmployeeBtn");
+
+    if (!saveBtn) return;
+
+    saveBtn.addEventListener("click", () => {
+        const name = nameInput.value.trim();
+        if (!name) {
+            alert("Skriv et navn på medarbejderen.");
+            return;
+        }
+
+        employees.push({
+            id: uuid(),
+            name,
+            email: emailInput.value.trim(),
+            role: roleSelect.value || "employee"
+        });
+
+        saveAll();
+        renderEmployeeTable();
+        refreshEmployeeSelectsAndChips();
+
+        nameInput.value = "";
+        emailInput.value = "";
+        roleSelect.value = "employee";
+    });
+}
+
+
+/* ======================================================
+   AFSNIT 07 – QUICK TIMER (FORSIDE)
+   ====================================================== */
+
+function getSelectedIdsFromChipList(containerId) {
+    const box = document.getElementById(containerId);
+    if (!box) return [];
+    return Array.from(box.querySelectorAll("input[type=checkbox]:checked"))
+        .map(cb => cb.value);
+}
+
+function updateQuickTimerDisplay() {
+    const display = document.getElementById("quickTimerDisplay");
+    if (!display) return;
+
+    // sørg for at CSS-klassen passer til din CSS-fil
+    display.classList.add("quick-timer-display");
+
+    if (!quickTimer) {
+        display.textContent = "00:00:00";
+        return;
+    }
+
+    const start = new Date(quickTimer.start);
+    const now   = new Date();
+    const diffSeconds = Math.floor((now - start) / 1000);
+    display.textContent = formatTimeFromSeconds(Math.max(diffSeconds, 0));
+}
+
+function stopQuickInterval() {
+    if (quickIntervalId) {
+        clearInterval(quickIntervalId);
+        quickIntervalId = null;
+    }
+}
+
+function startQuickIntervalIfNeeded() {
+    stopQuickInterval();
+    if (quickTimer) {
+        updateQuickTimerDisplay();
+        quickIntervalId = setInterval(updateQuickTimerDisplay, 1000);
+    } else {
+        updateQuickTimerDisplay();
+    }
+}
+
+function initQuickTimer() {
+    const startBtn = document.getElementById("quickStartBtn");
+    const stopBtn  = document.getElementById("quickStopBtn");
+    const customerSelect = document.getElementById("quickCustomerSelect");
+
+    if (!startBtn || !stopBtn || !customerSelect) return;
+
+    startBtn.addEventListener("click", () => {
+        const customerId = customerSelect.value;
+        const employeeIds = getSelectedIdsFromChipList("quickEmployeeList");
+
+        if (!customerId) {
+            alert("Vælg en kunde først.");
+            return;
+        }
+        if (employeeIds.length === 0) {
+            alert("Vælg mindst én medarbejder.");
+            return;
+        }
+
+        quickTimer = {
+            customerId,
+            employeeIds,
+            start: new Date().toISOString()
+        };
+
+        saveAll();
+        startQuickIntervalIfNeeded();
+    });
+
+    stopBtn.addEventListener("click", () => {
+        if (!quickTimer) return;
+
+        const end   = new Date();
+        const start = new Date(quickTimer.start);
+        const minutes = Math.max(1, Math.round((end - start) / 60000));
+
+        quickTimer.employeeIds.forEach(empId => {
+            const emp  = employees.find(e => e.id === empId);
+            const name = emp ? emp.name : "Ukendt";
+
+            logs.push({
+                id: uuid(),
+                customerId: quickTimer.customerId,
+                employeeId: empId,
+                employeeName: name,
+                startTime: start.toISOString(),
+                endTime: end.toISOString(),
+                minutes
+            });
+        });
+
+        quickTimer = null;
+        saveAll();
+        stopQuickInterval();
+        updateQuickTimerDisplay();
+        renderTodayLogs();
+    });
+
+    // hvis der var en aktiv quickTimer gemt
+    startQuickIntervalIfNeeded();
+}
+
+
+/* ======================================================
+   AFSNIT 08 – DETALJERET TIMER & DAGENS LOGS
+   ====================================================== */
+
+function setTimerButtonsState() {
+    const startBtn = document.getElementById("startTimerBtn");
+    const stopBtn  = document.getElementById("stopTimerBtn");
+    const statusEl = document.getElementById("timerStatus");
+
+    if (!startBtn || !stopBtn || !statusEl) return;
+
+    if (!activeTimer) {
+        startBtn.disabled = false;
+        stopBtn.disabled  = true;
+        statusEl.textContent = "Ingen aktiv timer.";
+    } else {
+        startBtn.disabled = true;
+        stopBtn.disabled  = false;
+
+        const cust = customers.find(c => c.id === activeTimer.customerId);
+        const emp  = employees.find(e => e.id === activeTimer.employeeId);
+        statusEl.textContent = `Aktiv for ${cust ? cust.name : "kunde"} – ${emp ? emp.name : "medarbejder"}`;
+    }
+}
+
+function renderTodayLogs() {
+    const table = document.getElementById("timeLogTable");
+    if (!table) return;
+    const tbody = table.querySelector("tbody");
+    if (!tbody) return;
+
+    const todayStr = toDateString(new Date());
+    tbody.innerHTML = "";
+
+    logs
+        .filter(l => l.startTime.slice(0, 10) === todayStr)
+        .forEach(l => {
+            const tr = document.createElement("tr");
+
+            const cust = customers.find(c => c.id === l.customerId);
+            const custName = cust ? cust.name : "";
+
+            tr.innerHTML = `
+                <td>${new Date(l.startTime).toLocaleTimeString()}</td>
+                <td>${new Date(l.endTime).toLocaleTimeString()}</td>
+                <td>${l.minutes}</td>
+                <td>${custName}</td>
+                <td>${l.employeeName || ""}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+}
+
+function initDetailedTimer() {
+    const startBtn = document.getElementById("startTimerBtn");
+    const stopBtn  = document.getElementById("stopTimerBtn");
+    const customerSelect = document.getElementById("timerCustomerSelect");
+    const employeeSelect = document.getElementById("timerEmployeeSelect");
+
+    if (!startBtn || !stopBtn || !customerSelect || !employeeSelect) return;
+
+    startBtn.addEventListener("click", () => {
+        const customerId = customerSelect.value;
+        const employeeId = employeeSelect.value;
+
+        if (!customerId || !employeeId) {
+            alert("Vælg både kunde og medarbejder.");
+            return;
+        }
+
+        activeTimer = {
+            customerId,
+            employeeId,
+            start: new Date().toISOString()
+        };
+        saveAll();
+        setTimerButtonsState();
+    });
+
+    stopBtn.addEventListener("click", () => {
+        if (!activeTimer) return;
+
+        const end   = new Date();
+        const start = new Date(activeTimer.start);
+        const minutes = Math.max(1, Math.round((end - start) / 60000));
+
+        const emp = employees.find(e => e.id === activeTimer.employeeId);
+
+        logs.push({
+            id: uuid(),
+            customerId: activeTimer.customerId,
+            employeeId: activeTimer.employeeId,
+            employeeName: emp ? emp.name : "",
+            startTime: start.toISOString(),
+            endTime: end.toISOString(),
+            minutes
+        });
+
+        activeTimer = null;
+        saveAll();
+        setTimerButtonsState();
+        renderTodayLogs();
+    });
+
+    setTimerButtonsState();
+}
+
+
+/* ======================================================
+   AFSNIT 09 – NULSTIL TID FOR KUNDE
+   ====================================================== */
+
+function initCustomerReset() {
+    const select = document.getElementById("resetCustomerSelect");
+    const btn    = document.getElementById("resetCustomerTimeBtn");
+    const info   = document.getElementById("resetCustomerInfo");
+
+    if (!select || !btn || !info) return;
+
+    btn.addEventListener("click", () => {
+        const cid = select.value;
+        if (!cid) {
+            alert("Vælg en kunde, der skal nulstilles.");
+            return;
+        }
+
+        const before = logs.length;
+        logs = logs.filter(l => l.customerId !== cid);
+        const removed = before - logs.length;
+
+        saveAll();
+        renderTodayLogs();
+
+        const cust = customers.find(c => c.id === cid);
+        const name = cust ? cust.name : "kunden";
+        info.textContent = `Nulstillede ${removed} log(s) for ${name}.`;
+    });
+}
+
+
+/* ======================================================
+   AFSNIT 10 – PLANLÆG OPGAVER (MULTI-MEDARBEJDERE)
+   ====================================================== */
+
+function initPlanning() {
+    const dateInput     = document.getElementById("planDate");
+    const startInput    = document.getElementById("planStart");
+    const durationInput = document.getElementById("planDuration");
+    const customerSelect= document.getElementById("planCustomerSelect");
+    const noteInput     = document.getElementById("planNote");
+    const saveBtn       = document.getElementById("savePlanBtn");
+
+    if (!dateInput || !startInput || !durationInput || !customerSelect || !saveBtn) return;
+
+    saveBtn.addEventListener("click", () => {
+        const date = dateInput.value;
+        const start = startInput.value;
+        const duration = parseInt(durationInput.value, 10) || 0;
+        const customerId = customerSelect.value;
+        const employeeIds = getSelectedIdsFromChipList("planEmployeeList");
+        const note = noteInput.value.trim();
+
+        if (!date) {
+            alert("Vælg en dato.");
+            return;
+        }
+        if (!start) {
+            alert("Vælg en starttid.");
+            return;
+        }
+        if (!customerId) {
+            alert("Vælg en kunde.");
+            return;
+        }
+        if (duration <= 0) {
+            alert("Skriv en varighed i minutter.");
+            return;
+        }
+
+        plans.push({
+            id: uuid(),
+            date,
+            start,
+            duration,
+            customerId,
+            employeeIds,
+            note
+        });
+
+        saveAll();
+        renderCalendar();
+        renderDayDetails();
+
+        // ryd felter
+        // (dato lader vi stå – det giver mening at oprette flere den dag)
+        startInput.value = "";
+        durationInput.value = "";
+        noteInput.value = "";
+        const chipBox = document.getElementById("planEmployeeList");
+        if (chipBox) {
+            chipBox.querySelectorAll("input[type=checkbox]").forEach(cb => cb.checked = false);
+        }
+    });
+}
+
+
+/* ======================================================
+   AFSNIT 11 – KALENDER RENDERING (FARVER & NAVIGATION)
+   ====================================================== */
+
+function getPlanCountForDate(dateStr) {
+    return plans.filter(p => p.date === dateStr).length;
 }
 
 function renderCalendar() {
-    const grid = document.getElementById("calendarGrid");
-    const title = document.getElementById("calendarMonthTitle");
+    const cellsContainer = document.getElementById("calendarCells");
+    const monthLabel     = document.getElementById("calMonthLabel");
+    if (!cellsContainer || !monthLabel) return;
 
-    if (!grid) return;
+    // Sørg for at vi altid bruger den 1. i måneden i calendarMonth
+    calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
 
-    // Nulstil UI
-    grid.innerHTML = "";
+    const year  = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth(); // 0-11
 
-    const year = calendarMonth.getFullYear();
-    const month = calendarMonth.getMonth();
-
-    title.textContent = calendarMonth.toLocaleDateString("da-DK", {
+    monthLabel.textContent = calendarMonth.toLocaleDateString("da-DK", {
         month: "long",
         year: "numeric"
     });
 
-    const firstDay = new Date(year, month, 1);
-    const startDayOfWeek = firstDay.getDay() || 7;
+    cellsContainer.innerHTML = "";
 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstOfMonth = new Date(year, month, 1);
+    const daysInMonth  = new Date(year, month + 1, 0).getDate();
 
-    // Tomme felter før dag 1
-    for (let i = 1; i < startDayOfWeek; i++) {
+    // Mandag som første dag (0 = mandag, 6 = søndag)
+    const firstWeekday = (firstOfMonth.getDay() + 6) % 7;
+
+    // tomme felter før dag 1
+    for (let i = 0; i < firstWeekday; i++) {
         const empty = document.createElement("div");
         empty.className = "calendar-cell";
-        grid.appendChild(empty);
+        cellsContainer.appendChild(empty);
     }
 
-    // Selve dagene
+    const todayStr = toDateString(new Date());
+    if (!selectedCalendarDate) {
+        selectedCalendarDate = todayStr;
+    }
+
     for (let day = 1; day <= daysInMonth; day++) {
-        const dateObj = new Date(year, month, day);
+        const d = new Date(year, month, day);
+        const dateStr = toDateString(d);
+        const count   = getPlanCountForDate(dateStr);
+
         const btn = document.createElement("button");
-
         btn.className = "calendar-cell";
-        btn.textContent = day;
+        btn.textContent = String(day);
 
-        // Find opgave-antal for datoen
-        const tasks = getTasksForDate(dateObj);
-        const count = tasks.length;
-
-        // Tildel farve efter regler
+        // farve efter antal opgaver
         if (count === 0) {
             btn.classList.add("calendar-day-empty");
         } else if (count >= 1 && count <= 4) {
@@ -315,436 +712,191 @@ function renderCalendar() {
             btn.classList.add("calendar-day-busy");
         }
 
-        // Klik på dato
-        btn.addEventListener("click", () => {
-            selectedCalendarDate = dateObj;
-            document.getElementById("planDate").value =
-                dateObj.toISOString().split("T")[0];
-        });
-
-        grid.appendChild(btn);
-    }
-}
-
-/* ======================================================
-   AFSNIT 06E – TOOLTIP LOGIK FOR KALENDER
-   ====================================================== */
-
-let calendarTooltip = null;
-
-function showCalendarTooltip(evt, tasks) {
-    if (!calendarTooltip) {
-        calendarTooltip = document.createElement("div");
-        calendarTooltip.className = "calendar-tooltip";
-        document.body.appendChild(calendarTooltip);
-    }
-
-    // Indhold
-    if (tasks.length === 0) {
-        calendarTooltip.innerHTML = "Ingen opgaver";
-    } else {
-        calendarTooltip.innerHTML = `
-            <strong>${tasks.length} opgave(r)</strong><br>
-            ${tasks.map(t => `${t.customer} — ${t.employees.join(", ")}`).join("<br>")}
-        `;
-    }
-
-    // Position
-    calendarTooltip.style.left = evt.pageX + 15 + "px";
-    calendarTooltip.style.top = evt.pageY + 15 + "px";
-    calendarTooltip.style.opacity = 1;
-}
-
-function hideCalendarTooltip() {
-    if (calendarTooltip) {
-        calendarTooltip.style.opacity = 0;
-    }
-}
-
-
-
-/* ======================================================
-   AFSNIT 07 – MEDARBEJDERE
-   ====================================================== */
-
-function initEmployeeSave() {
-    document.getElementById("saveEmployeeBtn")?.addEventListener("click", () => {
-        const name = empName.value.trim();
-        if (!name) return alert("Skriv navn");
-
-        employees.push({
-            id: uuid(),
-            name,
-            email: empEmail.value,
-            role: empRole.value
-        });
-
-        saveAll();
-        populateEmployeeSelects();
-        renderEmployeeTable();
-
-        empName.value = "";
-        empEmail.value = "";
-        empRole.value = "medarbejder";
-    });
-}
-
-function renderEmployeeTable() {
-    const tbody = document.querySelector("#employeeTable tbody");
-    if (!tbody) return;
-
-    tbody.innerHTML = "";
-
-    employees.forEach(e => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${e.name}</td>
-            <td>${e.email}</td>
-            <td>${e.role}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 08 – DETALJERET TIMER
-   ====================================================== */
-
-function initDetailedTimer() {
-    startTimerBtn?.addEventListener("click", () => {
-        const cust = timerCustomerSelect.value;
-        const emp = timerEmployeeSelect.value;
-
-        if (!cust || !emp) return alert("Vælg kunde og medarbejder");
-
-        activeTimer = {
-            customerId: cust,
-            employeeId: emp,
-            start: new Date().toISOString()
-        };
-
-        saveAll();
-        renderTimerStatus();
-    });
-
-    stopTimerBtn?.addEventListener("click", () => {
-        if (!activeTimer) return;
-
-        const end = new Date();
-        const start = new Date(activeTimer.start);
-
-        const minutes = Math.max(1, Math.round((end - start) / 60000));
-
-        const emp = employees.find(x => x.id === activeTimer.employeeId);
-
-        logs.push({
-            id: uuid(),
-            customerId: activeTimer.customerId,
-            employeeId: activeTimer.employeeId,
-            employee: emp?.name || "?",
-            startTime: activeTimer.start,
-            endTime: end.toISOString(),
-            duration: minutes
-        });
-
-        activeTimer = null;
-        saveAll();
-        renderTimerStatus();
-        renderTodayLogs();
-    });
-}
-
-function renderTimerStatus() {
-    const box = document.getElementById("timerStatus");
-    if (!box) return;
-
-    if (!activeTimer) {
-        box.textContent = "Ingen aktiv timer";
-    } else {
-        const cust = customers.find(x => x.id === activeTimer.customerId);
-        const emp = employees.find(x => x.id === activeTimer.employeeId);
-        box.textContent = `Kører for ${cust?.name} – ${emp?.name}`;
-    }
-}
-
-
-/* ======================================================
-   AFSNIT 09 – LOGS
-   ====================================================== */
-
-function renderTodayLogs() {
-    const tbody = document.querySelector("#timeLogTable tbody");
-    if (!tbody) return;
-
-    const today = new Date().toISOString().slice(0, 10);
-
-    tbody.innerHTML = "";
-
-    logs.filter(l => l.startTime.slice(0, 10) === today)
-        .forEach(l => {
-            const cust = customers.find(c => c.id === l.customerId);
-            const tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td>${new Date(l.startTime).toLocaleTimeString()}</td>
-                <td>${new Date(l.endTime).toLocaleTimeString()}</td>
-                <td>${l.duration}</td>
-                <td>${cust?.name}</td>
-                <td>${l.employee}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-}
-
-
-/* ======================================================
-   AFSNIT 10 – PLANLÆG OPGAVER (MULTI-MEDARBEJDERE)
-   ====================================================== */
-
-function renderPlanEmployeeChips() {
-    const box = document.getElementById("planEmployeeList");
-    if (!box) return;
-
-    box.innerHTML = "";
-
-    employees.forEach(emp => {
-        const lbl = document.createElement("label");
-        lbl.className = "chip-check";
-        lbl.innerHTML = `
-            <input type="checkbox" value="${emp.id}">
-            <span>${emp.name}</span>
-        `;
-        box.appendChild(lbl);
-    });
-}
-
-function initPlanning() {
-    savePlanBtn?.addEventListener("click", () => {
-        const date = planDate.value;
-        if (!date) return alert("Vælg dato");
-
-        const start = planStart.value;
-        const dur = Number(planDuration.value);
-        const cust = planCustomerSelect.value;
-        const note = planNote.value;
-
-        const employeesSelected = Array.from(
-            document.querySelectorAll("#planEmployeeList input:checked")
-        ).map(cb => cb.value);
-
-        plans.push({
-            id: uuid(),
-            date,
-            start,
-            duration: dur,
-            customerId: cust,
-            employeeIds: employeesSelected,
-            employeeNames: employeesSelected.map(id => employees.find(e => e.id === id)?.name || "?"),
-            note
-        });
-
-        saveAll();
-        renderCalendar();
-        if (selectedCalendarDate === date) renderDayPlanList();
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 11 – KALENDER
-   ====================================================== */
-
-function ymd(d) {
-    return d.toISOString().slice(0, 10);
-}
-
-function renderCalendar() {
-    const box = document.getElementById("calendarCells");
-    const label = document.getElementById("calMonthLabel");
-    if (!box || !label) return;
-
-    box.innerHTML = "";
-
-    const y = calendarMonth.getFullYear();
-    const m = calendarMonth.getMonth();
-
-    label.textContent = calendarMonth.toLocaleDateString("da-DK", {
-        month: "long",
-        year: "numeric"
-    });
-
-    const first = new Date(y, m, 1);
-    const days = new Date(y, m + 1, 0).getDate();
-
-    const empty = (first.getDay() + 6) % 7;
-
-    for (let i = 0; i < empty; i++) {
-        const div = document.createElement("div");
-        div.className = "calendar-cell empty";
-        box.appendChild(div);
-    }
-
-    for (let d = 1; d <= days; d++) {
-        const date = new Date(y, m, d);
-        const ds = ymd(date);
-
-        const div = document.createElement("div");
-        div.className = "calendar-cell";
-        div.dataset.date = ds;
-        div.innerHTML = d;
-
-        if (ds === selectedCalendarDate) {
-            div.classList.add("selected");
+        // marker valgt dag
+        if (dateStr === selectedCalendarDate) {
+            btn.classList.add("selected");
         }
 
-        div.addEventListener("click", () => {
-            selectedCalendarDate = ds;
+        btn.addEventListener("click", () => {
+            selectedCalendarDate = dateStr;
+            const planDateInput = document.getElementById("planDate");
+            if (planDateInput) {
+                planDateInput.value = dateStr;
+            }
             renderCalendar();
-            renderDayPlanList();
+            renderDayDetails();
         });
 
-        box.appendChild(div);
+        cellsContainer.appendChild(btn);
     }
 }
 
-function renderDayPlanList() {
-    const list = document.getElementById("dayPlanList");
-    const label = document.getElementById("selectedDayLabel");
-    if (!list || !label) return;
+function initCalendarNavigation() {
+    const prevBtn = document.getElementById("prevMonthBtn");
+    const nextBtn = document.getElementById("nextMonthBtn");
 
-    list.innerHTML = "";
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
+            renderCalendar();
+            renderDayDetails();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
+            renderCalendar();
+            renderDayDetails();
+        });
+    }
+}
+
+
+/* ======================================================
+   AFSNIT 12 – DAGENS OPGAVER (UNDER KALENDER)
+   ====================================================== */
+
+function renderDayDetails() {
+    const labelEl = document.getElementById("selectedDayLabel");
+    const listEl  = document.getElementById("dayPlanList");
+    if (!labelEl || !listEl) return;
+
+    listEl.innerHTML = "";
+
     if (!selectedCalendarDate) {
-        label.textContent = "Klik på en dag for at se opgaver";
+        labelEl.textContent = "Klik på en dag for at se opgaver.";
         return;
     }
 
-    label.textContent = selectedCalendarDate;
+    const d = new Date(selectedCalendarDate);
+    labelEl.textContent = `Opgaver for ${d.toLocaleDateString("da-DK")}`;
 
-    const items = plans.filter(p => p.date === selectedCalendarDate);
-
-    if (items.length === 0) {
-        list.innerHTML = "<li>Ingen opgaver denne dag</li>";
-    } else {
-        items.forEach(p => {
-            const cust = customers.find(c => c.id === p.customerId);
-            const li = document.createElement("li");
-            li.textContent = `${p.start} – ${cust?.name || "?"} – ${p.employeeNames.join(", ")} (${p.duration} min)`;
-            list.appendChild(li);
-        });
+    const dayPlans = plans.filter(p => p.date === selectedCalendarDate);
+    if (dayPlans.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "Ingen opgaver denne dag.";
+        listEl.appendChild(li);
+        return;
     }
+
+    dayPlans.forEach(p => {
+        const cust = customers.find(c => c.id === p.customerId);
+        const custName = cust ? cust.name : "Kunde?";
+        const emps = p.employeeIds
+            .map(id => {
+                const e = employees.find(emp => emp.id === id);
+                return e ? e.name : "Medarbejder?";
+            })
+            .join(", ");
+
+        const li = document.createElement("li");
+        li.textContent = `${p.start} – ${custName} – ${emps} (${p.duration} min)${p.note ? " – " + p.note : ""}`;
+        listEl.appendChild(li);
+    });
 }
 
 
 /* ======================================================
-   AFSNIT 12 – RAPPORTER
+   AFSNIT 13 – RAPPORTER
    ====================================================== */
 
 function initReports() {
-    runReportBtn?.addEventListener("click", () => {
-        const tbody = document.querySelector("#reportTable tbody");
-        const sum = document.getElementById("reportSummary");
+    const btn = document.getElementById("runReportBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const fromInput     = document.getElementById("reportDateFrom");
+        const toInput       = document.getElementById("reportDateTo");
+        const custSelect    = document.getElementById("reportCustomerSelect");
+        const empSelect     = document.getElementById("reportEmployeeSelect");
+        const table         = document.getElementById("reportTable");
+        const summary       = document.getElementById("reportSummary");
+
+        if (!table || !summary) return;
+        const tbody = table.querySelector("tbody");
         if (!tbody) return;
 
+        let filtered = logs.slice();
+
+        const from = fromInput?.value || "";
+        const to   = toInput?.value || "";
+        const cid  = custSelect?.value || "";
+        const eid  = empSelect?.value || "";
+
+        if (from) {
+            filtered = filtered.filter(l => l.startTime.slice(0,10) >= from);
+        }
+        if (to) {
+            filtered = filtered.filter(l => l.startTime.slice(0,10) <= to);
+        }
+        if (cid) {
+            filtered = filtered.filter(l => l.customerId === cid);
+        }
+        if (eid) {
+            filtered = filtered.filter(l => l.employeeId === eid);
+        }
+
         tbody.innerHTML = "";
+        let totalMin = 0;
 
-        let data = logs.slice();
-
-        const f = reportDateFrom.value;
-        const t = reportDateTo.value;
-        const c = reportCustomerSelect.value;
-        const e = reportEmployeeSelect.value;
-
-        if (f) data = data.filter(x => x.startTime.slice(0, 10) >= f);
-        if (t) data = data.filter(x => x.startTime.slice(0, 10) <= t);
-        if (c) data = data.filter(x => x.customerId === c);
-        if (e) data = data.filter(x => x.employeeId === e);
-
-        let total = 0;
-
-        data.forEach(l => {
+        filtered.forEach(l => {
+            const tr = document.createElement("tr");
             const cust = customers.find(c => c.id === l.customerId);
 
-            const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td>${l.startTime.slice(0, 10)}</td>
+                <td>${l.startTime.slice(0,10)}</td>
                 <td>${new Date(l.startTime).toLocaleTimeString()}</td>
                 <td>${new Date(l.endTime).toLocaleTimeString()}</td>
-                <td>${l.duration}</td>
-                <td>${cust?.name}</td>
-                <td>${l.employee}</td>
+                <td>${l.minutes}</td>
+                <td>${cust ? cust.name : ""}</td>
+                <td>${l.employeeName || ""}</td>
             `;
-
             tbody.appendChild(tr);
-            total += l.duration;
+            totalMin += l.minutes;
         });
 
-        sum.textContent = `Total minutter: ${total}`;
+        summary.textContent = `Total minutter: ${totalMin}`;
     });
 }
 
 
 /* ======================================================
-   AFSNIT 13 – SIDEBAR / NAVIGATION
-   ====================================================== */
-
-function initNavigation() {
-    document.querySelectorAll(".sidebar li").forEach(li => {
-        li.addEventListener("click", () => {
-            document.querySelectorAll(".page").forEach(p => p.classList.remove("visible"));
-            document.getElementById(li.dataset.page).classList.add("visible");
-
-            document.querySelectorAll(".sidebar li").forEach(x => x.classList.remove("active"));
-            li.classList.add("active");
-        });
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 14 – TEMA (LYS / MØRK)
-   ====================================================== */
-
-function initTheme() {
-    currentTheme = localStorage.getItem("gt_theme") || "light";
-    document.documentElement.dataset.theme = currentTheme;
-}
-
-function initThemeButton() {
-    document.getElementById("themeToggle")?.addEventListener("click", () => {
-        currentTheme = currentTheme === "light" ? "dark" : "light";
-        document.documentElement.dataset.theme = currentTheme;
-        localStorage.setItem("gt_theme", currentTheme);
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 15 – INITIALISERING
+   AFSNIT 14 – INITIALISERING (ALT STARTER HER)
    ====================================================== */
 
 window.addEventListener("load", () => {
+    // load data
     loadAll();
 
-    initNavigation();
+    // tema & sprog
     initTheme();
-    initThemeButton();
+    initThemeToggle();
+    initLanguage();
 
-    populateCustomerSelects();
-    populateEmployeeSelects();
+    // navigation
+    initNavigation();
 
+    // data-visning
+    refreshCustomerSelects();
     renderCustomerTable();
+
     renderEmployeeTable();
+    refreshEmployeeSelectsAndChips();
+
     renderTodayLogs();
+
+    // kalender + plan
     renderCalendar();
+    renderDayDetails();
     initCalendarNavigation();
+    initPlanning();
 
-
-    initCustomerSave();
-    initEmployeeSave();
+    // funktioner
+    initCustomers();
+    initEmployees();
     initQuickTimer();
     initDetailedTimer();
-    initPlanning();
+    initCustomerReset();
     initReports();
 });
-
