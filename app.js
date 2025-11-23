@@ -326,6 +326,42 @@ function renderCalendar() {
     }
 }
 
+/* ======================================================
+   AFSNIT 06E – TOOLTIP LOGIK FOR KALENDER
+   ====================================================== */
+
+let calendarTooltip = null;
+
+function showCalendarTooltip(evt, tasks) {
+    if (!calendarTooltip) {
+        calendarTooltip = document.createElement("div");
+        calendarTooltip.className = "calendar-tooltip";
+        document.body.appendChild(calendarTooltip);
+    }
+
+    // Indhold
+    if (tasks.length === 0) {
+        calendarTooltip.innerHTML = "Ingen opgaver";
+    } else {
+        calendarTooltip.innerHTML = `
+            <strong>${tasks.length} opgave(r)</strong><br>
+            ${tasks.map(t => `${t.customer} — ${t.employees.join(", ")}`).join("<br>")}
+        `;
+    }
+
+    // Position
+    calendarTooltip.style.left = evt.pageX + 15 + "px";
+    calendarTooltip.style.top = evt.pageY + 15 + "px";
+    calendarTooltip.style.opacity = 1;
+}
+
+function hideCalendarTooltip() {
+    if (calendarTooltip) {
+        calendarTooltip.style.opacity = 0;
+    }
+}
+
+
 
 /* ======================================================
    AFSNIT 07 – MEDARBEJDERE
