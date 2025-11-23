@@ -381,6 +381,31 @@ table tr:nth-child(even) td {
 }
 
 /* ======================================================
+   AFSNIT 98 – TIMER DISPLAY FIX (LYS + MØRK MODE)
+   ====================================================== */
+
+.quick-timer-display {
+    background-color: var(--bg-card);    /* Synlig baggrund */
+    color: var(--text);                  /* Læsbar tekst */
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    padding: 1.3rem;
+    font-size: 2.4rem;
+    text-align: center;
+    box-shadow: 0 0 20px var(--accent-soft);
+    font-weight: bold;
+}
+
+/* LYS MODE – tydelig kontrast */
+[data-theme="light"] .quick-timer-display {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 25px rgba(0,0,0,0.10);
+}
+
+
+/* ======================================================
    AFSNIT 99 – FORCED TABLE HEADER FIX (OVERSKRIVER ALT)
    ====================================================== */
 
