@@ -230,6 +230,25 @@ body {
     font-size: 1rem;
 }
 
+/* ======================================================
+   AFSNIT 06C – KALENDER FARVER FOR ANTAL OPGAVER
+   ====================================================== */
+
+.calendar-day-empty {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.calendar-day-medium {
+    background-color: #facc15 !important; /* Gul */
+    color: #0f172a !important;
+}
+
+.calendar-day-busy {
+    background-color: #ef4444 !important; /* Rød */
+    color: white !important;
+}
+
 
 /* ======================================================
    AFSNIT 07 – FORM ELEMENTER
