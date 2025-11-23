@@ -1,19 +1,19 @@
 // ======================================================
-// ================  DATA & STORAGE  ====================
+// ================  GLOBAL DATA  ========================
 // ======================================================
 
 let customers = [];
 let employees = [];
 let timeLogs = [];
 let plannedTasks = [];
-let activeTimer = null; 
+let activeTimer = null;
 
 let currentCalendarMonth = new Date();
 let selectedCalendarDate = null;
 
 function loadData() {
     customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]" );
+    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
     timeLogs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
     plannedTasks = JSON.parse(localStorage.getItem("gtp_plans") || "[]");
     activeTimer = JSON.parse(localStorage.getItem("gtp_active") || "null");
@@ -46,12 +46,34 @@ function initNavigation() {
             showPage(li.dataset.page);
         });
     });
+}
 
-    const navToggle = document.getElementById("navToggle");
-    const sidebar = document.getElementById("sidebar");
-    if (navToggle && sidebar) {
-        navToggle.addEventListener("click", () => sidebar.classList.toggle("open"));
-    }
+// ======================================================
+// ================  MOBILE MENU FIX  ====================
+// ======================================================
+
+function initMobileMenu() {
+    const menuToggle = document.getElementById("menuToggle");
+    const sidebar = document.querySelector(".sidebar");
+
+    // Åbn/luk ved klik
+    menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+    });
+
+    // Luk når musen forlader menuen (desktop)
+    sidebar.addEventListener("mouseleave", () => {
+        if (window.innerWidth > 900) {
+            sidebar.classList.remove("open");
+        }
+    });
+
+    // Luk når man klikker et menupunkt
+    document.querySelectorAll(".sidebar li").forEach(li => {
+        li.addEventListener("click", () => {
+            sidebar.classList.remove("open");
+        });
+    });
 }
 
 // ======================================================
@@ -63,6 +85,7 @@ function initThemeToggle() {
 
     const savedTheme = localStorage.getItem("gtp_theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
+
     themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
 
     themeToggle.addEventListener("click", () => {
@@ -75,7 +98,7 @@ function initThemeToggle() {
 }
 
 // ======================================================
-// ================  RENDER CUSTOMER  ====================
+// ================  CUSTOMERS  ==========================
 // ======================================================
 
 function renderCustomers() {
@@ -84,7 +107,10 @@ function renderCustomers() {
     const planSel = document.getElementById("planCustomerSelect");
     const repSel = document.getElementById("reportCustomerSelect");
 
-    [tbody, timerSel, planSel, repSel].forEach(el => { if (el) el.innerHTML = ""; });
+    if (tbody) tbody.innerHTML = "";
+    if (timerSel) timerSel.innerHTML = "";
+    if (planSel) planSel.innerHTML = "";
+    if (repSel) repSel.innerHTML = "";
 
     if (repSel) {
         const opt = document.createElement("option");
@@ -127,7 +153,7 @@ function renderCustomers() {
 }
 
 // ======================================================
-// ================  RENDER EMPLOYEES  ===================
+// ================  EMPLOYEES (FIX)  ====================
 // ======================================================
 
 function renderEmployees() {
@@ -136,7 +162,10 @@ function renderEmployees() {
     const planSel = document.getElementById("planEmployeeSelect");
     const repSel = document.getElementById("reportEmployeeSelect");
 
-    [tbody, timerSel, planSel, repSel].forEach(el => { if (el) el.innerHTML = ""; });
+    if (tbody) tbody.innerHTML = "";
+    if (timerSel) timerSel.innerHTML = "";
+    if (planSel) planSel.innerHTML = "";
+    if (repSel) repSel.innerHTML = "";
 
     if (repSel) {
         const opt = document.createElement("option");
@@ -177,8 +206,41 @@ function renderEmployees() {
     if (dash) dash.textContent = employees.length;
 }
 
+// FIX: korrekt gem funktion
+function initEmployeeSave() {
+    const btn = document.getElementById("saveEmployeeBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const name = document.getElementById("empName").value.trim();
+        const email = document.getElementById("empEmail").value.trim();
+        const role = document.getElementById("empRole").value;
+
+        if (!name) {
+            alert("Please enter a name");
+            return;
+        }
+
+        employees.push({
+            id: Date.now(),
+            name,
+            email,
+            role
+        });
+
+        saveData();
+        renderEmployees();
+
+        document.getElementById("empName").value = "";
+        document.getElementById("empEmail").value = "";
+        document.getElementById("empRole").value = "employee";
+
+        alert("Employee saved!");
+    });
+}
+
 // ======================================================
-// ================  RENDER LOGS  ========================
+// ================  TIME LOGS  ==========================
 // ======================================================
 
 function renderLogs() {
@@ -190,7 +252,7 @@ function renderLogs() {
     let count = 0;
 
     timeLogs
-        .filter(l => l.startTime.slice(0,10) === today)
+        .filter(l => l.startTime.slice(0, 10) === today)
         .forEach(log => {
             const cust = customers.find(c => c.id === log.customerId);
             const tr = document.createElement("tr");
@@ -208,10 +270,6 @@ function renderLogs() {
     const dash = document.getElementById("dashTodayLogs");
     if (dash) dash.textContent = count;
 }
-
-// ======================================================
-// ================  TIMER  ==============================
-// ======================================================
 
 function renderTimer() {
     const status = document.getElementById("timerStatus");
@@ -231,7 +289,9 @@ function renderTimer() {
 // ================  CALENDAR  ===========================
 // ======================================================
 
-function dateToYMD(d) { return d.toISOString().slice(0, 10); }
+function dateToYMD(d) {
+    return d.toISOString().slice(0, 10);
+}
 
 function renderCalendar() {
     const label = document.getElementById("calMonthLabel");
@@ -243,7 +303,7 @@ function renderCalendar() {
     const m = currentCalendarMonth.getMonth();
 
     const first = new Date(y, m, 1);
-    const days = new Date(y, m+1, 0).getDate();
+    const days = new Date(y, m + 1, 0).getDate();
     const weekday = (first.getDay() + 6) % 7;
 
     label.textContent = currentCalendarMonth.toLocaleDateString("en-GB", {
@@ -334,8 +394,8 @@ function generateReport() {
 
     let data = [...timeLogs];
 
-    if (from) data = data.filter(l => l.startTime.slice(0,10) >= from);
-    if (to) data = data.filter(l => l.startTime.slice(0,10) <= to);
+    if (from) data = data.filter(l => l.startTime.slice(0, 10) >= from);
+    if (to) data = data.filter(l => l.startTime.slice(0, 10) <= to);
     if (custId) data = data.filter(l => l.customerId === custId);
     if (emp) data = data.filter(l => l.employee === emp);
 
@@ -346,7 +406,7 @@ function generateReport() {
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
-            <td>${log.startTime.slice(0,10)}</td>
+            <td>${log.startTime.slice(0, 10)}</td>
             <td>${new Date(log.startTime).toLocaleTimeString()}</td>
             <td>${new Date(log.endTime).toLocaleTimeString()}</td>
             <td>${log.duration}</td>
@@ -358,17 +418,19 @@ function generateReport() {
         total += log.duration;
     });
 
-    summary.textContent = `${data.length} logs – ${total} min (${(total/60).toFixed(1)} h)`;
+    summary.textContent = `${data.length} logs – ${total} min (${(total / 60).toFixed(1)} h)`;
 }
 
 // ======================================================
-// ================  INIT (LOAD ALL)  ====================
+// ================  INIT  ===============================
 // ======================================================
 
 document.addEventListener("DOMContentLoaded", () => {
     loadData();
     initNavigation();
+    initMobileMenu();
     initThemeToggle();
+    initEmployeeSave();
 
     const today = new Date();
     selectedCalendarDate = dateToYMD(today);
