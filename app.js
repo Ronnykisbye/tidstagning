@@ -40,7 +40,7 @@ function toDateString(d) {
 function formatTimeFromSeconds(sec) {
     const h = String(Math.floor(sec / 3600)).padStart(2, "0");
     const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
-    const s = String(sec % 60).padStart(2, "0");
+    const s = String(sec % 60).padStart(2, 10).slice(-2);
     return `${h}:${m}:${s}`;
 }
 
@@ -75,7 +75,6 @@ function getLocaleForLang(lang) {
 }
 
 function parseDateString(dateStr) {
-    // "yyyy-mm-dd" -> Date
     return new Date(`${dateStr}T00:00:00`);
 }
 
@@ -109,8 +108,6 @@ function saveAll() {
 /* ======================================================
    AFSNIT 03 – SPROG & TEMA
    ====================================================== */
-
-/* --- Oversættelser (forenklet, kan udvides senere) --- */
 
 const translations = {
     da: {
@@ -222,7 +219,6 @@ const translations = {
         weekday_sat: "Lør",
         weekday_sun: "Søn",
 
-        // Tekster som kun bruges i JS:
         msg_select_customer: "Vælg en kunde først.",
         msg_select_employees: "Vælg mindst én medarbejder.",
         msg_select_customer_employee: "Vælg både kunde og medarbejder.",
@@ -242,7 +238,6 @@ const translations = {
         placeholder_all_employees: "Alle medarbejdere"
     },
 
-    // Engelske tekster (kort og tydelige)
     en: {
         app_title: "GreenTime Pro",
 
@@ -371,7 +366,6 @@ const translations = {
         placeholder_all_employees: "All employees"
     },
 
-    // Tysk (forenklet, kan finpudses)
     de: {
         app_title: "GreenTime Pro",
 
@@ -500,7 +494,6 @@ const translations = {
         placeholder_all_employees: "Alle Mitarbeiter"
     },
 
-    // Litauisk (simpel, kan forbedres)
     lt: {
         app_title: "GreenTime Pro",
 
@@ -655,6 +648,7 @@ function applyLangActiveButton() {
 
 function initLanguage() {
     if (!currentLang) currentLang = "da";
+
     applyLangActiveButton();
     applyTranslations();
 
@@ -665,11 +659,14 @@ function initLanguage() {
             if (!lang) return;
             currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+
             applyLangActiveButton();
             applyTranslations();
-            renderCalendar();    // månedstekst
-            renderTodayLogs();   // evt. oversatte tekster
-            renderReportsTable([]); // overskrifter er allerede med data-i18n
+
+            renderCalendar();
+            renderTodayLogs();
+            renderReportsTable([]);
+            renderDayDetails(selectedCalendarDate);
         });
     });
 }
@@ -739,7 +736,8 @@ function refreshCustomerSelects() {
         "quickCustomerSelect",
         "timerCustomerSelect",
         "planCustomerSelect",
-        "reportCustomerSelect"
+        "reportCustomerSelect",
+        "resetCustomerSelect"
     ];
 
     ids.forEach(selectId => {
@@ -747,13 +745,19 @@ function refreshCustomerSelects() {
         if (!sel) return;
         sel.innerHTML = "";
 
-        const isReport = selectId === "reportCustomerSelect";
-        const placeholder = isReport ? t("placeholder_all_customers")
-                                     : t("placeholder_select_customer");
+        const isReport = (selectId === "reportCustomerSelect");
+        const isReset  = (selectId === "resetCustomerSelect");
+
+        let placeholderKey;
+        if (isReport) {
+            placeholderKey = "placeholder_all_customers";
+        } else {
+            placeholderKey = "placeholder_select_customer";
+        }
 
         const optEmpty = document.createElement("option");
         optEmpty.value = "";
-        optEmpty.textContent = placeholder;
+        optEmpty.textContent = t(placeholderKey);
         sel.appendChild(optEmpty);
 
         customers.forEach(c => {
@@ -883,8 +887,9 @@ function refreshEmployeeSelects() {
         sel.innerHTML = "";
 
         const isReport = selectId === "reportEmployeeSelect";
-        const placeholder = isReport ? t("placeholder_all_employees")
-                                     : t("placeholder_select_employee");
+        const placeholder = isReport
+            ? t("placeholder_all_employees")
+            : t("placeholder_select_employee");
 
         const optEmpty = document.createElement("option");
         optEmpty.value = "";
@@ -1016,7 +1021,6 @@ function initQuickTimer() {
 
     if (!startBtn || !stopBtn) return;
 
-    // Hvis der allerede ligger en quickTimer i storage
     if (quickTimer && quickTimer.start) {
         quickIntervalId = setInterval(updateQuickTimerDisplay, 1000);
         updateQuickTimerDisplay();
@@ -1192,9 +1196,8 @@ function renderTodayLogs() {
 
 /* ======================================================
    AFSNIT 10 – NULSTIL TID FOR KUNDE
-   (selve logikken sidder i initCustomers)
+   (logikken er i initCustomers)
    ====================================================== */
-// Se initCustomers ovenfor – her er kun heading for strukturens skyld.
 
 /* ======================================================
    AFSNIT 11 – PLANLÆGNING (VARIGHED I HALVE TIMER)
@@ -1204,7 +1207,6 @@ function setupPlanDurationInput() {
     const durationInput = document.getElementById("planDuration");
     if (!durationInput) return;
 
-    // Vi bruger stadig <input type="number">, men tolker det som timer i trin á 0,5
     durationInput.min = "0.5";
     durationInput.max = "8";
     durationInput.step = "0.5";
@@ -1226,7 +1228,8 @@ function initPlanning() {
 
         const dateStr    = dateInput.value;
         const startTime  = startInput.value;
-        const durationHr = parseFloat(durationInput.value.replace(",", "."));
+        const raw        = durationInput.value.replace(",", ".");
+        const durationHr = parseFloat(raw);
         const customerId = customerSel.value;
         const employeeIds = getSelectedIdsFromChipList("planEmployeeList");
         const note       = noteInput.value.trim();
@@ -1260,13 +1263,12 @@ function initPlanning() {
             note
         });
 
-        // ryd felter (dato lader vi stå, så man kan oprette flere på samme dag)
-        // start & duration nulstilles
         startInput.value = "";
         durationInput.value = "";
         noteInput.value = "";
-        const chips = document.querySelectorAll("#planEmployeeList .chip.selected");
-        chips.forEach(chip => chip.classList.remove("selected"));
+        document
+            .querySelectorAll("#planEmployeeList .chip.selected")
+            .forEach(chip => chip.classList.remove("selected"));
 
         saveAll();
 
@@ -1302,7 +1304,6 @@ function renderCalendar() {
     const lastOfMonth  = new Date(year, month + 1, 0);
     const daysInMonth  = lastOfMonth.getDate();
 
-    // mandag = 0
     const weekday = firstOfMonth.getDay(); // søndag=0, mandag=1...
     const mondayIndex = (weekday + 6) % 7;
 
@@ -1347,7 +1348,7 @@ function renderCalendar() {
 }
 
 /* ======================================================
-   AFSNIT 13 – DAGEN OPGAVER (DETAILLISTE)
+   AFSNIT 13 – DAGEN OPGAVER
    ====================================================== */
 
 function renderDayDetails(dateStr) {
@@ -1385,11 +1386,15 @@ function renderDayDetails(dateStr) {
         const durHr = (p.durationMinutes || 0) / 60;
         const durText = durHr ? `${durHr.toString().replace(".", ",")} t` : "";
         const customerName = getCustomerName(p.customerId);
-        const employeesNames = (p.employeeIds || []).map(getEmployeeName).filter(Boolean).join(", ");
+        const employeesNames = (p.employeeIds || [])
+            .map(getEmployeeName)
+            .filter(Boolean)
+            .join(", ");
 
-        li.textContent = `${p.startTime || ""} – ${durText} – ${customerName}${
-            employeesNames ? " (" + employeesNames + ")" : ""
-        }${p.note ? " – " + p.note : ""}`;
+        li.textContent =
+            `${p.startTime || ""} – ${durText} – ${customerName}` +
+            (employeesNames ? ` (${employeesNames})` : "") +
+            (p.note ? ` – ${p.note}` : "");
 
         list.appendChild(li);
     });
