@@ -28,6 +28,7 @@
             <li data-page="employees">Employees</li>
             <li data-page="timer">Time Tracking</li>
             <li data-page="logs">Logs</li>
+            <li data-page="reports">Reports</li>
             <li data-page="settings">Settings</li>
         </ul>
     </nav>
@@ -140,8 +141,10 @@
 
                 <div id="timerStatus">No active timer</div>
 
-                <button id="startTimerBtn">Start Timer</button>
-                <button id="stopTimerBtn" disabled>Stop Timer</button>
+                <div class="button-row">
+                    <button id="startTimerBtn">Start Timer</button>
+                    <button id="stopTimerBtn" disabled>Stop Timer</button>
+                </div>
             </div>
         </section>
 
@@ -149,12 +152,70 @@
         <section id="logs" class="page">
             <h2>Today's Logs</h2>
 
-            <table id="timeLogTable">
-                <thead>
-                    <tr><th>Start</th><th>End</th><th>Duration</th><th>Customer</th><th>Employee</th></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="card">
+                <table id="timeLogTable">
+                    <thead>
+                        <tr>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Duration (min)</th>
+                            <th>Customer</th>
+                            <th>Employee</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- REPORTS -->
+        <section id="reports" class="page">
+            <h2>Reports</h2>
+
+            <div class="card">
+                <h3>Filter</h3>
+                <div class="filter-row">
+                    <div>
+                        <label for="reportDateFrom">Date from</label>
+                        <input type="date" id="reportDateFrom" />
+                    </div>
+                    <div>
+                        <label for="reportDateTo">Date to</label>
+                        <input type="date" id="reportDateTo" />
+                    </div>
+                    <div>
+                        <label for="reportCustomerSelect">Customer</label>
+                        <select id="reportCustomerSelect"></select>
+                    </div>
+                    <div>
+                        <label for="reportEmployeeSelect">Employee</label>
+                        <select id="reportEmployeeSelect"></select>
+                    </div>
+                </div>
+                <button id="reportGenerateBtn">Generate report</button>
+            </div>
+
+            <div class="card">
+                <h3>Summary</h3>
+                <p id="reportSummary">No report generated yet.</p>
+            </div>
+
+            <div class="card">
+                <h3>Report details</h3>
+                <table id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Duration (min)</th>
+                            <th>Customer</th>
+                            <th>Employee</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </section>
 
         <!-- SETTINGS -->
@@ -169,6 +230,6 @@
         Written by ChatGPT for - Kisbye Consulting
     </footer>
 
-<script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
