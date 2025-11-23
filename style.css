@@ -10,7 +10,7 @@
     --text: #e5e7eb;
     --text-muted: #9ca3af;
     --accent: #22c55e;
-    --accent-soft: rgba(34, 197, 94, 0.15);
+    --accent-soft: rgba(34, 197, 94, 0.18);
     --accent-strong: #16a34a;
 }
 
@@ -22,8 +22,8 @@
     --text: #111827;
     --text-muted: #6b7280;
     --accent: #16a34a;
-    --accent-soft: rgba(34, 197, 94, 0.1);
-    --accent-strong: #16a34a;
+    --accent-soft: rgba(22, 163, 74, 0.10);
+    --accent-strong: #15803d;
 }
 
 *,
@@ -34,14 +34,13 @@
 
 body {
     margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
-    font-family: system-ui, sans-serif;
 }
 
-
 /* ======================================================
-   AFSNIT 02 – APP LAYOUT
+   AFSNIT 02 – LAYOUT (APP, SIDEBAR, MAIN)
    ====================================================== */
 
 .app {
@@ -49,80 +48,105 @@ body {
     min-height: 100vh;
 }
 
-.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    background: radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
-                radial-gradient(circle at bottom right, rgba(22,163,74,0.18), transparent 60%),
-                var(--bg);
-}
-
-
-/* ======================================================
-   AFSNIT 03 – SIDEBAR
-   ====================================================== */
-
 .sidebar {
-    width: 230px;
+    width: 240px;
     background: radial-gradient(circle at top left, #22c55e33, transparent 60%),
                 #020617;
     border-right: 1px solid var(--border-subtle);
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 20;
 }
 
-.sidebar ul {
+.logo {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.logo-mark {
+    font-size: 1.4rem;
+}
+
+.logo-text {
+    font-size: 1rem;
+}
+
+.nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.sidebar li {
-    padding: 0.6rem 0.7rem;
-    margin-bottom: 0.2rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
+.nav li {
+    padding: .5rem .7rem;
+    border-radius: .6rem;
     color: var(--text-muted);
+    cursor: pointer;
+    margin-bottom: .2rem;
 }
 
-.sidebar li:hover {
+.nav li:hover {
     background: var(--accent-soft);
     color: var(--text);
 }
 
-.sidebar li.active {
+.nav li.active {
     background: var(--accent);
-    color: #0f172a;
+    color: #052e16;
 }
 
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(22,163,74,0.18), transparent 60%),
+        var(--bg);
+}
 
 /* ======================================================
-   AFSNIT 04 – TOPBAR
+   AFSNIT 03 – TOPBAR & KNAPPER
    ====================================================== */
 
 .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.6rem 1rem;
+    padding: .6rem 1rem;
     border-bottom: 1px solid var(--border-subtle);
-
-    background: rgba(2, 6, 23, 0.9);
+    background: rgba(2, 6, 23, 0.95);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
+    z-index: 30;
+}
+
+.topbar-center h1 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
 .icon-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: var(--text);
-    padding: 0.35rem 0.7rem;
     border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    padding: .3rem .7rem;
+    background: var(--bg-card);
+    color: var(--text);
     cursor: pointer;
+    font-size: .9rem;
 }
 
 .icon-btn:hover {
@@ -131,91 +155,122 @@ body {
 
 .lang-switcher {
     display: flex;
-    gap: 0.3rem;
+    gap: .3rem;
 }
 
 .lang-btn {
-    background: var(--accent);
-    color: #0f172a;
     border-radius: 999px;
     border: 1px solid var(--border-subtle);
-    padding: 0.25rem 0.6rem;
+    padding: .2rem .6rem;
+    font-size: .75rem;
     cursor: pointer;
+    background: var(--bg-card);
+    color: var(--text-muted);
 }
 
 .lang-btn.active {
-    background: #0f172a;
-    color: #bbf7d0;
+    background: var(--accent);
+    color: #052e16;
 }
 
-
 /* ======================================================
-   AFSNIT 05 – GENERELLE ELEMENTER (KORT, FORMS, TABELLER)
+   AFSNIT 04 – GENERELLE SIDE-ELEMENTER
    ====================================================== */
 
 .page {
+    padding: 1rem 1.5rem 2rem;
     display: none;
-    padding: 1rem;
 }
 
 .page.visible {
     display: block;
 }
 
+h2 {
+    margin-top: .4rem;
+    margin-bottom: .8rem;
+    font-size: 1.3rem;
+}
+
+/* Kort / paneler */
 .form-card,
 .table-card,
 .calendar-card,
 .quick-card {
     background: var(--bg-card);
-    border-radius: 1rem;
+    border-radius: 1.1rem;
     border: 1px solid var(--border-subtle);
-    padding: 1rem;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 18px 40px rgba(15,23,42,0.85);
 }
 
+/* Grid-layouts */
 .form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0,1.1fr) minmax(0,1.3fr);
     gap: 1rem;
 }
 
+/* Labels & inputs */
 label {
     display: block;
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
+    margin-bottom: .5rem;
+    font-size: .85rem;
+}
+
+label span {
+    display: block;
+    margin-bottom: .15rem;
 }
 
 input,
-select,
-textarea {
+textarea,
+select {
     width: 100%;
-    padding: 0.35rem 0.6rem;
-    border-radius: 0.5rem;
+    padding: .4rem .6rem;
+    border-radius: .6rem;
     border: 1px solid var(--border-subtle);
-    background: var(--bg-card);
+    background: var(--bg-elevated);
     color: var(--text);
-    font-size: 0.9rem;
-
-    /* Synlig dropdown pil */
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='%23aaa' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 36px;
+    font-size: .9rem;
 }
 
+/* Kun select har pil */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23a1a1aa' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 34px;
+}
 
-/* ======================================================
-   AFSNIT 06 – KNAPPER
-   ====================================================== */
+textarea {
+    resize: vertical;
+}
+
+/* Status tekst */
+.status {
+    margin-top: .3rem;
+    font-size: .82rem;
+    color: var(--text-muted);
+}
+
+/* Knapper */
+.btn-row {
+    display: flex;
+    gap: .5rem;
+    margin-top: .6rem;
+}
 
 .btn {
-    background: var(--accent);
-    color: #0f172a;
-    border: none;
     border-radius: 999px;
-    padding: 0.45rem 1rem;
+    border: none;
+    padding: .45rem 1.2rem;
+    background: var(--accent);
+    color: #052e16;
+    font-weight: 600;
+    font-size: .9rem;
     cursor: pointer;
-    font-weight: bold;
 }
 
 .btn:hover {
@@ -232,44 +287,95 @@ textarea {
     border-color: var(--accent);
 }
 
+/* Tabeller */
+.table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+}
+
+.table-card th,
+.table-card td {
+    border: 1px solid var(--border-subtle);
+    padding: .35rem .5rem;
+    text-align: left;
+}
+
+.table-card th {
+    background: #020617;
+}
 
 /* ======================================================
-   AFSNIT 07 – QUICK TIMER (FORSIDE)
+   AFSNIT 05 – QUICK TIMER (FORSIDE)
    ====================================================== */
+
+.quick-card {
+    max-width: 1100px;
+    margin-inline: auto;
+}
 
 .quick-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+    gap: 1.2rem;
+    align-items: center;
 }
 
 .quick-timer {
-    font-size: 2.3rem;
+    font-size: 2.6rem;
+    font-weight: 600;
     text-align: center;
-    padding: 1rem;
+    padding: 1.1rem 0;
     border-radius: 999px;
     border: 1px solid var(--accent);
-    box-shadow: 0 0 25px #22c55e44;
+    background: radial-gradient(circle at top, #22c55e26, transparent 65%);
+    box-shadow: 0 0 40px rgba(34,197,94,0.5);
 }
 
+.quick-buttons {
+    justify-content: center;
+    margin-top: .7rem;
+}
+
+.small-label {
+    font-size: .8rem;
+    color: var(--text-muted);
+}
+
+.quick-mode {
+    margin-top: .5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
+}
+
+.mode-option {
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+    font-size: .8rem;
+}
 
 /* ======================================================
-   AFSNIT 08 – CHIP LIST (MEDARBEJDER MULTI-SELECT)
+   AFSNIT 06 – CHIP-LISTE (MULTI MEDARBEJDER)
    ====================================================== */
 
 .chip-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: .35rem;
+    margin-top: .2rem;
 }
 
 .chip-check {
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
-    border: 1px solid var(--border-subtle);
+    gap: .25rem;
     border-radius: 999px;
-    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    padding: .18rem .6rem;
+    font-size: .8rem;
     cursor: pointer;
 }
 
@@ -277,28 +383,58 @@ textarea {
     width: auto;
 }
 
-
 /* ======================================================
-   AFSNIT 09 – KALENDER
+   AFSNIT 07 – KALENDER
    ====================================================== */
 
 .calendar-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1.3fr);
     gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .4rem;
+}
+
+#calMonthLabel {
+    font-weight: 500;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    font-size: .75rem;
+    color: var(--text-muted);
+    margin-bottom: .25rem;
 }
 
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.3rem;
+    grid-template-columns: repeat(7,1fr);
+    gap: .25rem;
+    font-size: .8rem;
 }
 
 .calendar-cell {
+    min-height: 2.3rem;
+    border-radius: .55rem;
     border: 1px solid var(--border-subtle);
-    padding: 0.3rem;
-    border-radius: 0.4rem;
+    padding: .15rem .3rem;
     cursor: pointer;
+}
+
+.calendar-cell.empty {
+    border: none;
+    cursor: default;
+}
+
+.calendar-cell .date-number {
+    font-size: .8rem;
 }
 
 .calendar-cell.selected {
@@ -306,28 +442,50 @@ textarea {
     box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
+/* ======================================================
+   AFSNIT 08 – DAY DETAILS (OPGAVE-LISTE)
+   ====================================================== */
+
+.day-details ul {
+    padding-left: 1rem;
+    font-size: .85rem;
+}
 
 /* ======================================================
-   AFSNIT 10 – MOBIL RESPONSIVITET
+   AFSNIT 09 – RESPONSIVT DESIGN
    ====================================================== */
 
 @media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        max-width: 230px;
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
     .form-grid,
     .calendar-layout,
     .quick-grid {
         grid-template-columns: 1fr;
     }
 
-    .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        transition: 0.2s ease;
+    .quick-card {
+        margin-inline: .2rem;
     }
 
-    .sidebar.open {
-        transform: translateX(0);
+    .topbar-center h1 {
+        font-size: .95rem;
     }
+}
+
+/* ======================================================
+   AFSNIT 10 – SMÅ JUSTERINGER
+   ====================================================== */
+
+.reset-card {
+    margin-top: 1rem;
 }
