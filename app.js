@@ -254,6 +254,78 @@ function renderCustomerTable() {
     });
 }
 
+/* ======================================================
+   AFSNIT 06D – KALENDER LOGIK: FARVER EFTER ANTAL OPGAVER
+   ====================================================== */
+
+function getTasksForDate(dateObj) {
+    const d = dateObj.toISOString().split("T")[0]; // yyyy-mm-dd
+
+    // Find alle opgaver på datoen
+    return plans.filter(p => p.date === d);
+}
+
+function renderCalendar() {
+    const grid = document.getElementById("calendarGrid");
+    const title = document.getElementById("calendarMonthTitle");
+
+    if (!grid) return;
+
+    // Nulstil UI
+    grid.innerHTML = "";
+
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+
+    title.textContent = calendarMonth.toLocaleDateString("da-DK", {
+        month: "long",
+        year: "numeric"
+    });
+
+    const firstDay = new Date(year, month, 1);
+    const startDayOfWeek = firstDay.getDay() || 7;
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Tomme felter før dag 1
+    for (let i = 1; i < startDayOfWeek; i++) {
+        const empty = document.createElement("div");
+        empty.className = "calendar-cell";
+        grid.appendChild(empty);
+    }
+
+    // Selve dagene
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(year, month, day);
+        const btn = document.createElement("button");
+
+        btn.className = "calendar-cell";
+        btn.textContent = day;
+
+        // Find opgave-antal for datoen
+        const tasks = getTasksForDate(dateObj);
+        const count = tasks.length;
+
+        // Tildel farve efter regler
+        if (count === 0) {
+            btn.classList.add("calendar-day-empty");
+        } else if (count >= 1 && count <= 4) {
+            btn.classList.add("calendar-day-medium");
+        } else {
+            btn.classList.add("calendar-day-busy");
+        }
+
+        // Klik på dato
+        btn.addEventListener("click", () => {
+            selectedCalendarDate = dateObj;
+            document.getElementById("planDate").value =
+                dateObj.toISOString().split("T")[0];
+        });
+
+        grid.appendChild(btn);
+    }
+}
+
 
 /* ======================================================
    AFSNIT 07 – MEDARBEJDERE
