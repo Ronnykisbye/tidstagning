@@ -14,7 +14,7 @@
     <aside class="sidebar">
         <div class="logo">
             <span class="logo-mark">🌿</span>
-            <span class="logo-text">GreenTime Pro</span>
+            <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
         </div>
 
         <nav class="nav">
@@ -76,7 +76,7 @@
         <section id="dashboardPage" class="page visible">
             <h2 data-i18n="dashboard_title">Tidsregistrering</h2>
 
-            <div class="quick-card">
+            <div class="card quick-card">
                 <div class="quick-grid">
 
                     <!-- VENSTRE: FELTER -->
@@ -112,7 +112,7 @@
 
                     <!-- HØJRE: TIMER -->
                     <div class="quick-right">
-                        <div id="quickTimerDisplay" class="quick-timer">00:00:00</div>
+                        <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
                         <div class="btn-row quick-buttons">
                             <button id="quickStartBtn" class="btn" data-i18n="btn_start_timer">Start</button>
                             <button id="quickStopBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">Stop</button>
@@ -127,7 +127,7 @@
             <h2 data-i18n="customers_title">Kunder</h2>
 
             <div class="form-grid">
-                <div class="form-card">
+                <div class="card form-card">
                     <h3 data-i18n="customers_add">Tilføj kunde</h3>
 
                     <label>
@@ -152,7 +152,7 @@
                     </button>
                 </div>
 
-                <div class="table-card">
+                <div class="card table-card">
                     <h3 data-i18n="customers_list">Kundeliste</h3>
                     <table id="customerTable">
                         <thead>
@@ -168,7 +168,7 @@
                 </div>
             </div>
 
-            <div class="form-card reset-card">
+            <div class="card reset-card">
                 <h3 data-i18n="customers_reset_title">Nulstil tid for kunde</h3>
                 <label>
                     <span data-i18n="label_reset_customer">Vælg kunde</span>
@@ -186,7 +186,7 @@
             <h2 data-i18n="employees_title">Medarbejdere</h2>
 
             <div class="form-grid">
-                <div class="form-card">
+                <div class="card form-card">
                     <h3 data-i18n="employees_add">Tilføj medarbejder</h3>
 
                     <label>
@@ -210,7 +210,7 @@
                     </button>
                 </div>
 
-                <div class="table-card">
+                <div class="card table-card">
                     <h3 data-i18n="employees_list">Medarbejderliste</h3>
                     <table id="employeeTable">
                         <thead>
@@ -226,13 +226,12 @@
             </div>
         </section>
 
-     
         <!-- AFSNIT 07 – DETALJERET TID -->
         <section id="timeTrackingPage" class="page">
             <h2 data-i18n="time_title">Tidsregistrering</h2>
 
             <div class="form-grid">
-                <div class="form-card">
+                <div class="card form-card">
                     <h3 data-i18n="time_start_stop">Start / stop</h3>
 
                     <label>
@@ -251,13 +250,13 @@
 
                     <div class="btn-row">
                         <button id="startTimerBtn" class="btn" data-i18n="btn_start_timer">Start</button>
-                        <button id="stopTimerBtn" class="btn btn-secondary" data-i18n="btn_stop_timer" disabled>
+                        <button id="stopTimerBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">
                             Stop
                         </button>
                     </div>
                 </div>
 
-                <div class="table-card">
+                <div class="card table-card">
                     <h3 data-i18n="logs_today_title">Dagens logs</h3>
                     <table id="timeLogTable">
                         <thead>
@@ -281,11 +280,11 @@
 
             <div class="calendar-layout">
                 <!-- Kalender -->
-                <div class="calendar-card">
+                <div class="card calendar-card">
                     <div class="calendar-header">
-                        <button id="prevMonthBtn" class="icon-btn">‹</button>
+                        <button id="prevMonthBtn" class="icon-btn" aria-label="Forrige måned">‹</button>
                         <div id="calMonthLabel">Måned</div>
-                        <button id="nextMonthBtn" class="icon-btn">›</button>
+                        <button id="nextMonthBtn" class="icon-btn" aria-label="Næste måned">›</button>
                     </div>
                     <div class="calendar-weekdays">
                         <span data-i18n="weekday_mon">Man</span>
@@ -300,7 +299,7 @@
                 </div>
 
                 <!-- Planlæg opgave -->
-                <div class="form-card">
+                <div class="card form-card">
                     <h3 data-i18n="schedule_plan_job">Planlæg opgave</h3>
 
                     <label>
@@ -312,7 +311,7 @@
                         <input id="planStart" type="time" />
                     </label>
                     <label>
-                        <span data-i18n="label_plan_duration">Varighed (minutter)</span>
+                        <span data-i18n="label_plan_duration">Varighed (timer, 0,5–8)</span>
                         <input id="planDuration" type="number" />
                     </label>
                     <label>
@@ -334,7 +333,7 @@
                 </div>
             </div>
 
-            <div class="day-details">
+            <div class="card day-details">
                 <h3 id="selectedDayLabel" data-i18n="schedule_selected_day">
                     Klik på en dag for at se opgaver.
                 </h3>
@@ -355,7 +354,7 @@
             <h2 data-i18n="reports_title">Rapporter</h2>
 
             <div class="form-grid">
-                <div class="form-card">
+                <div class="card form-card">
                     <h3 data-i18n="reports_filter_title">Filtre</h3>
 
                     <label>
@@ -382,7 +381,7 @@
                     <p id="reportSummary" class="status"></p>
                 </div>
 
-                <div class="table-card">
+                <div class="card table-card">
                     <h3 data-i18n="reports_result_title">Resultat</h3>
                     <table id="reportTable">
                         <thead>
@@ -404,9 +403,24 @@
         <!-- AFSNIT 11 – INDSTILLINGER -->
         <section id="settingsPage" class="page">
             <h2 data-i18n="settings_title">Indstillinger</h2>
-            <p data-i18n="settings_lang_info">
-                Appen husker automatisk dit sprog og tema (lys/mørk).
-            </p>
+
+            <div class="form-grid">
+                <div class="card">
+                    <h3 data-i18n="settings_language_title">Sprog</h3>
+                    <p>
+                        <span data-i18n="settings_language_title">Sprog</span>:
+                        DK / GB / DE / LT via knapperne i toppen.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 data-i18n="settings_theme_title">Tema</h3>
+                    <p>
+                        <span data-i18n="settings_theme_title">Tema</span>:
+                        Lys / mørk via sol-knappen i toppen.
+                    </p>
+                </div>
+            </div>
         </section>
 
     </main>
