@@ -12,34 +12,40 @@
     <header class="topbar">
         <div class="topbar-left">
             <div class="logo"></div>
-            <h1>GreenTime Pro</h1>
+            <div class="topbar-title">
+                <h1>GreenTime Pro</h1>
+                <span>Smart planning & time tracking</span>
+            </div>
         </div>
         <div class="topbar-right">
-            <button id="themeToggle" class="theme-toggle">🌙</button>
-            <button id="navToggle" class="nav-toggle">☰</button>
+            <button id="themeToggle" class="chip-btn">🌙</button>
+            <button id="navToggle" class="chip-btn nav-toggle">☰</button>
         </div>
     </header>
 
-    <!-- SIDE NAVIGATION -->
+    <!-- SIDEBAR -->
     <nav id="sidebar" class="sidebar">
         <ul>
             <li data-page="dashboard" class="active">Dashboard</li>
             <li data-page="customers">Customers</li>
             <li data-page="employees">Employees</li>
             <li data-page="timer">Time Tracking</li>
+            <li data-page="schedule">Schedule</li>
             <li data-page="logs">Logs</li>
             <li data-page="reports">Reports</li>
             <li data-page="settings">Settings</li>
         </ul>
     </nav>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main id="appContent">
 
         <!-- DASHBOARD -->
         <section id="dashboard" class="page visible">
             <h2>Dashboard</h2>
-            <p>Welcome to GreenTime Pro – your service business control center.</p>
+            <p class="page-intro">
+                Overview of your customers, employees and today’s work.
+            </p>
 
             <div class="dashboard-cards">
                 <div class="dash-card">
@@ -60,74 +66,90 @@
         <!-- CUSTOMERS -->
         <section id="customers" class="page">
             <h2>Customers</h2>
+            <p class="page-intro">Store contact details and keep everything in one place.</p>
 
-            <div class="card">
-                <h3>Add Customer</h3>
-                <form id="customerForm">
-                    <label>Name</label>
-                    <input id="customerName" type="text" required />
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Add customer</h3>
+                    <form id="customerForm">
+                        <label>Name</label>
+                        <input id="customerName" type="text" required />
 
-                    <label>Phone</label>
-                    <input id="customerPhone" type="text" />
+                        <label>Phone</label>
+                        <input id="customerPhone" type="text" />
 
-                    <label>Email</label>
-                    <input id="customerEmail" type="email" />
+                        <label>Email</label>
+                        <input id="customerEmail" type="email" />
 
-                    <label>Address</label>
-                    <input id="customerAddress" type="text" />
+                        <label>Address</label>
+                        <input id="customerAddress" type="text" />
 
-                    <button type="submit">Save Customer</button>
-                </form>
-            </div>
+                        <button type="submit">Save customer</button>
+                    </form>
+                </div>
 
-            <div class="card">
-                <h3>Customer List</h3>
-                <table id="customerTable">
-                    <thead>
-                        <tr><th>Name</th><th>Phone</th><th>Email</th><th>Address</th></tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="card">
+                    <h3>Customer list</h3>
+                    <table id="customerTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
         <!-- EMPLOYEES -->
         <section id="employees" class="page">
             <h2>Employees</h2>
+            <p class="page-intro">Create users for your team and connect time entries to people.</p>
 
-            <div class="card">
-                <h3>Add Employee</h3>
-                <form id="employeeForm">
-                    <label>Name</label>
-                    <input id="employeeName" type="text" required />
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Add employee</h3>
+                    <form id="employeeForm">
+                        <label>Name</label>
+                        <input id="employeeName" type="text" required />
 
-                    <label>Email</label>
-                    <input id="employeeEmail" type="email" />
+                        <label>Email</label>
+                        <input id="employeeEmail" type="email" />
 
-                    <label>Role</label>
-                    <select id="employeeRole">
-                        <option value="employee">Employee</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                        <label>Role</label>
+                        <select id="employeeRole">
+                            <option value="employee">Employee</option>
+                            <option value="admin">Admin</option>
+                        </select>
 
-                    <button type="submit">Save Employee</button>
-                </form>
-            </div>
+                        <button type="submit">Save employee</button>
+                    </form>
+                </div>
 
-            <div class="card">
-                <h3>Employee List</h3>
-                <table id="employeeTable">
-                    <thead>
-                        <tr><th>Name</th><th>Email</th><th>Role</th></tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="card">
+                    <h3>Employee list</h3>
+                    <table id="employeeTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- TIMER -->
+        <!-- TIME TRACKING -->
         <section id="timer" class="page">
-            <h2>Time Tracking</h2>
+            <h2>Time tracking</h2>
+            <p class="page-intro">Start and stop a timer when you work for a customer.</p>
 
             <div class="card">
                 <label>Customer</label>
@@ -139,18 +161,87 @@
                 <label>Or type name</label>
                 <input id="timerEmployeeName" type="text" placeholder="Optional" />
 
-                <div id="timerStatus">No active timer</div>
+                <div id="timerStatus" class="timer-status">No active timer</div>
 
                 <div class="button-row">
-                    <button id="startTimerBtn">Start Timer</button>
-                    <button id="stopTimerBtn" disabled>Stop Timer</button>
+                    <button id="startTimerBtn">Start timer</button>
+                    <button id="stopTimerBtn" disabled>Stop timer</button>
                 </div>
+            </div>
+        </section>
+
+        <!-- SCHEDULE (CALENDAR + PLANNING) -->
+        <section id="schedule" class="page">
+            <h2>Schedule</h2>
+            <p class="page-intro">
+                Plan upcoming visits and see your workload on the calendar.
+            </p>
+
+            <div class="grid-2">
+                <!-- Plan new job -->
+                <div class="card">
+                    <h3>Plan new job</h3>
+
+                    <form id="planForm">
+                        <label for="planDate">Date</label>
+                        <input type="date" id="planDate" required />
+
+                        <label for="planStartTime">Start time</label>
+                        <input type="time" id="planStartTime" required />
+
+                        <label for="planDuration">Duration (minutes)</label>
+                        <input type="number" id="planDuration" min="1" value="60" required />
+
+                        <label for="planCustomerSelect">Customer</label>
+                        <select id="planCustomerSelect"></select>
+
+                        <label for="planEmployeeSelect">Employee</label>
+                        <select id="planEmployeeSelect"></select>
+
+                        <label for="planNote">Note</label>
+                        <input type="text" id="planNote" placeholder="E.g. lawn mowing, hedge trimming" />
+
+                        <button type="submit">Save planned job</button>
+                    </form>
+                </div>
+
+                <!-- Calendar -->
+                <div class="card">
+                    <div class="calendar-header">
+                        <button id="calPrev" class="chip-btn">◀</button>
+                        <div id="calMonthLabel" class="cal-month-label">Month</div>
+                        <button id="calNext" class="chip-btn">▶</button>
+                    </div>
+
+                    <div class="calendar-grid">
+                        <div class="day-name">Mon</div>
+                        <div class="day-name">Tue</div>
+                        <div class="day-name">Wed</div>
+                        <div class="day-name">Thu</div>
+                        <div class="day-name">Fri</div>
+                        <div class="day-name">Sat</div>
+                        <div class="day-name">Sun</div>
+                        <div id="calendarCells"></div>
+                    </div>
+
+                    <p id="selectedDayLabel" class="selected-day-label">
+                        Click a day to see planned jobs.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Planned jobs on selected day</h3>
+                <ul id="dayPlanList" class="day-plan-list">
+                    <!-- Filled by JS -->
+                </ul>
             </div>
         </section>
 
         <!-- LOGS -->
         <section id="logs" class="page">
-            <h2>Today's Logs</h2>
+            <h2>Today's logs</h2>
+            <p class="page-intro">Time entries created today.</p>
 
             <div class="card">
                 <table id="timeLogTable">
@@ -171,6 +262,9 @@
         <!-- REPORTS -->
         <section id="reports" class="page">
             <h2>Reports</h2>
+            <p class="page-intro">
+                Filter your time entries by date, customer and employee.
+            </p>
 
             <div class="card">
                 <h3>Filter</h3>
@@ -221,7 +315,9 @@
         <!-- SETTINGS -->
         <section id="settings" class="page">
             <h2>Settings</h2>
-            <p>More features will be added soon.</p>
+            <p class="page-intro">
+                Future place for user accounts, export, integrations and more.
+            </p>
         </section>
 
     </main>
