@@ -17,6 +17,22 @@ let currentTheme = "light";
 
 let selectedCalendarDate = null;
 let calendarMonth = new Date();
+// ======================================================
+// ================  LOCAL STORAGE  ======================
+// ======================================================
+
+function loadAll() {
+    customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
+    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
+    logs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
+}
+
+function saveAll() {
+    localStorage.setItem("gtp_customers", JSON.stringify(customers));
+    localStorage.setItem("gtp_employees", JSON.stringify(employees));
+    localStorage.setItem("gtp_logs", JSON.stringify(logs));
+}
+
 
 
 /* ======================================================
@@ -596,18 +612,16 @@ function initThemeButton() {
 
 
 /* ======================================================
-   AFSNIT 15 – INITIALISERING (RETTET VERSION)
+   AFSNIT 15 – INITIALISERING
    ====================================================== */
 
 window.addEventListener("load", () => {
     loadAll();
 
-    // UI og tema
     initNavigation();
     initTheme();
     initThemeButton();
 
-    // Dropdowns og tabeller
     populateCustomerSelects();
     populateEmployeeSelects();
 
@@ -616,7 +630,6 @@ window.addEventListener("load", () => {
     renderTodayLogs();
     renderCalendar();
 
-    // Funktionelle moduler
     initCustomerSave();
     initEmployeeSave();
     initQuickTimer();
@@ -624,3 +637,4 @@ window.addEventListener("load", () => {
     initPlanning();
     initReports();
 });
+
