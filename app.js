@@ -596,16 +596,18 @@ function initThemeButton() {
 
 
 /* ======================================================
-   AFSNIT 15 – INITIALISERING
+   AFSNIT 15 – INITIALISERING (RETTET VERSION)
    ====================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
     loadAll();
 
+    // UI og tema
     initNavigation();
     initTheme();
     initThemeButton();
 
+    // Dropdowns og tabeller
     populateCustomerSelects();
     populateEmployeeSelects();
 
@@ -614,6 +616,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTodayLogs();
     renderCalendar();
 
+    // Funktionelle moduler
     initCustomerSave();
     initEmployeeSave();
     initQuickTimer();
