@@ -1,4 +1,4 @@
-/* ====== GENERELT ====== */
+/* AFSNIT 01 – GENERELT & TEMA */
 :root {
     --bg: #020617;
     --bg-elevated: #020617;
@@ -36,7 +36,7 @@ body {
     color: var(--text);
 }
 
-/* ====== LAYOUT ====== */
+/* AFSNIT 02 – LAYOUT & SIDEBAR */
 .app {
     display: flex;
     min-height: 100vh;
@@ -106,7 +106,7 @@ body {
                 var(--bg);
 }
 
-/* TOPBAR */
+/* AFSNIT 03 – TOPBAR & KNAPPER */
 .topbar {
     display: flex;
     align-items: center;
@@ -195,9 +195,10 @@ body {
     color: #bbf7d0;
 }
 
-.page {
+/* AFSNIT 04 – SIDER & CARDS */
+.main .page {
+    padding: 1rem;
     display: none;
-    padding: 1rem 1.2rem 2rem;
 }
 
 .page.visible {
@@ -235,7 +236,7 @@ h2 {
     font-size: 1.5rem;
 }
 
-/* FORMS & TABLES */
+/* AFSNIT 05 – FORMS & TABELLER */
 .form-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
@@ -264,6 +265,7 @@ label span {
     margin-bottom: 0.1rem;
 }
 
+/* VIGTIGT: FELTER I LYS MODE – BRUGER TEMA-FARVER */
 input,
 select,
 textarea {
@@ -271,8 +273,8 @@ textarea {
     padding: 0.35rem 0.5rem;
     border-radius: 0.55rem;
     border: 1px solid var(--border-subtle);
-    background: #020617;
-    color: var(--text);
+    background: var(--bg-card);   /* før: #020617 → nu følger tema */
+    color: var(--text);           /* altid læsbar tekst */
     font-size: 0.85rem;
 }
 
@@ -310,7 +312,7 @@ textarea {
     margin-top: 0.5rem;
 }
 
-/* QUICK TIMER PANEL */
+/* AFSNIT 06 – QUICK TIMER (FORSIDE) */
 .quick-card {
     margin-bottom: 1rem;
 }
@@ -369,6 +371,7 @@ textarea {
     width: auto;
 }
 
+/* "I dag" og "Samlet tid" ved siden af hinanden */
 .quick-mode {
     margin-top: 0.6rem;
     display: flex;
@@ -389,7 +392,7 @@ textarea {
     margin-top: 1rem;
 }
 
-/* CALENDAR */
+/* AFSNIT 07 – KALENDER */
 .calendar-layout {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.3fr);
@@ -450,7 +453,7 @@ textarea {
     font-size: 0.85rem;
 }
 
-/* RESPONSIVE */
+/* AFSNIT 08 – RESPONSIV (MOBIL, FLAG DROPDOWN) */
 @media (max-width: 880px) {
     .sidebar {
         position: fixed;
