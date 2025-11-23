@@ -6,11 +6,15 @@ let customers = [];
 let employees = [];
 let timeLogs = [];
 let plannedTasks = [];
-let activeTimer = null;
-
+let activeTimer = null;      // brugt af "Time tracking" siden
 let currentCalendarMonth = new Date();
 let selectedCalendarDate = null;
 let currentLang = "da";
+
+// Hurtig timer på forsiden
+let quickActiveTimer = null;
+let quickTimerInterval = null;
+let quickMode = "day"; // "day" eller "total"
 
 // ======================================================
 // ================  I18N TEKSTER  =======================
@@ -33,9 +37,20 @@ const translations = {
         card_employees: "Medarbejdere",
         card_logs_today: "Logs i dag",
 
+        quick_title: "Hurtig tidsregistrering",
+        quick_select_customer: "Vælg kunde",
+        quick_select_employees: "Vælg medarbejdere hos kunden i dag",
+        quick_time_label: "Vis tid for denne kunde:",
+        quick_mode_today: "I dag",
+        quick_mode_total: "Samlet tid",
+        quick_hint: "Vælg kunde og én eller flere medarbejdere, og brug Start/Stop-knapperne.",
+
         customers_title: "Kunder",
         customers_add: "Tilføj kunde",
         customers_list: "Kundeliste",
+        customers_reset_title: "Nulstil tid for kunde",
+        label_reset_customer: "Vælg kunde",
+        btn_reset_customer_time: "Nulstil al logget tid",
 
         label_customer_name: "Navn",
         label_customer_phone: "Telefon",
@@ -78,7 +93,7 @@ const translations = {
         schedule_plan_job: "Planlæg opgave",
         label_plan_date: "Dato",
         label_plan_start: "Starttid",
-        label_plan_duration: "Varighed (min)",
+        label_plan_duration: "Varighed (minutter)",
         label_plan_customer: "Kunde",
         label_plan_employee: "Medarbejder",
         label_plan_note: "Note",
@@ -111,7 +126,7 @@ const translations = {
         th_report_employee: "Medarbejder",
 
         settings_title: "Indstillinger",
-        settings_lang_info: "Du kan skifte sprog via flagene i topbaren. Appen husker dit valg."
+        settings_lang_info: "Du kan skifte sprog via knapperne i topbaren. Appen husker dit valg."
     },
     en: {
         app_title: "GreenTime Pro",
@@ -129,9 +144,20 @@ const translations = {
         card_employees: "Employees",
         card_logs_today: "Logs today",
 
+        quick_title: "Quick time tracking",
+        quick_select_customer: "Select customer",
+        quick_select_employees: "Select employees at the customer",
+        quick_time_label: "Show time for this customer:",
+        quick_mode_today: "Today",
+        quick_mode_total: "Total",
+        quick_hint: "Choose customer and one or more employees, then use Start/Stop.",
+
         customers_title: "Customers",
         customers_add: "Add customer",
         customers_list: "Customer list",
+        customers_reset_title: "Reset time for customer",
+        label_reset_customer: "Select customer",
+        btn_reset_customer_time: "Reset all logged time",
 
         label_customer_name: "Name",
         label_customer_phone: "Phone",
@@ -174,7 +200,7 @@ const translations = {
         schedule_plan_job: "Plan job",
         label_plan_date: "Date",
         label_plan_start: "Start time",
-        label_plan_duration: "Duration (min)",
+        label_plan_duration: "Duration (minutes)",
         label_plan_customer: "Customer",
         label_plan_employee: "Employee",
         label_plan_note: "Note",
@@ -207,7 +233,7 @@ const translations = {
         th_report_employee: "Employee",
 
         settings_title: "Settings",
-        settings_lang_info: "You can change language using the flags in the top bar. The app remembers your choice."
+        settings_lang_info: "You can change language using the buttons in the top bar. The app remembers your choice."
     },
     lt: {
         app_title: "GreenTime Pro",
@@ -225,9 +251,20 @@ const translations = {
         card_employees: "Darbuotojai",
         card_logs_today: "Šiandienos įrašai",
 
+        quick_title: "Greitas laiko sekimas",
+        quick_select_customer: "Pasirinkite klientą",
+        quick_select_employees: "Pasirinkite darbuotojus pas klientą",
+        quick_time_label: "Rodyti laiką šiam klientui:",
+        quick_mode_today: "Šiandien",
+        quick_mode_total: "Iš viso",
+        quick_hint: "Pasirinkite klientą ir vieną ar daugiau darbuotojų, tada naudokite Start/Stop.",
+
         customers_title: "Klientai",
         customers_add: "Pridėti klientą",
         customers_list: "Klientų sąrašas",
+        customers_reset_title: "Nustatyti kliento laiką iš naujo",
+        label_reset_customer: "Pasirinkite klientą",
+        btn_reset_customer_time: "Ištrinti visą laiką",
 
         label_customer_name: "Vardas",
         label_customer_phone: "Telefonas",
@@ -270,7 +307,7 @@ const translations = {
         schedule_plan_job: "Planuoti darbą",
         label_plan_date: "Data",
         label_plan_start: "Pradžios laikas",
-        label_plan_duration: "Trukmė (min)",
+        label_plan_duration: "Trukmė (minutės)",
         label_plan_customer: "Klientas",
         label_plan_employee: "Darbuotojas",
         label_plan_note: "Pastaba",
@@ -303,7 +340,7 @@ const translations = {
         th_report_employee: "Darbuotojas",
 
         settings_title: "Nustatymai",
-        settings_lang_info: "Kalbą galite pakeisti naudodami vėliavėles viršuje. Programa prisimena jūsų pasirinkimą."
+        settings_lang_info: "Kalbą galite pakeisti naudodami mygtukus viršuje. Programa prisimena jūsų pasirinkimą."
     },
     de: {
         app_title: "GreenTime Pro",
@@ -321,9 +358,20 @@ const translations = {
         card_employees: "Mitarbeiter",
         card_logs_today: "Logs heute",
 
+        quick_title: "Schnelle Zeiterfassung",
+        quick_select_customer: "Kunden wählen",
+        quick_select_employees: "Mitarbeiter beim Kunden wählen",
+        quick_time_label: "Zeit für diesen Kunden anzeigen:",
+        quick_mode_today: "Heute",
+        quick_mode_total: "Gesamt",
+        quick_hint: "Wählen Sie Kunde und einen oder mehrere Mitarbeiter und nutzen Sie Start/Stop.",
+
         customers_title: "Kunden",
-        customers_add: "Kunden hinzufügen",
+        customers_add: "Kunde hinzufügen",
         customers_list: "Kundenliste",
+        customers_reset_title: "Zeit für Kunden zurücksetzen",
+        label_reset_customer: "Kunde wählen",
+        btn_reset_customer_time: "Gesamte Zeit löschen",
 
         label_customer_name: "Name",
         label_customer_phone: "Telefon",
@@ -399,7 +447,7 @@ const translations = {
         th_report_employee: "Mitarbeiter",
 
         settings_title: "Einstellungen",
-        settings_lang_info: "Sie können die Sprache über die Flaggen in der oberen Leiste ändern. Die App merkt sich Ihre Auswahl."
+        settings_lang_info: "Sie können die Sprache über die Buttons in der oberen Leiste ändern. Die App merkt sich Ihre Auswahl."
     }
 };
 
@@ -413,7 +461,6 @@ function loadData() {
     timeLogs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
     plannedTasks = JSON.parse(localStorage.getItem("gtp_plans") || "[]");
     activeTimer = JSON.parse(localStorage.getItem("gtp_active") || "null");
-
     currentLang = localStorage.getItem("gtp_lang") || "da";
 }
 
@@ -439,7 +486,6 @@ function applyTranslations() {
     });
     document.title = dict.app_title || "GreenTime Pro";
 
-    // Opdatér role option labels i select (de ligger som textContent)
     const empRole = document.getElementById("empRole");
     if (empRole && empRole.options.length >= 2) {
         empRole.options[0].textContent = dict.role_employee || "Employee";
@@ -457,13 +503,24 @@ function setLanguage(lang) {
     });
 
     applyTranslations();
+    updateQuickTimerDisplay();
 }
 
 function initLanguageSwitcher() {
+    const switcher = document.querySelector(".lang-switcher");
+
     document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
             setLanguage(btn.dataset.lang);
         });
+    });
+
+    // Dropdown-adfærd på mobil
+    switcher.addEventListener("click", () => {
+        if (window.innerWidth <= 880) {
+            switcher.classList.toggle("open");
+        }
     });
 }
 
@@ -497,13 +554,11 @@ function initMobileMenu() {
     const menuToggle = document.getElementById("menuToggle");
     const sidebar = document.querySelector(".sidebar");
 
-    // Åbn/luk ved klik
     menuToggle.addEventListener("click", (e) => {
         e.stopPropagation();
         sidebar.classList.toggle("open");
     });
 
-    // Luk ved klik udenfor (desktop + mobil)
     document.addEventListener("click", (e) => {
         if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
             sidebar.classList.remove("open");
@@ -516,7 +571,6 @@ function initMobileMenu() {
         }
     });
 
-    // Luk når man vælger menupunkt
     document.querySelectorAll(".sidebar li").forEach(li => {
         li.addEventListener("click", () => {
             sidebar.classList.remove("open");
@@ -547,23 +601,38 @@ function initThemeToggle() {
 // ================  CUSTOMERS  ==========================
 // ======================================================
 
+function populateCustomerSelects() {
+    const customerSelectIds = [
+        "timerCustomerSelect",
+        "planCustomerSelect",
+        "reportCustomerSelect",
+        "quickCustomerSelect",
+        "resetCustomerSelect"
+    ];
+
+    customerSelectIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        sel.innerHTML = "";
+
+        // standard tom mulighed (hvis relevant)
+        const emptyOpt = document.createElement("option");
+        emptyOpt.value = "";
+        emptyOpt.textContent = id === "reportCustomerSelect" ? "—" : "";
+        sel.appendChild(emptyOpt);
+
+        customers.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.name;
+            sel.appendChild(opt);
+        });
+    });
+}
+
 function renderCustomers() {
     const tbody = document.querySelector("#customerTable tbody");
-    const timerSel = document.getElementById("timerCustomerSelect");
-    const planSel = document.getElementById("planCustomerSelect");
-    const repSel = document.getElementById("reportCustomerSelect");
-
     if (tbody) tbody.innerHTML = "";
-    if (timerSel) timerSel.innerHTML = "";
-    if (planSel) planSel.innerHTML = "";
-    if (repSel) repSel.innerHTML = "";
-
-    if (repSel) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "—";
-        repSel.appendChild(opt);
-    }
 
     customers.forEach(c => {
         if (tbody) {
@@ -576,26 +645,13 @@ function renderCustomers() {
             `;
             tbody.appendChild(tr);
         }
-
-        [timerSel, planSel].forEach(sel => {
-            if (sel) {
-                const opt = document.createElement("option");
-                opt.value = c.id;
-                opt.textContent = c.name;
-                sel.appendChild(opt);
-            }
-        });
-
-        if (repSel) {
-            const opt = document.createElement("option");
-            opt.value = c.id;
-            opt.textContent = c.name;
-            repSel.appendChild(opt);
-        }
     });
 
     const dash = document.getElementById("dashTotalCustomers");
     if (dash) dash.textContent = customers.length;
+
+    populateCustomerSelects();
+    renderQuickEmployeeList(); // så quick-panel også opdateres
 }
 
 function initCustomerSave() {
@@ -631,39 +687,55 @@ function initCustomerSave() {
     });
 }
 
+function initCustomerReset() {
+    const btn = document.getElementById("resetCustomerTimeBtn");
+    const info = document.getElementById("resetCustomerInfo");
+    const sel = document.getElementById("resetCustomerSelect");
+    if (!btn || !sel) return;
+
+    btn.addEventListener("click", () => {
+        const id = sel.value;
+        if (!id) {
+            alert("Vælg en kunde først.");
+            return;
+        }
+
+        const before = timeLogs.length;
+        timeLogs = timeLogs.filter(l => l.customerId !== id);
+        const after = timeLogs.length;
+
+        saveData();
+        renderLogs();
+        generateReport();
+        updateQuickTimerDisplay();
+
+        const removed = before - after;
+        info.textContent = `Nulstillede ${removed} log-poster for kunden.`;
+    });
+}
+
 // ======================================================
 // ================  EMPLOYEES  ==========================
 // ======================================================
 
-function renderEmployees() {
-    const tbody = document.querySelector("#employeeTable tbody");
+function populateEmployeeSelects() {
     const timerSel = document.getElementById("timerEmployeeSelect");
     const planSel = document.getElementById("planEmployeeSelect");
     const repSel = document.getElementById("reportEmployeeSelect");
+    const quickList = document.getElementById("quickEmployeeList");
 
-    if (tbody) tbody.innerHTML = "";
     if (timerSel) timerSel.innerHTML = "";
     if (planSel) planSel.innerHTML = "";
-    if (repSel) repSel.innerHTML = "";
-
     if (repSel) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "—";
-        repSel.appendChild(opt);
+        repSel.innerHTML = "";
+        const emptyOpt = document.createElement("option");
+        emptyOpt.value = "";
+        emptyOpt.textContent = "—";
+        repSel.appendChild(emptyOpt);
     }
+    if (quickList) quickList.innerHTML = "";
 
     employees.forEach(e => {
-        if (tbody) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${e.name}</td>
-                <td>${e.email || ""}</td>
-                <td>${e.role}</td>
-            `;
-            tbody.appendChild(tr);
-        }
-
         [timerSel, planSel].forEach(sel => {
             if (sel) {
                 const opt = document.createElement("option");
@@ -681,8 +753,29 @@ function renderEmployees() {
         }
     });
 
+    renderQuickEmployeeList();
+}
+
+function renderEmployees() {
+    const tbody = document.querySelector("#employeeTable tbody");
+    if (tbody) tbody.innerHTML = "";
+
+    employees.forEach(e => {
+        if (tbody) {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${e.name}</td>
+                <td>${e.email || ""}</td>
+                <td>${e.role}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    });
+
     const dash = document.getElementById("dashTotalEmployees");
     if (dash) dash.textContent = employees.length;
+
+    populateEmployeeSelects();
 }
 
 function initEmployeeSave() {
@@ -712,15 +805,11 @@ function initEmployeeSave() {
         document.getElementById("empName").value = "";
         document.getElementById("empEmail").value = "";
         document.getElementById("empRole").value = "employee";
-
-        // Opdatér dashboard direkte
-        const dash = document.getElementById("dashTotalEmployees");
-        if (dash) dash.textContent = employees.length;
     });
 }
 
 // ======================================================
-// ================  TIME LOGS & TIMER  ==================
+// ================  LOGS & TIMER (SIDE)  =================
 // ======================================================
 
 function renderLogs() {
@@ -755,12 +844,15 @@ function renderTimer() {
     const status = document.getElementById("timerStatus");
     const stopBtn = document.getElementById("stopTimerBtn");
 
+    if (!status || !stopBtn) return;
+
     if (!activeTimer) {
         status.textContent = translations[currentLang].timer_no_active || "No active timer";
         stopBtn.disabled = true;
     } else {
         const cust = customers.find(c => c.id === activeTimer.customerId);
-        status.textContent = `Running: ${cust ? cust.name : "?"} – ${activeTimer.employee}`;
+        const emp = employees.find(e => e.id === activeTimer.employeeId);
+        status.textContent = `Running: ${cust ? cust.name : "?"} – ${emp ? emp.name : ""}`;
         stopBtn.disabled = false;
     }
 }
@@ -781,9 +873,7 @@ function initTimerControls() {
         const custId = custSel.value;
         const empId = empSel.value;
 
-        const empObj = employees.find(e => e.id === empId);
-
-        if (!custId || !empObj) {
+        if (!custId || !empId) {
             alert("Please select customer and employee.");
             return;
         }
@@ -791,7 +881,6 @@ function initTimerControls() {
         activeTimer = {
             customerId: custId,
             employeeId: empId,
-            employee: empObj.name,
             startTime: new Date().toISOString()
         };
 
@@ -806,11 +895,12 @@ function initTimerControls() {
         const startTime = new Date(activeTimer.startTime);
         const diffMs = endTime - startTime;
         const durationMinutes = Math.max(1, Math.round(diffMs / 60000));
+        const empObj = employees.find(e => e.id === activeTimer.employeeId);
 
         timeLogs.push({
             customerId: activeTimer.customerId,
             employeeId: activeTimer.employeeId,
-            employee: activeTimer.employee,
+            employee: empObj ? empObj.name : "",
             startTime: activeTimer.startTime,
             endTime: endTime.toISOString(),
             duration: durationMinutes
@@ -820,8 +910,158 @@ function initTimerControls() {
         saveData();
         renderTimer();
         renderLogs();
-        generateReport(); // så rapporter også opdateres
+        generateReport();
+        updateQuickTimerDisplay();
     });
+}
+
+// ======================================================
+// ================  QUICK TIMER (FORSIDE) ===============
+// ======================================================
+
+function renderQuickEmployeeList() {
+    const container = document.getElementById("quickEmployeeList");
+    if (!container) return;
+    container.innerHTML = "";
+
+    employees.forEach(e => {
+        const label = document.createElement("label");
+        label.className = "chip-check";
+        label.innerHTML = `
+            <input type="checkbox" value="${e.id}" />
+            <span>${e.name}</span>
+        `;
+        container.appendChild(label);
+    });
+}
+
+function getSelectedQuickEmployeeIds() {
+    const container = document.getElementById("quickEmployeeList");
+    if (!container) return [];
+    return Array.from(container.querySelectorAll("input[type=checkbox]:checked"))
+        .map(cb => cb.value);
+}
+
+function getCustomerMinutes(customerId, mode) {
+    if (!customerId) return 0;
+    const today = new Date().toISOString().slice(0, 10);
+    let total = 0;
+    timeLogs.forEach(l => {
+        if (l.customerId !== customerId) return;
+        if (mode === "day" && l.startTime.slice(0, 10) !== today) return;
+        total += l.duration;
+    });
+    return total;
+}
+
+function formatSecondsToHMS(seconds) {
+    const s = Math.max(0, Math.floor(seconds));
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return [
+        h.toString().padStart(2, "0"),
+        m.toString().padStart(2, "0"),
+        sec.toString().padStart(2, "0")
+    ].join(":");
+}
+
+function updateQuickTimerDisplay() {
+    const display = document.getElementById("quickTimerDisplay");
+    const sel = document.getElementById("quickCustomerSelect");
+    if (!display || !sel) return;
+
+    const customerId = sel.value;
+    if (!customerId) {
+        display.textContent = "00:00:00";
+        return;
+    }
+
+    if (quickActiveTimer && quickActiveTimer.customerId === customerId) {
+        const elapsedSec = (Date.now() - new Date(quickActiveTimer.startTime).getTime()) / 1000;
+        display.textContent = formatSecondsToHMS(elapsedSec);
+    } else {
+        const minutes = getCustomerMinutes(customerId, quickMode);
+        display.textContent = formatSecondsToHMS(minutes * 60);
+    }
+}
+
+function initQuickTimerControls() {
+    const startBtn = document.getElementById("quickStartBtn");
+    const stopBtn = document.getElementById("quickStopBtn");
+    const custSel = document.getElementById("quickCustomerSelect");
+    const modeDay = document.getElementById("quickModeDay");
+    const modeTotal = document.getElementById("quickModeTotal");
+
+    if (!startBtn || !stopBtn || !custSel) return;
+
+    startBtn.addEventListener("click", () => {
+        if (quickActiveTimer) {
+            alert("Timer is already running.");
+            return;
+        }
+        const custId = custSel.value;
+        const empIds = getSelectedQuickEmployeeIds();
+        if (!custId) {
+            alert("Vælg en kunde først.");
+            return;
+        }
+        if (empIds.length === 0) {
+            alert("Vælg mindst én medarbejder.");
+            return;
+        }
+
+        quickActiveTimer = {
+            customerId: custId,
+            employeeIds: empIds,
+            startTime: new Date().toISOString()
+        };
+
+        if (quickTimerInterval) clearInterval(quickTimerInterval);
+        quickTimerInterval = setInterval(updateQuickTimerDisplay, 1000);
+        updateQuickTimerDisplay();
+    });
+
+    stopBtn.addEventListener("click", () => {
+        if (!quickActiveTimer) return;
+
+        const end = new Date();
+        const start = new Date(quickActiveTimer.startTime);
+        const durationMinutes = Math.max(1, Math.round((end - start) / 60000));
+
+        quickActiveTimer.employeeIds.forEach(empId => {
+            const empObj = employees.find(e => e.id === empId);
+            timeLogs.push({
+                customerId: quickActiveTimer.customerId,
+                employeeId: empId,
+                employee: empObj ? empObj.name : "",
+                startTime: quickActiveTimer.startTime,
+                endTime: end.toISOString(),
+                duration: durationMinutes
+            });
+        });
+
+        quickActiveTimer = null;
+        if (quickTimerInterval) {
+            clearInterval(quickTimerInterval);
+            quickTimerInterval = null;
+        }
+
+        saveData();
+        renderLogs();
+        generateReport();
+        updateQuickTimerDisplay();
+    });
+
+    [modeDay, modeTotal].forEach(r => {
+        if (!r) return;
+        r.addEventListener("change", () => {
+            quickMode = modeDay.checked ? "day" : "total";
+            updateQuickTimerDisplay();
+        });
+    });
+
+    custSel.addEventListener("change", updateQuickTimerDisplay);
 }
 
 // ======================================================
@@ -836,6 +1076,8 @@ function renderCalendar() {
     const label = document.getElementById("calMonthLabel");
     const cells = document.getElementById("calendarCells");
 
+    if (!label || !cells) return;
+
     cells.innerHTML = "";
 
     const y = currentCalendarMonth.getFullYear();
@@ -845,12 +1087,12 @@ function renderCalendar() {
     const days = new Date(y, m + 1, 0).getDate();
     const weekday = (first.getDay() + 6) % 7;
 
-    label.textContent = currentCalendarMonth.toLocaleDateString(currentLang === "de" ? "de-DE" :
+    label.textContent = currentCalendarMonth.toLocaleDateString(
+        currentLang === "de" ? "de-DE" :
         currentLang === "lt" ? "lt-LT" :
-        currentLang === "da" ? "da-DK" : "en-GB", {
-        month: "long",
-        year: "numeric"
-    });
+        currentLang === "da" ? "da-DK" : "en-GB",
+        { month: "long", year: "numeric" }
+    );
 
     for (let i = 0; i < weekday; i++) {
         const div = document.createElement("div");
@@ -887,6 +1129,7 @@ function renderCalendar() {
 function renderDayPlans() {
     const list = document.getElementById("dayPlanList");
     const label = document.getElementById("selectedDayLabel");
+    if (!list || !label) return;
 
     list.innerHTML = "";
 
@@ -915,51 +1158,56 @@ function renderDayPlans() {
 }
 
 function initCalendarControls() {
-    document.getElementById("prevMonthBtn").addEventListener("click", () => {
+    const prev = document.getElementById("prevMonthBtn");
+    const next = document.getElementById("nextMonthBtn");
+    const savePlanBtn = document.getElementById("savePlanBtn");
+
+    if (prev) prev.addEventListener("click", () => {
         currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() - 1);
         renderCalendar();
         renderDayPlans();
     });
 
-    document.getElementById("nextMonthBtn").addEventListener("click", () => {
+    if (next) next.addEventListener("click", () => {
         currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + 1);
         renderCalendar();
         renderDayPlans();
     });
 
-    const savePlanBtn = document.getElementById("savePlanBtn");
-    savePlanBtn.addEventListener("click", () => {
-        const date = document.getElementById("planDate").value;
-        const startTime = document.getElementById("planStart").value;
-        const duration = parseInt(document.getElementById("planDuration").value || "0", 10);
-        const customerId = document.getElementById("planCustomerSelect").value;
-        const employeeId = document.getElementById("planEmployeeSelect").value;
-        const note = document.getElementById("planNote").value.trim();
+    if (savePlanBtn) {
+        savePlanBtn.addEventListener("click", () => {
+            const date = document.getElementById("planDate").value;
+            const startTime = document.getElementById("planStart").value;
+            const duration = parseInt(document.getElementById("planDuration").value || "0", 10);
+            const customerId = document.getElementById("planCustomerSelect").value;
+            const employeeId = document.getElementById("planEmployeeSelect").value;
+            const note = document.getElementById("planNote").value.trim();
 
-        if (!date || !startTime || !duration || !customerId || !employeeId) {
-            alert("Please fill all fields for planned job.");
-            return;
-        }
+            if (!date || !startTime || !duration || !customerId || !employeeId) {
+                alert("Please fill all fields for planned job.");
+                return;
+            }
 
-        const empObj = employees.find(e => e.id === employeeId);
+            const empObj = employees.find(e => e.id === employeeId);
 
-        plannedTasks.push({
-            id: Date.now().toString(),
-            date,
-            startTime,
-            durationMinutes: duration,
-            customerId,
-            employeeId,
-            employeeName: empObj ? empObj.name : "",
-            note
+            plannedTasks.push({
+                id: Date.now().toString(),
+                date,
+                startTime,
+                durationMinutes: duration,
+                customerId,
+                employeeId,
+                employeeName: empObj ? empObj.name : "",
+                note
+            });
+
+            saveData();
+            renderCalendar();
+            if (selectedCalendarDate === date) {
+                renderDayPlans();
+            }
         });
-
-        saveData();
-        renderCalendar();
-        if (selectedCalendarDate === date) {
-            renderDayPlans();
-        }
-    });
+    }
 }
 
 // ======================================================
@@ -974,6 +1222,7 @@ function generateReport() {
 
     const tbody = document.querySelector("#reportTable tbody");
     const summary = document.getElementById("reportSummary");
+    if (!tbody || !summary) return;
 
     tbody.innerHTML = "";
 
@@ -1024,21 +1273,19 @@ document.addEventListener("DOMContentLoaded", () => {
     initThemeToggle();
     initLanguageSwitcher();
 
-    // Sprog først
     setLanguage(currentLang);
 
-    // State
     const today = new Date();
     selectedCalendarDate = dateToYMD(today);
 
-    // Init funktioner
     initCustomerSave();
+    initCustomerReset();
     initEmployeeSave();
     initTimerControls();
+    initQuickTimerControls();
     initCalendarControls();
     initReportControls();
 
-    // Render
     renderCustomers();
     renderEmployees();
     renderLogs();
@@ -1046,7 +1293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendar();
     renderDayPlans();
     generateReport();
+    updateQuickTimerDisplay();
 
-    // Vis dashboard som start
     showPage("dashboardPage");
 });
