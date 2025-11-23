@@ -1,203 +1,196 @@
-// Simple client-side app for customer management and time tracking
-
-// ---- Data storage ----
+// ========== STORAGE ==========
 let customers = [];
+let employees = [];
 let timeLogs = [];
-let activeTimer = null; // { customerId, employeeName, startTime }
+let activeTimer = null;
 
-// Load from localStorage when app starts
 function loadData() {
-    const customersRaw = localStorage.getItem("gtp_customers");
-    const logsRaw = localStorage.getItem("gtp_timelogs");
-
-    customers = customersRaw ? JSON.parse(customersRaw) : [];
-    timeLogs = logsRaw ? JSON.parse(logsRaw) : [];
+    customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
+    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
+    timeLogs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
+    activeTimer = JSON.parse(localStorage.getItem("gtp_active") || "null");
 }
-
-// Save to localStorage
 function saveData() {
     localStorage.setItem("gtp_customers", JSON.stringify(customers));
-    localStorage.setItem("gtp_timelogs", JSON.stringify(timeLogs));
+    localStorage.setItem("gtp_employees", JSON.stringify(employees));
+    localStorage.setItem("gtp_logs", JSON.stringify(timeLogs));
+    localStorage.setItem("gtp_active", JSON.stringify(activeTimer));
 }
 
-// ---- Rendering ----
+// ========== SPA NAVIGATION ==========
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("visible"));
+    document.getElementById(pageId).classList.add("visible");
+
+    document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
+    document.querySelector(`.sidebar li[data-page="${pageId}"]`).classList.add("active");
+}
+
+// ========== RENDER FUNCTIONS ==========
 function renderCustomers() {
     const tbody = document.querySelector("#customerTable tbody");
-    const select = document.getElementById("timerCustomerSelect");
-
+    const sel = document.getElementById("timerCustomerSelect");
     tbody.innerHTML = "";
-    select.innerHTML = "";
+    sel.innerHTML = "";
 
-    customers.forEach((c) => {
-        // table row
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${c.name}</td>
-            <td>${c.phone || ""}</td>
-            <td>${c.email || ""}</td>
-            <td>${c.address || ""}</td>
-        `;
-        tbody.appendChild(tr);
-
-        // select option
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.name;
-        select.appendChild(opt);
+    customers.forEach(c => {
+        tbody.innerHTML += `<tr><td>${c.name}</td><td>${c.phone}</td><td>${c.email}</td><td>${c.address}</td></tr>`;
+        sel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
     });
 
-    // If no customers, show placeholder
-    if (customers.length === 0) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "No customers yet";
-        select.appendChild(opt);
-    }
+    document.getElementById("dashTotalCustomers").textContent = customers.length;
 }
 
-function renderTimeLogs() {
+function renderEmployees() {
+    const tbody = document.querySelector("#employeeTable tbody");
+    const sel = document.getElementById("timerEmployeeSelect");
+    tbody.innerHTML = "";
+    sel.innerHTML = "";
+
+    employees.forEach(e => {
+        tbody.innerHTML += `<tr><td>${e.name}</td><td>${e.email}</td><td>${e.role}</td></tr>`;
+        sel.innerHTML += `<option value="${e.id}">${e.name}</option>`;
+    });
+
+    document.getElementById("dashTotalEmployees").textContent = employees.length;
+}
+
+function renderLogs() {
     const tbody = document.querySelector("#timeLogTable tbody");
     tbody.innerHTML = "";
 
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const today = new Date().toISOString().slice(0, 10);
 
-    timeLogs
-        .filter((log) => log.startTime.slice(0, 10) === today)
-        .forEach((log) => {
-            const tr = document.createElement("tr");
-            const start = new Date(log.startTime);
-            const end = new Date(log.endTime);
-            const customer = customers.find((c) => c.id === log.customerId);
-            tr.innerHTML = `
-                <td>${start.toLocaleTimeString()}</td>
-                <td>${end.toLocaleTimeString()}</td>
-                <td>${log.durationMinutes}</td>
-                <td>${customer ? customer.name : "Unknown"}</td>
-                <td>${log.employeeName || ""}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+    let count = 0;
+
+    timeLogs.filter(l => l.startTime.slice(0,10) === today)
+    .forEach(log => {
+        const customer = customers.find(c => c.id === log.customerId);
+        tbody.innerHTML += `
+            <tr>
+                <td>${new Date(log.startTime).toLocaleTimeString()}</td>
+                <td>${new Date(log.endTime).toLocaleTimeString()}</td>
+                <td>${log.duration} min</td>
+                <td>${customer ? customer.name : "?"}</td>
+                <td>${log.employee}</td>
+            </tr>
+        `;
+        count++;
+    });
+
+    document.getElementById("dashTodayLogs").textContent = count;
 }
 
-function renderTimerStatus() {
-    const statusDiv = document.getElementById("timerStatus");
-    const startBtn = document.getElementById("startTimerBtn");
+function renderTimer() {
+    const status = document.getElementById("timerStatus");
     const stopBtn = document.getElementById("stopTimerBtn");
 
     if (!activeTimer) {
-        statusDiv.textContent = "No active timer";
-        startBtn.disabled = false;
+        status.textContent = "No active timer";
         stopBtn.disabled = true;
     } else {
-        const customer = customers.find(
-            (c) => c.id === activeTimer.customerId
-        );
-        const name = customer ? customer.name : "Unknown customer";
-        statusDiv.textContent = `Running: ${name} (${activeTimer.employeeName || "no employee name"})`;
-        startBtn.disabled = true;
+        const customer = customers.find(c => c.id === activeTimer.customerId);
+        status.textContent = `Running: ${customer.name} – ${activeTimer.employee}`;
         stopBtn.disabled = false;
     }
 }
 
-// ---- Event handlers ----
-function handleAddCustomer(event) {
-    event.preventDefault();
-
-    const nameInput = document.getElementById("customerName");
-    const phoneInput = document.getElementById("customerPhone");
-    const emailInput = document.getElementById("customerEmail");
-    const addrInput = document.getElementById("customerAddress");
-
-    const name = nameInput.value.trim();
-    if (!name) return;
-
-    const newCustomer = {
-        id: "c_" + Date.now(),
-        name,
-        phone: phoneInput.value.trim(),
-        email: emailInput.value.trim(),
-        address: addrInput.value.trim()
-    };
-
-    customers.push(newCustomer);
-    saveData();
-    renderCustomers();
-
-    // Clear form
-    nameInput.value = "";
-    phoneInput.value = "";
-    emailInput.value = "";
-    addrInput.value = "";
-}
-
-function handleStartTimer() {
-    if (activeTimer) return; // already running
-
-    const customerSelect = document.getElementById("timerCustomerSelect");
-    const employeeInput = document.getElementById("timerEmployeeName");
-
-    const customerId = customerSelect.value;
-    if (!customerId) {
-        alert("Please select a customer first.");
-        return;
-    }
-
-    const employeeName = employeeInput.value.trim();
-
-    activeTimer = {
-        customerId,
-        employeeName,
-        startTime: new Date().toISOString()
-    };
-
-    renderTimerStatus();
-}
-
-function handleStopTimer() {
-    if (!activeTimer) return;
-
-    const endTime = new Date().toISOString();
-    const start = new Date(activeTimer.startTime);
-    const end = new Date(endTime);
-
-    const durationMinutes = Math.max(
-        1,
-        Math.round((end.getTime() - start.getTime()) / 60000)
-    );
-
-    const log = {
-        id: "l_" + Date.now(),
-        customerId: activeTimer.customerId,
-        employeeName: activeTimer.employeeName,
-        startTime: activeTimer.startTime,
-        endTime,
-        durationMinutes
-    };
-
-    timeLogs.push(log);
-    activeTimer = null;
-
-    saveData();
-    renderTimerStatus();
-    renderTimeLogs();
-}
-
-// ---- Init ----
+// ========== ADD CUSTOMER ==========
 document.addEventListener("DOMContentLoaded", () => {
     loadData();
+
+    // SPA
+    document.querySelectorAll(".sidebar li").forEach(li => {
+        li.addEventListener("click", () => showPage(li.dataset.page));
+    });
+
+    // DARK MODE
+    const themeToggle = document.getElementById("themeToggle");
+    const savedTheme = localStorage.getItem("gtp_theme") || "light";
+
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+
+    themeToggle.onclick = () => {
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("gtp_theme", next);
+        themeToggle.textContent = next === "dark" ? "☀️" : "🌙";
+    };
+
+    // ADD CUSTOMER
+    document.getElementById("customerForm").onsubmit = e => {
+        e.preventDefault();
+        const c = {
+            id: "c" + Date.now(),
+            name: customerName.value,
+            phone: customerPhone.value,
+            email: customerEmail.value,
+            address: customerAddress.value
+        };
+        customers.push(c);
+        saveData();
+        renderCustomers();
+        e.target.reset();
+    };
+
+    // ADD EMPLOYEE
+    document.getElementById("employeeForm").onsubmit = e => {
+        e.preventDefault();
+        const emp = {
+            id: "e" + Date.now(),
+            name: employeeName.value,
+            email: employeeEmail.value,
+            role: employeeRole.value
+        };
+        employees.push(emp);
+        saveData();
+        renderEmployees();
+        e.target.reset();
+    };
+
+    // TIMER START
+    document.getElementById("startTimerBtn").onclick = () => {
+        const cid = timerCustomerSelect.value;
+        let ename = timerEmployeeSelect.value ?
+            employees.find(e => e.id === timerEmployeeSelect.value).name :
+            timerEmployeeName.value;
+
+        if (!cid || !ename) return alert("Choose customer and employee");
+
+        activeTimer = {
+            customerId: cid,
+            employee: ename,
+            startTime: new Date().toISOString()
+        };
+        saveData();
+        renderTimer();
+    };
+
+    // TIMER STOP
+    document.getElementById("stopTimerBtn").onclick = () => {
+        const end = new Date();
+        const start = new Date(activeTimer.startTime);
+        const minutes = Math.max(1, Math.round((end - start) / 60000));
+
+        timeLogs.push({
+            customerId: activeTimer.customerId,
+            employee: activeTimer.employee,
+            startTime: activeTimer.startTime,
+            endTime: end.toISOString(),
+            duration: minutes
+        });
+
+        activeTimer = null;
+        saveData();
+        renderLogs();
+        renderTimer();
+    };
+
+    // FIRST RENDER
     renderCustomers();
-    renderTimeLogs();
-    renderTimerStatus();
-
-    document
-        .getElementById("customerForm")
-        .addEventListener("submit", handleAddCustomer);
-
-    document
-        .getElementById("startTimerBtn")
-        .addEventListener("click", handleStartTimer);
-
-    document
-        .getElementById("stopTimerBtn")
-        .addEventListener("click", handleStopTimer);
+    renderEmployees();
+    renderLogs();
+    renderTimer();
 });
