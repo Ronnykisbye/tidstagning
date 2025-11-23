@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
+    <!-- AFSNIT 01 – META & STYLES -->
     <meta charset="UTF-8" />
     <title>GreenTime Pro</title>
     <link rel="stylesheet" href="style.css" />
@@ -9,7 +10,7 @@
 <body>
 <div class="app">
 
-    <!-- SIDEBAR -->
+    <!-- AFSNIT 02 – SIDEBAR -->
     <aside class="sidebar">
         <div class="logo">
             <span class="logo-mark">🌿</span>
@@ -17,7 +18,7 @@
         </div>
         <ul>
             <li data-page="dashboardPage" class="active">
-                <span data-i18n="menu_dashboard">Dashboard</span>
+                <span data-i18n="menu_dashboard">Tidsregistrering</span>
             </li>
             <li data-page="customersPage">
                 <span data-i18n="menu_customers">Customers</span>
@@ -43,7 +44,7 @@
         </ul>
     </aside>
 
-    <!-- MAIN -->
+    <!-- AFSNIT 03 – MAIN LAYOUT -->
     <main class="main">
         <!-- TOPBAR -->
         <header class="topbar">
@@ -71,14 +72,16 @@
             </div>
         </header>
 
-        <!-- DASHBOARD / FORSIDE -->
+        <!-- AFSNIT 04 – FORSIDE / HURTIG TIDSREGISTRERING -->
         <section id="dashboardPage" class="page visible">
-            <h2 data-i18n="dashboard_title">Overblik</h2>
+            <!-- Nu hedder forsiden Tidsregistrering -->
+            <h2 data-i18n="dashboard_title">Tidsregistrering</h2>
 
             <div class="quick-card">
                 <h3 data-i18n="quick_title">Hurtig tidsregistrering</h3>
 
                 <div class="quick-grid">
+                    <!-- Venstre side: kunde + medarbejdere + mode -->
                     <div class="quick-left">
                         <label>
                             <span data-i18n="quick_select_customer">Vælg kunde</span>
@@ -111,34 +114,39 @@
                         </p>
                     </div>
 
+                    <!-- Højre side: selve timeren -->
                     <div class="quick-right">
                         <div id="quickTimerDisplay" class="quick-timer">00:00:00</div>
                         <div class="btn-row quick-buttons">
-                            <button id="quickStartBtn" class="btn" data-i18n="btn_start_timer">Start</button>
-                            <button id="quickStopBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">Stop</button>
+                            <button id="quickStartBtn" class="btn" data-i18n="btn_start_timer">
+                                Start
+                            </button>
+                            <button id="quickStopBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">
+                                Stop
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Små tal-oversigter -->
+            <!-- Små kort (kan senere bruges til overblik) -->
             <div class="cards">
                 <div class="card">
                     <h3 data-i18n="card_customers">Kunder</h3>
-                    <p><span id="dashTotalCustomers">0</span></p>
+                    <p id="cardCustomerCount">0</p>
                 </div>
                 <div class="card">
                     <h3 data-i18n="card_employees">Medarbejdere</h3>
-                    <p><span id="dashTotalEmployees">0</span></p>
+                    <p id="cardEmployeeCount">0</p>
                 </div>
                 <div class="card">
                     <h3 data-i18n="card_logs_today">Logs i dag</h3>
-                    <p><span id="dashTodayLogs">0</span></p>
+                    <p id="cardLogsToday">0</p>
                 </div>
             </div>
         </section>
 
-        <!-- CUSTOMERS -->
+        <!-- AFSNIT 05 – KUNDER -->
         <section id="customersPage" class="page">
             <h2 data-i18n="customers_title">Kunder</h2>
 
@@ -151,7 +159,7 @@
                     </label>
                     <label>
                         <span data-i18n="label_customer_phone">Telefon</span>
-                        <input id="custPhone" type="text" />
+                        <input id="custPhone" type="tel" />
                     </label>
                     <label>
                         <span data-i18n="label_customer_email">Email</span>
@@ -195,7 +203,7 @@
             </div>
         </section>
 
-        <!-- EMPLOYEES -->
+        <!-- AFSNIT 06 – MEDARBEJDERE -->
         <section id="employeesPage" class="page">
             <h2 data-i18n="employees_title">Medarbejdere</h2>
 
@@ -238,7 +246,7 @@
             </div>
         </section>
 
-        <!-- TIME TRACKING SIDE (ekstra, hvis man vil se mere) -->
+        <!-- AFSNIT 07 – TIDSREGISTRERING (DETALJERET SIDE) -->
         <section id="timeTrackingPage" class="page">
             <h2 data-i18n="time_title">Tidsregistrering</h2>
 
@@ -288,7 +296,7 @@
             </div>
         </section>
 
-        <!-- SCHEDULE -->
+        <!-- AFSNIT 08 – PLAN & KALENDER -->
         <section id="schedulePage" class="page">
             <h2 data-i18n="schedule_title">Planlægning & kalender</h2>
 
@@ -324,7 +332,7 @@
                     </label>
                     <label>
                         <span data-i18n="label_plan_duration">Varighed (minutter)</span>
-                        <input id="planDuration" type="number" min="1" />
+                        <input id="planDuration" type="number" />
                     </label>
                     <label>
                         <span data-i18n="label_plan_customer">Kunde</span>
@@ -353,7 +361,7 @@
             </div>
         </section>
 
-        <!-- LOGS PAGE -->
+        <!-- AFSNIT 09 – LOGS (ALLE) -->
         <section id="logsPage" class="page">
             <h2 data-i18n="logs_page_title">Logs (alle)</h2>
             <p data-i18n="logs_page_desc">
@@ -361,7 +369,7 @@
             </p>
         </section>
 
-        <!-- REPORTS -->
+        <!-- AFSNIT 10 – RAPPORTER -->
         <section id="reportsPage" class="page">
             <h2 data-i18n="reports_title">Rapporter</h2>
 
@@ -412,7 +420,7 @@
             </div>
         </section>
 
-        <!-- SETTINGS -->
+        <!-- AFSNIT 11 – INDSTILLINGER -->
         <section id="settingsPage" class="page">
             <h2 data-i18n="settings_title">Indstillinger</h2>
             <p data-i18n="settings_lang_info">
@@ -422,6 +430,7 @@
     </main>
 </div>
 
+<!-- AFSNIT 12 – SCRIPT -->
 <script src="app.js"></script>
 </body>
 </html>
