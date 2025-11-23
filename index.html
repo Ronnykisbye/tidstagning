@@ -1,103 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GreenTime Pro</title>
     <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-
-    <!-- TOPBAR -->
-    <header class="topbar">
-        <div class="topbar-left">
-            <div class="logo"></div>
-            <div class="topbar-title">
-                <h1>GreenTime Pro</h1>
-                <span>Smart planning & time tracking</span>
-            </div>
-        </div>
-        <div class="topbar-right">
-            <button id="themeToggle" class="chip-btn">🌙</button>
-            <button id="navToggle" class="chip-btn nav-toggle">☰</button>
-        </div>
-    </header>
+<div class="app">
 
     <!-- SIDEBAR -->
-    <nav id="sidebar" class="sidebar">
+    <aside class="sidebar">
+        <div class="logo">
+            <span class="logo-mark">🌿</span>
+            <span class="logo-text">GreenTime Pro</span>
+        </div>
         <ul>
-            <li data-page="dashboard" class="active">Dashboard</li>
-            <li data-page="customers">Customers</li>
-            <li data-page="employees">Employees</li>
-            <li data-page="timer">Time Tracking</li>
-            <li data-page="schedule">Schedule</li>
-            <li data-page="logs">Logs</li>
-            <li data-page="reports">Reports</li>
-            <li data-page="settings">Settings</li>
+            <li data-page="dashboardPage" class="active">
+                <span data-i18n="menu_dashboard">Dashboard</span>
+            </li>
+            <li data-page="customersPage">
+                <span data-i18n="menu_customers">Customers</span>
+            </li>
+            <li data-page="employeesPage">
+                <span data-i18n="menu_employees">Employees</span>
+            </li>
+            <li data-page="timeTrackingPage">
+                <span data-i18n="menu_time_tracking">Time tracking</span>
+            </li>
+            <li data-page="schedulePage">
+                <span data-i18n="menu_schedule">Schedule</span>
+            </li>
+            <li data-page="logsPage">
+                <span data-i18n="menu_logs">Logs</span>
+            </li>
+            <li data-page="reportsPage">
+                <span data-i18n="menu_reports">Reports</span>
+            </li>
+            <li data-page="settingsPage">
+                <span data-i18n="menu_settings">Settings</span>
+            </li>
         </ul>
-    </nav>
+    </aside>
 
     <!-- MAIN -->
-    <main id="appContent">
+    <main class="main">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <button id="menuToggle" class="icon-btn" aria-label="Toggle menu">
+                ☰
+            </button>
 
-        <!-- DASHBOARD -->
-        <section id="dashboard" class="page visible">
-            <h2>Dashboard</h2>
-            <p class="page-intro">
-                Overview of your customers, employees and today’s work.
-            </p>
+            <div class="topbar-center">
+                <h1 data-i18n="app_title">GreenTime Pro</h1>
+            </div>
 
-            <div class="dashboard-cards">
-                <div class="dash-card">
-                    <h3>Total Customers</h3>
-                    <p id="dashTotalCustomers">0</p>
+            <div class="topbar-right">
+                <!-- Language buttons -->
+                <div class="lang-switcher">
+                    <button class="lang-btn" data-lang="da" title="Dansk">🇩🇰</button>
+                    <button class="lang-btn" data-lang="en" title="English">🇬🇧</button>
+                    <button class="lang-btn" data-lang="lt" title="Lietuvių">🇱🇹</button>
+                    <button class="lang-btn" data-lang="de" title="Deutsch">🇩🇪</button>
                 </div>
-                <div class="dash-card">
-                    <h3>Total Employees</h3>
-                    <p id="dashTotalEmployees">0</p>
+
+                <!-- Theme toggle -->
+                <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+                    ☀️
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <section id="dashboardPage" class="page visible">
+            <h2 data-i18n="dashboard_title">Dashboard</h2>
+            <div class="cards">
+                <div class="card">
+                    <h3 data-i18n="card_customers">Customers</h3>
+                    <p><span id="dashTotalCustomers">0</span></p>
                 </div>
-                <div class="dash-card">
-                    <h3>Today's Logs</h3>
-                    <p id="dashTodayLogs">0</p>
+                <div class="card">
+                    <h3 data-i18n="card_employees">Employees</h3>
+                    <p><span id="dashTotalEmployees">0</span></p>
+                </div>
+                <div class="card">
+                    <h3 data-i18n="card_logs_today">Logs today</h3>
+                    <p><span id="dashTodayLogs">0</span></p>
                 </div>
             </div>
         </section>
 
-        <!-- CUSTOMERS -->
-        <section id="customers" class="page">
-            <h2>Customers</h2>
-            <p class="page-intro">Store contact details and keep everything in one place.</p>
+        <section id="customersPage" class="page">
+            <h2 data-i18n="customers_title">Customers</h2>
 
-            <div class="grid-2">
-                <div class="card">
-                    <h3>Add customer</h3>
-                    <form id="customerForm">
-                        <label>Name</label>
-                        <input id="customerName" type="text" required />
-
-                        <label>Phone</label>
-                        <input id="customerPhone" type="text" />
-
-                        <label>Email</label>
-                        <input id="customerEmail" type="email" />
-
-                        <label>Address</label>
-                        <input id="customerAddress" type="text" />
-
-                        <button type="submit">Save customer</button>
-                    </form>
+            <div class="form-grid">
+                <div class="form-card">
+                    <h3 data-i18n="customers_add">Add customer</h3>
+                    <label>
+                        <span data-i18n="label_customer_name">Name</span>
+                        <input id="custName" type="text" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_customer_phone">Phone</span>
+                        <input id="custPhone" type="text" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_customer_email">Email</span>
+                        <input id="custEmail" type="email" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_customer_address">Address</span>
+                        <input id="custAddress" type="text" />
+                    </label>
+                    <button id="saveCustomerBtn" class="btn" data-i18n="btn_save_customer">
+                        Save customer
+                    </button>
                 </div>
 
-                <div class="card">
-                    <h3>Customer list</h3>
+                <div class="table-card">
+                    <h3 data-i18n="customers_list">Customer list</h3>
                     <table id="customerTable">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Address</th>
-                            </tr>
+                        <tr>
+                            <th data-i18n="th_customer_name">Name</th>
+                            <th data-i18n="th_customer_phone">Phone</th>
+                            <th data-i18n="th_customer_email">Email</th>
+                            <th data-i18n="th_customer_address">Address</th>
+                        </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -105,40 +134,41 @@
             </div>
         </section>
 
-        <!-- EMPLOYEES -->
-        <section id="employees" class="page">
-            <h2>Employees</h2>
-            <p class="page-intro">Create users for your team and connect time entries to people.</p>
+        <section id="employeesPage" class="page">
+            <h2 data-i18n="employees_title">Employees</h2>
 
-            <div class="grid-2">
-                <div class="card">
-                    <h3>Add employee</h3>
-                    <form id="employeeForm">
-                        <label>Name</label>
-                        <input id="employeeName" type="text" required />
-
-                        <label>Email</label>
-                        <input id="employeeEmail" type="email" />
-
-                        <label>Role</label>
-                        <select id="employeeRole">
-                            <option value="employee">Employee</option>
-                            <option value="admin">Admin</option>
+            <div class="form-grid">
+                <div class="form-card">
+                    <h3 data-i18n="employees_add">Add employee</h3>
+                    <label>
+                        <span data-i18n="label_employee_name">Name</span>
+                        <input id="empName" type="text" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_employee_email">Email</span>
+                        <input id="empEmail" type="email" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_employee_role">Role</span>
+                        <select id="empRole">
+                            <option value="employee" data-i18n="role_employee">Employee</option>
+                            <option value="admin" data-i18n="role_admin">Admin</option>
                         </select>
-
-                        <button type="submit">Save employee</button>
-                    </form>
+                    </label>
+                    <button id="saveEmployeeBtn" class="btn" data-i18n="btn_save_employee">
+                        Save employee
+                    </button>
                 </div>
 
-                <div class="card">
-                    <h3>Employee list</h3>
+                <div class="table-card">
+                    <h3 data-i18n="employees_list">Employee list</h3>
                     <table id="employeeTable">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                            </tr>
+                        <tr>
+                            <th data-i18n="th_employee_name">Name</th>
+                            <th data-i18n="th_employee_email">Email</th>
+                            <th data-i18n="th_employee_role">Role</th>
+                        </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -146,186 +176,185 @@
             </div>
         </section>
 
-        <!-- TIME TRACKING -->
-        <section id="timer" class="page">
-            <h2>Time tracking</h2>
-            <p class="page-intro">Start and stop a timer when you work for a customer.</p>
+        <section id="timeTrackingPage" class="page">
+            <h2 data-i18n="time_title">Time tracking</h2>
 
-            <div class="card">
-                <label>Customer</label>
-                <select id="timerCustomerSelect"></select>
+            <div class="form-grid">
+                <div class="form-card">
+                    <h3 data-i18n="time_start_stop">Start / stop timer</h3>
 
-                <label>Employee</label>
-                <select id="timerEmployeeSelect"></select>
+                    <label>
+                        <span data-i18n="label_timer_customer">Customer</span>
+                        <select id="timerCustomerSelect"></select>
+                    </label>
 
-                <label>Or type name</label>
-                <input id="timerEmployeeName" type="text" placeholder="Optional" />
+                    <label>
+                        <span data-i18n="label_timer_employee">Employee</span>
+                        <select id="timerEmployeeSelect"></select>
+                    </label>
 
-                <div id="timerStatus" class="timer-status">No active timer</div>
-
-                <div class="button-row">
-                    <button id="startTimerBtn">Start timer</button>
-                    <button id="stopTimerBtn" disabled>Stop timer</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- SCHEDULE (CALENDAR + PLANNING) -->
-        <section id="schedule" class="page">
-            <h2>Schedule</h2>
-            <p class="page-intro">
-                Plan upcoming visits and see your workload on the calendar.
-            </p>
-
-            <div class="grid-2">
-                <!-- Plan new job -->
-                <div class="card">
-                    <h3>Plan new job</h3>
-
-                    <form id="planForm">
-                        <label for="planDate">Date</label>
-                        <input type="date" id="planDate" required />
-
-                        <label for="planStartTime">Start time</label>
-                        <input type="time" id="planStartTime" required />
-
-                        <label for="planDuration">Duration (minutes)</label>
-                        <input type="number" id="planDuration" min="1" value="60" required />
-
-                        <label for="planCustomerSelect">Customer</label>
-                        <select id="planCustomerSelect"></select>
-
-                        <label for="planEmployeeSelect">Employee</label>
-                        <select id="planEmployeeSelect"></select>
-
-                        <label for="planNote">Note</label>
-                        <input type="text" id="planNote" placeholder="E.g. lawn mowing, hedge trimming" />
-
-                        <button type="submit">Save planned job</button>
-                    </form>
-                </div>
-
-                <!-- Calendar -->
-                <div class="card">
-                    <div class="calendar-header">
-                        <button id="calPrev" class="chip-btn">◀</button>
-                        <div id="calMonthLabel" class="cal-month-label">Month</div>
-                        <button id="calNext" class="chip-btn">▶</button>
-                    </div>
-
-                    <div class="calendar-grid">
-                        <div class="day-name">Mon</div>
-                        <div class="day-name">Tue</div>
-                        <div class="day-name">Wed</div>
-                        <div class="day-name">Thu</div>
-                        <div class="day-name">Fri</div>
-                        <div class="day-name">Sat</div>
-                        <div class="day-name">Sun</div>
-                        <div id="calendarCells"></div>
-                    </div>
-
-                    <p id="selectedDayLabel" class="selected-day-label">
-                        Click a day to see planned jobs.
+                    <p id="timerStatus" class="status">
+                        <span data-i18n="timer_no_active">No active timer</span>
                     </p>
+
+                    <div class="btn-row">
+                        <button id="startTimerBtn" class="btn" data-i18n="btn_start_timer">
+                            Start
+                        </button>
+                        <button id="stopTimerBtn" class="btn btn-secondary" disabled data-i18n="btn_stop_timer">
+                            Stop
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <h3 data-i18n="logs_today_title">Logs today</h3>
+                    <table id="timeLogTable">
+                        <thead>
+                        <tr>
+                            <th data-i18n="th_log_start">Start</th>
+                            <th data-i18n="th_log_end">End</th>
+                            <th data-i18n="th_log_duration">Minutes</th>
+                            <th data-i18n="th_log_customer">Customer</th>
+                            <th data-i18n="th_log_employee">Employee</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="schedulePage" class="page">
+            <h2 data-i18n="schedule_title">Schedule & calendar</h2>
+
+            <div class="calendar-layout">
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button id="prevMonthBtn" class="icon-btn">‹</button>
+                        <div id="calMonthLabel">Month</div>
+                        <button id="nextMonthBtn" class="icon-btn">›</button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <span data-i18n="weekday_mon">Mon</span>
+                        <span data-i18n="weekday_tue">Tue</span>
+                        <span data-i18n="weekday_wed">Wed</span>
+                        <span data-i18n="weekday_thu">Thu</span>
+                        <span data-i18n="weekday_fri">Fri</span>
+                        <span data-i18n="weekday_sat">Sat</span>
+                        <span data-i18n="weekday_sun">Sun</span>
+                    </div>
+                    <div id="calendarCells" class="calendar-grid"></div>
+                </div>
+
+                <div class="form-card">
+                    <h3 data-i18n="schedule_plan_job">Plan job</h3>
+
+                    <label>
+                        <span data-i18n="label_plan_date">Date</span>
+                        <input id="planDate" type="date" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_plan_start">Start time</span>
+                        <input id="planStart" type="time" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_plan_duration">Duration (minutes)</span>
+                        <input id="planDuration" type="number" min="1" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_plan_customer">Customer</span>
+                        <select id="planCustomerSelect"></select>
+                    </label>
+                    <label>
+                        <span data-i18n="label_plan_employee">Employee</span>
+                        <select id="planEmployeeSelect"></select>
+                    </label>
+                    <label>
+                        <span data-i18n="label_plan_note">Note</span>
+                        <textarea id="planNote" rows="2"></textarea>
+                    </label>
+
+                    <button id="savePlanBtn" class="btn" data-i18n="btn_save_plan">
+                        Save planned job
+                    </button>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>Planned jobs on selected day</h3>
-                <ul id="dayPlanList" class="day-plan-list">
-                    <!-- Filled by JS -->
-                </ul>
+            <div class="day-details">
+                <h3 id="selectedDayLabel" data-i18n="schedule_selected_day">
+                    Click a day to see planned jobs.
+                </h3>
+                <ul id="dayPlanList"></ul>
             </div>
         </section>
 
-        <!-- LOGS -->
-        <section id="logs" class="page">
-            <h2>Today's logs</h2>
-            <p class="page-intro">Time entries created today.</p>
-
-            <div class="card">
-                <table id="timeLogTable">
-                    <thead>
-                        <tr>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Duration (min)</th>
-                            <th>Customer</th>
-                            <th>Employee</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- REPORTS -->
-        <section id="reports" class="page">
-            <h2>Reports</h2>
-            <p class="page-intro">
-                Filter your time entries by date, customer and employee.
+        <section id="logsPage" class="page">
+            <h2 data-i18n="logs_page_title">Logs (all)</h2>
+            <p data-i18n="logs_page_desc">
+                Here you can later add a full log view if desired. For now, use the dashboard and time tracking page.
             </p>
+        </section>
 
-            <div class="card">
-                <h3>Filter</h3>
-                <div class="filter-row">
-                    <div>
-                        <label for="reportDateFrom">Date from</label>
-                        <input type="date" id="reportDateFrom" />
-                    </div>
-                    <div>
-                        <label for="reportDateTo">Date to</label>
-                        <input type="date" id="reportDateTo" />
-                    </div>
-                    <div>
-                        <label for="reportCustomerSelect">Customer</label>
+        <section id="reportsPage" class="page">
+            <h2 data-i18n="reports_title">Reports</h2>
+
+            <div class="form-grid">
+                <div class="form-card">
+                    <h3 data-i18n="reports_filter_title">Filter</h3>
+
+                    <label>
+                        <span data-i18n="label_report_date_from">From date</span>
+                        <input id="reportDateFrom" type="date" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_report_date_to">To date</span>
+                        <input id="reportDateTo" type="date" />
+                    </label>
+                    <label>
+                        <span data-i18n="label_report_customer">Customer</span>
                         <select id="reportCustomerSelect"></select>
-                    </div>
-                    <div>
-                        <label for="reportEmployeeSelect">Employee</label>
+                    </label>
+                    <label>
+                        <span data-i18n="label_report_employee">Employee</span>
                         <select id="reportEmployeeSelect"></select>
-                    </div>
+                    </label>
+
+                    <button id="runReportBtn" class="btn" data-i18n="btn_run_report">
+                        Run report
+                    </button>
+
+                    <p id="reportSummary" class="status"></p>
                 </div>
-                <button id="reportGenerateBtn">Generate report</button>
-            </div>
 
-            <div class="card">
-                <h3>Summary</h3>
-                <p id="reportSummary">No report generated yet.</p>
-            </div>
-
-            <div class="card">
-                <h3>Report details</h3>
-                <table id="reportTable">
-                    <thead>
+                <div class="table-card">
+                    <h3 data-i18n="reports_result_title">Result</h3>
+                    <table id="reportTable">
+                        <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Duration (min)</th>
-                            <th>Customer</th>
-                            <th>Employee</th>
+                            <th data-i18n="th_report_date">Date</th>
+                            <th data-i18n="th_report_start">Start</th>
+                            <th data-i18n="th_report_end">End</th>
+                            <th data-i18n="th_report_duration">Minutes</th>
+                            <th data-i18n="th_report_customer">Customer</th>
+                            <th data-i18n="th_report_employee">Employee</th>
                         </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- SETTINGS -->
-        <section id="settings" class="page">
-            <h2>Settings</h2>
-            <p class="page-intro">
-                Future place for user accounts, export, integrations and more.
+        <section id="settingsPage" class="page">
+            <h2 data-i18n="settings_title">Settings</h2>
+            <p data-i18n="settings_lang_info">
+                You can switch language using the flag buttons in the top bar. The app remembers your choice.
             </p>
         </section>
-
     </main>
+</div>
 
-    <footer class="footer">
-        Written by ChatGPT for - Kisbye Consulting
-    </footer>
-
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
