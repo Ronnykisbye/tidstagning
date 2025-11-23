@@ -1,394 +1,459 @@
-// =================== DATA & STORAGE ===================
-
-let customers = [];
-let employees = [];
-let timeLogs = [];
-let activeTimer = null; // { customerId, employee, startTime }
-
-function loadData() {
-    customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-    employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
-    timeLogs = JSON.parse(localStorage.getItem("gtp_logs") || "[]");
-    activeTimer = JSON.parse(localStorage.getItem("gtp_active") || "null");
+:root {
+    --bg: #020617;
+    --bg-soft: #020617;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --card: #020617;
+    --accent: #22c55e;
+    --accent-soft: #14532d;
+    --border: #1f2937;
 }
 
-function saveData() {
-    localStorage.setItem("gtp_customers", JSON.stringify(customers));
-    localStorage.setItem("gtp_employees", JSON.stringify(employees));
-    localStorage.setItem("gtp_logs", JSON.stringify(timeLogs));
-    localStorage.setItem("gtp_active", JSON.stringify(activeTimer));
+[data-theme="light"] {
+    --bg: #f3f4f6;
+    --bg-soft: #e5e7eb;
+    --text: #020617;
+    --muted: #6b7280;
+    --card: #ffffff;
+    --accent: #16a34a;
+    --accent-soft: #bbf7d0;
+    --border: #d1d5db;
 }
 
-// =================== NAVIGATION (SPA) ===================
-
-function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("visible"));
-    const page = document.getElementById(pageId);
-    if (page) page.classList.add("visible");
-
-    document.querySelectorAll(".sidebar li").forEach(li => li.classList.remove("active"));
-    const navItem = document.querySelector(`.sidebar li[data-page="${pageId}"]`);
-    if (navItem) navItem.classList.add("active");
+* {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-// =================== RENDER FUNCTIONS ===================
-
-function renderCustomers() {
-    const tbody = document.querySelector("#customerTable tbody");
-    const selTimer = document.getElementById("timerCustomerSelect");
-    const selReport = document.getElementById("reportCustomerSelect");
-
-    if (tbody) tbody.innerHTML = "";
-    if (selTimer) selTimer.innerHTML = "";
-    if (selReport) selReport.innerHTML = "";
-
-    // "All customers" option for reports
-    if (selReport) {
-        const optAll = document.createElement("option");
-        optAll.value = "";
-        optAll.textContent = "All customers";
-        selReport.appendChild(optAll);
-    }
-
-    customers.forEach(c => {
-        if (tbody) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${c.name}</td>
-                <td>${c.phone || ""}</td>
-                <td>${c.email || ""}</td>
-                <td>${c.address || ""}</td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        if (selTimer) {
-            const opt = document.createElement("option");
-            opt.value = c.id;
-            opt.textContent = c.name;
-            selTimer.appendChild(opt);
-        }
-
-        if (selReport) {
-            const opt2 = document.createElement("option");
-            opt2.value = c.id;
-            opt2.textContent = c.name;
-            selReport.appendChild(opt2);
-        }
-    });
-
-    const dashCustomers = document.getElementById("dashTotalCustomers");
-    if (dashCustomers) dashCustomers.textContent = customers.length;
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.22), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.18), transparent 55%),
+        var(--bg);
+    color: var(--text);
 }
 
-function renderEmployees() {
-    const tbody = document.querySelector("#employeeTable tbody");
-    const selTimer = document.getElementById("timerEmployeeSelect");
-    const selReport = document.getElementById("reportEmployeeSelect");
+/* TOPBAR */
 
-    if (tbody) tbody.innerHTML = "";
-    if (selTimer) selTimer.innerHTML = "";
-    if (selReport) selReport.innerHTML = "";
-
-    // "All employees" option for reports
-    if (selReport) {
-        const optAllEmp = document.createElement("option");
-        optAllEmp.value = "";
-        optAllEmp.textContent = "All employees";
-        selReport.appendChild(optAllEmp);
-    }
-
-    employees.forEach(e => {
-        if (tbody) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${e.name}</td>
-                <td>${e.email || ""}</td>
-                <td>${e.role}</td>
-            `;
-            tbody.appendChild(tr);
-        }
-
-        if (selTimer) {
-            const opt = document.createElement("option");
-            opt.value = e.id;
-            opt.textContent = e.name;
-            selTimer.appendChild(opt);
-        }
-
-        if (selReport) {
-            const opt2 = document.createElement("option");
-            opt2.value = e.name; // filter by name in logs
-            opt2.textContent = e.name;
-            selReport.appendChild(opt2);
-        }
-    });
-
-    const dashEmp = document.getElementById("dashTotalEmployees");
-    if (dashEmp) dashEmp.textContent = employees.length;
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1.1rem;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.7);
 }
 
-function renderLogs() {
-    const tbody = document.querySelector("#timeLogTable tbody");
-    if (!tbody) return;
-
-    tbody.innerHTML = "";
-    const today = new Date().toISOString().slice(0, 10);
-    let count = 0;
-
-    timeLogs
-        .filter(l => (l.startTime || "").slice(0, 10) === today)
-        .forEach(log => {
-            const tr = document.createElement("tr");
-            const customer = customers.find(c => c.id === log.customerId);
-            tr.innerHTML = `
-                <td>${new Date(log.startTime).toLocaleTimeString()}</td>
-                <td>${new Date(log.endTime).toLocaleTimeString()}</td>
-                <td>${log.duration}</td>
-                <td>${customer ? customer.name : "?"}</td>
-                <td>${log.employee}</td>
-            `;
-            tbody.appendChild(tr);
-            count++;
-        });
-
-    const dashLogs = document.getElementById("dashTodayLogs");
-    if (dashLogs) dashLogs.textContent = count;
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
 }
 
-function renderTimer() {
-    const status = document.getElementById("timerStatus");
-    const stopBtn = document.getElementById("stopTimerBtn");
-
-    if (!status || !stopBtn) return;
-
-    if (!activeTimer) {
-        status.textContent = "No active timer";
-        stopBtn.disabled = true;
-    } else {
-        const customer = customers.find(c => c.id === activeTimer.customerId);
-        const cname = customer ? customer.name : "?";
-        status.textContent = `Running: ${cname} – ${activeTimer.employee}`;
-        stopBtn.disabled = false;
-    }
+.logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background:
+        conic-gradient(from 220deg, #22c55e, #a3e635, #4ade80, #22c55e);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.9);
 }
 
-// =================== REPORTS ===================
-
-function generateReport() {
-    const fromInput = document.getElementById("reportDateFrom");
-    const toInput = document.getElementById("reportDateTo");
-    const custSel = document.getElementById("reportCustomerSelect");
-    const empSel = document.getElementById("reportEmployeeSelect");
-    const tbody = document.querySelector("#reportTable tbody");
-    const summary = document.getElementById("reportSummary");
-
-    if (!tbody || !summary) return;
-
-    tbody.innerHTML = "";
-
-    const fromDate = fromInput?.value || "";
-    const toDate = toInput?.value || "";
-    const custId = custSel?.value || "";
-    const empName = empSel?.value || "";
-
-    let filtered = [...timeLogs];
-
-    // Date filter (inclusive)
-    if (fromDate) {
-        filtered = filtered.filter(l => (l.startTime || "").slice(0, 10) >= fromDate);
-    }
-    if (toDate) {
-        filtered = filtered.filter(l => (l.startTime || "").slice(0, 10) <= toDate);
-    }
-
-    if (custId) {
-        filtered = filtered.filter(l => l.customerId === custId);
-    }
-
-    if (empName) {
-        filtered = filtered.filter(l => l.employee === empName);
-    }
-
-    let totalMinutes = 0;
-
-    filtered.forEach(log => {
-        const customer = customers.find(c => c.id === log.customerId);
-        const dateStr = (log.startTime || "").slice(0, 10);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${dateStr}</td>
-            <td>${new Date(log.startTime).toLocaleTimeString()}</td>
-            <td>${new Date(log.endTime).toLocaleTimeString()}</td>
-            <td>${log.duration}</td>
-            <td>${customer ? customer.name : "?"}</td>
-            <td>${log.employee}</td>
-        `;
-        tbody.appendChild(tr);
-        totalMinutes += Number(log.duration) || 0;
-    });
-
-    const hours = (totalMinutes / 60).toFixed(2);
-    const periodText =
-        fromDate || toDate
-            ? `Period: ${fromDate || "…"} – ${toDate || "…"}`
-            : "All dates";
-
-    summary.textContent = `${filtered.length} log(s), ${totalMinutes} minutes (${hours} hours). ${periodText}`;
+.topbar-title h1 {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
 }
 
-// =================== INIT & EVENTS ===================
+.topbar-title span {
+    display: block;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.1rem;
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadData();
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
 
-    // Side menu navigation
-    document.querySelectorAll(".sidebar li").forEach(li => {
-        li.addEventListener("click", () => {
-            showPage(li.dataset.page);
-        });
-    });
+/* CHIP BUTTONS */
 
-    // Mobile nav toggle
-    const navToggle = document.getElementById("navToggle");
-    const sidebar = document.getElementById("sidebar");
-    if (navToggle && sidebar) {
-        navToggle.addEventListener("click", () => {
-            sidebar.classList.toggle("open");
-        });
+.chip-btn {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.8);
+    background: rgba(15, 23, 42, 0.85);
+    color: #e5e7eb;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    width: 230px;
+    background: rgba(15, 23, 42, 0.96);
+    border-right: 1px solid rgba(30, 64, 175, 0.6);
+    padding: 0.7rem 0.3rem;
+    overflow-y: auto;
+}
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 0.7rem 0.9rem;
+    margin: 0.15rem 0.4rem;
+    cursor: pointer;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    transition: background 0.16s ease, transform 0.12s ease;
+}
+
+.sidebar li:hover {
+    background: rgba(30, 64, 175, 0.7);
+    transform: translateX(2px);
+}
+
+.sidebar li.active {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    color: #f9fafb;
+    box-shadow: 0 0 16px rgba(22, 163, 74, 0.9);
+}
+
+/* MAIN LAYOUT */
+
+main {
+    margin-left: 244px;
+    padding: 1.4rem 1.6rem 2.6rem;
+    max-width: 1240px;
+}
+
+.page {
+    display: none;
+    animation: fadeIn 0.25s ease-out;
+}
+
+.page.visible {
+    display: block;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 0.35rem;
+}
+
+.page-intro {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+/* CARDS & GRID */
+
+.card {
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 65%),
+        var(--card);
+    border-radius: 18px;
+    padding: 1rem 1.25rem 1.3rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 22px 40px rgba(15, 23, 42, 0.7);
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr);
+    gap: 1rem;
+}
+
+/* DASHBOARD CARDS */
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1rem;
+}
+
+.dash-card {
+    background:
+        radial-gradient(circle at top, var(--accent-soft), transparent 60%),
+        var(--card);
+    border-radius: 18px;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    box-shadow: 0 20px 42px rgba(15, 23, 42, 0.75);
+}
+
+.dash-card h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.dash-card p {
+    margin: 0.4rem 0 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+/* FORMS */
+
+label {
+    display: block;
+    font-size: 0.82rem;
+    margin-bottom: 0.15rem;
+    color: var(--muted);
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.12);
+    color: var(--text);
+    font-size: 0.9rem;
+    margin-bottom: 0.55rem;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
+}
+
+button {
+    background: linear-gradient(135deg, var(--accent), #4ade80);
+    color: #052e16;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 14px 30px rgba(22, 163, 74, 0.7);
+    margin-top: 0.1rem;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 40px rgba(22, 163, 74, 0.85);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.button-row {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 0.4rem;
+}
+
+/* TIMER STATUS */
+
+.timer-status {
+    margin: 0.4rem 0 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+/* TABLES */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+}
+
+th,
+td {
+    padding: 0.45rem 0.55rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+/* FILTER ROW (REPORTS) */
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.filter-row > div {
+    flex: 1 1 160px;
+}
+
+/* CALENDAR */
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+}
+
+.cal-month-label {
+    font-weight: 600;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    font-size: 0.8rem;
+}
+
+.day-name {
+    text-align: center;
+    font-weight: 600;
+    color: var(--muted);
+    padding-bottom: 0.2rem;
+}
+
+#calendarCells {
+    display: contents;
+}
+
+.calendar-cell {
+    min-height: 70px;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    padding: 0.25rem 0.3rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(15, 23, 42, 0.18);
+}
+
+.calendar-cell.empty {
+    border-style: dashed;
+    opacity: 0.3;
+    cursor: default;
+}
+
+.calendar-cell .date-number {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+.calendar-cell .load-pill {
+    align-self: flex-start;
+    margin-top: 0.3rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.15);
+    color: #bbf7d0;
+    font-size: 0.72rem;
+}
+
+.calendar-cell.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.8);
+}
+
+.selected-day-label {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* DAY PLAN LIST */
+
+.day-plan-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.86rem;
+}
+
+.day-plan-list li {
+    padding: 0.4rem 0.3rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.day-plan-list li span {
+    display: inline-block;
+    margin-right: 0.4rem;
+}
+
+/* FOOTER */
+
+.footer {
+    text-align: center;
+    padding: 0.9rem 0.6rem 1.4rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+
+.nav-toggle {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    main {
+        margin-left: 0;
+        padding: 1rem 1rem 2.4rem;
     }
 
-    // Theme toggle
-    const themeToggle = document.getElementById("themeToggle");
-    const savedTheme = localStorage.getItem("gtp_theme") || "light";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-    if (themeToggle) {
-        themeToggle.textContent = savedTheme === "dark" ? "☀️" : "🌙";
-        themeToggle.onclick = () => {
-            const current = document.documentElement.getAttribute("data-theme");
-            const next = current === "dark" ? "light" : "dark";
-            document.documentElement.setAttribute("data-theme", next);
-            localStorage.setItem("gtp_theme", next);
-            themeToggle.textContent = next === "dark" ? "☀️" : "🌙";
-        };
+    .sidebar {
+        display: none;
+        width: 220px;
+        z-index: 40;
     }
 
-    // Forms
-    const customerForm = document.getElementById("customerForm");
-    if (customerForm) {
-        customerForm.addEventListener("submit", e => {
-            e.preventDefault();
-            const c = {
-                id: "c" + Date.now(),
-                name: document.getElementById("customerName").value.trim(),
-                phone: document.getElementById("customerPhone").value.trim(),
-                email: document.getElementById("customerEmail").value.trim(),
-                address: document.getElementById("customerAddress").value.trim()
-            };
-            if (!c.name) return;
-            customers.push(c);
-            saveData();
-            renderCustomers();
-            customerForm.reset();
-        });
+    .sidebar.open {
+        display: block;
     }
 
-    const employeeForm = document.getElementById("employeeForm");
-    if (employeeForm) {
-        employeeForm.addEventListener("submit", e => {
-            e.preventDefault();
-            const emp = {
-                id: "e" + Date.now(),
-                name: document.getElementById("employeeName").value.trim(),
-                email: document.getElementById("employeeEmail").value.trim(),
-                role: document.getElementById("employeeRole").value
-            };
-            if (!emp.name) return;
-            employees.push(emp);
-            saveData();
-            renderEmployees();
-            employeeForm.reset();
-        });
+    .nav-toggle {
+        display: inline-flex;
     }
 
-    // Timer start
-    const startBtn = document.getElementById("startTimerBtn");
-    if (startBtn) {
-        startBtn.addEventListener("click", () => {
-            const custSel = document.getElementById("timerCustomerSelect");
-            const empSel = document.getElementById("timerEmployeeSelect");
-            const empNameInput = document.getElementById("timerEmployeeName");
-
-            const cid = custSel ? custSel.value : "";
-            if (!cid) {
-                alert("Please select a customer.");
-                return;
-            }
-
-            let empName = "";
-            if (empSel && empSel.value) {
-                const empObj = employees.find(e => e.id === empSel.value);
-                empName = empObj ? empObj.name : "";
-            }
-            if (!empName && empNameInput) {
-                empName = empNameInput.value.trim();
-            }
-            if (!empName) empName = "Unknown";
-
-            activeTimer = {
-                customerId: cid,
-                employee: empName,
-                startTime: new Date().toISOString()
-            };
-            saveData();
-            renderTimer();
-        });
+    .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
     }
-
-    // Timer stop
-    const stopBtn = document.getElementById("stopTimerBtn");
-    if (stopBtn) {
-        stopBtn.addEventListener("click", () => {
-            if (!activeTimer) return;
-            const end = new Date();
-            const start = new Date(activeTimer.startTime);
-            const minutes = Math.max(1, Math.round((end - start) / 60000));
-
-            timeLogs.push({
-                customerId: activeTimer.customerId,
-                employee: activeTimer.employee,
-                startTime: activeTimer.startTime,
-                endTime: end.toISOString(),
-                duration: minutes
-            });
-
-            activeTimer = null;
-            saveData();
-            renderLogs();
-            renderTimer();
-            generateReport(); // opdater rapport automatisk
-        });
-    }
-
-    // Report generate
-    const reportBtn = document.getElementById("reportGenerateBtn");
-    if (reportBtn) {
-        reportBtn.addEventListener("click", () => {
-            generateReport();
-        });
-    }
-
-    // Sæt default datoer til i dag
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const reportFrom = document.getElementById("reportDateFrom");
-    const reportTo = document.getElementById("reportDateTo");
-    if (reportFrom) reportFrom.value = todayStr;
-    if (reportTo) reportTo.value = todayStr;
-
-    // Første rendering
-    renderCustomers();
-    renderEmployees();
-    renderLogs();
-    renderTimer();
-    generateReport();
-});
+}
