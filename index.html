@@ -7,102 +7,168 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>
-        <h1>GreenTime Pro</h1>
-        <p>Simple time tracking and customer management for small service businesses</p>
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo"></div>
+            <h1>GreenTime Pro</h1>
+        </div>
+        <div class="topbar-right">
+            <button id="themeToggle" class="theme-toggle">🌙</button>
+            <button id="navToggle" class="nav-toggle">☰</button>
+        </div>
     </header>
 
-    <main>
-        <!-- Customer creation -->
-        <section class="card">
-            <h2>Add customer</h2>
-            <form id="customerForm">
-                <div class="field">
-                    <label for="customerName">Name</label>
+    <!-- SIDE NAVIGATION -->
+    <nav id="sidebar" class="sidebar">
+        <ul>
+            <li data-page="dashboard" class="active">Dashboard</li>
+            <li data-page="customers">Customers</li>
+            <li data-page="employees">Employees</li>
+            <li data-page="timer">Time Tracking</li>
+            <li data-page="logs">Logs</li>
+            <li data-page="settings">Settings</li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="appContent">
+
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="page visible">
+            <h2>Dashboard</h2>
+            <p>Welcome to GreenTime Pro – your service business control center.</p>
+
+            <div class="dashboard-cards">
+                <div class="dash-card">
+                    <h3>Total Customers</h3>
+                    <p id="dashTotalCustomers">0</p>
+                </div>
+                <div class="dash-card">
+                    <h3>Total Employees</h3>
+                    <p id="dashTotalEmployees">0</p>
+                </div>
+                <div class="dash-card">
+                    <h3>Today's Logs</h3>
+                    <p id="dashTodayLogs">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section id="customers" class="page">
+            <h2>Customers</h2>
+
+            <div class="card">
+                <h3>Add Customer</h3>
+                <form id="customerForm">
+                    <label>Name</label>
                     <input id="customerName" type="text" required />
-                </div>
-                <div class="field">
-                    <label for="customerPhone">Phone</label>
-                    <input id="customerPhone" type="tel" />
-                </div>
-                <div class="field">
-                    <label for="customerEmail">Email</label>
+
+                    <label>Phone</label>
+                    <input id="customerPhone" type="text" />
+
+                    <label>Email</label>
                     <input id="customerEmail" type="email" />
-                </div>
-                <div class="field">
-                    <label for="customerAddress">Address</label>
+
+                    <label>Address</label>
                     <input id="customerAddress" type="text" />
-                </div>
-                <button type="submit">Save customer</button>
-            </form>
-        </section>
 
-        <!-- Customer list -->
-        <section class="card">
-            <h2>Customer list</h2>
-            <table id="customerTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Filled by JS -->
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Time tracking -->
-        <section class="card">
-            <h2>Time tracking</h2>
-            <div class="field">
-                <label for="timerCustomerSelect">Customer</label>
-                <select id="timerCustomerSelect">
-                    <!-- Filled by JS -->
-                </select>
-            </div>
-            <div class="field">
-                <label for="timerEmployeeName">Employee name</label>
-                <input id="timerEmployeeName" type="text" placeholder="Your name" />
+                    <button type="submit">Save Customer</button>
+                </form>
             </div>
 
-            <div id="timerStatus">
-                <p>No active timer</p>
-            </div>
-
-            <div class="button-row">
-                <button id="startTimerBtn">Start</button>
-                <button id="stopTimerBtn" disabled>Stop</button>
+            <div class="card">
+                <h3>Customer List</h3>
+                <table id="customerTable">
+                    <thead>
+                        <tr><th>Name</th><th>Phone</th><th>Email</th><th>Address</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </section>
 
-        <!-- Time logs -->
-        <section class="card">
-            <h2>Time logs (today)</h2>
+        <!-- EMPLOYEES -->
+        <section id="employees" class="page">
+            <h2>Employees</h2>
+
+            <div class="card">
+                <h3>Add Employee</h3>
+                <form id="employeeForm">
+                    <label>Name</label>
+                    <input id="employeeName" type="text" required />
+
+                    <label>Email</label>
+                    <input id="employeeEmail" type="email" />
+
+                    <label>Role</label>
+                    <select id="employeeRole">
+                        <option value="employee">Employee</option>
+                        <option value="admin">Admin</option>
+                    </select>
+
+                    <button type="submit">Save Employee</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Employee List</h3>
+                <table id="employeeTable">
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Role</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TIMER -->
+        <section id="timer" class="page">
+            <h2>Time Tracking</h2>
+
+            <div class="card">
+                <label>Customer</label>
+                <select id="timerCustomerSelect"></select>
+
+                <label>Employee</label>
+                <select id="timerEmployeeSelect"></select>
+
+                <label>Or type name</label>
+                <input id="timerEmployeeName" type="text" placeholder="Optional" />
+
+                <div id="timerStatus">No active timer</div>
+
+                <button id="startTimerBtn">Start Timer</button>
+                <button id="stopTimerBtn" disabled>Stop Timer</button>
+            </div>
+        </section>
+
+        <!-- LOGS -->
+        <section id="logs" class="page">
+            <h2>Today's Logs</h2>
+
             <table id="timeLogTable">
                 <thead>
-                    <tr>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Duration (min)</th>
-                        <th>Customer</th>
-                        <th>Employee</th>
-                    </tr>
+                    <tr><th>Start</th><th>End</th><th>Duration</th><th>Customer</th><th>Employee</th></tr>
                 </thead>
-                <tbody>
-                    <!-- Filled by JS -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="page">
+            <h2>Settings</h2>
+            <p>More features will be added soon.</p>
+        </section>
+
     </main>
 
-    <footer>
-        <p>Written by ChatGPT for - Kisbye Consulting</p>
+    <footer class="footer">
+        Written by ChatGPT for - Kisbye Consulting
     </footer>
 
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
