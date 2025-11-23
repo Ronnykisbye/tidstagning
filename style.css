@@ -249,6 +249,74 @@ body {
     color: white !important;
 }
 
+/* ======================================================
+   AFSNIT 06E – KALENDER HOVER & ANIMATION
+   ====================================================== */
+
+.calendar-cell {
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.calendar-cell:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+/* ======================================================
+   AFSNIT 06F – TOOLTIP FOR KALENDER
+   ====================================================== */
+
+.calendar-tooltip {
+    position: absolute;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border-subtle);
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    font-size: 0.85rem;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+/* ======================================================
+   AFSNIT 06E – TOOLTIP LOGIK FOR KALENDER
+   ====================================================== */
+
+let calendarTooltip = null;
+
+function showCalendarTooltip(evt, tasks) {
+    if (!calendarTooltip) {
+        calendarTooltip = document.createElement("div");
+        calendarTooltip.className = "calendar-tooltip";
+        document.body.appendChild(calendarTooltip);
+    }
+
+    // Indhold
+    if (tasks.length === 0) {
+        calendarTooltip.innerHTML = "Ingen opgaver";
+    } else {
+        calendarTooltip.innerHTML = `
+            <strong>${tasks.length} opgave(r)</strong><br>
+            ${tasks.map(t => `${t.customer} — ${t.employees.join(", ")}`).join("<br>")}
+        `;
+    }
+
+    // Position
+    calendarTooltip.style.left = evt.pageX + 15 + "px";
+    calendarTooltip.style.top = evt.pageY + 15 + "px";
+    calendarTooltip.style.opacity = 1;
+}
+
+function hideCalendarTooltip() {
+    if (calendarTooltip) {
+        calendarTooltip.style.opacity = 0;
+    }
+}
+
 
 /* ======================================================
    AFSNIT 07 – FORM ELEMENTER
