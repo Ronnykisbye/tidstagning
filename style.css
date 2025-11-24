@@ -517,3 +517,30 @@ table tr:nth-child(even) td {
     color: var(--text) !important;
     background-color: var(--bg-card) !important;
 }
+
+/* =====================================================
+   AFSNIT XX – MOBIL SIDEBAR FIX (OVERLAP & POSITION)
+   ===================================================== */
+
+/* Flyt hamburger-menuen lidt ned på mobile enheder */
+@media (max-width: 768px) {
+    #menuToggle {
+        position: fixed;
+        top: 18px;          /* flyttet længere ned */
+        left: 18px;         /* lidt ind fra venstre */
+        z-index: 2000;      /* altid øverst */
+    }
+
+    /* Sidebar skal ligge under topbaren og må ikke overlappe */
+    .sidebar {
+        top: 60px !important;      /* flyt den ned så den ikke sidder helt oppe */
+        height: calc(100% - 60px); /* tilpas højden */
+        z-index: 1500;             /* under menuToggle, over indholdet */
+    }
+
+    /* Indhold skal ikke ligge bag sidebar-knappen */
+    .page {
+        padding-top: 70px !important;
+    }
+}
+
