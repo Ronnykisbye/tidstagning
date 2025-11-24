@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
+    <!-- ======================================================
+         AFSNIT 01 – META & CSS
+    ======================================================= -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenTime Pro</title>
+
+    <!-- Style -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- ======================================================
+     AFSNIT 02 – APP-CONTAINER (wrapper)
+======================================================= -->
 <div class="app-container">
 
-    <!-- Topbar -->
+    <!-- ======================================================
+         AFSNIT 03 – TOPBAR
+    ======================================================= -->
     <header class="topbar">
         <button id="menuToggle" class="menu-btn">☰</button>
 
@@ -27,7 +38,9 @@
         <button id="themeToggle" class="theme-btn">☀️</button>
     </header>
 
-    <!-- Sidebar -->
+    <!-- ======================================================
+         AFSNIT 04 – SIDEMENU
+    ======================================================= -->
     <aside id="sidebar" class="sidebar">
         <nav class="nav">
             <ul>
@@ -66,10 +79,12 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
+    <!-- ======================================================
+         AFSNIT 05 – MAIN CONTENT / SIDER
+    ======================================================= -->
     <main id="contentArea" class="content">
-        
-        <!-- DASHBOARD SIDE -->
+
+        <!-- =============== DASHBOARD =============== -->
         <section id="dashboardPage" class="page active">
 
             <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
@@ -83,6 +98,7 @@
                 <div id="timerEmployeeChips" class="chip-container"></div>
 
                 <label data-i18n="show_time_for_customer">Vis tid for kunden:</label>
+
                 <div class="radio-row">
                     <label>
                         <input type="radio" name="timeView" value="today" checked>
@@ -95,36 +111,94 @@
                     </label>
                 </div>
 
-                <p class="info">
-                    <span data-i18n="timer_instruction">
-                        Vælg kunde og medarbejdere og brug Start / Stop.
-                    </span>
+                <p class="info" data-i18n="timer_instruction">
+                    Vælg kunde og medarbejdere og brug Start / Stop.
                 </p>
 
                 <div class="timer-display" id="timerDisplay">00:00:00</div>
 
                 <div class="timer-buttons">
-                    <button id="startTimerBtn" class="btn start">Start</button>
-                    <button id="stopTimerBtn" class="btn stop">Stop</button>
+                    <button id="startTimerBtn" class="btn start" data-i18n="start">Start</button>
+                    <button id="stopTimerBtn" class="btn stop" data-i18n="stop">Stop</button>
                 </div>
 
             </div>
         </section>
 
-        <!-- TOMME SIDER (plads til senere) -->
-        <section id="customersPage" class="page"></section>
-        <section id="employeesPage" class="page"></section>
-        <section id="timeTrackingPage" class="page"></section>
-        <section id="schedulePage" class="page"></section>
-        <section id="logsPage" class="page"></section>
-        <section id="reportsPage" class="page"></section>
-        <section id="settingsPage" class="page"></section>
+        <!-- =============== KUNDER =============== -->
+        <section id="customersPage" class="page">
+
+            <h1 data-i18n="customers_title">Kunder</h1>
+
+            <div class="card form-card">
+                <label data-i18n="customer_name">Kundenavn</label>
+                <input id="customerName" class="input" placeholder="Skriv kundenavn..." />
+
+                <label data-i18n="customer_phone">Telefon</label>
+                <input id="customerPhone" class="input" placeholder="12345678" />
+
+                <label data-i18n="customer_email">Email</label>
+                <input id="customerEmail" class="input" placeholder="mail@kunde.dk" />
+
+                <label data-i18n="customer_address">Adresse</label>
+                <input id="customerAddress" class="input" placeholder="Adresse…" />
+
+                <button id="addCustomerBtn" class="btn start" data-i18n="customer_add_btn">
+                    Tilføj kunde
+                </button>
+            </div>
+
+            <div class="card list-card">
+                <h2 data-i18n="customer_list_title">Kundeliste</h2>
+                <div id="customerList" class="list-area"></div>
+            </div>
+        </section>
+
+        <!-- =============== MEDARBEJDERE =============== -->
+        <section id="employeesPage" class="page">
+            <h1 data-i18n="employees_title">Medarbejdere</h1>
+            <p data-i18n="employees_desc">
+                Tilføj, rediger eller fjern medarbejdere her.
+            </p>
+            <div id="employeesContent"></div>
+        </section>
+
+        <!-- =============== DETALJERET TID =============== -->
+        <section id="timeTrackingPage" class="page">
+            <h1 data-i18n="time_tracking_title">Detaljeret tid</h1>
+            <div id="timeTrackingContent"></div>
+        </section>
+
+        <!-- =============== KALENDER =============== -->
+        <section id="schedulePage" class="page">
+            <h1 data-i18n="schedule_title">Plan & kalender</h1>
+            <div id="scheduleContent"></div>
+        </section>
+
+        <!-- =============== LOGS =============== -->
+        <section id="logsPage" class="page">
+            <h1 data-i18n="logs_title">Logs</h1>
+            <div id="logsContent"></div>
+        </section>
+
+        <!-- =============== RAPPORTER =============== -->
+        <section id="reportsPage" class="page">
+            <h1 data-i18n="reports_title">Rapporter</h1>
+            <div id="reportsContent"></div>
+        </section>
+
+        <!-- =============== INDSTILLINGER =============== -->
+        <section id="settingsPage" class="page">
+            <h1 data-i18n="settings_title">Indstillinger</h1>
+            <div id="settingsContent"></div>
+        </section>
 
     </main>
-
 </div>
 
-<!-- KORREKT SCRIPT-STI -->
+<!-- ======================================================
+     AFSNIT 06 – SCRIPT
+======================================================= -->
 <script src="app.js"></script>
 
 </body>
