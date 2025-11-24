@@ -185,6 +185,31 @@ function initThemeToggle() {
     });
 }
 
+/* ======================================================
+   AFSNIT 03B – TEMA-KNAPPEN (RETTET VERSION)
+   ====================================================== */
+
+function initThemeToggle() {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    // Start med korrekt ikon
+    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+
+    btn.addEventListener("click", () => {
+        // Skift tema
+        currentTheme = currentTheme === "light" ? "dark" : "light";
+
+        // Anvend temaet
+        document.documentElement.dataset.theme = currentTheme;
+        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+
+        // Skift ikon efter tema
+        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+    });
+}
+
+
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (MOBIL)
