@@ -1,415 +1,774 @@
 /* ======================================================
-   AFSNIT 15 – POPUP SLETNING (JS)
-   ------------------------------------------------------
-   Dette afsnit indeholder:
-   15.1 – Funktion til at åbne popup
-   15.2 – Funktion til at lukke popup
-   15.3 – Funktion til at slette opgave efter godkendelse
-   15.4 – Auto-generering af popup-element i DOM
+   AFSNIT 01 – TEMA VARIABLER (LIGHT + DARK)
    ====================================================== */
 
+/* DARK MODE (DEFAULT) */
+:root {
+    --bg: #0f172a;
+    --bg-main: #0b1120;
+    --bg2: #1e293b;
+    --sidebar-bg: #020617;
 
-/* ------------------------------------------------------
-   15.1 – VIS POPUP (id = opgave der skal slettes)
-   ------------------------------------------------------ */
-function showDeletePopup(planId) {
-    // Find popup-elementer
-    const overlay = document.getElementById("deleteModalOverlay");
-    const delBtn  = document.getElementById("confirmDeleteBtn");
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --text-soft: #6b7280;
 
-    if (!overlay || !delBtn) return;
+    --border: #334155;
 
-    // Gem id'et på knappen (smart og simpelt)
-    delBtn.dataset.planId = planId;
+    --accent: #22c55e;
+    --accent-strong: #16a34a;
+    --accent-soft: rgba(34, 197, 94, 0.16);
 
-    // Vis popup
-    overlay.classList.add("visible");
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-pill: 999px;
+
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.55);
+
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+
+    --transition-fast: 0.15s ease-out;
+    --transition-med: 0.25s ease-out;
+
+    --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* LIGHT MODE OVERRIDES */
+html[data-theme="light"] {
+    --bg: #f3f4f6;
+    --bg-main: #e5e7eb;
+    --bg2: #ffffff;
+    --sidebar-bg: #ffffff;
 
-/* ------------------------------------------------------
-   15.2 – LUK POPUP
-   ------------------------------------------------------ */
-function closeDeletePopup() {
-    const overlay = document.getElementById("deleteModalOverlay");
-    if (overlay) {
-        overlay.classList.remove("visible");
+    --text: #111827;
+    --text-muted: #4b5563;
+    --text-soft: #6b7280;
+
+    --border: #d1d5db;
+
+    --accent: #16a34a;
+    --accent-strong: #15803d;
+    --accent-soft: rgba(22, 163, 74, 0.16);
+
+    --shadow-soft: 0 10px 26px rgba(0, 0, 0, 0.12);
+    --shadow-card: 0 14px 30px rgba(15, 23, 42, 0.18);
+}
+
+/* ======================================================
+   AFSNIT 02 – GLOBAL RESET & BODY
+   ====================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-main);
+    background: radial-gradient(circle at top, #020617 0, var(--bg-main) 55%, #020617 100%);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+img,
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+/* ======================================================
+   AFSNIT 03 – APP LAYOUT
+   ====================================================== */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    padding: 1.4rem 1.4rem 2rem 1.4rem;
+    transition: background 0.25s ease;
+}
+
+.page {
+    display: none;
+    padding-top: 1.2rem;
+}
+
+.page.visible {
+    display: block;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* ======================================================
+   AFSNIT 04 – SIDEBAR
+   ====================================================== */
+
+.sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 1.4rem 1.1rem;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    box-shadow: var(--shadow-soft);
+    color: var(--text);
+    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+}
+
+/* Logo */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text);
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: radial-gradient(circle at 20% 0%, #bbf7d0 0, #22c55e 40%, #166534 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #022c22;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+}
+
+.logo-text {
+    font-size: 1.12rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+/* Menu */
+
+.sidebar nav {
+    margin-top: 0.5rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.3rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    background: transparent;
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.sidebar li:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+    transform: translateX(2px);
+}
+
+.sidebar li.active {
+    background: var(--accent);
+    color: #0b1120;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+}
+
+html[data-theme="light"] .sidebar li.active {
+    color: #ffffff;
+}
+
+/* ======================================================
+   AFSNIT 05 – TOPBAR
+   ====================================================== */
+
+.topbar {
+    height: var(--topbar-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1200;
+    padding: 0 1rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+}
+
+.topbar-center h1 {
+    font-size: 1.35rem;
+    margin: 0;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ======================================================
+   AFSNIT 06 – IKON-KNAPPER & TEMA-TOGGLE
+   ====================================================== */
+
+.icon-btn {
+    border: none;
+    background: transparent;
+    color: var(--text);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.35rem;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+}
+
+/* Tema-ikon via ::before */
+#themeToggle::before {
+    content: "☀️";
+}
+
+html[data-theme="light"] #themeToggle::before {
+    content: "🌙";
+}
+
+/* ======================================================
+   AFSNIT 07 – CARDS / BOXES
+   ====================================================== */
+
+.card,
+.quick-card,
+.form-card,
+.reset-card,
+.calendar-card,
+.table-card {
+    background: var(--bg2);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.4rem;
+    box-shadow: var(--shadow-card);
+    color: var(--text);
+    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+}
+
+.page h2,
+.page h3 {
+    color: var(--text);
+}
+
+/* ======================================================
+   AFSNIT 08 – FORMULARER
+   ====================================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 1.2rem;
+}
+
+label {
+    display: block;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 0.45rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border 0.25s ease,
+        box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-soft);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    outline: none;
+}
+
+/* Select med pil */
+select {
+    appearance: none;
+    background: var(--bg2)
+        url("data:image/svg+xml;utf8,<svg fill='%23aaa' height='12' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M2 4l4 4 4-4'/></svg>")
+        no-repeat right 0.8rem center;
+    padding-right: 2rem;
+}
+
+/* Radio & checkbox */
+input[type="radio"],
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* ======================================================
+   AFSNIT 09 – KNAPPER
+   ====================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-pill);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    color: #ffffff;
+    background: var(--accent);
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35);
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--bg2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+.btn-secondary:hover {
+    background: var(--accent-soft);
+}
+
+/* ======================================================
+   AFSNIT 10 – QUICK TIMER VISNING
+   ====================================================== */
+
+.quick-timer-display {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    text-align: center;
+}
+
+/* ======================================================
+   AFSNIT 11 – CHIP LIST (MEDARBEJDERE)
+   ====================================================== */
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.chip {
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border 0.2s ease,
+        transform 0.15s ease;
+}
+
+.chip:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.chip.selected {
+    background: var(--accent);
+    border-color: var(--accent-strong);
+    color: #0f172a;
+    transform: translateY(-1px);
+}
+
+/* ======================================================
+   AFSNIT 12 – TABELLER / LOGS
+   ====================================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th {
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+td {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* ======================================================
+   AFSNIT 13 – KALENDER GRID
+   ====================================================== */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.3rem;
+}
+
+/* ======================================================
+   AFSNIT 14 – KALENDER DAG-FELTER
+   ====================================================== */
+
+.calendar-cell {
+    padding: 0.55rem 0.3rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    color: var(--text);
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.85rem;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.calendar-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+.calendar-day-empty {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+.calendar-day-medium {
+    background: #fde047 !important;
+    color: #1f2937 !important;
+}
+
+.calendar-day-busy {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+.calendar-cell.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+/* ======================================================
+   AFSNIT 15 – DAGEN OPGAVER + SLET-KNAPPER + POPUP
+   ====================================================== */
+
+/* Liste over opgaver for valgt dag */
+.day-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+#dayPlanList li {
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+/* SLET-KNAPPER (dagsliste) */
+.delete-plan-btn,
+.plan-delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.15rem;
+    color: #ef4444;
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+    line-height: 1;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+.delete-plan-btn:hover,
+.plan-delete-btn:hover {
+    color: #b91c1c;
+    background: rgba(239, 68, 68, 0.12);
+    transform: translateY(-1px);
+}
+
+.delete-plan-btn:focus,
+.plan-delete-btn:focus {
+    outline: 2px solid rgba(239, 68, 68, 0.4);
+    outline-offset: 2px;
+}
+
+/* PLAN-LISTE LINJER */
+.plan-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+/* POPUP – OVERLAY */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* POPUP – BOKS */
+.modal-box {
+    background: var(--bg2);
+    color: var(--text);
+    padding: 1.4rem 1.6rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    width: min(90%, 360px);
+    box-shadow: var(--shadow-card);
+    transform: translateY(15px);
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.modal-overlay.visible .modal-box {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+
+.modal-message {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 1.3rem;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+
+.modal-btn {
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    transition: 0.2s ease;
+}
+
+.modal-btn-cancel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.modal-btn-cancel:hover {
+    background: var(--accent-soft);
+}
+
+.modal-btn-delete {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.modal-btn-delete:hover {
+    background: #dc2626;
+}
+
+/* ======================================================
+   AFSNIT 16 – STATUS TEKSTER
+   ====================================================== */
+
+.status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ======================================================
+   AFSNIT 17 – MOBILE UI (BASIS)
+   ====================================================== */
+
+@media (max-width: 768px) {
+    .app {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: var(--topbar-height);
+        height: calc(100% - var(--topbar-height));
+        width: 80%;
+        max-width: 320px;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 18px 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .icon-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1.45rem;
     }
 }
 
-
-/* ------------------------------------------------------
-   15.3 – KØR SLETNING EFTER GODKENDELSE
-   ------------------------------------------------------ */
-function confirmDeleteAction() {
-    const delBtn = document.getElementById("confirmDeleteBtn");
-    if (!delBtn) return;
-
-    const planId = delBtn.dataset.planId;
-    if (!planId) return;
-
-    // Selve sletningen
-    deletePlanItem(planId);
-
-    // Luk popup
-    closeDeletePopup();
-}
-
-
-/* ------------------------------------------------------
-   15.4 – AUTO-OPRET MODAL I DOM (kun 1 gang)
-   ------------------------------------------------------ */
-(function createDeleteModal() {
-    if (document.getElementById("deleteModalOverlay")) return;
-
-    const div = document.createElement("div");
-    div.id = "deleteModalOverlay";
-    div.className = "modal-overlay";
-
-    div.innerHTML = `
-        <div class="modal-box">
-            <div class="modal-title">Bekræft sletning</div>
-            <div class="modal-message">Er du sikker på, at du vil slette denne opgave?</div>
-
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-cancel" id="cancelDeleteBtn">Fortryd</button>
-                <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">Slet</button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(div);
-
-    // Event listeners
-    document.getElementById("cancelDeleteBtn").addEventListener("click", closeDeletePopup);
-    document.getElementById("confirmDeleteBtn").addEventListener("click", confirmDeleteAction);
-})();
-
-
 /* ======================================================
-   AFSNIT 08 – PLAN VISNING (DASHBOARD-LIGNENDE)
+   AFSNIT 18 – MOBILE FORMS
    ====================================================== */
 
-function renderPlans() {
-    const list = document.getElementById("allPlansList");
-    if (!list) return;
-
-    list.innerHTML = "";
-
-    plans.forEach(p => {
-        const li = document.createElement("li");
-        li.className = "plan-item";
-
-        const customerName = getCustomerName(p.customerId);
-        const employeesNames = (p.employeeIds || [])
-            .map(getEmployeeName)
-            .filter(Boolean)
-            .join(", ");
-
-        li.innerHTML = `
-            <span>
-                ${p.date} – ${customerName}
-                ${employeesNames ? " (" + employeesNames + ")" : ""}
-                ${p.note ? " – " + p.note : ""}
-            </span>
-            <button class="plan-delete-btn" data-id="${p.id}">🗑️</button>
-        `;
-
-        li.querySelector(".plan-delete-btn").addEventListener("click", () => {
-            showDeletePopup(p.id);
-        });
-
-        list.appendChild(li);
-    });
-}
-
-
-/* ======================================================
-   AFSNIT 09 – KALENDER GENERERING
-   ====================================================== */
-
-function renderCalendar() {
-    const grid = document.getElementById("calendarGrid");
-    if (!grid) return;
-
-    grid.innerHTML = "";
-
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth();
-
-    const first = new Date(y, m, 1);
-    const last = new Date(y, m + 1, 0);
-    const daysInMonth = last.getDate();
-    const startDay = first.getDay() === 0 ? 7 : first.getDay();
-
-    // Tomme felter før 1.
-    for (let i = 1; i < startDay; i++) {
-        const empty = document.createElement("div");
-        empty.className = "calendar-cell calendar-empty";
-        grid.appendChild(empty);
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateStr = `${y}-${String(m+1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-        const dayPlans = plans.filter(p => p.date === dateStr);
-
-        const cell = document.createElement("div");
-        cell.className = "calendar-cell";
-        cell.textContent = d;
-
-        // Farver baseret på antal opgaver
-        if (dayPlans.length === 0) {
-            cell.classList.add("calendar-day-empty");
-        } else if (dayPlans.length <= 3) {
-            cell.classList.add("calendar-day-medium");
-        } else {
-            cell.classList.add("calendar-day-busy");
-        }
-
-        // Klik: vælg dag
-        cell.addEventListener("click", () => {
-            selectedCalendarDate = dateStr;
-            renderDayDetails(dateStr);
-        });
-
-        grid.appendChild(cell);
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-
 /* ======================================================
-   AFSNIT 10 – HELPER: LOKALISERING FOR SPROG
+   AFSNIT 19 – MOBILE KALENDER
    ====================================================== */
 
-function getLocaleForLang(lang) {
-    switch (lang) {
-        case "dk": return "da-DK";
-        case "gb": return "en-GB";
-        case "de": return "de-DE";
-        case "lt": return "lt-LT";
-        default: return "da-DK";
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
     }
 }
 
-
 /* ======================================================
-   AFSNIT 11 – SLET OPGAVE (NY FUNKTION)
+   AFSNIT 20 – TABLET UI
    ====================================================== */
 
-function deletePlanItem(id) {
-    plans = plans.filter(p => p.id !== id);
-    saveAll();
-    renderCalendar();
-    renderDayDetails(selectedCalendarDate);
-    renderPlans();
-}
-
-
-/* ======================================================
-   AFSNIT 12 – RENDER DAGENS OPGAVER (NY VERSION)
-   ====================================================== */
-
-function renderDayDetails(dateStr) {
-    const label = document.getElementById("selectedDayLabel");
-    const list  = document.getElementById("dayPlanList");
-    if (!label || !list) return;
-
-    if (!dateStr) {
-        label.textContent = "Vælg en dag";
-        list.innerHTML = "";
-        return;
+@media (max-width: 1024px) {
+    .main {
+        padding: 1rem;
     }
+}
 
-    const locale = getLocaleForLang(currentLang);
-    const d = parseDateString(dateStr);
+/* ======================================================
+   AFSNIT 21 – TRANSITIONER & ANIMATIONER
+   ====================================================== */
 
-    label.textContent = d.toLocaleDateString(locale, {
-        weekday: "short",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-    });
-
-    const dayPlans = plans.filter(p => p.date === dateStr);
-    list.innerHTML = "";
-
-    if (!dayPlans.length) {
-        const li = document.createElement("li");
-        li.textContent = "Ingen opgaver for denne dag.";
-        list.appendChild(li);
-        return;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
     }
-
-    dayPlans.forEach(p => {
-        const li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.justifyContent = "space-between";
-        li.style.alignItems = "center";
-
-        const customerName = getCustomerName(p.customerId);
-        const employeesNames = (p.employeeIds || [])
-            .map(getEmployeeName)
-            .filter(Boolean)
-            .join(", ");
-
-        const infoSpan = document.createElement("span");
-        infoSpan.textContent =
-            `${customerName}` +
-            (employeesNames ? ` (${employeesNames})` : "") +
-            (p.note ? ` – ${p.note}` : "");
-
-        const delBtn = document.createElement("button");
-        delBtn.className = "delete-plan-btn";
-        delBtn.textContent = "🗑️";
-        delBtn.addEventListener("click", () => showDeletePopup(p.id));
-
-        li.appendChild(infoSpan);
-        li.appendChild(delBtn);
-        list.appendChild(li);
-    });
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
 
 /* ======================================================
-   AFSNIT 13 – SPROGSKIFT (UBERØRT)
+   AFSNIT 22 – SLUT
    ====================================================== */
-
-let currentLang = "dk";
-
-function setLang(lang) {
-    currentLang = lang;
-    document.documentElement.setAttribute("data-lang", lang);
-}
-
-
-/* ======================================================
-   AFSNIT 14 – THEME SWITCH
-   ====================================================== */
-
-function toggleTheme() {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-}
-
-function initTheme() {
-    const saved = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", saved);
-}
-
-
-/* ======================================================
-   AFSNIT 15 – SLET OPGAVE POPUP (NYT)
-   ------------------------------------------------------
-   15.1 – Åbn popup
-   15.2 – Luk popup
-   15.3 – Bekræft og slet
-   15.4 – Opret popup-element automatisk i DOM
-   ====================================================== */
-
-
-/* 15.1 – VIS POPUP */
-function showDeletePopup(planId) {
-    const overlay = document.getElementById("deleteModalOverlay");
-    const btn = document.getElementById("confirmDeleteBtn");
-    if (!overlay || !btn) return;
-
-    btn.dataset.planId = planId;
-    overlay.classList.add("visible");
-}
-
-/* 15.2 – LUK POPUP */
-function closeDeletePopup() {
-    const overlay = document.getElementById("deleteModalOverlay");
-    if (overlay) overlay.classList.remove("visible");
-}
-
-/* 15.3 – SLET OPGAVE */
-function confirmDeleteAction() {
-    const btn = document.getElementById("confirmDeleteBtn");
-    if (!btn) return;
-
-    const id = btn.dataset.planId;
-    if (!id) return;
-
-    deletePlanItem(id);
-    closeDeletePopup();
-}
-
-/* 15.4 – OPRET POPUP AUTOMATISK */
-(function createDeleteModal() {
-    if (document.getElementById("deleteModalOverlay")) return;
-
-    const div = document.createElement("div");
-    div.id = "deleteModalOverlay";
-    div.className = "modal-overlay";
-
-    div.innerHTML = `
-        <div class="modal-box">
-            <div class="modal-title">Bekræft sletning</div>
-            <div class="modal-message">Vil du slette denne opgave?</div>
-
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-cancel" id="cancelDeleteBtn">Fortryd</button>
-                <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">Slet</button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(div);
-
-    document.getElementById("cancelDeleteBtn")
-        .addEventListener("click", closeDeletePopup);
-
-    document.getElementById("confirmDeleteBtn")
-        .addEventListener("click", confirmDeleteAction);
-})();
-
-
-/* ======================================================
-   AFSNIT 16 – STARTSIDE / DASHBOARD
-   ====================================================== */
-
-function initDashboard() {
-    renderCustomers();
-    renderEmployees();
-    renderPlans();
-    renderCalendar();
-}
-
-
-/* ======================================================
-   AFSNIT 17 – INIT APP (KØRES ÉN GANG)
-   ====================================================== */
-
-function initApp() {
-
-    loadAll();
-    initTheme();
-    initDashboard();
-
-    // Navigation links
-    document.querySelectorAll("[data-page]").forEach(el => {
-        el.addEventListener("click", () => {
-            const page = el.dataset.page;
-            showPage(page);
-        });
-    });
-
-    // Theme toggle knap
-    const themeBtn = document.getElementById("themeToggle");
-    if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
-
-    // Opret opgave
-    const addPlanBtn = document.getElementById("addPlanBtn");
-    if (addPlanBtn) addPlanBtn.addEventListener("click", addPlan);
-}
-
-
-/* ======================================================
-   AFSNIT 18 – START APPEN
-   ====================================================== */
-
-document.addEventListener("DOMContentLoaded", initApp);
