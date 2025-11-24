@@ -194,17 +194,24 @@ function showPage(pageId) {
 }
 
 function initNavigation() {
+    // FANGER ALLE MENUPUNKTER I SIDEBAR – robust selector!
     const menuItems = document.querySelectorAll(".sidebar li[data-page]");
+
+    if (!menuItems.length) {
+        console.error("FEJL: Ingen menu-items fundet i .sidebar. Tjek HTML-strukturen.");
+        return;
+    }
 
     menuItems.forEach(li => {
         li.addEventListener("click", () => {
             const pageId = li.dataset.page;
+            if (!pageId) return;
 
-            // marker korrekt menu-knap
+            // aktiv markering
             menuItems.forEach(m => m.classList.remove("active"));
             li.classList.add("active");
 
-            // vis korrekt side
+            // vis side
             showPage(pageId);
 
             // luk sidebar på mobil
@@ -213,7 +220,7 @@ function initNavigation() {
         });
     });
 
-    // vis startside
+    // startside
     showPage("dashboardPage");
 }
 
