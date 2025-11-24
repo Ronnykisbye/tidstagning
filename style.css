@@ -148,18 +148,33 @@ button {
     padding: 0 20px;
 }
 
-.topbar-left,
-.topbar-right {
+/* Venstre side (menu-ikon) */
+.topbar-left {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+/* MIDTEN — FIX: giver plads så sprogknapper ikke overlapper */
+.topbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 .topbar-center h1 {
     font-size: 20px;
     font-weight: 600;
+    margin: 0;
+    text-align: center;
 }
 
+/* Højre side (sprog + tema) */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 /* ======================================================
    AFSNIT 7. – IKONKNAPPER
