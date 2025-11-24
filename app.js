@@ -1298,6 +1298,9 @@ function initPlanning() {
     });
 }
 
+renderDayDetails()
+
+
 /* ======================================================
    AFSNIT 12 – KALENDER
    ====================================================== */
@@ -1368,8 +1371,20 @@ function renderCalendar() {
 }
 
 /* ======================================================
-   AFSNIT 13 – DAGEN OPGAVER
+   AFSNIT 13 – DAGEN OPGAVER (MED SLET-FUNKTION)
    ====================================================== */
+
+function deletePlanItem(id) {
+    // Fjern opgave fra array
+    plans = plans.filter(p => p.id !== id);
+
+    // Gem ændringer
+    saveAll();
+
+    // Opdater UI
+    renderCalendar();
+    renderDayDetails(selectedCalendarDate);
+}
 
 function renderDayDetails(dateStr) {
     const label = document.getElementById("selectedDayLabel");
@@ -1384,6 +1399,7 @@ function renderDayDetails(dateStr) {
 
     const locale = getLocaleForLang(currentLang);
     const d = parseDateString(dateStr);
+
     label.textContent = d.toLocaleDateString(locale, {
         weekday: "short",
         year: "numeric",
@@ -1403,6 +1419,7 @@ function renderDayDetails(dateStr) {
 
     dayPlans.forEach(p => {
         const li = document.createElement("li");
+
         const durHr = (p.durationMinutes || 0) / 60;
         const durText = durHr ? `${durHr.toString().replace(".", ",")} t` : "";
         const customerName = getCustomerName(p.customerId);
@@ -1411,14 +1428,31 @@ function renderDayDetails(dateStr) {
             .filter(Boolean)
             .join(", ");
 
-        li.textContent =
+        // Teksten
+        const infoSpan = document.createElement("span");
+        infoSpan.textContent =
             `${p.startTime || ""} – ${durText} – ${customerName}` +
             (employeesNames ? ` (${employeesNames})` : "") +
             (p.note ? ` – ${p.note}` : "");
 
+        // Sletteknap
+        const delBtn = document.createElement("button");
+        delBtn.className = "delete-plan-btn";
+        delBtn.textContent = "🗑️";
+        delBtn.title = t("delete_task") || "Slet opgave";
+        delBtn.addEventListener("click", () => deletePlanItem(p.id));
+
+        // Layout
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+        li.appendChild(infoSpan);
+        li.appendChild(delBtn);
+
         list.appendChild(li);
     });
 }
+
 
 /* ======================================================
    AFSNIT 14 – RAPPORTER
