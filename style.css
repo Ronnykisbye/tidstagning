@@ -39,7 +39,10 @@ html[data-theme="dark"] {
 body {
     background: var(--bg);
     color: var(--text);
-    display: flex;
+
+    /* VIGTIG RETTELSE:
+       fjernede display:flex fordi det ødelægger topbar + layout */
+    display: block;
     height: 100vh;
 }
 
@@ -48,7 +51,6 @@ button {
     border: none;
     outline: none;
 }
-
 
 /* ======================================================
    AFSNIT 3. – LAYOUT (APP)
