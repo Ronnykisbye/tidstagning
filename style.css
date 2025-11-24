@@ -345,9 +345,44 @@ select {
 }
 
 /* ======================================================
-   AFSNIT 10 – CHIP LISTS (MULTI SELECT)
+   AFSNIT 10 – CHIP LISTS (MULTI SELECT – OPDATERET)
    ====================================================== */
 
+/* Container til medarbejder-valg (forsiden & planlægning) */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Selve chip-knappen – bruges til medarbejdere */
+.chip {
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.15s;
+    white-space: nowrap;
+}
+
+.chip:hover {
+    background: var(--accent-soft);
+}
+
+/* Når en medarbejder er valgt – grøn knap */
+.chip.selected {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* GAMLE KLASSER (chip-list / chip-check) BEHOLDES
+   så de ikke ødelægger andre steder i appen */
 .chip-list {
     display: flex;
     flex-wrap: wrap;
@@ -367,6 +402,7 @@ select {
 .chip-check input {
     width: auto;
 }
+
 
 
 /* ======================================================
