@@ -519,28 +519,60 @@ table tr:nth-child(even) td {
 }
 
 /* =====================================================
-   AFSNIT XX – MOBIL SIDEBAR FIX (OVERLAP & POSITION)
+   AFSNIT XX – MOBIL TOPBAR & SIDEBAR FIX
+   Retter overlap mellem topbar, menuknap og sidebar
    ===================================================== */
 
-/* Flyt hamburger-menuen lidt ned på mobile enheder */
 @media (max-width: 768px) {
+
+    /* Topbar: Flyt hele topbaren længere ned */
+    header, .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding-top: 14px !important; /* ekstra luft */
+        padding-bottom: 10px !important;
+        z-index: 3000; /* øverst på mobilen */
+        background: var(--bg-card);
+    }
+
+    /* Hamburger-knap */
     #menuToggle {
         position: fixed;
-        top: 18px;          /* flyttet længere ned */
-        left: 18px;         /* lidt ind fra venstre */
-        z-index: 2000;      /* altid øverst */
+        top: 18px;    /* lidt ned fra top */
+        left: 14px;
+        z-index: 4000;    /* altid øverst */
     }
 
-    /* Sidebar skal ligge under topbaren og må ikke overlappe */
+    /* Sprogknapper */
+    .lang-container {
+        margin-top: 52px !important; /* så de ikke overlapper menu */
+        z-index: 2500;
+    }
+
+    .lang-btn {
+        position: relative;
+        z-index: 2500;
+    }
+
+    /* Tema-knap (sol/halvmåne) */
+    #themeToggle {
+        margin-top: 50px !important;
+        position: relative;
+        z-index: 2500;
+    }
+
+    /* Sidebar: Flyt den ned så den ikke ligger under topbaren */
     .sidebar {
-        top: 60px !important;      /* flyt den ned så den ikke sidder helt oppe */
-        height: calc(100% - 60px); /* tilpas højden */
-        z-index: 1500;             /* under menuToggle, over indholdet */
+        top: 80px !important; /* flyt ned efter topbar */
+        height: calc(100% - 80px) !important;
+        z-index: 2000; /* under knapperne */
     }
 
-    /* Indhold skal ikke ligge bag sidebar-knappen */
+    /* Hovedindhold må ikke lægge sig bag topbar */
     .page {
-        padding-top: 70px !important;
+        padding-top: 110px !important;
     }
 }
 
