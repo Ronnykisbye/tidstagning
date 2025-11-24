@@ -1,45 +1,64 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <!-- AFSNIT 01 – META & STYLES -->
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenTime Pro</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="app">
 
-    <!-- AFSNIT 02 – SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo">
-            <span class="logo-mark">🌿</span>
-            <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
+<body>
+
+<div class="app-container">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <button id="menuToggle" class="menu-btn">☰</button>
+
+        <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
+
+        <div class="lang-switch">
+            <button class="lang-btn" data-lang="da">DK</button>
+            <button class="lang-btn" data-lang="en">GB</button>
+            <button class="lang-btn" data-lang="de">DE</button>
+            <button class="lang-btn" data-lang="lt">LT</button>
         </div>
 
+        <button id="themeToggle" class="theme-btn">☀️</button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
         <nav class="nav">
             <ul>
                 <li data-page="dashboardPage" class="active">
                     <span data-i18n="menu_dashboard">Tidsregistrering</span>
                 </li>
+
                 <li data-page="customersPage">
                     <span data-i18n="menu_customers">Kunder</span>
                 </li>
+
                 <li data-page="employeesPage">
                     <span data-i18n="menu_employees">Medarbejdere</span>
                 </li>
+
                 <li data-page="timeTrackingPage">
                     <span data-i18n="menu_time_tracking">Detaljeret tid</span>
                 </li>
+
                 <li data-page="schedulePage">
                     <span data-i18n="menu_schedule">Plan & kalender</span>
                 </li>
+
                 <li data-page="logsPage">
                     <span data-i18n="menu_logs">Logs</span>
                 </li>
+
                 <li data-page="reportsPage">
                     <span data-i18n="menu_reports">Rapporter</span>
                 </li>
+
                 <li data-page="settingsPage">
                     <span data-i18n="menu_settings">Indstillinger</span>
                 </li>
@@ -47,386 +66,66 @@
         </nav>
     </aside>
 
-    <!-- AFSNIT 03 – MAIN + TOPBAR -->
-    <main class="main">
+    <!-- Main Content -->
+    <main id="contentArea" class="content">
+        
+        <!-- DASHBOARD SIDE -->
+        <section id="dashboardPage" class="page active">
 
-        <header class="topbar">
-            <button id="menuToggle" class="icon-btn" aria-label="Menu">
-                ☰
-            </button>
+            <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
 
-            <div class="topbar-center">
-                <h1 data-i18n="app_title">GreenTime Pro</h1>
-            </div>
+            <div class="timer-box">
 
-            <div class="topbar-right">
-                <div class="lang-switcher">
-                    <button class="lang-btn" data-lang="da">DK</button>
-                    <button class="lang-btn" data-lang="en">GB</button>
-                    <button class="lang-btn" data-lang="de">DE</button>
-                    <button class="lang-btn" data-lang="lt">LT</button>
+                <label data-i18n="select_customer">Vælg kunde</label>
+                <select id="customerSelect" class="input"></select>
+
+                <label data-i18n="select_employees">Vælg medarbejdere</label>
+                <div id="timerEmployeeChips" class="chip-container"></div>
+
+                <label data-i18n="show_time_for_customer">Vis tid for kunden:</label>
+                <div class="radio-row">
+                    <label>
+                        <input type="radio" name="timeView" value="today" checked>
+                        <span data-i18n="today">I dag</span>
+                    </label>
+
+                    <label>
+                        <input type="radio" name="timeView" value="total">
+                        <span data-i18n="total_time">Samlet tid</span>
+                    </label>
                 </div>
-                <button id="themeToggle" class="icon-btn" aria-label="Tema">
-                    ☀️
-                </button>
-            </div>
-        </header>
 
-        <!-- AFSNIT 04 – FORSIDE / QUICK TID -->
-        <section id="dashboardPage" class="page visible">
-            <h2 data-i18n="dashboard_title">Tidsregistrering</h2>
+                <p class="info">
+                    <span data-i18n="timer_instruction">
+                        Vælg kunde og medarbejdere og brug Start / Stop.
+                    </span>
+                </p>
 
-            <div class="card quick-card">
-                <div class="quick-grid">
+                <div class="timer-display" id="timerDisplay">00:00:00</div>
 
-                    <!-- VENSTRE: FELTER -->
-                    <div class="quick-left">
-                        <label>
-                            <span data-i18n="quick_select_customer">Vælg kunde</span>
-                            <select id="quickCustomerSelect"></select>
-                        </label>
-
-                        <label>
-                            <span data-i18n="quick_select_employees">Vælg medarbejdere</span>
-                            <div id="quickEmployeeList" class="chip-list"></div>
-                        </label>
-
-                        <div class="quick-mode">
-                            <span class="small-label" data-i18n="quick_time_label">
-                                Vis tid for kunden:
-                            </span>
-                            <label class="mode-option">
-                                <input type="radio" name="quickMode" id="quickModeDay" value="day" checked />
-                                <span data-i18n="quick_mode_today">I dag</span>
-                            </label>
-                            <label class="mode-option">
-                                <input type="radio" name="quickMode" id="quickModeTotal" value="total" />
-                                <span data-i18n="quick_mode_total">Samlet tid</span>
-                            </label>
-                        </div>
-
-                        <p class="status" data-i18n="quick_hint">
-                            Vælg kunde og medarbejdere og brug Start / Stop.
-                        </p>
-                    </div>
-
-                    <!-- HØJRE: TIMER -->
-                    <div class="quick-right">
-                        <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
-                        <div class="btn-row quick-buttons">
-                            <button id="quickStartBtn" class="btn" data-i18n="btn_start_timer">Start</button>
-                            <button id="quickStopBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">Stop</button>
-                        </div>
-                    </div>
+                <div class="timer-buttons">
+                    <button id="startTimerBtn" class="btn start">Start</button>
+                    <button id="stopTimerBtn" class="btn stop">Stop</button>
                 </div>
+
             </div>
         </section>
 
-        <!-- AFSNIT 05 – KUNDER -->
-        <section id="customersPage" class="page">
-            <h2 data-i18n="customers_title">Kunder</h2>
-
-            <div class="form-grid">
-                <div class="card form-card">
-                    <h3 data-i18n="customers_add">Tilføj kunde</h3>
-
-                    <label>
-                        <span data-i18n="label_customer_name">Navn</span>
-                        <input id="custName" type="text" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_customer_phone">Telefon</span>
-                        <input id="custPhone" type="tel" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_customer_email">Email</span>
-                        <input id="custEmail" type="email" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_customer_address">Adresse</span>
-                        <input id="custAddress" type="text" />
-                    </label>
-
-                    <button id="saveCustomerBtn" class="btn" data-i18n="btn_save_customer">
-                        Gem kunde
-                    </button>
-                </div>
-
-                <div class="card table-card">
-                    <h3 data-i18n="customers_list">Kundeliste</h3>
-                    <table id="customerTable">
-                        <thead>
-                        <tr>
-                            <th data-i18n="th_customer_name">Navn</th>
-                            <th data-i18n="th_customer_phone">Telefon</th>
-                            <th data-i18n="th_customer_email">Email</th>
-                            <th data-i18n="th_customer_address">Adresse</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card reset-card">
-                <h3 data-i18n="customers_reset_title">Nulstil tid for kunde</h3>
-                <label>
-                    <span data-i18n="label_reset_customer">Vælg kunde</span>
-                    <select id="resetCustomerSelect"></select>
-                </label>
-                <button id="resetCustomerTimeBtn" class="btn btn-secondary" data-i18n="btn_reset_customer_time">
-                    Nulstil al tid
-                </button>
-                <p id="resetCustomerInfo" class="status"></p>
-            </div>
-        </section>
-
-        <!-- AFSNIT 06 – MEDARBEJDERE -->
-        <section id="employeesPage" class="page">
-            <h2 data-i18n="employees_title">Medarbejdere</h2>
-
-            <div class="form-grid">
-                <div class="card form-card">
-                    <h3 data-i18n="employees_add">Tilføj medarbejder</h3>
-
-                    <label>
-                        <span data-i18n="label_employee_name">Navn</span>
-                        <input id="empName" type="text" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_employee_email">Email</span>
-                        <input id="empEmail" type="email" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_employee_role">Rolle</span>
-                        <select id="empRole">
-                            <option value="employee" data-i18n="role_employee">Medarbejder</option>
-                            <option value="admin" data-i18n="role_admin">Admin</option>
-                        </select>
-                    </label>
-
-                    <button id="saveEmployeeBtn" class="btn" data-i18n="btn_save_employee">
-                        Gem medarbejder
-                    </button>
-                </div>
-
-                <div class="card table-card">
-                    <h3 data-i18n="employees_list">Medarbejderliste</h3>
-                    <table id="employeeTable">
-                        <thead>
-                        <tr>
-                            <th data-i18n="th_employee_name">Navn</th>
-                            <th data-i18n="th_employee_email">Email</th>
-                            <th data-i18n="th_employee_role">Rolle</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- AFSNIT 07 – DETALJERET TID -->
-        <section id="timeTrackingPage" class="page">
-            <h2 data-i18n="time_title">Tidsregistrering</h2>
-
-            <div class="form-grid">
-                <div class="card form-card">
-                    <h3 data-i18n="time_start_stop">Start / stop</h3>
-
-                    <label>
-                        <span data-i18n="label_timer_customer">Kunde</span>
-                        <select id="timerCustomerSelect"></select>
-                    </label>
-
-                    <label>
-                        <span data-i18n="label_timer_employee">Medarbejder</span>
-                        <select id="timerEmployeeSelect"></select>
-                    </label>
-
-                    <p id="timerStatus" class="status" data-i18n="timer_no_active">
-                        Ingen aktiv timer
-                    </p>
-
-                    <div class="btn-row">
-                        <button id="startTimerBtn" class="btn" data-i18n="btn_start_timer">Start</button>
-                        <button id="stopTimerBtn" class="btn btn-secondary" data-i18n="btn_stop_timer">
-                            Stop
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card table-card">
-                    <h3 data-i18n="logs_today_title">Dagens logs</h3>
-                    <table id="timeLogTable">
-                        <thead>
-                        <tr>
-                            <th data-i18n="th_log_start">Start</th>
-                            <th data-i18n="th_log_end">Slut</th>
-                            <th data-i18n="th_log_duration">Minutter</th>
-                            <th data-i18n="th_log_customer">Kunde</th>
-                            <th data-i18n="th_log_employee">Medarbejder</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- AFSNIT 08 – PLAN & KALENDER -->
-        <section id="schedulePage" class="page">
-            <h2 data-i18n="schedule_title">Plan & kalender</h2>
-
-            <div class="calendar-layout">
-                <!-- Kalender -->
-                <div class="card calendar-card">
-                    <div class="calendar-header">
-                        <button id="prevMonthBtn" class="icon-btn" aria-label="Forrige måned">‹</button>
-                        <div id="calMonthLabel">Måned</div>
-                        <button id="nextMonthBtn" class="icon-btn" aria-label="Næste måned">›</button>
-                    </div>
-                    <div class="calendar-weekdays">
-                        <span data-i18n="weekday_mon">Man</span>
-                        <span data-i18n="weekday_tue">Tir</span>
-                        <span data-i18n="weekday_wed">Ons</span>
-                        <span data-i18n="weekday_thu">Tor</span>
-                        <span data-i18n="weekday_fri">Fre</span>
-                        <span data-i18n="weekday_sat">Lør</span>
-                        <span data-i18n="weekday_sun">Søn</span>
-                    </div>
-                    <div id="calendarCells" class="calendar-grid"></div>
-                </div>
-
-                <!-- Planlæg opgave -->
-                <div class="card form-card">
-                    <h3 data-i18n="schedule_plan_job">Planlæg opgave</h3>
-
-                    <label>
-                        <span data-i18n="label_plan_date">Dato</span>
-                        <input id="planDate" type="date" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_plan_start">Starttid</span>
-                        <input id="planStart" type="time" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_plan_duration">Varighed (timer, 0,5–8)</span>
-                        <input id="planDuration" type="number" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_plan_customer">Kunde</span>
-                        <select id="planCustomerSelect"></select>
-                    </label>
-                    <label>
-                        <span data-i18n="label_plan_employee">Medarbejdere</span>
-                        <div id="planEmployeeList" class="chip-list"></div>
-                    </label>
-                    <label>
-                        <span data-i18n="label_plan_note">Note</span>
-                        <textarea id="planNote" rows="2"></textarea>
-                    </label>
-
-                    <button id="savePlanBtn" class="btn" data-i18n="btn_save_plan">
-                        Gem opgave
-                    </button>
-                </div>
-            </div>
-
-            <div class="card day-details">
-                <h3 id="selectedDayLabel" data-i18n="schedule_selected_day">
-                    Klik på en dag for at se opgaver.
-                </h3>
-                <ul id="dayPlanList"></ul>
-            </div>
-        </section>
-
-        <!-- AFSNIT 09 – LOGS -->
-        <section id="logsPage" class="page">
-            <h2 data-i18n="logs_page_title">Logs</h2>
-            <p data-i18n="logs_page_desc">
-                Senere kan du få fuldt overblik her. Brug indtil videre fanerne for tid og rapporter.
-            </p>
-        </section>
-
-        <!-- AFSNIT 10 – RAPPORTER -->
-        <section id="reportsPage" class="page">
-            <h2 data-i18n="reports_title">Rapporter</h2>
-
-            <div class="form-grid">
-                <div class="card form-card">
-                    <h3 data-i18n="reports_filter_title">Filtre</h3>
-
-                    <label>
-                        <span data-i18n="label_report_date_from">Fra dato</span>
-                        <input id="reportDateFrom" type="date" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_report_date_to">Til dato</span>
-                        <input id="reportDateTo" type="date" />
-                    </label>
-                    <label>
-                        <span data-i18n="label_report_customer">Kunde</span>
-                        <select id="reportCustomerSelect"></select>
-                    </label>
-                    <label>
-                        <span data-i18n="label_report_employee">Medarbejder</span>
-                        <select id="reportEmployeeSelect"></select>
-                    </label>
-
-                    <button id="runReportBtn" class="btn" data-i18n="btn_run_report">
-                        Kør rapport
-                    </button>
-
-                    <p id="reportSummary" class="status"></p>
-                </div>
-
-                <div class="card table-card">
-                    <h3 data-i18n="reports_result_title">Resultat</h3>
-                    <table id="reportTable">
-                        <thead>
-                        <tr>
-                            <th data-i18n="th_report_date">Dato</th>
-                            <th data-i18n="th_report_start">Start</th>
-                            <th data-i18n="th_report_end">Slut</th>
-                            <th data-i18n="th_report_duration">Minutter</th>
-                            <th data-i18n="th_report_customer">Kunde</th>
-                            <th data-i18n="th_report_employee">Medarbejder</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- AFSNIT 11 – INDSTILLINGER -->
-        <section id="settingsPage" class="page">
-            <h2 data-i18n="settings_title">Indstillinger</h2>
-
-            <div class="form-grid">
-                <div class="card">
-                    <h3 data-i18n="settings_language_title">Sprog</h3>
-                    <p>
-                        <span data-i18n="settings_language_title">Sprog</span>:
-                        DK / GB / DE / LT via knapperne i toppen.
-                    </p>
-                </div>
-
-                <div class="card">
-                    <h3 data-i18n="settings_theme_title">Tema</h3>
-                    <p>
-                        <span data-i18n="settings_theme_title">Tema</span>:
-                        Lys / mørk via sol-knappen i toppen.
-                    </p>
-                </div>
-            </div>
-        </section>
+        <!-- TOMME SIDER (plads til senere) -->
+        <section id="customersPage" class="page"></section>
+        <section id="employeesPage" class="page"></section>
+        <section id="timeTrackingPage" class="page"></section>
+        <section id="schedulePage" class="page"></section>
+        <section id="logsPage" class="page"></section>
+        <section id="reportsPage" class="page"></section>
+        <section id="settingsPage" class="page"></section>
 
     </main>
+
 </div>
 
-<!-- AFSNIT 12 – SCRIPT -->
+<!-- KORREKT SCRIPT-STI -->
 <script src="app.js"></script>
+
 </body>
 </html>
