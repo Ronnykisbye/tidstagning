@@ -134,7 +134,7 @@ button {
 
 
 /* ======================================================
-   AFSNIT 6. – TOPBAR (NYT DESIGN)
+   AFSNIT 6. – TOPBAR (KORREKT + FIX TIL HØJRE JUSTERING)
    ====================================================== */
 
 .topbar {
@@ -144,12 +144,12 @@ button {
     display: flex;
     align-items: center;
     padding: 0 20px;
-    position: sticky;
-    top: 0;
-    z-index: 200;
+
+    /* DEN VIGTIGE DEL: */
+    justify-content: space-between !important;
 }
 
-/* Venstre: Vis hamburger kun på mobil */
+/* Venstre sektion (hamburger kun på mobil) */
 .topbar-left {
     width: 60px;
     display: flex;
@@ -166,7 +166,7 @@ button {
     }
 }
 
-/* Center: titel altid præcis centreret */
+/* Center tekst */
 .topbar-center {
     flex: 1;
     display: flex;
@@ -177,18 +177,16 @@ button {
     font-size: 20px;
     font-weight: 700;
     margin: 0;
-    color: var(--text);
 }
 
-/* Højre: sprogknapper + tema helt ude i højre side */
+/* Højre sektion: sprogknapper + tema */
 .topbar-right {
-    width: 260px;
+    width: 280px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
 }
-
 
 /* ======================================================
    AFSNIT 7. – IKONKNAPPER
