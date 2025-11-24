@@ -258,7 +258,7 @@ function updateLogList() {
 
 
 /* ======================================================
-   AFSNIT 9. – KUNDER (NY VERSION MED AL INFO)
+   AFSNIT 9. – KUNDER (MED SLET-KNAP)
 ====================================================== */
 
 function addCustomer() {
@@ -270,6 +270,7 @@ function addCustomer() {
     if (!name) return;
 
     customers.push({
+        id: Date.now(),   // unikt ID
         name,
         phone,
         email,
@@ -278,7 +279,6 @@ function addCustomer() {
 
     saveAll();
 
-    // Nulstil felter
     document.getElementById("custName").value = "";
     document.getElementById("custPhone").value = "";
     document.getElementById("custEmail").value = "";
@@ -307,11 +307,29 @@ function renderCustomers() {
             <div>📞 ${c.phone || "-"}</div>
             <div>📧 ${c.email || "-"}</div>
             <div>🏠 ${c.address || "-"}</div>
+            <button class="btn-red delete-btn" data-id="${c.id}" style="margin-top:10px;">Slet kunde</button>
         `;
         list.appendChild(item);
 
-        con
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+    });
 
+    // Gør alle slet-knapperne aktive
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            deleteCustomer(btn.dataset.id);
+        });
+    });
+}
+
+function deleteCustomer(id) {
+    customers = customers.filter(c => c.id.toString() !== id.toString());
+    saveAll();
+    renderCustomers();
+}
 
 
 
