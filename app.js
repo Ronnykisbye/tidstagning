@@ -107,7 +107,7 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA (RETTET VERSION)
+   AFSNIT 03 – SPROG & TEMA (STABIL VERSION)
    ====================================================== */
 
 function t(key) {
@@ -116,61 +116,45 @@ function t(key) {
 }
 
 function applyTranslations() {
-    const elements = document.querySelectorAll("[data-i18n]");
-    elements.forEach(el => {
+    // statiske labels
+    document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
-        if (!key) return;
-        const txt = t(key);
-        if (txt) el.textContent = txt;
+        if (key) el.textContent = t(key);
     });
 
-    // Opdater dropdowns med nye tekster
+    // dynamiske selects
     refreshCustomerSelects();
     refreshEmployeeSelects();
 
-    // Opdater chips (kun tekst)
+    // medarbejder chips
     renderEmployeeChips();
 }
 
 function applyLangActiveButton() {
-    const buttons = document.querySelectorAll(".lang-btn");
-    buttons.forEach(btn => {
-        const lang = btn.dataset.lang;
-        btn.classList.toggle("active", lang === currentLang);
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
     });
 }
 
 function initLanguage() {
-    if (!currentLang) currentLang = "da";
-
     applyLangActiveButton();
     applyTranslations();
 
-    const buttons = document.querySelectorAll(".lang-btn");
-    buttons.forEach(btn => {
+    document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const lang = btn.dataset.lang;
-            if (!lang) return;
-
-            currentLang = lang;
+            currentLang = btn.dataset.lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
 
-            // Opdater aktive knapper
             applyLangActiveButton();
-
-            // Opdater ALLE statiske tekster
             applyTranslations();
-
-            // Opdater sider der viser dynamiske tekster
             renderCalendar();
             renderTodayLogs();
-            initReports();  // Korrekt funktion der allerede findes
+            initReports();
         });
     });
 }
 
 function initTheme() {
-    if (!currentTheme) currentTheme = "light";
     document.documentElement.dataset.theme = currentTheme;
 }
 
@@ -178,10 +162,14 @@ function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
+    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+
     btn.addEventListener("click", () => {
         currentTheme = currentTheme === "light" ? "dark" : "light";
         document.documentElement.dataset.theme = currentTheme;
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+
+        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
     });
 }
 
