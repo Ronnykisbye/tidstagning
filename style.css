@@ -167,170 +167,93 @@ body {
 }
 
 
-/* ======================================================
-   AFSNIT 03 – GLOBAL THEME + NEON BUTTONS (Medium Glow)
-   ====================================================== */
+/* ============================================================
+   AFSNIT 03 – APP LAYOUT (GLOBAL PLACERING)
+   ============================================================ */
 
-/* ---------- 03.1 – NEON-PALLETS ---------- */
-:root {
-    --neon-blue: #3aa9ff;
-    --neon-cyan: #39f3ff;
-    --neon-purple: #c07dff;
-
-    /* Behagelig baggrund i lys mode */
-    --bg-light: #f4f6f9;
-    --bg-card-light: #ffffff;
-
-    /* Behagelig baggrund i mørk mode */
-    --bg-dark: #11131a;
-    --bg-card-dark: #181b24;
-
-    --text-light: #1a1a1a;
-    --text-dark: #e7e7e7;
+.app {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-main);
+    transition: background 0.3s ease;
 }
 
-/* ---------- 03.2 – LYS MODE ---------- */
-html[data-theme="light"] {
-    background: var(--bg-light);
-    color: var(--text-light);
-}
-
-html[data-theme="light"] .card {
-    background: var(--bg-card-light);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-/* ---------- 03.3 – MØRK MODE ---------- */
-html[data-theme="dark"] {
-    background: var(--bg-dark);
-    color: var(--text-dark);
-}
-
-html[data-theme="dark"] .card {
-    background: var(--bg-card-dark);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-}
-
-/* ---------- 03.4 – STORE (DOUBLE SIZE) KNAPPER ---------- */
-.btn {
-    font-size: 1.3rem;            /* større tekst */
-    padding: 16px 26px;           /* større knapper */
-    border-radius: 14px;          /* bløde hjørner */
-    font-weight: 600;
-    transition: 0.25s;
-    cursor: pointer;
-    border: none;
-}
-
-/* ---------- 03.5 – SPECIFIKKE KNAPFARVER (NEON / MEDIUM GLOW) ---------- */
-.btn-green {
-    background: #4ce668;
-    color: #042609;
-    box-shadow: 0 0 12px #4ce66880;
-}
-.btn-green:hover {
-    box-shadow: 0 0 20px #4ce668cc;
-}
-
-.btn-red {
-    background: #ff4f4f;
-    color: #330000;
-    box-shadow: 0 0 12px #ff4f4f80;
-}
-.btn-red:hover {
-    box-shadow: 0 0 20px #ff4f4fdd;
-}
-
-/* ---------- 03.6 – NEON OUTLINE TIL INPUTS ---------- */
-.input {
-    border: 2px solid transparent;
-    transition: 0.25s;
-}
-
-.input:focus {
-    border: 2px solid var(--neon-blue);
-    box-shadow: 0 0 12px var(--neon-blue);
-    outline: none;
-}
-
-/* ---------- 03.7 – NEON CHIP-MEDARBEJDERKNAPPER ---------- */
-.chip {
-    padding: 10px 18px;
-    border-radius: 12px;
-    background: #2a2d36;
-    color: white;
-    cursor: pointer;
-    font-size: 1.1rem;
-    border: 2px solid transparent;
-    transition: 0.25s;
-}
-
-html[data-theme="light"] .chip {
-    background: #e6e6e6;
-    color: #1a1a1a;
-}
-
-.chip.active {
-    background: var(--neon-purple);
-    color: white !important;
-    box-shadow: 0 0 14px var(--neon-purple);
-}
-
-.chip:hover {
-    box-shadow: 0 0 10px var(--neon-purple);
-}
-
-/* ---------- 03.8 – TIMER DISPLAY ---------- */
-.timer-display {
-    font-size: 3rem;
-    font-weight: 700;
-    text-align: center;
-    padding: 20px;
-    border-radius: 16px;
-    margin: 15px 0;
-    background: #00000010;
-    backdrop-filter: blur(4px);
-}
-
-html[data-theme="dark"] .timer-display {
-    background: #ffffff10;
+/* Centrer indhold mere behageligt */
+#contentArea {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
 }
 
 
-/* ======================================================
-   AFSNIT 04 – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
-   ====================================================== */
+
+/* ============================================================
+   AFSNIT 04 – SIDEBAR (ENDGYLDIG, MODERNE, NEON-READY)
+   ============================================================ */
 
 .sidebar {
     width: 250px;
-    background: var(--bg-elevated); /* Lys/mørk mode automatisk */
+    background: var(--bg-elevated);
     border-right: 1px solid var(--border-subtle);
     padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.25s ease;
 }
 
+/* Sidebar UL */
 .sidebar ul {
     list-style: none;
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar li {
-    padding: 0.7rem 1rem;
-    border-radius: var(--radius);
-    margin-bottom: 0.3rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: 0.15s;
+    margin-bottom: 0.35rem;
 }
 
-.sidebar li:hover {
-    background: var(--accent-soft);
+/* Sidebar links */
+.sidebar li span {
+    display: block;
+    padding: 0.85rem 1.1rem;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    background: var(--bg-elevated);
     color: var(--text);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
 }
 
-.sidebar li.active {
-    background: var(--accent);
-    color: #0f172a;
+/* Hover • Neon elegant */
+.sidebar li span:hover {
+    background: var(--bg-hover);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 12px var(--neon-cyan);
+}
+
+/* Aktive menupunkter */
+.sidebar li.active span {
+    background: var(--neon-cyan);
+    color: #fff;
+    box-shadow: 0 0 16px var(--neon-cyan);
+}
+
+/* Mobil-version: */
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -260px;
+        z-index: 999;
+        box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
 }
 
 /* ======================================================
