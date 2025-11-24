@@ -352,34 +352,40 @@ button {
 /* ======================================================
    AFSNIT 15. – LISTE ELEMENTER (KUNDER / MEDARBEJDERE)
    ====================================================== */
+
 .list-item {
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+
+    /* VIGTIG RETTELSE: gør at knap + info vises korrekt */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.list-item span {
-    font-size: 15px;
+.list-item div {
+    font-size: 14px;
     color: var(--text);
 }
 
 .list-item button {
+    margin-top: 8px;
     background: var(--accent);
     color: #0f172a;
     border-radius: 6px;
     padding: 6px 10px;
     font-size: 14px;
     transition: 0.2s ease;
+    width: 130px;
 }
 
 .list-item button:hover {
     background: var(--accent-hover);
 }
+
 
 
 /* ======================================================
