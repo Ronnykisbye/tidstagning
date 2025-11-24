@@ -667,6 +667,8 @@ function initLanguage() {
             renderTodayLogs();
             renderReportsTable([]);
             renderDayDetails(selectedCalendarDate);
+            updateStartStopButtons();
+
         });
     });
 }
@@ -686,6 +688,24 @@ function initThemeToggle() {
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
     });
 }
+
+/* ======================================================
+   AFSNIT 03C – OPDATERING AF START/STOP KNAPPER
+   ====================================================== */
+
+function updateStartStopButtons() {
+    const quickStartBtn = document.getElementById("quickStartBtn");
+    const quickStopBtn  = document.getElementById("quickStopBtn");
+    const startBtn      = document.getElementById("startTimerBtn");
+    const stopBtn       = document.getElementById("stopTimerBtn");
+
+    if (quickStartBtn) quickStartBtn.textContent = t("btn_start_timer");
+    if (quickStopBtn)  quickStopBtn.textContent  = t("btn_stop_timer");
+
+    if (startBtn)      startBtn.textContent      = t("btn_start_timer");
+    if (stopBtn)       stopBtn.textContent       = t("btn_stop_timer");
+}
+
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (MOBIL)
