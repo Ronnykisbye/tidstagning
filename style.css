@@ -267,25 +267,39 @@ select {
 
 
 /* ======================================================
-   AFSNIT 08 – KNAPPER
+   AFSNIT 08 – KNAPPER (OPDATERET)
    ====================================================== */
 
 .btn {
-    padding: 0.55rem 1.2rem;
+    padding: 0.75rem 1.6rem;
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 600;
     background: var(--accent);
     color: #0f172a;
     transition: 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
 }
 
 .btn:hover {
     background: var(--accent-strong);
+    transform: translateY(-1px);
 }
 
+/* Række med knapper – bruges til Start/Stop */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+}
+
+/* Sekundær knap (f.eks. neutrale handlinger) */
 .btn-secondary {
     background: transparent;
     border: 1px solid var(--border-subtle);
@@ -295,6 +309,27 @@ select {
 .btn-secondary:hover {
     border-color: var(--accent);
 }
+
+/* SPECIFIKT TIL TIDSREGISTRERING – GRØN & RØD KNAP */
+
+.btn-green {
+    background: #16a34a;            /* Grøn */
+    color: #0f172a;
+}
+
+.btn-green:hover {
+    background: #15803d;
+}
+
+.btn-red {
+    background: #dc2626;            /* Rød */
+    color: #fef2f2;
+}
+
+.btn-red:hover {
+    background: #b91c1c;
+}
+
 
 /* ======================================================
    AFSNIT 09 – QUICK TIMER
