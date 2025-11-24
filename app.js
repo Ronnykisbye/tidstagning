@@ -107,16 +107,15 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA (KORREKT RÆKKEFØLGE)
+   AFSNIT 03 – SPROG & TEMA (FEJLFRI VERSION)
    ====================================================== */
 
-/* 1) — OVERSÆTTELSER SKAL KOMME FØRST! */
+/* 1) — OVERSÆTTELSER (KOMMA RETTET!) */
 const translations = {
     da: { app_title: "GreenTime Pro", menu_dashboard: "Tidsregistrering" },
     en: { app_title: "GreenTime Pro", menu_dashboard: "Time tracking" },
     de: { app_title: "GreenTime Pro", menu_dashboard: "Zeiterfassung" },
-    lt: { app_title: "GreenTime Pro", menu_dashboard: "Laiko registracija" }
-    // (indsæt resten her når alt virker)
+    lt: { app_title: "GreenTime Pro", menu_dashboard: "Laiko registracija" },
 };
 
 /* 2) — Brug oversættelser */
@@ -170,9 +169,11 @@ function initThemeToggle() {
         currentTheme = currentTheme === "light" ? "dark" : "light";
         document.documentElement.dataset.theme = currentTheme;
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+
         btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
     });
 }
+
 
 
 /* ======================================================
