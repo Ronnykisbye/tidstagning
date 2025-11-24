@@ -113,13 +113,57 @@ function saveAll() {
    AFSNIT 03 – SPROG & TEMA (FEJLFRI VERSION)
    ====================================================== */
 
-/* 1) — OVERSÆTTELSER (KOMMA RETTET!) */
+/* 1) — OVERSÆTTELSER (KOMPLET MENU VERSION) */
 const translations = {
-    da: { app_title: "GreenTime Pro", menu_dashboard: "Tidsregistrering" },
-    en: { app_title: "GreenTime Pro", menu_dashboard: "Time tracking" },
-    de: { app_title: "GreenTime Pro", menu_dashboard: "Zeiterfassung" },
-    lt: { app_title: "GreenTime Pro", menu_dashboard: "Laiko registracija" },
+    da: {
+        app_title: "GreenTime Pro",
+        menu_dashboard: "Tidsregistrering",
+        menu_customers: "Kunder",
+        menu_employees: "Medarbejdere",
+        menu_time_tracking: "Detaljeret tid",
+        menu_schedule: "Plan & kalender",
+        menu_logs: "Logs",
+        menu_reports: "Rapporter",
+        menu_settings: "Indstillinger"
+    },
+
+    en: {
+        app_title: "GreenTime Pro",
+        menu_dashboard: "Time tracking",
+        menu_customers: "Customers",
+        menu_employees: "Employees",
+        menu_time_tracking: "Detailed time",
+        menu_schedule: "Plan & calendar",
+        menu_logs: "Logs",
+        menu_reports: "Reports",
+        menu_settings: "Settings"
+    },
+
+    de: {
+        app_title: "GreenTime Pro",
+        menu_dashboard: "Zeiterfassung",
+        menu_customers: "Kunden",
+        menu_employees: "Mitarbeiter",
+        menu_time_tracking: "Detailzeit",
+        menu_schedule: "Plan & Kalender",
+        menu_logs: "Protokolle",
+        menu_reports: "Berichte",
+        menu_settings: "Einstellungen"
+    },
+
+    lt: {
+        app_title: "GreenTime Pro",
+        menu_dashboard: "Laiko registracija",
+        menu_customers: "Klientai",
+        menu_employees: "Darbuotojai",
+        menu_time_tracking: "Detali apskaita",
+        menu_schedule: "Planavimas ir kalendorius",
+        menu_logs: "Žurnalai",
+        menu_reports: "Ataskaitos",
+        menu_settings: "Nustatymai"
+    }
 };
+
 
 /* 2) — Brug oversættelser */
 function t(key) {
