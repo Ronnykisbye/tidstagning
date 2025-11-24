@@ -23,11 +23,11 @@
 
 /* ---------- LYS MODE ---------- */
 [data-theme="light"] {
-    --bg: #e5e7eb;        
+    --bg: #e5e7eb;
     --bg-elevated: #ffffff;
     --bg-card: #ffffff;
 
-    --text: #0f172a;      
+    --text: #0f172a;
     --text-muted: #475569;
 
     --border-subtle: #cbd5e1;
@@ -40,109 +40,7 @@
 }
 
 /* ======================================================
-   AFSNIT 02 – KNAPPER (Neon-Tech + Store Store)
-   ====================================================== */
-
-:root[data-theme="light"] {
-    --btn-bg: #ffffff;
-    --btn-text: #111;
-    --btn-border: #cfcfcf;
-    --neon-blue: #2dd4ff;
-    --neon-purple: #c084fc;
-    --neon-green: #22c55e;
-    --neon-red: #ef4444;
-}
-
-:root[data-theme="dark"] {
-    --btn-bg: #1a1a1a;
-    --btn-text: #fff;
-    --btn-border: #333;
-    --neon-blue: #00eaff;
-    --neon-purple: #b388ff;
-    --neon-green: #42ff9e;
-    --neon-red: #ff6677;
-}
-
-/* STORE STORE KNAPPER */
-.btn {
-    padding: 18px 32px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    border-radius: 14px;
-    border: 2px solid var(--btn-border);
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 0 10px transparent;
-}
-
-/* STANDARD KNAP – Neon blå/purple */
-.btn:hover {
-    border-color: var(--neon-blue);
-    color: var(--neon-blue);
-    box-shadow: 0 0 10px var(--neon-blue),
-                0 0 20px var(--neon-purple);
-    transform: translateY(-2px);
-}
-
-/* START (GRØN) */
-.btn-green {
-    border-color: var(--neon-green);
-    color: var(--neon-green);
-}
-.btn-green:hover {
-    box-shadow: 0 0 10px var(--neon-green),
-                0 0 20px var(--neon-green);
-    transform: translateY(-2px);
-}
-
-/* STOP (RØD) */
-.btn-red {
-    border-color: var(--neon-red);
-    color: var(--neon-red);
-}
-.btn-red:hover {
-    box-shadow: 0 0 10px var(--neon-red),
-                0 0 20px var(--neon-red);
-    transform: translateY(-2px);
-}
-
-/* KNAPPER I TOP/MENU */
-.menu-btn,
-.theme-btn {
-    padding: 14px 20px;
-    font-size: 1.3rem;
-    border-radius: 12px;
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    border: 2px solid var(--btn-border);
-    transition: all 0.25s ease;
-}
-.menu-btn:hover,
-.theme-btn:hover {
-    color: var(--neon-blue);
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 10px var(--neon-blue);
-}
-
-/* Sprogknapper */
-.lang-btn {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: 2px solid var(--btn-border);
-    background: var(--btn-bg);
-    color: var(--btn-text);
-}
-.lang-btn.active {
-    border-color: var(--neon-purple);
-    color: var(--neon-purple);
-    box-shadow: 0 0 10px var(--neon-purple);
-}
-
-
-/* ======================================================
-   AFSNIT 02a– GLOBALT RESET
+   AFSNIT 02 – GLOBALT RESET
    ====================================================== */
 
 *,
@@ -176,157 +74,8 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================================
-   AFSNIT 04 – NEON BUTTONS + GLOW ELEMENTER (Store-Store UI)
-   ============================================================ */
-
-/* ---------- GLOW FARVER ---------- */
-:root {
-    --neon-blue: #19c3ff;
-    --neon-cyan: #00fff2;
-    --neon-purple: #b56dff;
-
-    --glow-soft: 0 0 8px;
-    --glow-medium: 0 0 14px;
-    --glow-big: 0 0 22px;
-}
-
-/* ---------- STORE-STORE KNAPPER ---------- */
-.bigButton {
-    font-size: 1.4rem;
-    padding: 16px 38px;
-    border-radius: 14px;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    transition: 0.25s ease;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ---------- NEON VERSION (DAG) ---------- */
-html.light .bigButton {
-    background: var(--card-bg);
-    color: #000;
-    border: 2px solid var(--neon-blue);
-    box-shadow: var(--glow-soft) var(--neon-blue);
-}
-
-html.light .bigButton:hover {
-    box-shadow: var(--glow-big) var(--neon-blue);
-    transform: translateY(-2px);
-    background: #f8faff;
-}
-
-/* ---------- NEON VERSION (NAT) ---------- */
-html.dark .bigButton {
-    background: rgba(20, 20, 20, 0.8);
-    color: var(--neon-cyan);
-    border: 2px solid var(--neon-purple);
-    box-shadow: var(--glow-medium) var(--neon-purple);
-}
-
-html.dark .bigButton:hover {
-    box-shadow: var(--glow-big) var(--neon-purple);
-    transform: translateY(-2px);
-    background: rgba(40, 40, 40, 0.8);
-}
-
-/* ---------- START & STOP (SPECIAL FARBESTYRING) ---------- */
-#startBtn.bigButton {
-    background: #0bd465;
-    color: white;
-    border-color: #0bd465;
-    box-shadow: var(--glow-soft) #0bd465;
-}
-
-#startBtn.bigButton:hover {
-    box-shadow: var(--glow-big) #0bd465;
-    transform: translateY(-2px);
-}
-
-#stopBtn.bigButton {
-    background: #e43a3a;
-    color: white;
-    border-color: #e43a3a;
-    box-shadow: var(--glow-soft) #e43a3a;
-}
-
-#stopBtn.bigButton:hover {
-    box-shadow: var(--glow-big) #e43a3a;
-    transform: translateY(-2px);
-}
-
-/* ---------- GLOW DROPDOWN ---------- */
-.neonSelect {
-    font-size: 1.2rem;
-    padding: 14px;
-    border-radius: 12px;
-    border: 2px solid var(--neon-blue);
-    background: var(--card-bg);
-    transition: 0.25s ease;
-}
-
-html.light .neonSelect:hover {
-    box-shadow: var(--glow-medium) var(--neon-blue);
-}
-
-html.dark .neonSelect {
-    color: var(--neon-cyan);
-    border-color: var(--neon-purple);
-    background: rgba(20,20,20,0.6);
-}
-
-html.dark .neonSelect:hover {
-    box-shadow: var(--glow-medium) var(--neon-purple);
-}
-
-/* ---------- MEDARBEJDER-CHIPS ---------- */
-.neon-chip {
-    padding: 10px 18px;
-    font-size: 1rem;
-    border-radius: 30px;
-    cursor: pointer;
-    border: 2px solid var(--neon-blue);
-    display: inline-block;
-    margin: 4px;
-    transition: 0.25s ease;
-}
-
-html.light .neon-chip:hover {
-    box-shadow: var(--glow-soft) var(--neon-blue);
-}
-
-html.dark .neon-chip {
-    border-color: var(--neon-purple);
-    color: var(--neon-cyan);
-    background: rgba(30,30,30,0.8);
-}
-
-html.dark .neon-chip:hover {
-    box-shadow: var(--glow-medium) var(--neon-purple);
-}
-
-/* Aktiv chip */
-.neon-chip.active {
-    background: var(--neon-blue);
-    color: #fff;
-    box-shadow: var(--glow-big) var(--neon-blue);
-}
-
-html.dark .neon-chip.active {
-    background: var(--neon-purple);
-    color: #000;
-    box-shadow: var(--glow-big) var(--neon-purple);
-}
-
-
-
 /* ======================================================
-   AFSNIT 04a – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
+   AFSNIT 04 – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
    ====================================================== */
 
 .sidebar {
@@ -442,9 +191,8 @@ html.dark .neon-chip.active {
     margin-bottom: 1.2rem;
 }
 
-
 /* ======================================================
-   AFSNIT 6a – KALENDER LAYOUT FIX (PC)
+   AFSNIT 06A – KALENDER LAYOUT FIX (PC)
    ====================================================== */
 
 .calendar-layout {
@@ -465,7 +213,7 @@ html.dark .neon-chip.active {
 }
 
 /* ======================================================
-   AFSNIT 06C – KALENDER FARVER FOR ANTAL OPGAVER
+   AFSNIT 06B – KALENDER FARVER FOR ANTAL OPGAVER
    ====================================================== */
 
 .calendar-day-empty {
@@ -482,8 +230,6 @@ html.dark .neon-chip.active {
     background-color: #ef4444 !important; /* Rød */
     color: white !important;
 }
-
-
 
 /* ======================================================
    AFSNIT 07 – FORM ELEMENTER
@@ -516,98 +262,35 @@ select {
     padding-right: 40px;
 }
 
-
 /* ======================================================
-   AFSNIT 08 – KNAPPER (NEON + STORE STORE)
+   AFSNIT 08 – KNAPPER
    ====================================================== */
 
 .btn {
-    padding: 0.9rem 1.8rem;                 /* STORE STORE knapper */
+    padding: 0.55rem 1.2rem;
     border-radius: 999px;
-    border: 1px solid var(--accent-soft);
+    border: none;
     cursor: pointer;
-    font-size: 1.05rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: var(--text);
-    box-shadow:
-        0 0 0 1px rgba(148, 163, 184, 0.4),
-        0 0 18px rgba(56, 189, 248, 0.35);  /* neon blå/cyan glow */
-    transition:
-        transform 0.12s ease-out,
-        box-shadow 0.12s ease-out,
-        background 0.12s ease-out,
-        border-color 0.12s ease-out;
-}
-
-/* Lys mode variant */
-[data-theme="light"] .btn {
-    background: linear-gradient(135deg, #ffffff, #e5e7eb);
+    font-size: 0.95rem;
+    font-weight: bold;
+    background: var(--accent);
     color: #0f172a;
-    box-shadow:
-        0 0 0 1px rgba(148, 163, 184, 0.35),
-        0 0 14px rgba(56, 189, 248, 0.25);
+    transition: 0.15s;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
-    box-shadow:
-        0 0 0 1px rgba(129, 140, 248, 0.7),
-        0 0 22px rgba(56, 189, 248, 0.55),
-        0 0 32px rgba(168, 85, 247, 0.45);  /* blå + cyan + purple glow */
+    background: var(--accent-strong);
 }
 
-.btn:active {
-    transform: translateY(0);
-    box-shadow:
-        0 0 0 1px rgba(129, 140, 248, 0.5),
-        0 0 14px rgba(56, 189, 248, 0.35);
-}
-
-/* START-knap – grøn neon */
-.btn-green {
-    background: linear-gradient(135deg, #16a34a, #22c55e);
-    color: #0f172a;
-    border-color: rgba(34, 197, 94, 0.65);
-    box-shadow:
-        0 0 0 1px rgba(22, 163, 74, 0.7),
-        0 0 24px rgba(34, 197, 94, 0.7);
-}
-
-[data-theme="light"] .btn-green {
-    background: linear-gradient(135deg, #22c55e, #bbf7d0);
-}
-
-/* STOP-knap – rød neon */
-.btn-red {
-    background: linear-gradient(135deg, #b91c1c, #ef4444);
-    color: #f9fafb;
-    border-color: rgba(248, 113, 113, 0.8);
-    box-shadow:
-        0 0 0 1px rgba(248, 113, 113, 0.8),
-        0 0 24px rgba(248, 113, 113, 0.7);
-}
-
-[data-theme="light"] .btn-red {
-    background: linear-gradient(135deg, #ef4444, #fee2e2);
-}
-
-/* Sekundære knapper (fx små hjælpeknapper) */
 .btn-secondary {
-    padding: 0.6rem 1.4rem;
     background: transparent;
-    border-radius: 999px;
     border: 1px solid var(--border-subtle);
-    color: var(--text-muted);
-    box-shadow: none;
+    color: var(--text);
 }
 
 .btn-secondary:hover {
     border-color: var(--accent);
-    color: var(--text);
-    box-shadow: 0 0 12px rgba(148, 163, 184, 0.45);
 }
-
 
 /* ======================================================
    AFSNIT 09 – QUICK TIMER
@@ -623,44 +306,9 @@ select {
 }
 
 /* ======================================================
-   AFSNIT 10 – CHIP LISTS (MULTI SELECT – OPDATERET)
+   AFSNIT 10 – CHIP LISTS (MULTI SELECT)
    ====================================================== */
 
-/* Container til medarbejder-valg (forsiden & planlægning) */
-.chip-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Selve chip-knappen – bruges til medarbejdere */
-.chip {
-    padding: 0.35rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
-    color: var(--text);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: 0.15s;
-    white-space: nowrap;
-}
-
-.chip:hover {
-    background: var(--accent-soft);
-}
-
-/* Når en medarbejder er valgt – grøn knap */
-.chip.selected {
-    background: var(--accent);
-    color: #0f172a;
-    border-color: var(--accent-strong);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-/* GAMLE KLASSER (chip-list / chip-check) BEHOLDES
-   så de ikke ødelægger andre steder i appen */
 .chip-list {
     display: flex;
     flex-wrap: wrap;
@@ -680,8 +328,6 @@ select {
 .chip-check input {
     width: auto;
 }
-
-
 
 /* ======================================================
    AFSNIT 11 – TABLES (RETTET OG FLOT)
@@ -713,7 +359,7 @@ table tr:nth-child(even) td {
 }
 
 /* ======================================================
-   AFSNIT 12 – KALENDER
+   AFSNIT 12 – KALENDER (STANDARD)
    ====================================================== */
 
 .calendar-grid {
@@ -743,7 +389,9 @@ table tr:nth-child(even) td {
 @media (max-width: 900px) {
     .sidebar {
         position: fixed;
-        top: 0; left: 0; bottom: 0;
+        top: 0;
+        left: 0;
+        bottom: 0;
         transform: translateX(-100%);
         transition: 0.2s;
     }
@@ -757,8 +405,8 @@ table tr:nth-child(even) td {
    ====================================================== */
 
 .quick-timer-display {
-    background-color: var(--bg-card);    /* Synlig baggrund */
-    color: var(--text);                  /* Læsbar tekst */
+    background-color: var(--bg-card); /* Synlig baggrund */
+    color: var(--text);               /* Læsbar tekst */
     border: 2px solid var(--accent);
     border-radius: 999px;
     padding: 1.3rem;
@@ -773,9 +421,8 @@ table tr:nth-child(even) td {
     background-color: #ffffff;
     color: #0f172a;
     border-color: var(--accent-strong);
-    box-shadow: 0 0 25px rgba(0,0,0,0.10);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
 }
-
 
 /* ======================================================
    AFSNIT 99 – FORCED TABLE HEADER FIX (OVERSKRIVER ALT)
