@@ -250,36 +250,7 @@ body {
     color: white !important;
 }
 
-/* ======================================================
-   AFSNIT 07 – FORM ELEMENTER
-   ====================================================== */
 
-label {
-    display: block;
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
-}
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 0.55rem 0.7rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
-    color: var(--text);
-    font-size: 0.95rem;
-}
-
-/* Dropdown pil */
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='%23868e96' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 40px;
-}
 
 /* ======================================================
    AFSNIT 07 – FORM ELEMENTER
