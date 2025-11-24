@@ -83,52 +83,65 @@
     ======================================================= -->
     <main id="contentArea" class="content">
 
-        <!-- ======================================================
-             AFSNIT 05A – DASHBOARD
-        ======================================================= -->
-        <section id="dashboardPage" class="page visible">
+       <!-- ======================================================
+     AFSNIT 05A – DASHBOARD / TIDSREGISTRERING
+====================================================== -->
+<section id="dashboardPage" class="page active">
 
-            <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
+    <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
 
-            <div class="card form-card">
+    <div class="card form-card">
 
-                <!-- Vælg kunde -->
-                <label data-i18n="select_customer">Vælg kunde</label>
-                <select id="quickCustomerSelect"></select>
+        <!-- ================================
+             Vælg kunde
+        ================================= -->
+        <label data-i18n="select_customer">Vælg kunde</label>
+        <select id="customerSelect" class="input"></select>
 
-                <!-- Vælg medarbejdere -->
-                <label data-i18n="select_employees">Vælg medarbejdere</label>
-                <div id="quickEmployeeList" class="chip-list"></div>
+        <!-- ================================
+             Vælg medarbejdere
+        ================================= -->
+        <label data-i18n="select_employees">Vælg medarbejdere</label>
+        <div id="timerEmployeeChips" class="chip-container"></div>
 
-                <!-- Visningstype -->
-                <label data-i18n="show_for_customer">Vis tid for kunden:</label>
-                <div class="radio-row">
-                    <label>
-                        <input type="radio" name="quickMode" id="quickModeDay" checked>
-                        <span data-i18n="mode_day">I dag</span>
-                    </label>
+        <!-- ================================
+             Vis tid for kunden
+        ================================= -->
+        <label data-i18n="show_time_for_customer">Vis tid for kunden:</label>
 
-                    <label>
-                        <input type="radio" name="quickMode" id="quickModeTotal">
-                        <span data-i18n="mode_total">Samlet tid</span>
-                    </label>
-                </div>
+        <div class="radio-row">
+            <label>
+                <input type="radio" name="timeView" value="today" checked>
+                <span data-i18n="today">I dag</span>
+            </label>
 
-                <!-- Tidsdisplay -->
-                <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
+            <label>
+                <input type="radio" name="timeView" value="total">
+                <span data-i18n="total_time">Samlet tid</span>
+            </label>
+        </div>
 
-                <!-- Start/Stop -->
-                <div class="btn-row">
-                    <button id="quickStartBtn" class="btn start" data-i18n="btn_start">Start</button>
-                    <button id="quickStopBtn" class="btn stop" data-i18n="btn_stop">Stop</button>
-                </div>
+        <!-- ================================
+             Timer display
+        ================================= -->
+        <div class="timer-display" id="timerDisplay">00:00:00</div>
 
-                <p data-i18n="dashboard_help">
-                    Vælg kunde og medarbejdere og brug Start / Stop.
-                </p>
+        <!-- ================================
+             Start / Stop
+        ================================= -->
+        <div class="timer-buttons">
+            <button id="startTimerBtn" class="btn start" data-i18n="start">Start</button>
+            <button id="stopTimerBtn" class="btn stop" data-i18n="stop">Stop</button>
+        </div>
 
-            </div>
-        </section>
+        <!-- Instruktion -->
+        <p class="info" data-i18n="timer_instruction">
+            Vælg kunde og medarbejdere og brug Start / Stop.
+        </p>
+
+    </div>
+
+</section>
 
         <!-- ======================================================
              AFSNIT 05B – KUNDER
