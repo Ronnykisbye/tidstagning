@@ -329,3 +329,26 @@ renderCustomers();
 renderEmployees();
 renderCustomerDropdown();
 renderTodayLogs();
+
+/* ======================================================
+   AFSNIT – Skift sprog
+====================================================== */
+
+function setLanguage(lang) {
+    localStorage.setItem("lang", lang);
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        el.textContent = translations[lang][key] || key;
+    });
+}
+
+const savedLang = localStorage.getItem("lang") || "da";
+setLanguage(savedLang);
+
+document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        setLanguage(btn.dataset.lang);
+    });
+});
+
