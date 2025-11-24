@@ -107,7 +107,7 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA (STABIL VERSION)
+   AFSNIT 03 – SPROG & TEMA (SAMLET VERSION)
    ====================================================== */
 
 function t(key) {
@@ -116,17 +116,17 @@ function t(key) {
 }
 
 function applyTranslations() {
-    // statiske labels
+    // opdater statiske labels
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
         if (key) el.textContent = t(key);
     });
 
-    // dynamiske selects
+    // opdater dynamiske dropdowns
     refreshCustomerSelects();
     refreshEmployeeSelects();
 
-    // medarbejder chips
+    // opdater chips
     renderEmployeeChips();
 }
 
@@ -142,7 +142,10 @@ function initLanguage() {
 
     document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            currentLang = btn.dataset.lang;
+            const lang = btn.dataset.lang;
+            if (!lang) return;
+
+            currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
 
             applyLangActiveButton();
@@ -162,37 +165,18 @@ function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
+    // ikon ved load
     btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
 
     btn.addEventListener("click", () => {
+        // skift tema
         currentTheme = currentTheme === "light" ? "dark" : "light";
+
+        // anvend tema
         document.documentElement.dataset.theme = currentTheme;
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
 
-        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
-    });
-}
-
-/* ======================================================
-   AFSNIT 03B – TEMA-KNAPPEN (RETTET VERSION)
-   ====================================================== */
-
-function initThemeToggle() {
-    const btn = document.getElementById("themeToggle");
-    if (!btn) return;
-
-    // Start med korrekt ikon
-    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
-
-    btn.addEventListener("click", () => {
-        // Skift tema
-        currentTheme = currentTheme === "light" ? "dark" : "light";
-
-        // Anvend temaet
-        document.documentElement.dataset.theme = currentTheme;
-        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
-
-        // Skift ikon efter tema
+        // skift ikon
         btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
     });
 }
