@@ -1,18 +1,18 @@
 /* ======================================================
-   AFSNIT 1 – GLOBAL VARIABLER
+   GLOBAL STATE
 ====================================================== */
 
 let customers = JSON.parse(localStorage.getItem("customers") || "[]");
 let employees = JSON.parse(localStorage.getItem("employees") || "[]");
 let logs = JSON.parse(localStorage.getItem("logs") || "[]");
 
+let timerStart = null;
 let timerInterval = null;
-let timerStartTime = null;
 let timerSelectedEmployees = [];
 
 
 /* ======================================================
-   AFSNIT 2 – GEM TIL LOCALSTORAGE
+   SAVE STATE
 ====================================================== */
 
 function saveAll() {
@@ -23,24 +23,16 @@ function saveAll() {
 
 
 /* ======================================================
-   AFSNIT 3 – SIDESKIFT (MENU)
+   PAGE SWITCHING
 ====================================================== */
 
 function showPage(page) {
+    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+    document.getElementById(page).style.display = "block";
 
-    document.querySelectorAll(".page").forEach(p => {
-        p.style.display = "none";
-    });
+    document.querySelectorAll(".sidebar-nav button")
+        .forEach(btn => btn.classList.toggle("active", btn.dataset.page === page));
 
-    const active = document.getElementById(page);
-    if (active) active.style.display = "block";
-
-    document.querySelectorAll(".sidebar-nav button").forEach(btn => {
-        btn.classList.remove("active");
-        if (btn.dataset.page === page) btn.classList.add("active");
-    });
-
-    // VIGTIGT → når vi åbner tidsregistrering, opdater chips
     if (page === "timereg") {
         renderTimerEmployeeChips();
         renderCustomerDropdown();
@@ -52,82 +44,16 @@ document.querySelectorAll(".sidebar-nav button").forEach(btn => {
     btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 
-// Start på Tidsregistrering
 showPage("timereg");
 
 
 /* ======================================================
-   AFSNIT 4 – KUNDER (OPRET, VIS, SLET)
+   KUNDER
 ====================================================== */
-
-function addCustomer() {
-    const name = document.getElementById("custName").value.trim();
-    const phone = document.getElementById("custPhone").value.trim();
-    const email = document.getElementById("custEmail").value.trim();
-    const address = document.getElementById("custAddress").value.trim();
-
-    if (!name) return;
-
-    customers.push({
-        id: Date.now(),
-        name, phone, email, address
-    });
-
-    saveAll();
-    renderCustomers();
-    renderCustomerDropdown();
-
-    document.getElementById("custName").value = "";
-    document.getElementById("custPhone").value = "";
-    document.getElementById("custEmail").value = "";
-    document.getElementById("custAddress").value = "";
-}
-
-document.getElementById("saveCustomerBtn").addEventListener("click", addCustomer);
-
-
-function renderCustomers() {
-    const list = document.getElementById("customerList");
-    list.innerHTML = "";
-
-    customers.forEach(c => {
-        const item = document.createElement("div");
-        item.className = "list-item";
-
-        item.innerHTML = `
-            <strong>${c.name}</strong>
-            <div>📞 ${c.phone || "-"}</div>
-            <div>📧 ${c.email || "-"}</div>
-            <div>🏠 ${c.address || "-"}</div>
-            <button class="btn-red">Slet kunde</button>
-        `;
-
-        item.querySelector("button").addEventListener("click", () => {
-            customers = customers.filter(x => x.id !== c.id);
-            saveAll();
-            renderCustomers();
-            renderCustomerDropdown();
-        });
-
-        list.appendChild(item);
-    });
-}
-
-document.getElementById("clearCustomersBtn").addEventListener("click", () => {
-    if (!confirm("Vil du slette alle kunder?")) return;
-    customers = [];
-    saveAll();
-    renderCustomers();
-    renderCustomerDropdown();
-});
-
 
 function renderCustomerDropdown() {
     const dd = document.getElementById("customerSelect");
-    if (!dd) return;
-
     dd.innerHTML = "";
-
     customers.forEach(c => {
         const opt = document.createElement("option");
         opt.value = c.id;
@@ -136,52 +62,87 @@ function renderCustomerDropdown() {
     });
 }
 
-renderCustomers();
-renderCustomerDropdown();
+function renderCustomers() {
+    const list = document.getElementById("customerList");
+    list.innerHTML = "";
+
+    customers.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `
+            <strong>${c.name}</strong><br>
+            📞 ${c.phone}<br>
+            📧 ${c.email}<br>
+            🏠 ${c.address}<br>
+            <button class="btn-red">Slet kunde</button>
+        `;
+
+        div.querySelector("button").addEventListener("click", () => {
+            customers = customers.filter(x => x.id !== c.id);
+            saveAll();
+            renderCustomers();
+            renderCustomerDropdown();
+        });
+
+        list.appendChild(div);
+    });
+}
+
+document.getElementById("saveCustomerBtn").addEventListener("click", () => {
+    const name = custName.value.trim();
+    if (!name) return;
+
+    customers.push({
+        id: Date.now(),
+        name,
+        phone: custPhone.value,
+        email: custEmail.value,
+        address: custAddress.value
+    });
+
+    saveAll();
+    renderCustomers();
+    renderCustomerDropdown();
+});
 
 
 /* ======================================================
-   AFSNIT 5 – MEDARBEJDERE (OPRET + VIS)
+   MEDARBEJDERE
 ====================================================== */
 
+function renderEmployees() {
+    const list = employeeList;
+    list.innerHTML = "";
+
+    employees.forEach(e => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.textContent = e.name;
+        list.appendChild(div);
+    });
+}
+
 document.getElementById("saveEmployeeBtn").addEventListener("click", () => {
-    const name = document.getElementById("empName").value.trim();
+    const name = empName.value.trim();
     if (!name) return;
 
-    employees.push({ id: Date.now(), name });
-
-    document.getElementById("empName").value = "";
+    employees.push({
+        id: Date.now(),
+        name
+    });
 
     saveAll();
     renderEmployees();
     renderTimerEmployeeChips();
 });
 
-function renderEmployees() {
-    const list = document.getElementById("employeeList");
-    if (!list) return;
-
-    list.innerHTML = "";
-
-    employees.forEach(emp => {
-        const div = document.createElement("div");
-        div.className = "list-item";
-        div.innerHTML = `<strong>${emp.name}</strong>`;
-        list.appendChild(div);
-    });
-}
-
-renderEmployees();
-
 
 /* ======================================================
-   AFSNIT 6 – MEDARBEJDER CHIPS I TIDSREGISTRERING
+   MEDARBEJDER CHIPS
 ====================================================== */
 
 function renderTimerEmployeeChips() {
     const area = document.getElementById("timerEmployeeChips");
-    if (!area) return;
-
     area.innerHTML = "";
 
     employees.forEach(emp => {
@@ -208,72 +169,66 @@ function renderTimerEmployeeChips() {
 
 
 /* ======================================================
-   AFSNIT 7 – TIMER FUNKTION
+   TIMER
 ====================================================== */
 
-function updateTimerDisplay() {
-    const diff = Date.now() - timerStartTime;
-    document.getElementById("timerDisplay").textContent =
-        new Date(diff).toISOString().substr(11, 8);
-}
-
 document.getElementById("startTimerBtn").addEventListener("click", () => {
-    timerStartTime = Date.now();
-    timerInterval = setInterval(updateTimerDisplay, 1000);
+    timerStart = Date.now();
+    timerInterval = setInterval(() => {
+        const diff = Date.now() - timerStart;
+        timerDisplay.textContent = new Date(diff).toISOString().substr(11, 8);
+    }, 1000);
 });
 
 document.getElementById("stopTimerBtn").addEventListener("click", () => {
     if (!timerInterval) return;
-
     clearInterval(timerInterval);
-
-    const duration = document.getElementById("timerDisplay").textContent;
-    const customerId = document.getElementById("customerSelect").value;
 
     logs.push({
         id: Date.now(),
-        customerId,
+        customerId: customerSelect.value,
         employees: [...timerSelectedEmployees],
-        duration,
+        duration: timerDisplay.textContent,
         date: new Date().toLocaleDateString()
     });
 
     saveAll();
     renderTodayLogs();
-
     timerSelectedEmployees = [];
     renderTimerEmployeeChips();
 });
 
 
 /* ======================================================
-   AFSNIT 8 – DAGENS LOGS
+   DAGENS LOGS
 ====================================================== */
 
 function renderTodayLogs() {
-    const box = document.getElementById("todayLogs");
-    if (!box) return;
-
-    box.innerHTML = "";
+    const area = todayLogs;
+    area.innerHTML = "";
 
     logs.forEach(l => {
-        const cust = customers.find(c => c.id == l.customerId);
-        const names = l.employees
-            .map(id => employees.find(e => e.id == id)?.name)
-            .join(", ");
+        const cu = customers.find(x => x.id == l.customerId);
 
         const div = document.createElement("div");
         div.className = "list-item";
 
+        const names = l.employees.map(eid =>
+            employees.find(e => e.id == eid)?.name
+        ).join(", ");
+
         div.innerHTML = `
-            <strong>${cust?.name || "Ukendt kunde"}</strong>
-            <div>⏱️ ${l.duration}</div>
-            <div>👷 ${names || "-"}</div>
-            <div>📅 ${l.date}</div>
+            <strong>${cu?.name || "Ukendt kunde"}</strong><br>
+            👷 ${names}<br>
+            ⏱️ ${l.duration}<br>
+            📅 ${l.date}
         `;
 
-        box.appendChild(div);
+        area.appendChild(div);
     });
 }
 
+renderCustomers();
+renderEmployees();
+renderCustomerDropdown();
 renderTodayLogs();
