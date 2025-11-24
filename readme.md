@@ -1,234 +1,244 @@
-🌱 GreenTime Pro
+GreenTime Pro – Digital tidsregistreringsplatform
 
-GreenTime Pro er en moderne web-applikation udviklet til servicefirmaer som gartnerier, håndværkere, rengøringsfirmaer og alle andre, der har brug for:
+GreenTime Pro er et moderne web-system udviklet til virksomheder, der ønsker at registrere tid hos kunder, planlægge besøg og holde styr på medarbejdernes arbejde.
+Appen er designet til både PC og mobil og understøtter flere sprog og både lys og mørk tilstand.
 
-kundehåndtering
+🧩 1. Projektets formål
 
-medarbejderstyring
+GreenTime Pro gør det muligt at:
 
-tidsregistrering
+Registrere tid hos hver kunde
 
-planlægning i kalender
+Udvælge de medarbejdere der deltager i besøget
 
-rapporter
+Starte og stoppe en timer for kunden
 
-mobilvenlig brugerflade
+Se både “I dag” og “Samlet tid”
 
-mørk/lys tilstand
+Oprette kunder og medarbejdere
 
-Appen er designet til at køre direkte i en webbrowser og kan hostes på fx GitHub Pages eller en almindelig webserver.
+Planlægge besøg via en farvekodet kalender
 
-🚀 Funktioner
-🧭 Navigation
+Se detaljeret tidsforbrug og køre rapporter
 
-Appen bruger en Single-Page-Application-struktur (SPA).
-Når du klikker i menuen, skifter kun indholdet i midten af skærmen.
+Fungere på både mobil og PC
 
-Menuen indeholder:
+Understøtte flere sprog (DK, EN, DE, LT)
 
-Dashboard
+Understøtte lys og mørk tilstand
 
-Customers
+🏗️ 2. Teknisk struktur
 
-Employees
+Appen består af tre hovedfiler:
 
-Time Tracking
+index.html
 
-Logs
+Indeholder al HTML-strukturen
 
-Calendar
+Alt indhold ligger i tydelige Afsnit 01–08
 
-Reports
+Hver side (Dashboard, Kunder, Medarbejdere osv.) er en <section>
 
-Settings
+Kun én side er synlig ad gangen
 
-🎨 Lys / Mørk tilstand
+style.css
 
-Øverst i højre hjørne findes en tema-knap:
+Styrer layout, farver og responsiv design
 
-🌙 betyder lys-tilstand kan aktiveres
+Underopdelt i mange afsnit, så du nemt kan finde ting
 
-☀️ betyder mørk-tilstand kan aktiveres
+Understøtter både light mode og dark mode
 
-Temaet gemmes i browseren, så brugeren får det samme look næste gang appen åbnes.
+Bruges til knapper, chips, dropdowns, timer-display osv.
 
-👥 Kunder
+app.js
 
-Under Customers kan man:
+Hovedmotoren
 
-oprette nye kunder (navn, telefon, email, adresse)
+Styrer navigation, sider, timer, sprog, tema og data
 
-se kundeliste i tabel
+Organiseret i mange afsnit: Afsnit 01, 02, 03a, 03b, 04… 09
 
-bruge kunderne i timer og planlægning
+Indeholder funktioner til:
 
-Kunder gemmes lokalt i browseren.
+Timer
 
-🧑‍🔧 Medarbejdere
+Kundeliste
 
-Under Employees kan man:
+Medarbejderliste
 
-oprette medarbejdere (navn, email, rolle)
+Kalender
 
-vælge om medarbejderen er employee eller admin
+Sprogskift
 
-bruge medarbejdere i timer og planlægning
+Tema
 
-Også gemt lokalt.
+Chips-knapper der bliver grønne/grå
 
-⏱ Time Tracking
+Start/Stop funktion
 
-Under Time Tracking kan du registrere arbejdstid:
+Data gemt i localStorage
 
-vælg kunde
+🧱 3. Appens funktioner
+Dashboard – Tidsregistrering
 
-vælg medarbejder eller skriv navn
+Vælg kunde (dropdown)
 
-tryk Start Timer
+Vælg medarbejdere (knapper/chips som skifter farve ved valg)
 
-tryk Stop Timer
+Timer (start/stop)
 
-systemet beregner automatisk antal minutter
+To tilstande: I dag / Samlet tid
 
-Alle timer bliver gemt og kan ses under Logs eller Reports.
+Timeren viser altid korrekt tid
 
-📋 Logs
+Alle data gemmes automatisk
 
-Under Logs vises tidsregistreringer for i dag:
+Kunder
 
-starttid
+Opret ny kunde
 
-sluttid
+Se kundeliste
 
-varighed
+Viser navn, telefon, email og adresse
 
-kunde
+Bruges i alle dropdowns
 
-medarbejder
+Medarbejdere
 
-Dashboardet viser også dagens antal registreringer.
+Tilføj medarbejdere
 
-📅 Kalender
+Vises som chips i dashboard
 
-Kalenderen viser:
+Kan vælges fra/til
 
-hele måneden
+Farver skifter automatisk i lys/mørk tilstand
 
-mulighed for at skifte måned
+Kalender
 
-klik på en dag → se planlagte opgaver
+Farvekoder:
 
-opgaver bliver vist som liste
+0 kunder = grå
 
-Opgaver der kan planlægges:
+1–3 kunder = gul
 
-kunde
+4+ kunder = rød
 
-medarbejder
+Man kan bladre frem og tilbage
 
-starttid
+Viser hurtigt travle dage
 
-varighed
+Rapporter
 
-note
+Find kunde
 
-Planlagte opgaver gemmes lokalt i browseren.
+Se alt tidsforbrug
 
-📊 Rapporter
+Mulighed for nulstilling
 
-Under Reports kan du filtrere tidsregistreringer efter:
+Viser samlet timer + antal medarbejdere
 
-dato fra / til
+🌍 4. Multisprog
 
-kunde
+Appen bruger data-i18n="" til alle tekster
+Sprog gemmes i localStorage og skifter uden reload.
+Understøttede sprog:
 
-medarbejder
+Dansk (DK)
 
-Systemet viser:
+Engelsk (GB)
 
-liste over arbejdstider
+Tysk (DE)
 
-total antal logs
+Litauisk (LT)
 
-samlet tidsforbrug i minutter og timer
+🌗 5. Lys & Mørk mode
 
-💾 Dataopbevaring
+Skiftes med sol/måne-knap
 
-I denne version (uden server) bliver data gemt i:
+Hele appen styres via CSS-variabler
 
-localStorage
+Timer, chips, sidebar, tekst – alt skifter automatisk
 
-fungerer uden login
+Gemmes i localStorage
 
-gemmer kundedata, medarbejdere, timer og kalender
+🔄 6. Datahåndtering
 
-virker på samme enhed / browser
+Alle data gemmes i browseren via localStorage, fx:
 
-deles ikke mellem brugere
+gtp_customers
 
-I næste version bygges der en rigtig SQL-database, så flere brugere kan dele data.
+gtp_employees
 
-📁 Filstruktur
-/ (roden af projektet)
-│
-├── index.html       → hovedfilen (layout + sektioner)
-├── style.css        → hele designet (mørk/lys tema, layout, grid osv.)
-├── app.js           → al logik (navigation, kalender, timer, kunder, rapporter)
-└── README.md        → denne fil
+gtp_active_timer
 
-🛠 Installation / Hosting
-GitHub Pages
+gtp_quick_timer
 
-Opret et repository
+gtp_theme
 
-Upload index.html, style.css, app.js
+gtp_lang
 
-Gå til
-Settings → Pages → Deploy from branch
+Data går aldrig tabt, selv hvis browseren lukkes.
 
-Vælg main og / (root)
+⚙️ 7. Navigation
 
-Appen ligger nu på:
-https://DIT_BRUGERNAVN.github.io/DIT_REPO
+Kun én side er synlig ad gangen.
+Følgende styrer hele navigationen:
 
-Webserver / hotel
+showPage("dashboardPage");
 
-Hvis din ven har adgang til en server:
 
-upload filerne via FTP
+Sidebar-knapper har data-page="".
 
-appen virker med det samme
+📱 8. Mobil & PC design
+PC
 
-ingen backend nødvendig endnu
+Venstremenu er altid synlig
 
-Næste version får SQL-backend.
+Content ligger i højre område
 
-📱 Mobilvenlig
+Mobil
 
-Appen er fuldt responsiv:
+Burger-menu (side-menu gemt)
 
-automatisk menu (hamburger på mobil)
+Content fylder hele skærmen
 
-sidebar skjules på små skærme
+Store knapper og touch-optimeret design
 
-alt layout tilpasser sig mobil
+🔧 9. Sådan arbejder vi videre (meget vigtigt)
 
-🔮 Fremtidige funktioner
+Når vi arbejder i nye sessioner:
 
-De næste store funktioner bliver:
+Du skriver: “fortsæt”
 
-database på rigtig server (SQL)
+Jeg fortsætter præcis hvor vi slap
 
-brugerlogin (adgang pr. medarbejder)
+Vi arbejder altid SBS (ét trin ad gangen)
 
-rolle-styring (admin / medarbejder)
+Jeg laver aldrig noget, før du skriver “klar”
 
-delte data mellem alle brugere
+Vi ødelægger aldrig funktioner der virker
 
-API-forbindelse mellem app og database
+Du downloader filerne, uploader dem igen i ny session
 
-synkronisering i realtime
+Jeg arbejder KUN ud fra filerne du uploader
 
-foto-upload pr. kunde
+Alt kodes i tydelige afsnit (Afsnit 01, 02, 03a osv.)
 
-ruteplanlægning / GPS
+⭐ 10. Visionen for GreenTime Pro
+
+Målet er at lave:
+
+Den bedste digitale tidsregistreringsapp
+
+Moderne UI
+
+Hurtig at bruge
+
+Driftssikker
+
+Let at udvide
+
+Utrolig flot i både lys og mørk tilstand
+
+Perfekt til real-life brug hos et firma
