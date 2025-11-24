@@ -777,3 +777,46 @@ tbody tr:hover td {
         width: 100%;
     }
 }
+
+/* =====================================================
+   AFSNIT XX – CHIP BUTTONS (BEDRE SYNLIGHED)
+   ===================================================== */
+
+/* Grundlayout */
+.chip {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+    user-select: none;
+    margin: 4px;
+}
+
+/* LIGHT MODE – Ikke valgt */
+:root[data-theme="light"] .chip {
+    background: #eaeaea;
+    color: #333;
+}
+:root[data-theme="light"] .chip:hover {
+    background: #dcdcdc;
+}
+
+/* DARK MODE – Ikke valgt */
+:root[data-theme="dark"] .chip {
+    background: #2d3645;      /* flot mørk-blå nuance */
+    color: #d5e2ff;           /* lys kølig tekst */
+}
+:root[data-theme="dark"] .chip:hover {
+    background: #3a4457;
+}
+
+/* Selected – gælder begge temaer */
+.chip.selected {
+    background: #2ecc71 !important;  /* grøn */
+    color: #000 !important;          /* god kontrast */
+    border: 1px solid #27ae60;
+    box-shadow: 0 0 6px rgba(46,204,113,0.45);
+}
