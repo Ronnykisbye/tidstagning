@@ -168,19 +168,17 @@ const translations = {
     }
 };
 
-
 /* ==========================
-   03B – FUNKTION: t()
+   03B – OVERSÆTTELSESFUNKTION
    ========================== */
 function t(key) {
     const langPack = translations[currentLang] || translations["da"];
     return langPack[key] || translations["da"][key] || "";
 }
 
-
-/* =================================
-   03C – ANVEND OVERSÆTTELSER PÅ HTML
-   ================================= */
+/* =======================================
+   03C – ANVEND OVERSÆTTELSER PÅ ELEMENTER
+   ======================================= */
 function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
@@ -188,20 +186,18 @@ function applyTranslations() {
     });
 }
 
-
-/* ===================================
+/* =======================================
    03D – MARKÉR AKTIV SPROGKNAP
-   =================================== */
+   ======================================= */
 function applyLangActiveButton() {
     document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.lang === currentLang);
     });
 }
 
-
-/* ===================================
-   03E – INITIALISER SPROGSKIFT
-   =================================== */
+/* =======================================
+   03E – INITIALISER SPROG
+   ======================================= */
 function initLanguage() {
     applyLangActiveButton();
     applyTranslations();
@@ -220,12 +216,10 @@ function initLanguage() {
     });
 }
 
-
-/* ==============================
-   03F – TEMA (LYS / MØRK)
-   ============================== */
+/* =======================================
+   03F – LYS/MØRK TEMA
+   ======================================= */
 function initTheme() {
-    // Sæt tema (html data-theme="light|dark")
     document.documentElement.dataset.theme = currentTheme;
 }
 
@@ -233,20 +227,12 @@ function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
-    // Sæt ikon ved load
     btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
 
     btn.addEventListener("click", () => {
-        // Skift tema
         currentTheme = currentTheme === "light" ? "dark" : "light";
-
-        // Opdater <html>
         document.documentElement.dataset.theme = currentTheme;
-
-        // Gem valgt tema
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
-
-        // Skift ikon
         btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
     });
 }
