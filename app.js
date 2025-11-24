@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ======================================================
-   AFSNIT 10 – MEDARBEJDER CHIPS
+   AFSNIT 10 – MEDARBEJDER-CHIPS (KLIK + FARVESKIFT)
 ====================================================== */
 
 let timerSelectedEmployees = [];
@@ -323,23 +323,27 @@ function renderTimerEmployeeChips() {
         chip.className = "chip";
         chip.textContent = emp.name;
 
+        // hvis medarbejderen er valgt → giv grøn farve
         if (timerSelectedEmployees.includes(emp.id)) {
             chip.classList.add("chip-selected");
         }
 
         chip.addEventListener("click", () => {
             if (timerSelectedEmployees.includes(emp.id)) {
+                // fjern hvis valgt
                 timerSelectedEmployees = timerSelectedEmployees.filter(id => id !== emp.id);
             } else {
+                // tilføj hvis ikke valgt
                 timerSelectedEmployees.push(emp.id);
             }
+
+            // genskab chips-visningen
             renderTimerEmployeeChips();
         });
 
         area.appendChild(chip);
     });
 }
-
 
 
 /* ======================================================
