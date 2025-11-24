@@ -258,7 +258,7 @@ function updateLogList() {
 
 
 /* ======================================================
-   AFSNIT 9. – KUNDER (MED SLET-KNAP)
+   AFSNIT 9. – KUNDER (KORREKT VERSION MED SLET-KNAP)
 ====================================================== */
 
 function addCustomer() {
@@ -278,13 +278,13 @@ function addCustomer() {
     });
 
     saveAll();
+    renderCustomers();
 
+    // Nulstil felter
     document.getElementById("custName").value = "";
     document.getElementById("custPhone").value = "";
     document.getElementById("custEmail").value = "";
     document.getElementById("custAddress").value = "";
-
-    renderCustomers();
 }
 
 function renderCustomers() {
@@ -302,22 +302,25 @@ function renderCustomers() {
     customers.forEach((c) => {
         const item = document.createElement("div");
         item.className = "list-item";
+
         item.innerHTML = `
             <div><strong>${c.name}</strong></div>
             <div>📞 ${c.phone || "-"}</div>
             <div>📧 ${c.email || "-"}</div>
             <div>🏠 ${c.address || "-"}</div>
-            <button class="btn-red delete-btn" data-id="${c.id}" style="margin-top:10px;">Slet kunde</button>
+            <button class="btn-red delete-btn" data-id="${c.id}">Slet kunde</button>
         `;
+
         list.appendChild(item);
 
+        // Dropdown til tidsregistrering
         const opt = document.createElement("option");
         opt.value = c.id;
         opt.textContent = c.name;
         select.appendChild(opt);
     });
 
-    // Gør alle slet-knapperne aktive
+    // Gör slet-knapper klikbare
     document.querySelectorAll(".delete-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             deleteCustomer(btn.dataset.id);
