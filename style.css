@@ -148,14 +148,14 @@ button {
     padding: 0 20px;
 }
 
-/* Venstre side (menu-ikon) */
+/* Venstre side */
 .topbar-left {
+    width: 60px; /* vigtig: så center ikke hopper */
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
-/* MIDTEN — FIX: giver plads så sprogknapper ikke overlapper */
+/* Center tekst altid præcis midt */
 .topbar-center {
     flex: 1;
     display: flex;
@@ -169,11 +169,30 @@ button {
     text-align: center;
 }
 
-/* Højre side (sprog + tema) */
+/* Højre side */
 .topbar-right {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+/* Mobil: hamburger vises */
+.mobile-only {
+    display: none;
+}
+
+/* PC layout */
+@media (max-width: 900px) {
+    .mobile-only {
+        display: inline-flex;     /* burger synlig */
+    }
+}
+
+/* PC: skjul hamburger */
+@media (min-width: 901px) {
+    .mobile-only {
+        display: none !important;
+    }
 }
 
 /* ======================================================
