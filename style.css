@@ -176,8 +176,157 @@ body {
     min-height: 100vh;
 }
 
+/* ============================================================
+   AFSNIT 04 – NEON BUTTONS + GLOW ELEMENTER (Store-Store UI)
+   ============================================================ */
+
+/* ---------- GLOW FARVER ---------- */
+:root {
+    --neon-blue: #19c3ff;
+    --neon-cyan: #00fff2;
+    --neon-purple: #b56dff;
+
+    --glow-soft: 0 0 8px;
+    --glow-medium: 0 0 14px;
+    --glow-big: 0 0 22px;
+}
+
+/* ---------- STORE-STORE KNAPPER ---------- */
+.bigButton {
+    font-size: 1.4rem;
+    padding: 16px 38px;
+    border-radius: 14px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: 0.25s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- NEON VERSION (DAG) ---------- */
+html.light .bigButton {
+    background: var(--card-bg);
+    color: #000;
+    border: 2px solid var(--neon-blue);
+    box-shadow: var(--glow-soft) var(--neon-blue);
+}
+
+html.light .bigButton:hover {
+    box-shadow: var(--glow-big) var(--neon-blue);
+    transform: translateY(-2px);
+    background: #f8faff;
+}
+
+/* ---------- NEON VERSION (NAT) ---------- */
+html.dark .bigButton {
+    background: rgba(20, 20, 20, 0.8);
+    color: var(--neon-cyan);
+    border: 2px solid var(--neon-purple);
+    box-shadow: var(--glow-medium) var(--neon-purple);
+}
+
+html.dark .bigButton:hover {
+    box-shadow: var(--glow-big) var(--neon-purple);
+    transform: translateY(-2px);
+    background: rgba(40, 40, 40, 0.8);
+}
+
+/* ---------- START & STOP (SPECIAL FARBESTYRING) ---------- */
+#startBtn.bigButton {
+    background: #0bd465;
+    color: white;
+    border-color: #0bd465;
+    box-shadow: var(--glow-soft) #0bd465;
+}
+
+#startBtn.bigButton:hover {
+    box-shadow: var(--glow-big) #0bd465;
+    transform: translateY(-2px);
+}
+
+#stopBtn.bigButton {
+    background: #e43a3a;
+    color: white;
+    border-color: #e43a3a;
+    box-shadow: var(--glow-soft) #e43a3a;
+}
+
+#stopBtn.bigButton:hover {
+    box-shadow: var(--glow-big) #e43a3a;
+    transform: translateY(-2px);
+}
+
+/* ---------- GLOW DROPDOWN ---------- */
+.neonSelect {
+    font-size: 1.2rem;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid var(--neon-blue);
+    background: var(--card-bg);
+    transition: 0.25s ease;
+}
+
+html.light .neonSelect:hover {
+    box-shadow: var(--glow-medium) var(--neon-blue);
+}
+
+html.dark .neonSelect {
+    color: var(--neon-cyan);
+    border-color: var(--neon-purple);
+    background: rgba(20,20,20,0.6);
+}
+
+html.dark .neonSelect:hover {
+    box-shadow: var(--glow-medium) var(--neon-purple);
+}
+
+/* ---------- MEDARBEJDER-CHIPS ---------- */
+.neon-chip {
+    padding: 10px 18px;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 2px solid var(--neon-blue);
+    display: inline-block;
+    margin: 4px;
+    transition: 0.25s ease;
+}
+
+html.light .neon-chip:hover {
+    box-shadow: var(--glow-soft) var(--neon-blue);
+}
+
+html.dark .neon-chip {
+    border-color: var(--neon-purple);
+    color: var(--neon-cyan);
+    background: rgba(30,30,30,0.8);
+}
+
+html.dark .neon-chip:hover {
+    box-shadow: var(--glow-medium) var(--neon-purple);
+}
+
+/* Aktiv chip */
+.neon-chip.active {
+    background: var(--neon-blue);
+    color: #fff;
+    box-shadow: var(--glow-big) var(--neon-blue);
+}
+
+html.dark .neon-chip.active {
+    background: var(--neon-purple);
+    color: #000;
+    box-shadow: var(--glow-big) var(--neon-purple);
+}
+
+
+
 /* ======================================================
-   AFSNIT 04 – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
+   AFSNIT 04a – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
    ====================================================== */
 
 .sidebar {
