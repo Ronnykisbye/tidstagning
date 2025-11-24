@@ -168,92 +168,86 @@ body {
 
 
 /* ============================================================
-   AFSNIT 03 – APP LAYOUT (GLOBAL PLACERING)
+   AFSNIT 03 – APP LAYOUT (2-kolonne struktur – stabil version)
    ============================================================ */
 
 .app {
-    display: flex;
+    display: grid;
+    grid-template-columns: 260px 1fr;  /* Sidebar + main content */
     min-height: 100vh;
-    background: var(--bg-main);
-    transition: background 0.3s ease;
+    background: var(--bg-default);
 }
-
-/* Centrer indhold mere behageligt */
-#contentArea {
-    flex: 1;
-    padding: 2rem 2.5rem;
-    overflow-y: auto;
-}
-
-
 
 /* ============================================================
-   AFSNIT 04 – SIDEBAR (ENDGYLDIG, MODERNE, NEON-READY)
+   AFSNIT 04 – SIDEBAR (korrekt placeret)
    ============================================================ */
 
 .sidebar {
-    width: 250px;
     background: var(--bg-elevated);
     border-right: 1px solid var(--border-subtle);
-    padding: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transition: all 0.25s ease;
+    padding: 1.6rem 1rem;
+    position: relative;
+    z-index: 5;
 }
 
-/* Sidebar UL */
 .sidebar ul {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
 
 .sidebar li {
-    margin-bottom: 0.35rem;
+    margin: 0.8rem 0;
 }
 
-/* Sidebar links */
 .sidebar li span {
     display: block;
-    padding: 0.85rem 1.1rem;
-    font-size: 1.05rem;
-    border-radius: 10px;
-    background: var(--bg-elevated);
-    color: var(--text);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid transparent;
+    font-size: 1.1rem;
+    transition: 0.25s ease;
+    color: var(--text-default);
 }
 
-/* Hover • Neon elegant */
-.sidebar li span:hover {
-    background: var(--bg-hover);
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 12px var(--neon-cyan);
-}
-
-/* Aktive menupunkter */
-.sidebar li.active span {
+.sidebar li span.active {
     background: var(--neon-cyan);
-    color: #fff;
-    box-shadow: 0 0 16px var(--neon-cyan);
+    color: #000;
+    font-weight: 600;
+    box-shadow: 0 0 8px var(--neon-cyan);
 }
 
-/* Mobil-version: */
-@media (max-width: 900px) {
-    .sidebar {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: -260px;
-        z-index: 999;
-        box-shadow: 0 0 25px rgba(0,0,0,0.4);
-    }
+.sidebar li span:hover {
+    background: var(--neon-purple);
+    color: #fff;
+    box-shadow: 0 0 8px var(--neon-purple);
+}
 
-    .sidebar.open {
-        left: 0;
-    }
+/* ============================================================
+   MAIN CONTENT AREA — centrer timer-kortet korrekt
+   ============================================================ */
+
+.content {
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.card-large {
+    width: 100%;
+    max-width: 560px;
+    padding: 2rem;
+    border-radius: 22px;
+    background: var(--bg-elevated);
+    box-shadow: 0 0 40px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.card-large h1 {
+    margin-bottom: 1.4rem;
+    font-size: 1.9rem;
+    color: var(--text-default);
 }
 
 /* ======================================================
