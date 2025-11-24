@@ -159,36 +159,38 @@ textarea {
 
 
 /* ======================================================
-   AFSNIT 05 – TOPBAR
+   AFSNIT 05. – SIDEBAR NAVIGATION
    ====================================================== */
 
-.topbar {
-    height: var(--topbar-height);
+.sidebar-nav {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    position: sticky;
-    top: 0;
-    z-index: 1200;
-    padding: 0 1rem;
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.sidebar-nav button {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     color: var(--text);
-    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
-.topbar-center h1 {
-    font-size: 1.35rem;
-    margin: 0;
-    letter-spacing: 0.06em;
+.sidebar-nav button:hover {
+    background: var(--hover);
+}
+
+.sidebar-nav button.active {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
     font-weight: 600;
-}
-
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 /* ======================================================
