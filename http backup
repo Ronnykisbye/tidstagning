@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <!-- ======================================================
+         AFSNIT 01 – META & CSS
+    ======================================================= -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenTime Pro</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ======================================================
+         AFSNIT 02 – APP WRAPPER
+    ======================================================= -->
+    <div class="app-container">
+
+        <!-- ======================================================
+             AFSNIT 03 – TOPBAR
+        ======================================================= -->
+        <header class="topbar">
+            <button id="menuToggle" class="menu-btn">☰</button>
+            <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
+            <div class="lang-switch">
+                <button class="lang-btn" data-lang="da">DK</button>
+                <button class="lang-btn" data-lang="en">GB</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="lt">LT</button>
+            </div>
+            <button id="themeToggle" class="theme-btn">☀️</button>
+        </header>
+
+        <!-- ======================================================
+             AFSNIT 04 – SIDEMENU (PC) / BURGER (MOBIL)
+        ======================================================= -->
+        <aside id="sidebar" class="sidebar">
+            <nav class="nav">
+                <ul>
+                    <li data-page="dashboardPage" class="active"><span data-i18n="menu_dashboard">Tidsregistrering</span></li>
+                    <li data-page="customersPage"><span data-i18n="menu_customers">Kunder</span></li>
+                    <li data-page="employeesPage"><span data-i18n="menu_employees">Medarbejdere</span></li>
+                    <li data-page="timeTrackingPage"><span data-i18n="menu_time_tracking">Detaljeret tid</span></li>
+                    <li data-page="schedulePage"><span data-i18n="menu_schedule">Plan & kalender</span></li>
+                    <li data-page="logsPage"><span data-i18n="menu_logs">Logs</span></li>
+                    <li data-page="reportsPage"><span data-i18n="menu_reports">Rapporter</span></li>
+                    <li data-page="settingsPage"><span data-i18n="menu_settings">Indstillinger</span></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- ======================================================
+             AFSNIT 05 – MAIN CONTENT (ALLE SIDER)
+        ======================================================= -->
+        <main id="contentArea" class="content">
+
+           <!-- ======================================================
+     SIDE 01 – TIDSREGISTRERING / DASHBOARD
+======================================================= -->
+<section id="dashboardPage" class="page visible">
+
+    <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
+
+    <div class="card form-card">
+
+        <!-- ============================ KUNDEVALG ============================ -->
+        <label for="quickCustomerSelect" data-i18n="select_customer">Vælg kunde</label>
+        <select id="quickCustomerSelect" class="input"></select>
+
+        <!-- ============================ MEDARBEJDERE ============================ -->
+        <label data-i18n="select_employees">Vælg medarbejdere</label>
+        <div id="quickEmployeeList" class="chip-container"></div>
+
+        <!-- ============================ VIS TIDSTYPE ============================ -->
+        <label data-i18n="show_for_customer">Vis tid for kunden:</label>
+        <div class="radio-row">
+            <label>
+                <input type="radio" name="quickMode" id="quickModeDay" checked>
+                <span data-i18n="mode_day">I dag</span>
+            </label>
+
+            <label>
+                <input type="radio" name="quickMode" id="quickModeTotal">
+                <span data-i18n="mode_total">Samlet tid</span>
+            </label>
+        </div>
+
+        <!-- ============================ TIMER DISPLAY ============================ -->
+        <div id="quickTimerDisplay" class="timer-display">00:00:00</div>
+
+        <!-- ============================ START / STOP ============================ -->
+        <div class="btn-row">
+            <button id="quickStartBtn" class="btn btn-green" data-i18n="btn_start">Start</button>
+            <button id="quickStopBtn" class="btn btn-red" data-i18n="btn_stop">Stop</button>
+        </div>
+
+        <p data-i18n="dashboard_help">
+            Vælg kunde og medarbejdere og brug Start / Stop.
+        </p>
+    </div>
+</section>
+
+
+            <!-- ======================================================
+                 SIDE 02 – KUNDER
+            ======================================================= -->
+            <section id="customersPage" class="page">
+                <h1 data-i18n="customers_title">Kunder</h1>
+
+                <div class="card form-card">
+                    <label data-i18n="customer_name">Kundenavn</label>
+                    <input id="customerName" class="input" placeholder="Skriv kundenavn..." />
+
+                    <label data-i18n="customer_phone">Telefon</label>
+                    <input id="customerPhone" class="input" placeholder="12345678" />
+
+                    <label data-i18n="customer_email">Email</label>
+                    <input id="customerEmail" class="input" placeholder="mail@kunde.dk" />
+
+                    <label data-i18n="customer_address">Adresse</label>
+                    <input id="customerAddress" class="input" placeholder="Adresse..." />
+
+                    <button id="addCustomerBtn" class="btn btn-green" data-i18n="customer_add_btn">Tilføj kunde</button>
+                </div>
+
+                <div class="card list-card">
+                    <h2 data-i18n="customer_list_title">Kundeliste</h2>
+                    <div id="customerList" class="list-area"></div>
+                </div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 03 – MEDARBEJDERE
+            ======================================================= -->
+            <section id="employeesPage" class="page">
+                <h1 data-i18n="employees_title">Medarbejdere</h1>
+                <p data-i18n="employees_desc">Tilføj, rediger eller fjern medarbejdere her.</p>
+                <div id="employeesContent"></div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 04 – DETALJERET TID
+            ======================================================= -->
+            <section id="timeTrackingPage" class="page">
+                <h1 data-i18n="time_tracking_title">Detaljeret tid</h1>
+                <div id="timeTrackingContent"></div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 05 – KALENDER
+            ======================================================= -->
+            <section id="schedulePage" class="page">
+                <h1 data-i18n="schedule_title">Plan & kalender</h1>
+                <div id="scheduleContent"></div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 06 – LOGS
+            ======================================================= -->
+            <section id="logsPage" class="page">
+                <h1 data-i18n="logs_title">Logs</h1>
+                <div id="logsContent"></div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 07 – RAPPORTER
+            ======================================================= -->
+            <section id="reportsPage" class="page">
+                <h1 data-i18n="reports_title">Rapporter</h1>
+                <div id="reportsContent"></div>
+            </section>
+
+            <!-- ======================================================
+                 SIDE 08 – INDSTILLINGER
+            ======================================================= -->
+            <section id="settingsPage" class="page">
+                <h1 data-i18n="settings_title">Indstillinger</h1>
+                <div id="settingsContent"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ======================================================
+         AFSNIT 06 – APP SCRIPT
+    ======================================================= -->
+    <script src="app.js"></script>
+</body>
+</html>
