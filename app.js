@@ -1,3 +1,100 @@
+
+/* ======================================================
+   AFSNIT – Sprogdata
+====================================================== */
+
+const translations = {
+    da: {
+        timereg: "Tidsregistrering",
+        customers: "Kunder",
+        employees: "Medarbejdere",
+        details: "Detaljeret tid",
+        planner: "Plan & kalender",
+        logs: "Logs",
+        reports: "Rapporter",
+        settings: "Indstillinger",
+        customer: "Kunde",
+        today: "I dag",
+        total: "Samlet tid",
+        start: "Start",
+        stop: "Stop",
+        todayLogs: "Dagens logs",
+        saveCustomer: "Gem kunde",
+        clearCustomers: "Ryd alle kunder",
+        customerList: "Kundeliste",
+        addEmployee: "Tilføj medarbejder",
+        employeeList: "Medarbejderliste"
+    },
+
+    en: {
+        timereg: "Time Tracking",
+        customers: "Customers",
+        employees: "Employees",
+        details: "Detailed Time",
+        planner: "Schedule",
+        logs: "Logs",
+        reports: "Reports",
+        settings: "Settings",
+        customer: "Customer",
+        today: "Today",
+        total: "Total time",
+        start: "Start",
+        stop: "Stop",
+        todayLogs: "Today's logs",
+        saveCustomer: "Save customer",
+        clearCustomers: "Clear customers",
+        customerList: "Customer list",
+        addEmployee: "Add employee",
+        employeeList: "Employee list"
+    },
+
+    de: {
+        timereg: "Zeiterfassung",
+        customers: "Kunden",
+        employees: "Mitarbeiter",
+        details: "Details Zeit",
+        planner: "Plan",
+        logs: "Protokolle",
+        reports: "Berichte",
+        settings: "Einstellungen",
+        customer: "Kunde",
+        today: "Heute",
+        total: "Gesamtzeit",
+        start: "Start",
+        stop: "Stopp",
+        todayLogs: "Heutige Einträge",
+        saveCustomer: "Kunde speichern",
+        clearCustomers: "Alle Kunden löschen",
+        customerList: "Kundenliste",
+        addEmployee: "Mitarbeiter hinzufügen",
+        employeeList: "Mitarbeiterliste"
+    },
+
+    lt: {
+        timereg: "Laiko registracija",
+        customers: "Klientai",
+        employees: "Darbuotojai",
+        details: "Išsami laiko",
+        planner: "Planas",
+        logs: "Įrašai",
+        reports: "Ataskaitos",
+        settings: "Nustatymai",
+        customer: "Klientas",
+        today: "Šiandien",
+        total: "Bendras laikas",
+        start: "Pradėti",
+        stop: "Stabdyti",
+        todayLogs: "Šiandienos įrašai",
+        saveCustomer: "Išsaugoti klientą",
+        clearCustomers: "Išvalyti klientus",
+        customerList: "Klientų sąrašas",
+        addEmployee: "Pridėti darbuotoją",
+        employeeList: "Darbuotojų sąrašas"
+    }
+};
+
+
+
 /* ======================================================
    GLOBAL STATE
 ====================================================== */
