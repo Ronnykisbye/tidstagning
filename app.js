@@ -358,19 +358,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ======================================================
-   AFSNIT 10. – MEDARBEJDERE & CHIPS
+   AFSNIT 10. – MEDARBEJDERE (CHIP-KNAPPER)
 ====================================================== */
 
 function addEmployee() {
     const name = document.getElementById("empName").value.trim();
     if (!name) return;
 
-    employees.push({ name });
-    saveAll();
+    employees.push({
+        id: Date.now(),
+        name
+    });
 
+    saveAll();
     document.getElementById("empName").value = "";
     renderEmployees();
-    renderEmployeeSelect();
+    renderEmployeeChips();
 }
 
 function renderEmployees() {
@@ -383,38 +386,40 @@ function renderEmployees() {
     }
 
     employees.forEach(emp => {
-        const div = document.createElement("div");
-        div.className = "list-item";
-        div.innerHTML = `<span>${emp.name}</span>`;
-        list.appendChild(div);
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `<div><strong>${emp.name}</strong></div>`;
+        list.appendChild(item);
     });
 }
 
-function renderEmployeeSelect() {
-    const select = document.getElementById("employeeSelect");
-    const chips = document.getElementById("employeeChips");
+let selectedEmployees = [];
 
-    select.innerHTML = "";
-    chips.innerHTML = "";
+function renderEmployeeChips() {
+    const chipArea = document.getElementById("employeeChips");
+    chipArea.innerHTML = "";
 
     employees.forEach(emp => {
-        const opt = document.createElement("option");
-        opt.value = emp.name;
-        opt.textContent = emp.name;
-        select.appendChild(opt);
-    });
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = emp.name;
 
-    select.addEventListener("change", () => {
-        chips.innerHTML = "";
-        [...select.selectedOptions].forEach(opt => {
-            const chip = document.createElement("div");
-            chip.className = "chip";
-            chip.innerHTML = `${opt.value} <button data-remove="${opt.value}">x</button>`;
-            chips.appendChild(chip);
+        if (selectedEmployees.includes(emp.id)) {
+            chip.classList.add("chip-selected");
+        }
+
+        chip.addEventListener("click", () => {
+            if (selectedEmployees.includes(emp.id)) {
+                selectedEmployees = selectedEmployees.filter(id => id !== emp.id);
+            } else {
+                selectedEmployees.push(emp.id);
+            }
+            renderEmployeeChips();
         });
+
+        chipArea.appendChild(chip);
     });
 }
-
 
 /* ======================================================
    AFSNIT 11. – KALENDER GENERERING
