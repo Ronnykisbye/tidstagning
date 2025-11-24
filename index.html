@@ -25,32 +25,28 @@
 
 
 <!-- ======================================================
-     AFSNIT 3. – APP CONTAINER (SIDEBAR + INDHOLD)
+     AFSNIT 3 – SIDEBAR + PAGE-ID KORREKTION
 ====================================================== -->
-<div class="app">
+<aside class="sidebar" id="sidebar">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <span class="brand-icon">🌿</span>
+        <span class="brand-title">GreenTime Pro</span>
+    </div>
 
-        <div class="sidebar-brand">
-            <span class="brand-icon">🌿</span>
-            <span class="brand-title">GreenTime Pro</span>
-        </div>
+    <nav class="sidebar-nav">
+        <button data-page="timereg" data-i18n="dashboard">Tidsregistrering</button>
+        <button data-page="customers" data-i18n="customers">Kunder</button>
+        <button data-page="employees" data-i18n="employees">Medarbejdere</button>
+        <button data-page="details" data-i18n="detailed">Detaljeret tid</button>
+        <button data-page="planner" data-i18n="planner">Plan & kalender</button>
+        <button data-page="logs" data-i18n="logs">Logs</button>
+        <button data-page="reports" data-i18n="reports">Rapporter</button>
+        <button data-page="settings" data-i18n="settings">Indstillinger</button>
+    </nav>
 
-        <nav class="sidebar-nav">
-            <button data-page="dashboard" data-i18n="dashboard">Tidsregistrering</button>
-            <button data-page="customers" data-i18n="customers">Kunder</button>
-            <button data-page="employees" data-i18n="employees">Medarbejdere</button>
-            <button data-page="detailed" data-i18n="detailed">Detaljeret tid</button>
-            <button data-page="planner" data-i18n="planner">Plan & kalender</button>
-            <button data-page="logs" data-i18n="logs">Logs</button>
-            <button data-page="reports" data-i18n="reports">Rapporter</button>
-            <button data-page="settings" data-i18n="settings">Indstillinger</button>
-        </nav>
+</aside>
 
-    </aside>
-
-    <!-- SIDEBAR SLUT — nu kommer alle siderne -->
 
 
 <!-- ======================================================
