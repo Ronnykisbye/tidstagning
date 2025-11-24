@@ -1,5 +1,5 @@
 /* ======================================================
-   AFSNIT 1. – ROOT VARIABLER (LYS/MØRK MODE)
+   AFSNIT 1 – ROOT VARIABLER (LYS/MØRK MODE)
 ====================================================== */
 
 :root {
@@ -13,92 +13,35 @@
     --accent-hover: #22c55e;
 }
 
-[data-theme="dark"] {
+body.dark {
     --bg: #0f172a;
-    --text: #f8fafc;
+    --text: #f1f5f9;
     --surface: #1e293b;
-    --surface-2: #273449;
-    --border: #3c4a60;
-    --hover: #334155;
+    --surface-2: #334155;
+    --border: #475569;
+    --hover: #3b4c61;
     --accent: #4ade80;
     --accent-hover: #22c55e;
 }
 
-
 /* ======================================================
-   AFSNIT 2. – GLOBAL RESET
+   AFSNIT 2 – GENERELT LAYOUT
 ====================================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Inter", sans-serif;
-}
-
 body {
+    margin: 0;
+    font-family: Inter, sans-serif;
     background: var(--bg);
     color: var(--text);
 }
-
-button {
-    cursor: pointer;
-    border: none;
-}
-
-
-/* ======================================================
-   AFSNIT 3. – LAYOUT (APP + SIDEBAR + CONTENT)
-====================================================== */
 
 .app {
     display: flex;
     height: calc(100vh - 60px);
 }
 
-.sidebar {
-    width: 240px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding-top: 10px;
-}
-
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-nav button {
-    padding: 14px 20px;
-    text-align: left;
-    background: transparent;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-}
-
-.sidebar-nav button:hover {
-    background: var(--hover);
-}
-
-.sidebar-nav button.active {
-    background: var(--accent);
-    color: #0f172a;
-}
-
-
 /* ======================================================
-   AFSNIT 4. – TOPBAR
+   AFSNIT 3 – TOPBAR
 ====================================================== */
 
 .topbar {
@@ -107,162 +50,78 @@ button {
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    padding: 0 20px;
     justify-content: space-between;
-}
-
-.topbar-left {
-    width: 60px;
-    display: flex;
-    align-items: center;
-}
-
-.mobile-only {
-    display: none;
-}
-
-@media (max-width: 900px) {
-    .mobile-only {
-        display: inline-flex;
-    }
-}
-
-.topbar-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    padding: 0 15px;
 }
 
 .topbar-center h1 {
-    font-size: 20px;
-    font-weight: 700;
+    margin: 0;
+    font-size: 22px;
 }
-
-.topbar-right {
-    width: 260px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-}
-
-.icon-btn {
-    background: var(--surface-2);
-    padding: 6px 12px;
-    border-radius: 8px;
-    color: var(--text);
-    border: 1px solid var(--border);
-}
-
-.icon-btn:hover {
-    background: var(--hover);
-}
-
 
 /* ======================================================
-   AFSNIT 5. – PAGES + SIDECONTENT
+   AFSNIT 4 – SIDEBAR
+====================================================== */
+
+.sidebar {
+    width: 240px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.sidebar-nav button {
+    width: 100%;
+    background: var(--surface-2);
+    padding: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.sidebar-nav button.active {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
+}
+
+/* ======================================================
+   AFSNIT 5 – PAGES & CARDS
 ====================================================== */
 
 .page {
-    flex: 1;
+    flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
 }
 
-.page h2 {
-    margin-bottom: 15px;
-}
-
-
-/* ======================================================
-   AFSNIT 6. – CARDS
-====================================================== */
-
 .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
+    padding: 15px;
+    border-radius: 8px;
     margin-bottom: 20px;
 }
 
-.form-grid {
-    display: grid;
-    gap: 10px;
-}
-
-input {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text);
-}
-
-
 /* ======================================================
-   AFSNIT 7. – BUTTONS (GRØN/RØD)
-====================================================== */
-
-.btn-green {
-    background: var(--accent);
-    color: #0f172a;
-    padding: 8px 16px;
-    border-radius: 8px;
-}
-
-.btn-green:hover {
-    background: var(--accent-hover);
-}
-
-.btn-red {
-    background: #ef4444;
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 8px;
-}
-
-.btn-red:hover {
-    background: #dc2626;
-}
-
-
-/* ======================================================
-   AFSNIT 8. – LISTE ELEMENTER (KUNDER)
-====================================================== */
-
-.list-item {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-
-/* ======================================================
-   AFSNIT 9 – CHIP DESIGN
+   AFSNIT 6 – CHIPS (MEDARBEJDERE)
 ====================================================== */
 
 .chip-container {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 10px;
 }
 
 .chip {
     padding: 6px 14px;
-    border-radius: 20px;
+    background: var(--surface-2);
     border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
+    border-radius: 20px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .chip:hover {
@@ -271,6 +130,40 @@ input {
 
 .chip-selected {
     background: var(--accent);
-    border-color: var(--accent);
     color: #0f172a;
+    border-color: var(--accent);
+}
+
+/* ======================================================
+   AFSNIT 7 – TIDSMÅLING
+====================================================== */
+
+.timer-display {
+    font-size: 32px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.btn-green {
+    background: var(--accent);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-red {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.list-item {
+    background: var(--surface-2);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
 }
