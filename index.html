@@ -122,34 +122,49 @@
 
 
 <!-- ======================================================
-     AFSNIT 6. – KUNDER (KORREKT VERSION MED SLET-KNAP)
+     AFSNIT 6 – MEDARBEJDER CHIPS I TIDSREGISTRERING
 ====================================================== -->
-<section id="customers" class="page">
-    <h2 data-i18n="customers">Kunder</h2>
+
+<section id="timereg" class="page">
+
+    <h2 data-i18n="dashboard">Tidsregistrering</h2>
 
     <div class="card">
-        <div class="form-grid">
-            <input id="custName" placeholder="Navn">
-            <input id="custPhone" placeholder="Telefon">
-            <input id="custEmail" placeholder="Email">
-            <input id="custAddress" placeholder="Adresse">
-            <button id="saveCustomerBtn" class="btn-green">Gem kunde</button>
+        <label data-i18n="customer">Kunde</label>
+        <select id="customerSelect"></select>
+    </div>
+
+    <div class="card">
+        <label data-i18n="employees">Medarbejdere</label>
+
+        <!-- 🔥 Her kommer de små knapper (chips) -->
+        <div id="timerEmployeeChips" class="chip-container"></div>
+    </div>
+
+    <div class="card">
+        <div class="timer-controls">
+
+            <div class="radio-group">
+                <label><input type="radio" name="mode" value="day" checked> <span data-i18n="today">I dag</span></label>
+                <label><input type="radio" name="mode" value="total"> <span data-i18n="total">Samlet tid</span></label>
+            </div>
+
+            <div id="timerDisplay" class="timer-display">00:00:00</div>
+
+            <div class="timer-buttons">
+                <button id="startTimerBtn" class="btn-green" data-i18n="start">Start</button>
+                <button id="stopTimerBtn" class="btn-red" data-i18n="stop">Stop</button>
+            </div>
+
         </div>
     </div>
 
     <div class="card">
-        <h3 data-i18n="customers">Kundeliste</h3>
-
-        <div id="customerList"></div>
-
-        <!-- ⭐ DEN MANGLEDE KNAP -->
-        <button id="clearCustomersBtn" class="btn-red" style="margin-top:20px;">
-            Ryd alle kunder
-        </button>
+        <h3 data-i18n="todayLogs">Dagens logs</h3>
+        <div id="todayLogs"></div>
     </div>
+
 </section>
-
-
 
 
     <!-- ======================================================
