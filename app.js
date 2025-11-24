@@ -31,38 +31,32 @@ function loadAll() {
 
 
 /* ======================================================
-   AFSNIT 3 – SHOW PAGE (KORREKT MENU SKIFT)
+   AFSNIT 3 – SHOW PAGE (MENU + CHIP INITIALISERING)
 ====================================================== */
 
 function showPage(page) {
-
-    // Gem alle sider
+    // gem alle sider
     document.querySelectorAll(".page").forEach(p => {
         p.style.display = "none";
     });
 
-    // Vis den valgte side
+    // vis valgt side
     const active = document.getElementById(page);
     if (active) active.style.display = "block";
 
-    // Skift aktiv knap
+    // marker aktiv knap
     document.querySelectorAll(".sidebar-nav button").forEach(btn => {
         btn.classList.remove("active");
         if (btn.dataset.page === page) {
             btn.classList.add("active");
         }
     });
+
+    // 🔥 VIGTIGT: når vi går til tidsregistrering → vis chips
+    if (page === "timereg") {
+        renderTimerEmployeeChips();
+    }
 }
-
-// Aktivér sidebar-knapper
-document.querySelectorAll(".sidebar-nav button").forEach(btn => {
-    btn.addEventListener("click", () => {
-        showPage(btn.dataset.page);
-    });
-});
-
-// Startside
-showPage("timereg");
 
 
 /* ======================================================
