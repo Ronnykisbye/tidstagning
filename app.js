@@ -112,9 +112,12 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03A – MENU-OVERSÆTTELSER (ERSTAT HELE DETTE)
+   AFSNIT 03 – SPROG & TEMA  (SAMLET OG FEJLFRI VERSION)
    ====================================================== */
 
+/* ==========================
+   03A – OVERSÆTTELSER
+   ========================== */
 const translations = {
     da: {
         app_title: "GreenTime Pro",
@@ -164,6 +167,90 @@ const translations = {
         menu_settings: "Nustatymai"
     }
 };
+
+
+/* ==========================
+   03B – FUNKTION: t()
+   ========================== */
+function t(key) {
+    const langPack = translations[currentLang] || translations["da"];
+    return langPack[key] || translations["da"][key] || "";
+}
+
+
+/* =================================
+   03C – ANVEND OVERSÆTTELSER PÅ HTML
+   ================================= */
+function applyTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (key) el.textContent = t(key);
+    });
+}
+
+
+/* ===================================
+   03D – MARKÉR AKTIV SPROGKNAP
+   =================================== */
+function applyLangActiveButton() {
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+}
+
+
+/* ===================================
+   03E – INITIALISER SPROGSKIFT
+   =================================== */
+function initLanguage() {
+    applyLangActiveButton();
+    applyTranslations();
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const lang = btn.dataset.lang;
+            if (!lang) return;
+
+            currentLang = lang;
+            localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+
+            applyLangActiveButton();
+            applyTranslations();
+        });
+    });
+}
+
+
+/* ==============================
+   03F – TEMA (LYS / MØRK)
+   ============================== */
+function initTheme() {
+    // Sæt tema (html data-theme="light|dark")
+    document.documentElement.dataset.theme = currentTheme;
+}
+
+function initThemeToggle() {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    // Sæt ikon ved load
+    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+
+    btn.addEventListener("click", () => {
+        // Skift tema
+        currentTheme = currentTheme === "light" ? "dark" : "light";
+
+        // Opdater <html>
+        document.documentElement.dataset.theme = currentTheme;
+
+        // Gem valgt tema
+        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+
+        // Skift ikon
+        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+    });
+}
+
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
