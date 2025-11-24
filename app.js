@@ -287,6 +287,8 @@ function deleteCustomer(id) {
     saveAll();
     renderCustomers();
 }
+
+
 /* ======================================================
    AFSNIT 9B – RYD ALLE KUNDER (HARD RESET)
 ====================================================== */
@@ -311,68 +313,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ======================================================
-   AFSNIT 10. – MEDARBEJDERE (CHIP-KNAPPER)
+   AFSNIT 10 – MEDARBEJDER CHIPS
 ====================================================== */
 
-function addEmployee() {
-    const name = document.getElementById("empName").value.trim();
-    if (!name) return;
+let timerSelectedEmployees = [];
 
-    employees.push({
-        id: Date.now(),
-        name
-    });
+function renderTimerEmployeeChips() {
+    const area = document.getElementById("timerEmployeeChips");
+    if (!area) return;
 
-    saveAll();
-    document.getElementById("empName").value = "";
-    renderEmployees();
-    renderEmployeeChips();
-}
-
-function renderEmployees() {
-    const list = document.getElementById("employeeList");
-    list.innerHTML = "";
-
-    if (employees.length === 0) {
-        list.innerHTML = `<div class="empty-state">Ingen medarbejdere</div>`;
-        return;
-    }
-
-    employees.forEach(emp => {
-        const item = document.createElement("div");
-        item.className = "list-item";
-        item.innerHTML = `<div><strong>${emp.name}</strong></div>`;
-        list.appendChild(item);
-    });
-}
-
-let selectedEmployees = [];
-
-function renderEmployeeChips() {
-    const chipArea = document.getElementById("employeeChips");
-    chipArea.innerHTML = "";
+    area.innerHTML = "";
 
     employees.forEach(emp => {
         const chip = document.createElement("button");
         chip.className = "chip";
         chip.textContent = emp.name;
 
-        if (selectedEmployees.includes(emp.id)) {
+        if (timerSelectedEmployees.includes(emp.id)) {
             chip.classList.add("chip-selected");
         }
 
         chip.addEventListener("click", () => {
-            if (selectedEmployees.includes(emp.id)) {
-                selectedEmployees = selectedEmployees.filter(id => id !== emp.id);
+            if (timerSelectedEmployees.includes(emp.id)) {
+                timerSelectedEmployees = timerSelectedEmployees.filter(id => id !== emp.id);
             } else {
-                selectedEmployees.push(emp.id);
+                timerSelectedEmployees.push(emp.id);
             }
-            renderEmployeeChips();
+            renderTimerEmployeeChips();
         });
 
-        chipArea.appendChild(chip);
+        area.appendChild(chip);
     });
 }
+
+
 
 /* ======================================================
    AFSNIT 11. – KALENDER GENERERING
