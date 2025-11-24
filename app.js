@@ -184,44 +184,50 @@ function initThemeToggle() {
 
 
 /* ======================================================
-   AFSNIT 04 – NAVIGATION & SIDEBAR (MOBIL)
+   AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
    ====================================================== */
 
 function showPage(pageId) {
-    const pages = document.querySelectorAll(".page");
-    pages.forEach(p => {
+    document.querySelectorAll(".page").forEach(p => {
         p.classList.toggle("visible", p.id === pageId);
     });
 }
 
 function initNavigation() {
-    const menuItems = document.querySelectorAll(".sidebar nav li[data-page]");
+    const menuItems = document.querySelectorAll(".sidebar li[data-page]");
+
     menuItems.forEach(li => {
         li.addEventListener("click", () => {
             const pageId = li.dataset.page;
-            if (!pageId) return;
 
+            // marker korrekt menu-knap
             menuItems.forEach(m => m.classList.remove("active"));
             li.classList.add("active");
 
+            // vis korrekt side
             showPage(pageId);
+
+            // luk sidebar på mobil
             const sidebar = document.querySelector(".sidebar");
             if (sidebar) sidebar.classList.remove("open");
         });
     });
 
+    // vis startside
     showPage("dashboardPage");
 }
 
 function initSidebarToggle() {
     const btn = document.getElementById("menuToggle");
     const sidebar = document.querySelector(".sidebar");
+
     if (!btn || !sidebar) return;
 
     btn.addEventListener("click", () => {
         sidebar.classList.toggle("open");
     });
 }
+
 
 /* ======================================================
    AFSNIT 05 – KUNDER
