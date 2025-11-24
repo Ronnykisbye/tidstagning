@@ -78,28 +78,25 @@ button {
    AFSNIT 4. – SIDEBAR
    ====================================================== */
 
-.sidebar {
-    width: 240px;
-    height: 100%;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.sidebar-header {
+/* Sidebar brand */
+.sidebar-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    padding: 20px;
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--text);
 }
 
-.logo-mark {
-    font-size: 28px;
+.brand-icon {
+    font-size: 22px;
 }
+
+.brand-title {
+    white-space: nowrap;
+}
+
 
 
 /* ======================================================
