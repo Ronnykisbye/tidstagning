@@ -25,32 +25,33 @@
 
 
 <!-- ======================================================
-     AFSNIT 2. – BODY & TOPBAR
+     AFSNIT 3. – APP CONTAINER (SIDEBAR + INDHOLD)
 ====================================================== -->
-<body>
+<div class="app">
 
-<header class="topbar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
-    <!-- VENSTRE SIDE (kun mobil) -->
-    <div class="topbar-left">
-        <button class="icon-btn mobile-only" id="sidebarToggle">☰</button>
-    </div>
+        <div class="sidebar-brand">
+            <span class="brand-icon">🌿</span>
+            <span class="brand-title">GreenTime Pro</span>
+        </div>
 
-    <!-- MIDTEN (titel) -->
-    <div class="topbar-center">
-        <h1>GreenTime Pro</h1>
-    </div>
+        <nav class="sidebar-nav">
+            <button data-page="dashboard" data-i18n="dashboard">Tidsregistrering</button>
+            <button data-page="customers" data-i18n="customers">Kunder</button>
+            <button data-page="employees" data-i18n="employees">Medarbejdere</button>
+            <button data-page="detailed" data-i18n="detailed">Detaljeret tid</button>
+            <button data-page="planner" data-i18n="planner">Plan & kalender</button>
+            <button data-page="logs" data-i18n="logs">Logs</button>
+            <button data-page="reports" data-i18n="reports">Rapporter</button>
+            <button data-page="settings" data-i18n="settings">Indstillinger</button>
+        </nav>
 
-    <!-- HØJRE SIDE (sprogskift + tema) -->
-    <div class="topbar-right">
-        <button class="icon-btn lang-btn" data-lang="da">DK</button>
-        <button class="icon-btn lang-btn" data-lang="en">EN</button>
-        <button class="icon-btn lang-btn" data-lang="de">DE</button>
-        <button class="icon-btn lang-btn" data-lang="lt">LT</button>
-        <button class="icon-btn" id="themeToggle">☀</button>
-    </div>
+    </aside>
 
-</header>
+    <!-- SIDEBAR SLUT — nu kommer alle siderne -->
+
 
 <!-- ======================================================
      AFSNIT 3. – APP CONTAINER
