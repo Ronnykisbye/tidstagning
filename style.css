@@ -40,30 +40,132 @@
 }
 
 /* ======================================================
-   AFSNIT 02 – GLOBALT RESET
+   AFSNIT 02 – GLOBALT LAYOUT (MODERNE / CLEAN / NEON)
    ====================================================== */
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-body {
+/* Reset + smooth rendering */
+* {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: system-ui, sans-serif;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
+/* Body baggrund – stille og moderne */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
-::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 8px;
+
+/* App container – centreret og clean */
+.app-container {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    flex-direction: row;
+    transition: background 0.3s ease;
 }
+
+/* Cards og bokse – moderne soft-shadow */
+.card {
+    background: var(--bg-secondary);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 0 12px var(--shadow-soft);
+}
+
+/* Input felter */
+.input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: 0.2s ease;
+}
+
+/* Input hover + fokus → lille neon-glød */
+.input:focus {
+    outline: none;
+    border-color: var(--neon);
+    box-shadow: 0 0 6px var(--neon);
+}
+
+/* Store neon-knapper */
+.btn {
+    padding: 18px 26px;
+    font-size: 1.15rem;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+/* Grøn neon – START */
+.btn-green {
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green-glow);
+}
+.btn-green:hover {
+    box-shadow: 0 0 14px var(--green-glow);
+}
+
+/* Rød neon – STOP */
+.btn-red {
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red-glow);
+}
+.btn-red:hover {
+    box-shadow: 0 0 14px var(--red-glow);
+}
+
+/* Radio knapper række */
+.radio-row {
+    display: flex;
+    gap: 18px;
+    margin: 10px 0 18px 0;
+}
+
+/* Timer display – stort og lækkert */
+.timer-display {
+    font-size: 3rem;
+    text-align: center;
+    padding: 18px 0;
+    margin: 15px 0;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 12px var(--shadow-soft);
+}
+
+/* Container til medarbejder chips */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 18px 0;
+}
+
+/* Knaprække */
+.btn-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
 
 /* ======================================================
    AFSNIT 03 – APP LAYOUT
