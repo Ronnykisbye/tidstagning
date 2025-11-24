@@ -31,85 +31,38 @@ function loadAll() {
 
 
 /* ======================================================
-   AFSNIT 3. – SPROGDATABASE & SPROGSKIFT
+   AFSNIT 3 – SHOW PAGE (KORREKT MENU SKIFT)
 ====================================================== */
 
-const translations = {
-    da: {
-        dashboard: "Tidsregistrering",
-        customers: "Kunder",
-        employees: "Medarbejdere",
-        detailed: "Detaljeret tid",
-        planner: "Plan & kalender",
-        logs: "Logs",
-        reports: "Rapporter",
-        settings: "Indstillinger",
-        today: "I dag",
-        total: "Samlet tid"
-    },
-    en: {
-        dashboard: "Time Tracking",
-        customers: "Customers",
-        employees: "Employees",
-        detailed: "Detailed Time",
-        planner: "Planner & Calendar",
-        logs: "Logs",
-        reports: "Reports",
-        settings: "Settings",
-        today: "Today",
-        total: "Total Time"
-    },
-    de: {
-        dashboard: "Zeiterfassung",
-        customers: "Kunden",
-        employees: "Mitarbeiter",
-        detailed: "Detailzeit",
-        planner: "Plan & Kalender",
-        logs: "Protokolle",
-        reports: "Berichte",
-        settings: "Einstellungen",
-        today: "Heute",
-        total: "Gesamtzeit"
-    },
-    lt: {
-        dashboard: "Laiko registravimas",
-        customers: "Klientai",
-        employees: "Darbuotojai",
-        detailed: "Išsamus laikas",
-        planner: "Planas ir kalendorius",
-        logs: "Žurnalai",
-        reports: "Ataskaitos",
-        settings: "Nustatymai",
-        today: "Šiandien",
-        total: "Iš viso"
-    }
-};
+function showPage(page) {
 
-function setLang(lang) {
-    currentLang = lang;
-    localStorage.setItem("lang", lang);
-    applyTranslations();
-    highlightActiveLanguage();
-}
+    // Gem alle sider
+    document.querySelectorAll(".page").forEach(p => {
+        p.style.display = "none";
+    });
 
-function applyTranslations() {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        if (translations[currentLang][key]) {
-            el.textContent = translations[currentLang][key];
+    // Vis den valgte side
+    const active = document.getElementById(page);
+    if (active) active.style.display = "block";
+
+    // Skift aktiv knap
+    document.querySelectorAll(".sidebar-nav button").forEach(btn => {
+        btn.classList.remove("active");
+        if (btn.dataset.page === page) {
+            btn.classList.add("active");
         }
     });
 }
 
-function highlightActiveLanguage() {
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        if (btn.dataset.lang === currentLang) {
-            btn.classList.add("active-lang");
-        } else {
-            btn.classList.remove("active-lang");
-        }
+// Aktivér sidebar-knapper
+document.querySelectorAll(".sidebar-nav button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        showPage(btn.dataset.page);
     });
-}
+});
+
+// Startside
+showPage("timereg");
 
 
 /* ======================================================
