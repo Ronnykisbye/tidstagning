@@ -112,10 +112,9 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA (FEJLFRI VERSION)
+   AFSNIT 03A – MENU-OVERSÆTTELSER (ERSTAT HELE DETTE)
    ====================================================== */
 
-/* 1) — OVERSÆTTELSER (KOMPLET MENU VERSION) */
 const translations = {
     da: {
         app_title: "GreenTime Pro",
@@ -165,65 +164,6 @@ const translations = {
         menu_settings: "Nustatymai"
     }
 };
-
-
-/* 2) — Brug oversættelser */
-function t(key) {
-    const langPack = translations[currentLang] || translations["da"];
-    return langPack[key] || translations["da"][key] || "";
-}
-
-/* 3) — Sæt alle tekster */
-function applyTranslations() {
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        if (key) el.textContent = t(key);
-    });
-}
-
-/* 4) — Aktiv knap */
-function applyLangActiveButton() {
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.lang === currentLang);
-    });
-}
-
-/* 5) — Start sprogskift */
-function initLanguage() {
-    applyLangActiveButton();
-    applyTranslations();
-
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            currentLang = btn.dataset.lang;
-            localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
-            applyLangActiveButton();
-            applyTranslations();
-        });
-    });
-}
-
-/* 6) — Tema */
-function initTheme() {
-    document.documentElement.dataset.theme = currentTheme;
-}
-
-function initThemeToggle() {
-    const btn = document.getElementById("themeToggle");
-    if (!btn) return;
-
-    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
-
-    btn.addEventListener("click", () => {
-        currentTheme = currentTheme === "light" ? "dark" : "light";
-        document.documentElement.dataset.theme = currentTheme;
-        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
-
-        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
-    });
-}
-
-
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
