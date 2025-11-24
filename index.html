@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="da" data-theme="dark">
 
-<!-- AFSNIT 01 – META & STYLES -->
-<meta charset="UTF-8" />
-<title>GreenTime Pro</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- ======================================================
+     AFSNIT 1. – META & CSS
+====================================================== -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenTime Pro</title>
 
-<!-- Tvinger CSS til at reloade (cache-bypass) -->
-<link rel="stylesheet" href="style.css?v=3" />
+    <!-- CSS (cache bypass) -->
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
 
 
 <!-- ======================================================
-     AFSNIT 2. – BODY & APP WRAPPER
+     AFSNIT 2. – BODY & APP CONTAINER
 ====================================================== -->
 <body>
 <div class="app">
 
+
     <!-- ======================================================
          AFSNIT 3. – SIDEBAR
-    ====================================================== -->
+    ======================================================= -->
     <aside class="sidebar" id="sidebar">
-        <div class="logo">
+
+        <div class="sidebar-header">
             <div class="logo-mark">🌿</div>
             <div class="logo-text">GreenTime Pro</div>
         </div>
@@ -37,10 +43,13 @@
         </nav>
     </aside>
 
+
+
     <!-- ======================================================
          AFSNIT 4. – TOPBAR
-    ====================================================== -->
+    ======================================================= -->
     <header class="topbar">
+
         <div class="topbar-left">
             <button class="icon-btn" id="sidebarToggle">☰</button>
         </div>
@@ -51,7 +60,7 @@
 
         <div class="topbar-right">
 
-            <!-- Sprog -->
+            <!-- Sprogknapper -->
             <button class="icon-btn lang-btn" data-lang="da">DK</button>
             <button class="icon-btn lang-btn" data-lang="en">EN</button>
             <button class="icon-btn lang-btn" data-lang="de">DE</button>
@@ -63,44 +72,53 @@
     </header>
 
 
-    <!-- ======================================================
-         AFSNIT 5. – SIDE: DASHBOARD
-    ====================================================== -->
-    <section id="dashboard" class="page visible">
 
+
+    <!-- ======================================================
+         AFSNIT 5. – DASHBOARD / TIDSREGISTRERING
+    ======================================================= -->
+    <section id="dashboard" class="page visible">
         <h2>Tidsregistrering</h2>
 
         <div class="card">
+
             <div class="form-grid">
-                
+
                 <label for="customerSelect">Kunde</label>
                 <select id="customerSelect"></select>
 
                 <label for="employeeSelect">Medarbejdere</label>
                 <select id="employeeSelect" multiple></select>
 
-                <div class="chip-container" id="employeeChips"></div>
+                <div id="employeeChips" class="chip-container"></div>
 
                 <div class="radio-row">
                     <label><input type="radio" name="timeview" value="day" checked> I dag</label>
                     <label><input type="radio" name="timeview" value="total"> Samlet tid</label>
                 </div>
 
-                <div class="timer-output" id="liveTimer">00:00:00</div>
+                <div class="big-timer" id="liveTimer">00:00:00</div>
 
                 <div class="button-row">
                     <button id="startBtn" class="btn-green">Start</button>
                     <button id="stopBtn" class="btn-red">Stop</button>
                 </div>
-
             </div>
+
+        </div>
+
+        <div class="card">
+            <h3>Dagens logs</h3>
+            <div id="logList"></div>
         </div>
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 6. – SIDE: KUNDER
-    ====================================================== -->
+         AFSNIT 6. – KUNDER
+    ======================================================= -->
     <section id="customers" class="page">
         <h2>Kunder</h2>
 
@@ -110,7 +128,7 @@
                 <input id="custPhone" placeholder="Telefon">
                 <input id="custEmail" placeholder="Email">
                 <input id="custAddress" placeholder="Adresse">
-                <button id="saveCustomerBtn">Gem kunde</button>
+                <button id="saveCustomerBtn" class="btn-green">Gem kunde</button>
             </div>
         </div>
 
@@ -121,16 +139,18 @@
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 7. – SIDE: MEDARBEJDERE
-    ====================================================== -->
+         AFSNIT 7. – MEDARBEJDERE
+    ======================================================= -->
     <section id="employees" class="page">
         <h2>Medarbejdere</h2>
 
         <div class="card">
             <div class="form-grid">
                 <input id="empName" placeholder="Navn">
-                <button id="saveEmployeeBtn">Tilføj medarbejder</button>
+                <button id="saveEmployeeBtn" class="btn-green">Tilføj medarbejder</button>
             </div>
         </div>
 
@@ -141,9 +161,11 @@
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 8. – SIDE: DETALJERET TID
-    ====================================================== -->
+         AFSNIT 8. – DETALJERET TID
+    ======================================================= -->
     <section id="detailed" class="page">
         <h2>Detaljeret tid</h2>
 
@@ -153,9 +175,11 @@
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 9. – SIDE: PLAN & KALENDER
-    ====================================================== -->
+         AFSNIT 9. – PLAN & KALENDER
+    ======================================================= -->
     <section id="planner" class="page">
         <h2>Plan & kalender</h2>
 
@@ -163,7 +187,7 @@
             <div class="form-grid">
                 <input id="planTitle" placeholder="Titel">
                 <input type="date" id="planDate">
-                <button id="addPlanBtn">Tilføj</button>
+                <button id="addPlanBtn" class="btn-green">Tilføj</button>
             </div>
         </div>
 
@@ -178,46 +202,57 @@
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 10. – SIDE: LOGS
-    ====================================================== -->
+         AFSNIT 10. – LOGS
+    ======================================================= -->
     <section id="logs" class="page">
         <h2>Logs</h2>
+
         <div class="card">
             <div id="logList"></div>
         </div>
     </section>
 
 
+
+
     <!-- ======================================================
-         AFSNIT 11. – SIDE: RAPPORTER
-    ====================================================== -->
+         AFSNIT 11. – RAPPORTER
+    ======================================================= -->
     <section id="reports" class="page">
         <h2>Rapporter</h2>
         <div class="card">
-            <p>Her kommer rapportmodulet.</p>
+            <p>Rapporter kommer senere…</p>
         </div>
     </section>
+
+
 
 
     <!-- ======================================================
-         AFSNIT 12. – SIDE: INDSTILLINGER
-    ====================================================== -->
+         AFSNIT 12. – INDSTILLINGER
+    ======================================================= -->
     <section id="settings" class="page">
         <h2>Indstillinger</h2>
+
         <div class="card">
-            <p>Her kommer indstillinger.</p>
+            <p>Indstillinger tilføjes senere</p>
         </div>
     </section>
 
-</div> <!-- app wrapper -->
+
+
+
+</div> <!-- END APP -->
 
 
 
 <!-- ======================================================
      AFSNIT 13. – APP.JS IMPORT
 ====================================================== -->
-<script src="./app.js?v=1"></script>
+<script src="app.js?v=10"></script>
 
 </body>
 </html>
