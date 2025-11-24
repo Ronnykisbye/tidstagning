@@ -97,127 +97,66 @@ textarea {
 }
 
 /* ======================================================
-   AFSNIT 03 – APP LAYOUT
-   ====================================================== */
-
-.app {
-    display: flex;
-    min-height: 100vh;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.main {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    padding: 1.4rem 1.4rem 2rem 1.4rem;
-    transition: background 0.25s ease;
-}
-
-.page {
-    display: none;
-    padding-top: 1.2rem;
-}
-
-.page.visible {
-    display: block;
-    animation: fadeIn 0.2s ease-out;
-}
-
-/* ======================================================
-   AFSNIT 04 – SIDEBAR
-   ====================================================== */
+   AFSNIT 3. – SIDEBAR
+====================================================== */
 
 .sidebar {
-    width: var(--sidebar-width);
-    flex-shrink: 0;
-    background: var(--sidebar-bg);
+    width: 240px;
+    background: var(--surface);
     border-right: 1px solid var(--border);
-    padding: 1.4rem 1.1rem;
     height: 100vh;
-    position: sticky;
-    top: 0;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 1.8rem;
-    box-shadow: var(--shadow-soft);
-    color: var(--text);
-    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+    gap: 30px;
 }
-
-/* Logo */
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    color: var(--text);
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .logo-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    background: radial-gradient(circle at 20% 0%, #bbf7d0 0, #22c55e 40%, #166534 100%);
+    font-size: 28px;
+}
+
+.sidebar-nav {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: #022c22;
-    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+    flex-direction: column;
+    gap: 10px;
 }
 
-.logo-text {
-    font-size: 1.12rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-}
+/* ======================================================
+   AFSNIT 4. – SIDEBAR KNAPPER
+====================================================== */
 
-/* Menu */
-
-.sidebar nav {
-    margin-top: 0.5rem;
-}
-
-.sidebar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.sidebar li {
-    padding: 0.7rem 0.9rem;
-    margin-bottom: 0.3rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    color: var(--text-muted);
-    background: transparent;
-    transition:
-        background var(--transition-fast),
-        color var(--transition-fast),
-        transform var(--transition-fast),
-        box-shadow var(--transition-fast);
-}
-
-.sidebar li:hover {
-    background: var(--accent-soft);
+.sidebar-nav button {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     color: var(--text);
-    transform: translateX(2px);
+    border-radius: 8px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
-.sidebar li.active {
+.sidebar-nav button:hover {
+    background: var(--hover);
+}
+
+.sidebar-nav button.active {
     background: var(--accent);
-    color: #0b1120;
-    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+    color: #0f172a;
+    border-color: var(--accent);
+    font-weight: 600;
 }
 
-html[data-theme="light"] .sidebar li.active {
-    color: #ffffff;
-}
 
 /* ======================================================
    AFSNIT 05 – TOPBAR
