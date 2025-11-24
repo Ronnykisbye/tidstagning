@@ -334,6 +334,25 @@ function deleteCustomer(id) {
     saveAll();
     renderCustomers();
 }
+/* ======================================================
+   AFSNIT 9B – RYD ALLE KUNDER (HARD RESET)
+====================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("clearCustomersBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        if (!confirm("Vil du slette ALLE kunder?")) return;
+
+        customers = [];
+        localStorage.removeItem("customers");
+        saveAll();
+        renderCustomers();
+        alert("Alle kunder er slettet.");
+    });
+});
+
 
 
 
