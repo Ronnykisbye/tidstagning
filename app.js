@@ -300,7 +300,6 @@ function renderCustomers() {
     }
 
     customers.forEach((c) => {
-        // Kundeliste (vis ALT)
         const item = document.createElement("div");
         item.className = "list-item";
         item.innerHTML = `
@@ -311,13 +310,8 @@ function renderCustomers() {
         `;
         list.appendChild(item);
 
-        // Dropdown-select
-        const opt = document.createElement("option");
-        opt.value = c.name;
-        opt.textContent = c.name;
-        select.appendChild(opt);
-    });
-}
+        con
+
 
 
 
