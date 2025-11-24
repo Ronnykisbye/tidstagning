@@ -75,12 +75,12 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR (RETTET VERSION)
+   AFSNIT 04 – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
    ====================================================== */
 
 .sidebar {
     width: 250px;
-    background: var(--bg-elevated); /* Skifter nu korrekt med tema */
+    background: var(--bg-elevated); /* Dynamisk farve! */
     border-right: 1px solid var(--border-subtle);
     padding: 1.2rem;
 }
