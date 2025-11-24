@@ -1,4 +1,6 @@
-console.log("LOADER DENNE FIL: app.js VERSION 99");
+
+console.log("LOADER DENNE APP.JS → VERSION 777");
+
 
 
 /* ======================================================
