@@ -144,23 +144,30 @@
 
 
     <!-- ======================================================
-         AFSNIT 7. – MEDARBEJDERE
-    ======================================================= -->
-    <section id="employees" class="page">
-        <h2>Medarbejdere</h2>
+     AFSNIT 7. – MEDARBEJDERE (MED KNAP-CHIPS)
+====================================================== -->
+<section id="employees" class="page">
+    <h2 data-i18n="employees">Medarbejdere</h2>
 
-        <div class="card">
-            <div class="form-grid">
-                <input id="empName" placeholder="Navn">
-                <button id="saveEmployeeBtn" class="btn-green">Tilføj medarbejder</button>
-            </div>
+    <div class="card">
+        <div class="form-grid">
+            <input id="empName" placeholder="Navn">
+            <button id="saveEmployeeBtn" class="btn-green" data-i18n="addEmployee">Tilføj medarbejder</button>
         </div>
+    </div>
 
-        <div class="card">
-            <h3>Medarbejderliste</h3>
-            <div id="employeeList"></div>
-        </div>
-    </section>
+    <div class="card">
+        <h3 data-i18n="employeeList">Medarbejderliste</h3>
+
+        <!-- Liste over medarbejdere -->
+        <div id="employeeList"></div>
+
+        <!-- Chips der vælges i tidsregistrering -->
+        <h4 data-i18n="selectEmployees">Vælg medarbejdere</h4>
+        <div id="employeeChips" class="chip-container"></div>
+    </div>
+</section>
+
 
 
 
