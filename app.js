@@ -1453,64 +1453,6 @@ function renderDayDetails(dateStr) {
     });
 }
 
-/* ======================================================
-   AFSNIT 13B – SPROGSKIFT FUNKTION (NYT)
-   ====================================================== */
-
-function setLang(lang) {
-    // Sæt nuværende sprog
-    currentLang = lang;
-    localStorage.setItem("lang", lang);
-
-    // Marker aktiv knap
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        if (btn.dataset.lang === lang) {
-            btn.classList.add("active-lang");
-        } else {
-            btn.classList.remove("active-lang");
-        }
-    });
-
-    // Opdater statisk tekst (kan udvides senere)
-    applyTranslations();
-}
-
-function applyTranslations() {
-    const t = translations[currentLang];
-
-    if (!t) return;
-
-    // Eksempler – kan udvides efter behov
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.dataset.i18n;
-        if (t[key]) el.textContent = t[key];
-    });
-}
-
-// Sprog-database (kan bygges videre på)
-const translations = {
-    dk: {
-        title: "Tidsregistrering",
-        customers: "Kunder",
-        employees: "Medarbejdere"
-    },
-    gb: {
-        title: "Time Registration",
-        customers: "Customers",
-        employees: "Employees"
-    },
-    de: {
-        title: "Zeiterfassung",
-        customers: "Kunden",
-        employees: "Mitarbeiter"
-    },
-    lt: {
-        title: "Laiko registravimas",
-        customers: "Klientai",
-        employees: "Darbuotojai"
-    }
-};
-
 
 
 /* ======================================================
