@@ -8,7 +8,7 @@ let logs = [];
 let plans = [];
 let currentLang = "da";
 let currentTheme = "dark";
-localStorage.removeItem("customers");
+
 
 
 /* ======================================================
