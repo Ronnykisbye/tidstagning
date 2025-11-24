@@ -1,188 +1,279 @@
-<!-- ======================================================
-     AFSNIT 1 – META & CSS
-====================================================== -->
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GreenTime Pro</title>
+/* ======================================================
+   AFSNIT 1 – GLOBAL VARIABLER
+====================================================== */
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="icon.png">
+let customers = JSON.parse(localStorage.getItem("customers") || "[]");
+let employees = JSON.parse(localStorage.getItem("employees") || "[]");
+let logs = JSON.parse(localStorage.getItem("logs") || "[]");
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
+let timerInterval = null;
+let timerStartTime = null;
+let timerSelectedEmployees = [];
 
 
-<!-- ======================================================
-     AFSNIT 2 – TOPBAR
-====================================================== -->
-<body>
+/* ======================================================
+   AFSNIT 2 – GEM TIL LOCALSTORAGE
+====================================================== */
 
-<header class="topbar">
-
-    <div class="topbar-left">
-        <button class="icon-btn mobile-only" id="sidebarToggle">☰</button>
-    </div>
-
-    <div class="topbar-center">
-        <h1>GreenTime Pro</h1>
-    </div>
-
-    <div class="topbar-right">
-        <button class="icon-btn lang-btn" data-lang="da">DK</button>
-        <button class="icon-btn lang-btn" data-lang="en">EN</button>
-        <button class="icon-btn lang-btn" data-lang="de">DE</button>
-        <button class="icon-btn lang-btn" data-lang="lt">LT</button>
-        <button class="icon-btn" id="themeToggle">☀</button>
-    </div>
-
-</header>
+function saveAll() {
+    localStorage.setItem("customers", JSON.stringify(customers));
+    localStorage.setItem("employees", JSON.stringify(employees));
+    localStorage.setItem("logs", JSON.stringify(logs));
+}
 
 
-<!-- ======================================================
-     AFSNIT 3 – APP LAYOUT
-====================================================== -->
-<div class="app">
+/* ======================================================
+   AFSNIT 3 – SIDESKIFT (MENU)
+====================================================== */
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+function showPage(page) {
 
-        <div class="sidebar-brand">
-            <span class="brand-icon">🌿</span>
-            <span class="brand-title">GreenTime Pro</span>
-        </div>
+    document.querySelectorAll(".page").forEach(p => {
+        p.style.display = "none";
+    });
 
-        <nav class="sidebar-nav">
-            <button data-page="timereg" data-i18n="dashboard">Tidsregistrering</button>
-            <button data-page="customers" data-i18n="customers">Kunder</button>
-            <button data-page="employees" data-i18n="employees">Medarbejdere</button>
-            <button data-page="details" data-i18n="detailed">Detaljeret tid</button>
-            <button data-page="planner" data-i18n="planner">Plan & kalender</button>
-            <button data-page="logs" data-i18n="logs">Logs</button>
-            <button data-page="reports" data-i18n="reports">Rapporter</button>
-            <button data-page="settings" data-i18n="settings">Indstillinger</button>
-        </nav>
+    const active = document.getElementById(page);
+    if (active) active.style.display = "block";
 
-    </aside>
+    document.querySelectorAll(".sidebar-nav button").forEach(btn => {
+        btn.classList.remove("active");
+        if (btn.dataset.page === page) btn.classList.add("active");
+    });
 
+    // VIGTIGT → når vi åbner tidsregistrering, opdater chips
+    if (page === "timereg") {
+        renderTimerEmployeeChips();
+        renderCustomerDropdown();
+        renderTodayLogs();
+    }
+}
 
-    <!-- ======================================================
-         AFSNIT 6 – TIDSREGISTRERING (MED CHIPS)
-    ====================================================== -->
-    <section id="timereg" class="page">
+document.querySelectorAll(".sidebar-nav button").forEach(btn => {
+    btn.addEventListener("click", () => showPage(btn.dataset.page));
+});
 
-        <h2 data-i18n="dashboard">Tidsregistrering</h2>
-
-        <div class="card">
-            <label data-i18n="customer">Kunde</label>
-            <select id="customerSelect"></select>
-        </div>
-
-        <div class="card">
-            <label data-i18n="employees">Medarbejdere</label>
-            <div id="timerEmployeeChips" class="chip-container"></div>
-        </div>
-
-        <div class="card">
-            <div class="timer-controls">
-                <div class="radio-group">
-                    <label><input type="radio" name="mode" value="day" checked> <span data-i18n="today">I dag</span></label>
-                    <label><input type="radio" name="mode" value="total"> <span data-i18n="total">Samlet tid</span></label>
-                </div>
-
-                <div id="timerDisplay" class="timer-display">00:00:00</div>
-
-                <div class="timer-buttons">
-                    <button id="startTimerBtn" class="btn-green" data-i18n="start">Start</button>
-                    <button id="stopTimerBtn" class="btn-red" data-i18n="stop">Stop</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3 data-i18n="todayLogs">Dagens logs</h3>
-            <div id="todayLogs"></div>
-        </div>
-
-    </section>
+// Start på Tidsregistrering
+showPage("timereg");
 
 
+/* ======================================================
+   AFSNIT 4 – KUNDER (OPRET, VIS, SLET)
+====================================================== */
 
-    <!-- ======================================================
-         AFSNIT 7 – KUNDER
-    ====================================================== -->
-    <section id="customers" class="page" style="display:none;">
-        <h2 data-i18n="customers">Kunder</h2>
+function addCustomer() {
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const email = document.getElementById("custEmail").value.trim();
+    const address = document.getElementById("custAddress").value.trim();
 
-        <div class="card form-grid">
-            <input id="custName" placeholder="Navn">
-            <input id="custPhone" placeholder="Telefon">
-            <input id="custEmail" placeholder="Email">
-            <input id="custAddress" placeholder="Adresse">
-            <button id="saveCustomerBtn" class="btn-green">Gem kunde</button>
-        </div>
+    if (!name) return;
 
-        <div class="card">
-            <h3>Kundeliste</h3>
-            <div id="customerList"></div>
-            <button id="clearCustomersBtn" class="btn-red" style="margin-top:20px;">Ryd alle kunder</button>
-        </div>
-    </section>
+    customers.push({
+        id: Date.now(),
+        name, phone, email, address
+    });
 
+    saveAll();
+    renderCustomers();
+    renderCustomerDropdown();
 
+    document.getElementById("custName").value = "";
+    document.getElementById("custPhone").value = "";
+    document.getElementById("custEmail").value = "";
+    document.getElementById("custAddress").value = "";
+}
 
-    <!-- ======================================================
-         AFSNIT 8 – MEDARBEJDERE
-    ====================================================== -->
-    <section id="employees" class="page" style="display:none;">
-        <h2 data-i18n="employees">Medarbejdere</h2>
-
-        <div class="card form-grid">
-            <input id="empName" placeholder="Navn">
-            <button id="saveEmployeeBtn" class="btn-green">Tilføj medarbejder</button>
-        </div>
-
-        <div class="card">
-            <h3>Medarbejderliste</h3>
-            <div id="employeeList"></div>
-        </div>
-    </section>
+document.getElementById("saveCustomerBtn").addEventListener("click", addCustomer);
 
 
+function renderCustomers() {
+    const list = document.getElementById("customerList");
+    list.innerHTML = "";
 
-    <!-- ======================================================
-         AFSNIT 9 – ANDRE SIDER (Tomme, klar til fremtid)
-    ====================================================== -->
+    customers.forEach(c => {
+        const item = document.createElement("div");
+        item.className = "list-item";
 
-    <section id="details" class="page" style="display:none;">
-        <h2>Detaljeret tid</h2>
-    </section>
+        item.innerHTML = `
+            <strong>${c.name}</strong>
+            <div>📞 ${c.phone || "-"}</div>
+            <div>📧 ${c.email || "-"}</div>
+            <div>🏠 ${c.address || "-"}</div>
+            <button class="btn-red">Slet kunde</button>
+        `;
 
-    <section id="planner" class="page" style="display:none;">
-        <h2>Plan & kalender</h2>
-    </section>
+        item.querySelector("button").addEventListener("click", () => {
+            customers = customers.filter(x => x.id !== c.id);
+            saveAll();
+            renderCustomers();
+            renderCustomerDropdown();
+        });
 
-    <section id="logs" class="page" style="display:none;">
-        <h2>Logs</h2>
-    </section>
+        list.appendChild(item);
+    });
+}
 
-    <section id="reports" class="page" style="display:none;">
-        <h2>Rapporter</h2>
-    </section>
-
-    <section id="settings" class="page" style="display:none;">
-        <h2>Indstillinger</h2>
-    </section>
-
-</div>
+document.getElementById("clearCustomersBtn").addEventListener("click", () => {
+    if (!confirm("Vil du slette alle kunder?")) return;
+    customers = [];
+    saveAll();
+    renderCustomers();
+    renderCustomerDropdown();
+});
 
 
-<!-- ======================================================
-     AFSNIT 10 – JAVASCRIPT
-====================================================== -->
-<script src="app.js"></script>
+function renderCustomerDropdown() {
+    const dd = document.getElementById("customerSelect");
+    if (!dd) return;
 
-</body>
-</html>
+    dd.innerHTML = "";
+
+    customers.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.name;
+        dd.appendChild(opt);
+    });
+}
+
+renderCustomers();
+renderCustomerDropdown();
+
+
+/* ======================================================
+   AFSNIT 5 – MEDARBEJDERE (OPRET + VIS)
+====================================================== */
+
+document.getElementById("saveEmployeeBtn").addEventListener("click", () => {
+    const name = document.getElementById("empName").value.trim();
+    if (!name) return;
+
+    employees.push({ id: Date.now(), name });
+
+    document.getElementById("empName").value = "";
+
+    saveAll();
+    renderEmployees();
+    renderTimerEmployeeChips();
+});
+
+function renderEmployees() {
+    const list = document.getElementById("employeeList");
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    employees.forEach(emp => {
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `<strong>${emp.name}</strong>`;
+        list.appendChild(div);
+    });
+}
+
+renderEmployees();
+
+
+/* ======================================================
+   AFSNIT 6 – MEDARBEJDER CHIPS I TIDSREGISTRERING
+====================================================== */
+
+function renderTimerEmployeeChips() {
+    const area = document.getElementById("timerEmployeeChips");
+    if (!area) return;
+
+    area.innerHTML = "";
+
+    employees.forEach(emp => {
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = emp.name;
+
+        if (timerSelectedEmployees.includes(emp.id)) {
+            chip.classList.add("chip-selected");
+        }
+
+        chip.addEventListener("click", () => {
+            if (timerSelectedEmployees.includes(emp.id)) {
+                timerSelectedEmployees = timerSelectedEmployees.filter(id => id !== emp.id);
+            } else {
+                timerSelectedEmployees.push(emp.id);
+            }
+            renderTimerEmployeeChips();
+        });
+
+        area.appendChild(chip);
+    });
+}
+
+
+/* ======================================================
+   AFSNIT 7 – TIMER FUNKTION
+====================================================== */
+
+function updateTimerDisplay() {
+    const diff = Date.now() - timerStartTime;
+    document.getElementById("timerDisplay").textContent =
+        new Date(diff).toISOString().substr(11, 8);
+}
+
+document.getElementById("startTimerBtn").addEventListener("click", () => {
+    timerStartTime = Date.now();
+    timerInterval = setInterval(updateTimerDisplay, 1000);
+});
+
+document.getElementById("stopTimerBtn").addEventListener("click", () => {
+    if (!timerInterval) return;
+
+    clearInterval(timerInterval);
+
+    const duration = document.getElementById("timerDisplay").textContent;
+    const customerId = document.getElementById("customerSelect").value;
+
+    logs.push({
+        id: Date.now(),
+        customerId,
+        employees: [...timerSelectedEmployees],
+        duration,
+        date: new Date().toLocaleDateString()
+    });
+
+    saveAll();
+    renderTodayLogs();
+
+    timerSelectedEmployees = [];
+    renderTimerEmployeeChips();
+});
+
+
+/* ======================================================
+   AFSNIT 8 – DAGENS LOGS
+====================================================== */
+
+function renderTodayLogs() {
+    const box = document.getElementById("todayLogs");
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    logs.forEach(l => {
+        const cust = customers.find(c => c.id == l.customerId);
+        const names = l.employees
+            .map(id => employees.find(e => e.id == id)?.name)
+            .join(", ");
+
+        const div = document.createElement("div");
+        div.className = "list-item";
+
+        div.innerHTML = `
+            <strong>${cust?.name || "Ukendt kunde"}</strong>
+            <div>⏱️ ${l.duration}</div>
+            <div>👷 ${names || "-"}</div>
+            <div>📅 ${l.date}</div>
+        `;
+
+        box.appendChild(div);
+    });
+}
+
+renderTodayLogs();
