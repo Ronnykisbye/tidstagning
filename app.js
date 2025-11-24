@@ -107,528 +107,8 @@ function saveAll() {
 }
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA
+   AFSNIT 03 – SPROG & TEMA (RETTET VERSION)
    ====================================================== */
-
-/* --- Oversættelser (forenklet, kan udvides senere) --- */
-
-const translations = {
-    da: {
-        app_title: "GreenTime Pro",
-
-        menu_dashboard: "Tidsregistrering",
-        menu_customers: "Kunder",
-        menu_employees: "Medarbejdere",
-        menu_time_tracking: "Detaljeret tid",
-        menu_schedule: "Plan & kalender",
-        menu_logs: "Logs",
-        menu_reports: "Rapporter",
-        menu_settings: "Indstillinger",
-
-        dashboard_title: "Tidsregistrering",
-        quick_select_customer: "Vælg kunde",
-        quick_select_employees: "Vælg medarbejdere",
-        quick_time_label: "Vis tid for kunden:",
-        quick_mode_today: "I dag",
-        quick_mode_total: "Samlet tid",
-        quick_hint: "Vælg kunde og medarbejdere og brug Start / Stop.",
-        btn_start_timer: "Start",
-        btn_stop_timer: "Stop",
-
-        customers_title: "Kunder",
-        customers_add: "Tilføj kunde",
-        customers_list: "Kundeliste",
-        customers_reset_title: "Nulstil tid for kunde",
-
-        label_customer_name: "Navn",
-        label_customer_phone: "Telefon",
-        label_customer_email: "Email",
-        label_customer_address: "Adresse",
-        label_reset_customer: "Vælg kunde",
-        btn_save_customer: "Gem kunde",
-        btn_reset_customer_time: "Nulstil al tid",
-
-        employees_title: "Medarbejdere",
-        employees_add: "Tilføj medarbejder",
-        employees_list: "Medarbejderliste",
-        label_employee_name: "Navn",
-        label_employee_email: "Email",
-        label_employee_role: "Rolle",
-        role_employee: "Medarbejder",
-        role_admin: "Admin",
-        btn_save_employee: "Gem medarbejder",
-
-        time_title: "Tidsregistrering",
-        time_start_stop: "Start / stop",
-        label_timer_customer: "Kunde",
-        label_timer_employee: "Medarbejder",
-        timer_no_active: "Ingen aktiv timer",
-
-        logs_page_title: "Logs",
-        logs_page_desc: "Senere kan du få fuldt overblik her. Brug indtil videre fanerne for tid og rapporter.",
-        logs_today_title: "Dagens logs",
-
-        schedule_title: "Plan & kalender",
-        schedule_plan_job: "Planlæg opgave",
-        label_plan_date: "Dato",
-        label_plan_start: "Starttid",
-        label_plan_duration: "Varighed (timer, 0,5–8)",
-        label_plan_customer: "Kunde",
-        label_plan_employee: "Medarbejdere",
-        label_plan_note: "Note",
-        btn_save_plan: "Gem opgave",
-        schedule_selected_day: "Klik på en dag for at se opgaver.",
-
-        reports_title: "Rapporter",
-        reports_filter_title: "Filtre",
-        reports_result_title: "Resultat",
-        label_report_date_from: "Fra dato",
-        label_report_date_to: "Til dato",
-        label_report_customer: "Kunde",
-        label_report_employee: "Medarbejder",
-        btn_run_report: "Kør rapport",
-
-        settings_title: "Indstillinger",
-        settings_language_title: "Sprog",
-        settings_theme_title: "Tema",
-
-        th_customer_name: "Navn",
-        th_customer_phone: "Telefon",
-        th_customer_email: "Email",
-        th_customer_address: "Adresse",
-
-        th_employee_name: "Navn",
-        th_employee_email: "Email",
-        th_employee_role: "Rolle",
-
-        th_log_start: "Start",
-        th_log_end: "Slut",
-        th_log_duration: "Minutter",
-        th_log_customer: "Kunde",
-        th_log_employee: "Medarbejder",
-
-        th_report_date: "Dato",
-        th_report_start: "Start",
-        th_report_end: "Slut",
-        th_report_duration: "Minutter",
-        th_report_customer: "Kunde",
-        th_report_employee: "Medarbejder",
-
-        weekday_mon: "Man",
-        weekday_tue: "Tir",
-        weekday_wed: "Ons",
-        weekday_thu: "Tor",
-        weekday_fri: "Fre",
-        weekday_sat: "Lør",
-        weekday_sun: "Søn",
-
-        // Tekster som kun bruges i JS:
-        msg_select_customer: "Vælg en kunde først.",
-        msg_select_employees: "Vælg mindst én medarbejder.",
-        msg_select_customer_employee: "Vælg både kunde og medarbejder.",
-        msg_select_date: "Vælg en dato.",
-        msg_select_start: "Vælg en starttid.",
-        msg_select_customer_plan: "Vælg en kunde.",
-        msg_duration_invalid: "Varighed skal være mellem 0,5 og 8 timer.",
-        msg_no_plans_for_day: "Ingen opgaver på denne dag.",
-        msg_reset_choose_customer: "Vælg en kunde, der skal nulstilles.",
-        msg_reset_done_prefix: "Nulstillede",
-        msg_reset_done_suffix: "log(s) for kunden.",
-        msg_report_summary_prefix: "Fundet",
-        msg_report_summary_suffix: "linje(r) i rapporten.",
-        placeholder_select_customer: "Vælg kunde",
-        placeholder_select_employee: "Vælg medarbejder",
-        placeholder_all_customers: "Alle kunder",
-        placeholder_all_employees: "Alle medarbejdere"
-    },
-
-    // Engelske tekster (kort og tydelige)
-    en: {
-        app_title: "GreenTime Pro",
-
-        menu_dashboard: "Time tracking",
-        menu_customers: "Customers",
-        menu_employees: "Employees",
-        menu_time_tracking: "Detailed time",
-        menu_schedule: "Plan & calendar",
-        menu_logs: "Logs",
-        menu_reports: "Reports",
-        menu_settings: "Settings",
-
-        dashboard_title: "Time tracking",
-        quick_select_customer: "Select customer",
-        quick_select_employees: "Select employees",
-        quick_time_label: "Show time for customer:",
-        quick_mode_today: "Today",
-        quick_mode_total: "Total time",
-        quick_hint: "Select customer and employees, then use Start / Stop.",
-        btn_start_timer: "Start",
-        btn_stop_timer: "Stop",
-
-        customers_title: "Customers",
-        customers_add: "Add customer",
-        customers_list: "Customer list",
-        customers_reset_title: "Reset time for customer",
-
-        label_customer_name: "Name",
-        label_customer_phone: "Phone",
-        label_customer_email: "Email",
-        label_customer_address: "Address",
-        label_reset_customer: "Select customer",
-        btn_save_customer: "Save customer",
-        btn_reset_customer_time: "Reset all time",
-
-        employees_title: "Employees",
-        employees_add: "Add employee",
-        employees_list: "Employee list",
-        label_employee_name: "Name",
-        label_employee_email: "Email",
-        label_employee_role: "Role",
-        role_employee: "Employee",
-        role_admin: "Admin",
-        btn_save_employee: "Save employee",
-
-        time_title: "Time tracking",
-        time_start_stop: "Start / stop",
-        label_timer_customer: "Customer",
-        label_timer_employee: "Employee",
-        timer_no_active: "No active timer",
-
-        logs_page_title: "Logs",
-        logs_page_desc: "Later you can get full overview here. For now use the time and report tabs.",
-        logs_today_title: "Today’s logs",
-
-        schedule_title: "Plan & calendar",
-        schedule_plan_job: "Plan task",
-        label_plan_date: "Date",
-        label_plan_start: "Start time",
-        label_plan_duration: "Duration (hours, 0.5–8)",
-        label_plan_customer: "Customer",
-        label_plan_employee: "Employees",
-        label_plan_note: "Note",
-        btn_save_plan: "Save task",
-        schedule_selected_day: "Click a day to see tasks.",
-
-        reports_title: "Reports",
-        reports_filter_title: "Filters",
-        reports_result_title: "Result",
-        label_report_date_from: "From date",
-        label_report_date_to: "To date",
-        label_report_customer: "Customer",
-        label_report_employee: "Employee",
-        btn_run_report: "Run report",
-
-        settings_title: "Settings",
-        settings_language_title: "Language",
-        settings_theme_title: "Theme",
-
-        th_customer_name: "Name",
-        th_customer_phone: "Phone",
-        th_customer_email: "Email",
-        th_customer_address: "Address",
-
-        th_employee_name: "Name",
-        th_employee_email: "Email",
-        th_employee_role: "Role",
-
-        th_log_start: "Start",
-        th_log_end: "End",
-        th_log_duration: "Minutes",
-        th_log_customer: "Customer",
-        th_log_employee: "Employee",
-
-        th_report_date: "Date",
-        th_report_start: "Start",
-        th_report_end: "End",
-        th_report_duration: "Minutes",
-        th_report_customer: "Customer",
-        th_report_employee: "Employee",
-
-        weekday_mon: "Mon",
-        weekday_tue: "Tue",
-        weekday_wed: "Wed",
-        weekday_thu: "Thu",
-        weekday_fri: "Fri",
-        weekday_sat: "Sat",
-        weekday_sun: "Sun",
-
-        msg_select_customer: "Please select a customer first.",
-        msg_select_employees: "Please select at least one employee.",
-        msg_select_customer_employee: "Please select both customer and employee.",
-        msg_select_date: "Please select a date.",
-        msg_select_start: "Please select a start time.",
-        msg_select_customer_plan: "Please select a customer.",
-        msg_duration_invalid: "Duration must be between 0.5 and 8 hours.",
-        msg_no_plans_for_day: "No tasks for this day.",
-        msg_reset_choose_customer: "Select a customer to reset.",
-        msg_reset_done_prefix: "Reset",
-        msg_reset_done_suffix: "log(s) for the customer.",
-        msg_report_summary_prefix: "Found",
-        msg_report_summary_suffix: "row(s) in the report.",
-        placeholder_select_customer: "Select customer",
-        placeholder_select_employee: "Select employee",
-        placeholder_all_customers: "All customers",
-        placeholder_all_employees: "All employees"
-    },
-
-    // Tysk (forenklet, kan finpudses)
-    de: {
-        app_title: "GreenTime Pro",
-
-        menu_dashboard: "Zeiterfassung",
-        menu_customers: "Kunden",
-        menu_employees: "Mitarbeiter",
-        menu_time_tracking: "Detailzeit",
-        menu_schedule: "Plan & Kalender",
-        menu_logs: "Protokolle",
-        menu_reports: "Berichte",
-        menu_settings: "Einstellungen",
-
-        dashboard_title: "Zeiterfassung",
-        quick_select_customer: "Kunden wählen",
-        quick_select_employees: "Mitarbeiter wählen",
-        quick_time_label: "Zeit für Kunden anzeigen:",
-        quick_mode_today: "Heute",
-        quick_mode_total: "Gesamtzeit",
-        quick_hint: "Kunden und Mitarbeiter wählen und Start / Stop benutzen.",
-        btn_start_timer: "Start",
-        btn_stop_timer: "Stop",
-
-        customers_title: "Kunden",
-        customers_add: "Kunden hinzufügen",
-        customers_list: "Kundenliste",
-        customers_reset_title: "Zeit für Kunden zurücksetzen",
-
-        label_customer_name: "Name",
-        label_customer_phone: "Telefon",
-        label_customer_email: "E-Mail",
-        label_customer_address: "Adresse",
-        label_reset_customer: "Kunden wählen",
-        btn_save_customer: "Kunden speichern",
-        btn_reset_customer_time: "Alle Zeiten löschen",
-
-        employees_title: "Mitarbeiter",
-        employees_add: "Mitarbeiter hinzufügen",
-        employees_list: "Mitarbeiterliste",
-        label_employee_name: "Name",
-        label_employee_email: "E-Mail",
-        label_employee_role: "Rolle",
-        role_employee: "Mitarbeiter",
-        role_admin: "Admin",
-        btn_save_employee: "Mitarbeiter speichern",
-
-        time_title: "Zeiterfassung",
-        time_start_stop: "Start / Stopp",
-        label_timer_customer: "Kunde",
-        label_timer_employee: "Mitarbeiter",
-        timer_no_active: "Kein aktiver Timer",
-
-        logs_page_title: "Protokolle",
-        logs_page_desc: "Später bekommst du hier den vollen Überblick. Nutze vorerst die Zeit- und Bericht-Reiter.",
-        logs_today_title: "Heutige Protokolle",
-
-        schedule_title: "Plan & Kalender",
-        schedule_plan_job: "Aufgabe planen",
-        label_plan_date: "Datum",
-        label_plan_start: "Startzeit",
-        label_plan_duration: "Dauer (Stunden, 0,5–8)",
-        label_plan_customer: "Kunde",
-        label_plan_employee: "Mitarbeiter",
-        label_plan_note: "Notiz",
-        btn_save_plan: "Aufgabe speichern",
-        schedule_selected_day: "Klicke einen Tag an, um Aufgaben zu sehen.",
-
-        reports_title: "Berichte",
-        reports_filter_title: "Filter",
-        reports_result_title: "Ergebnis",
-        label_report_date_from: "Von Datum",
-        label_report_date_to: "Bis Datum",
-        label_report_customer: "Kunde",
-        label_report_employee: "Mitarbeiter",
-        btn_run_report: "Bericht ausführen",
-
-        settings_title: "Einstellungen",
-        settings_language_title: "Sprache",
-        settings_theme_title: "Theme",
-
-        th_customer_name: "Name",
-        th_customer_phone: "Telefon",
-        th_customer_email: "E-Mail",
-        th_customer_address: "Adresse",
-
-        th_employee_name: "Name",
-        th_employee_email: "E-Mail",
-        th_employee_role: "Rolle",
-
-        th_log_start: "Start",
-        th_log_end: "Ende",
-        th_log_duration: "Minuten",
-        th_log_customer: "Kunde",
-        th_log_employee: "Mitarbeiter",
-
-        th_report_date: "Datum",
-        th_report_start: "Start",
-        th_report_end: "Ende",
-        th_report_duration: "Minuten",
-        th_report_customer: "Kunde",
-        th_report_employee: "Mitarbeiter",
-
-        weekday_mon: "Mo",
-        weekday_tue: "Di",
-        weekday_wed: "Mi",
-        weekday_thu: "Do",
-        weekday_fri: "Fr",
-        weekday_sat: "Sa",
-        weekday_sun: "So",
-
-        msg_select_customer: "Bitte zuerst einen Kunden wählen.",
-        msg_select_employees: "Bitte mindestens einen Mitarbeiter wählen.",
-        msg_select_customer_employee: "Bitte Kunde und Mitarbeiter wählen.",
-        msg_select_date: "Bitte ein Datum wählen.",
-        msg_select_start: "Bitte eine Startzeit wählen.",
-        msg_select_customer_plan: "Bitte einen Kunden wählen.",
-        msg_duration_invalid: "Dauer muss zwischen 0,5 und 8 Stunden liegen.",
-        msg_no_plans_for_day: "Keine Aufgaben an diesem Tag.",
-        msg_reset_choose_customer: "Wähle einen Kunden zum Zurücksetzen.",
-        msg_reset_done_prefix: "Zurückgesetzt:",
-        msg_reset_done_suffix: "Protokoll(e) für den Kunden.",
-        msg_report_summary_prefix: "Gefunden:",
-        msg_report_summary_suffix: "Zeile(n) im Bericht.",
-        placeholder_select_customer: "Kunde wählen",
-        placeholder_select_employee: "Mitarbeiter wählen",
-        placeholder_all_customers: "Alle Kunden",
-        placeholder_all_employees: "Alle Mitarbeiter"
-    },
-
-    // Litauisk (simpel, kan forbedres)
-    lt: {
-        app_title: "GreenTime Pro",
-
-        menu_dashboard: "Laiko registracija",
-        menu_customers: "Klientai",
-        menu_employees: "Darbuotojai",
-        menu_time_tracking: "Detali laiko apskaita",
-        menu_schedule: "Planavimas ir kalendorius",
-        menu_logs: "Žurnalai",
-        menu_reports: "Ataskaitos",
-        menu_settings: "Nustatymai",
-
-        dashboard_title: "Laiko registracija",
-        quick_select_customer: "Pasirinkite klientą",
-        quick_select_employees: "Pasirinkite darbuotojus",
-        quick_time_label: "Rodyti laiką klientui:",
-        quick_mode_today: "Šiandien",
-        quick_mode_total: "Bendras laikas",
-        quick_hint: "Pasirinkite klientą ir darbuotojus, tada naudokite Start / Stop.",
-        btn_start_timer: "Start",
-        btn_stop_timer: "Stop",
-
-        customers_title: "Klientai",
-        customers_add: "Pridėti klientą",
-        customers_list: "Klientų sąrašas",
-        customers_reset_title: "Nustatyti kliento laiką iš naujo",
-
-        label_customer_name: "Vardas",
-        label_customer_phone: "Telefonas",
-        label_customer_email: "El. paštas",
-        label_customer_address: "Adresas",
-        label_reset_customer: "Pasirinkite klientą",
-        btn_save_customer: "Išsaugoti klientą",
-        btn_reset_customer_time: "Ištrinti visą laiką",
-
-        employees_title: "Darbuotojai",
-        employees_add: "Pridėti darbuotoją",
-        employees_list: "Darbuotojų sąrašas",
-        label_employee_name: "Vardas",
-        label_employee_email: "El. paštas",
-        label_employee_role: "Vaidmuo",
-        role_employee: "Darbuotojas",
-        role_admin: "Administratorius",
-        btn_save_employee: "Išsaugoti darbuotoją",
-
-        time_title: "Laiko registracija",
-        time_start_stop: "Start / Stop",
-        label_timer_customer: "Klientas",
-        label_timer_employee: "Darbuotojas",
-        timer_no_active: "Aktyvaus laikmačio nėra",
-
-        logs_page_title: "Žurnalai",
-        logs_page_desc: "Vėliau čia matysite pilną vaizdą. Kol kas naudokite laiko ir ataskaitų skirtukus.",
-        logs_today_title: "Šiandienos žurnalai",
-
-        schedule_title: "Planavimas ir kalendorius",
-        schedule_plan_job: "Planuoti užduotį",
-        label_plan_date: "Data",
-        label_plan_start: "Pradžios laikas",
-        label_plan_duration: "Trukmė (val., 0,5–8)",
-        label_plan_customer: "Klientas",
-        label_plan_employee: "Darbuotojai",
-        label_plan_note: "Pastaba",
-        btn_save_plan: "Išsaugoti užduotį",
-        schedule_selected_day: "Paspauskite dieną, kad pamatytumėte užduotis.",
-
-        reports_title: "Ataskaitos",
-        reports_filter_title: "Filtrai",
-        reports_result_title: "Rezultatas",
-        label_report_date_from: "Nuo datos",
-        label_report_date_to: "Iki datos",
-        label_report_customer: "Klientas",
-        label_report_employee: "Darbuotojas",
-        btn_run_report: "Vykdyti ataskaitą",
-
-        settings_title: "Nustatymai",
-        settings_language_title: "Kalba",
-        settings_theme_title: "Tema",
-
-        th_customer_name: "Vardas",
-        th_customer_phone: "Telefonas",
-        th_customer_email: "El. paštas",
-        th_customer_address: "Adresas",
-
-        th_employee_name: "Vardas",
-        th_employee_email: "El. paštas",
-        th_employee_role: "Vaidmuo",
-
-        th_log_start: "Pradžia",
-        th_log_end: "Pabaiga",
-        th_log_duration: "Minutės",
-        th_log_customer: "Klientas",
-        th_log_employee: "Darbuotojas",
-
-        th_report_date: "Data",
-        th_report_start: "Pradžia",
-        th_report_end: "Pabaiga",
-        th_report_duration: "Minutės",
-        th_report_customer: "Klientas",
-        th_report_employee: "Darbuotojas",
-
-        weekday_mon: "Pr",
-        weekday_tue: "An",
-        weekday_wed: "Tr",
-        weekday_thu: "Kt",
-        weekday_fri: "Pn",
-        weekday_sat: "Št",
-        weekday_sun: "Sk",
-
-        msg_select_customer: "Pirmiausia pasirinkite klientą.",
-        msg_select_employees: "Pasirinkite bent vieną darbuotoją.",
-        msg_select_customer_employee: "Pasirinkite ir klientą, ir darbuotoją.",
-        msg_select_date: "Pasirinkite datą.",
-        msg_select_start: "Pasirinkite pradžios laiką.",
-        msg_select_customer_plan: "Pasirinkite klientą.",
-        msg_duration_invalid: "Trukmė turi būti nuo 0,5 iki 8 valandų.",
-        msg_no_plans_for_day: "Šiai dienai nėra užduočių.",
-        msg_reset_choose_customer: "Pasirinkite klientą, kuriam iš naujo nustatyti laiką.",
-        msg_reset_done_prefix: "Ištrinta",
-        msg_reset_done_suffix: "įrašų šiam klientui.",
-        msg_report_summary_prefix: "Rasta",
-        msg_report_summary_suffix: "eilutė(-ių) ataskaitoje.",
-        placeholder_select_customer: "Pasirinkite klientą",
-        placeholder_select_employee: "Pasirinkite darbuotoją",
-        placeholder_all_customers: "Visi klientai",
-        placeholder_all_employees: "Visi darbuotojai"
-    }
-};
 
 function t(key) {
     const langPack = translations[currentLang] || translations["da"];
@@ -643,6 +123,13 @@ function applyTranslations() {
         const txt = t(key);
         if (txt) el.textContent = txt;
     });
+
+    // Opdater dropdowns med nye tekster
+    refreshCustomerSelects();
+    refreshEmployeeSelects();
+
+    // Opdater chips (kun tekst)
+    renderEmployeeChips();
 }
 
 function applyLangActiveButton() {
@@ -655,6 +142,7 @@ function applyLangActiveButton() {
 
 function initLanguage() {
     if (!currentLang) currentLang = "da";
+
     applyLangActiveButton();
     applyTranslations();
 
@@ -663,13 +151,20 @@ function initLanguage() {
         btn.addEventListener("click", () => {
             const lang = btn.dataset.lang;
             if (!lang) return;
+
             currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+
+            // Opdater aktive knapper
             applyLangActiveButton();
+
+            // Opdater ALLE statiske tekster
             applyTranslations();
-            renderCalendar();    // månedstekst
-            renderTodayLogs();   // evt. oversatte tekster
-            renderReportsTable([]); // overskrifter er allerede med data-i18n
+
+            // Opdater sider der viser dynamiske tekster
+            renderCalendar();
+            renderTodayLogs();
+            initReports();  // Korrekt funktion der allerede findes
         });
     });
 }
@@ -689,6 +184,7 @@ function initThemeToggle() {
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
     });
 }
+
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (MOBIL)
