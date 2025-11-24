@@ -1,3 +1,6 @@
+console.log("LOADER DENNE FIL: app.js VERSION 99");
+
+
 /* ======================================================
    AFSNIT 01 – GLOBAL STATE & HJÆLPEFUNKTIONER
    ====================================================== */
