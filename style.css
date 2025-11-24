@@ -163,7 +163,7 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 06 – PAGES & CARDS
+   AFSNIT 06 – PAGES & CARDS (OPDATERET)
    ====================================================== */
 
 .page {
@@ -172,7 +172,13 @@ body {
     width: 100%;
 }
 
+/* Denne klasse bruges nu i app.js – derfor SKAL den være her */
 .page.visible {
+    display: block;
+}
+
+/* Denne klasse eksisterer i HTML (dashboard) – derfor skal den fungere igen */
+.page.active {
     display: block;
 }
 
@@ -183,30 +189,6 @@ body {
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-subtle);
     margin-bottom: 1.2rem;
-}
-
-/* Grids */
-.form-grid,
-.quick-grid,
-.calendar-layout {
-    display: grid;
-    gap: 1rem;
-}
-
-.form-grid {
-    grid-template-columns: 1fr 1fr;
-}
-
-.quick-grid {
-    grid-template-columns: 1fr 1fr;
-}
-
-@media (max-width: 900px) {
-    .form-grid,
-    .quick-grid,
-    .calendar-layout {
-        grid-template-columns: 1fr;
-    }
 }
 
 
