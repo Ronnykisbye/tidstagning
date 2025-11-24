@@ -135,7 +135,7 @@ button {
 
 
 /* ======================================================
-   AFSNIT 6. – TOPBAR
+   AFSNIT 6. – TOPBAR (NYT DESIGN)
    ====================================================== */
 
 .topbar {
@@ -144,18 +144,30 @@ button {
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
 }
 
-/* Venstre side */
+/* Venstre: Vis hamburger kun på mobil */
 .topbar-left {
-    width: 60px; /* vigtig: så center ikke hopper */
+    width: 60px;
     display: flex;
     align-items: center;
 }
 
-/* Center tekst altid præcis midt */
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .mobile-only {
+        display: inline-flex;
+    }
+}
+
+/* Center: titel altid præcis centreret */
 .topbar-center {
     flex: 1;
     display: flex;
@@ -164,36 +176,20 @@ button {
 
 .topbar-center h1 {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 700;
     margin: 0;
-    text-align: center;
+    color: var(--text);
 }
 
-/* Højre side */
+/* Højre: sprogknapper + tema helt ude i højre side */
 .topbar-right {
+    width: 260px;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 10px;
 }
 
-/* Mobil: hamburger vises */
-.mobile-only {
-    display: none;
-}
-
-/* PC layout */
-@media (max-width: 900px) {
-    .mobile-only {
-        display: inline-flex;     /* burger synlig */
-    }
-}
-
-/* PC: skjul hamburger */
-@media (min-width: 901px) {
-    .mobile-only {
-        display: none !important;
-    }
-}
 
 /* ======================================================
    AFSNIT 7. – IKONKNAPPER
