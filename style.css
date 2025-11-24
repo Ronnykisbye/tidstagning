@@ -348,18 +348,32 @@ select {
     border-color: var(--accent);
 }
 
-/* ======================================================
-   AFSNIT 09 – QUICK TIMER
-   ====================================================== */
+/* =====================================================
+   AFSNIT 09 – CHIP SELECTED STATE
+   Visuel markering når en medarbejder er valgt
+   ===================================================== */
 
-.quick-timer-display {
-    font-size: 2.4rem;
-    text-align: center;
-    padding: 1.3rem;
-    border-radius: 999px;
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 25px var(--accent-soft);
+.chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s;
 }
+
+/* GRØN markering når valgt */
+.chip.selected {
+    background: #1fae51;      /* samme grønne farve som Start-knappen */
+    color: #ffffff;
+    border-color: #1fae51;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
 
 /* ======================================================
    AFSNIT 10 – CHIP LISTS (MULTI SELECT)
