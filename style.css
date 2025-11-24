@@ -40,7 +40,109 @@
 }
 
 /* ======================================================
-   AFSNIT 02 – GLOBALT RESET
+   AFSNIT 02 – KNAPPER (Neon-Tech + Store Store)
+   ====================================================== */
+
+:root[data-theme="light"] {
+    --btn-bg: #ffffff;
+    --btn-text: #111;
+    --btn-border: #cfcfcf;
+    --neon-blue: #2dd4ff;
+    --neon-purple: #c084fc;
+    --neon-green: #22c55e;
+    --neon-red: #ef4444;
+}
+
+:root[data-theme="dark"] {
+    --btn-bg: #1a1a1a;
+    --btn-text: #fff;
+    --btn-border: #333;
+    --neon-blue: #00eaff;
+    --neon-purple: #b388ff;
+    --neon-green: #42ff9e;
+    --neon-red: #ff6677;
+}
+
+/* STORE STORE KNAPPER */
+.btn {
+    padding: 18px 32px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-radius: 14px;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 10px transparent;
+}
+
+/* STANDARD KNAP – Neon blå/purple */
+.btn:hover {
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-purple);
+    transform: translateY(-2px);
+}
+
+/* START (GRØN) */
+.btn-green {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+}
+.btn-green:hover {
+    box-shadow: 0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green);
+    transform: translateY(-2px);
+}
+
+/* STOP (RØD) */
+.btn-red {
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+}
+.btn-red:hover {
+    box-shadow: 0 0 10px var(--neon-red),
+                0 0 20px var(--neon-red);
+    transform: translateY(-2px);
+}
+
+/* KNAPPER I TOP/MENU */
+.menu-btn,
+.theme-btn {
+    padding: 14px 20px;
+    font-size: 1.3rem;
+    border-radius: 12px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-border);
+    transition: all 0.25s ease;
+}
+.menu-btn:hover,
+.theme-btn:hover {
+    color: var(--neon-blue);
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* Sprogknapper */
+.lang-btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+}
+.lang-btn.active {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple);
+    box-shadow: 0 0 10px var(--neon-purple);
+}
+
+
+/* ======================================================
+   AFSNIT 02a– GLOBALT RESET
    ====================================================== */
 
 *,
