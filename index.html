@@ -53,41 +53,52 @@
         ======================================================= -->
         <main id="contentArea" class="content">
 
-            <!-- ======================================================
-                 SIDE 01 – TIDSREGISTRERING / DASHBOARD
-            ======================================================= -->
-            <section id="dashboardPage" class="page active">
-                <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
+           <!-- ======================================================
+     SIDE 01 – TIDSREGISTRERING / DASHBOARD
+======================================================= -->
+<section id="dashboardPage" class="page visible">
 
-                <div class="card form-card">
+    <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
 
-                    <!-- ============================ KUNDEVALG ============================ -->
-                    <label data-i18n="select_customer">Vælg kunde</label>
-                    <select id="quickCustomerSelect" class="input"></select>
+    <div class="card form-card">
 
-                    <!-- ============================ MEDARBEJDERE ============================ -->
-                    <label data-i18n="select_employees">Vælg medarbejdere</label>
-                    <div id="quickEmployeeList" class="chip-container"></div>
+        <!-- ============================ KUNDEVALG ============================ -->
+        <label for="quickCustomerSelect" data-i18n="select_customer">Vælg kunde</label>
+        <select id="quickCustomerSelect" class="input"></select>
 
-                    <!-- ============================ VIS TIDSTYPE ============================ -->
-                    <label data-i18n="show_for_customer">Vis tid for kunden:</label>
-                    <div class="radio-row">
-                        <label><input type="radio" name="quickMode" id="quickModeDay" checked /><span data-i18n="mode_day">I dag</span></label>
-                        <label><input type="radio" name="quickMode" id="quickModeTotal" /><span data-i18n="mode_total">Samlet tid</span></label>
-                    </div>
+        <!-- ============================ MEDARBEJDERE ============================ -->
+        <label data-i18n="select_employees">Vælg medarbejdere</label>
+        <div id="quickEmployeeList" class="chip-container"></div>
 
-                    <!-- ============================ TIMER DISPLAY ============================ -->
-                    <div class="timer-display" id="quickTimerDisplay">00:00:00</div>
+        <!-- ============================ VIS TIDSTYPE ============================ -->
+        <label data-i18n="show_for_customer">Vis tid for kunden:</label>
+        <div class="radio-row">
+            <label>
+                <input type="radio" name="quickMode" id="quickModeDay" checked>
+                <span data-i18n="mode_day">I dag</span>
+            </label>
 
-                    <!-- ============================ KNAPPER (START/STOP) ============================ -->
-                    <div class="btn-row">
-                        <button id="quickStartBtn" class="btn btn-green" data-i18n="btn_start">Start</button>
-                        <button id="quickStopBtn" class="btn btn-red" data-i18n="btn_stop">Stop</button>
-                    </div>
+            <label>
+                <input type="radio" name="quickMode" id="quickModeTotal">
+                <span data-i18n="mode_total">Samlet tid</span>
+            </label>
+        </div>
 
-                    <p data-i18n="dashboard_help">Vælg kunde og medarbejdere og brug Start / Stop.</p>
-                </div>
-            </section>
+        <!-- ============================ TIMER DISPLAY ============================ -->
+        <div id="quickTimerDisplay" class="timer-display">00:00:00</div>
+
+        <!-- ============================ START / STOP ============================ -->
+        <div class="btn-row">
+            <button id="quickStartBtn" class="btn btn-green" data-i18n="btn_start">Start</button>
+            <button id="quickStopBtn" class="btn btn-red" data-i18n="btn_stop">Stop</button>
+        </div>
+
+        <p data-i18n="dashboard_help">
+            Vælg kunde og medarbejdere og brug Start / Stop.
+        </p>
+    </div>
+</section>
+
 
             <!-- ======================================================
                  SIDE 02 – KUNDER
