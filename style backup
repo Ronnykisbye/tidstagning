@@ -1,0 +1,524 @@
+/* ======================================================
+   AFSNIT 01 – ROOT VARIABLER (THEME ENGINE)
+   ====================================================== */
+
+:root {
+    /* DARK MODE DEFAULTS */
+    --bg: #0f172a;
+    --bg-elevated: #1e293b;
+    --bg-card: #1e293b;
+
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+
+    --border-subtle: #334155;
+
+    --accent: #22c55e;
+    --accent-soft: rgba(34, 197, 94, 0.15);
+    --accent-strong: #16a34a;
+
+    --radius: 14px;
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* ---------- LYS MODE ---------- */
+[data-theme="light"] {
+    --bg: #e5e7eb;        
+    --bg-elevated: #ffffff;
+    --bg-card: #ffffff;
+
+    --text: #0f172a;      
+    --text-muted: #475569;
+
+    --border-subtle: #cbd5e1;
+
+    --accent: #16a34a;
+    --accent-soft: rgba(34, 197, 94, 0.14);
+    --accent-strong: #15803d;
+
+    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* ======================================================
+   AFSNIT 02 – GLOBALT RESET
+   ====================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 8px;
+}
+
+/* ======================================================
+   AFSNIT 03 – APP LAYOUT
+   ====================================================== */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ======================================================
+   AFSNIT 04 – SIDEBAR (ENDGYLDIG OG KORREKT VERSION)
+   ====================================================== */
+
+.sidebar {
+    width: 250px;
+    background: var(--bg-elevated); /* Lys/mørk mode automatisk */
+    border-right: 1px solid var(--border-subtle);
+    padding: 1.2rem;
+}
+
+.sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 0.3rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.sidebar li:hover {
+    background: var(--accent-soft);
+    color: var(--text);
+}
+
+.sidebar li.active {
+    background: var(--accent);
+    color: #0f172a;
+}
+
+/* ======================================================
+   AFSNIT 05 – TOPBAR
+   ====================================================== */
+
+.topbar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+
+    padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.lang-switcher {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.lang-btn {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #0f172a;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid var(--border-subtle);
+    transition: 0.15s;
+}
+
+.lang-btn.active {
+    background: #0f172a;
+    color: #a7f3d0;
+}
+
+/* Tema-knap */
+#themeToggle {
+    margin-left: 0.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: var(--text);
+}
+
+/* ======================================================
+   AFSNIT 06 – PAGES & CARDS (OPDATERET)
+   ====================================================== */
+
+.page {
+    display: none;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+/* Denne klasse bruges nu i app.js – derfor SKAL den være her */
+.page.visible {
+    display: block;
+}
+
+/* Denne klasse eksisterer i HTML (dashboard) – derfor skal den fungere igen */
+.page.active {
+    display: block;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 1.2rem;
+}
+
+
+/* ======================================================
+   AFSNIT 6a – KALENDER LAYOUT FIX (PC)
+   ====================================================== */
+
+.calendar-layout {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(90px, 1fr));
+    gap: 0.45rem;
+}
+
+.calendar-grid button,
+.calendar-cell {
+    min-height: 65px;
+    font-size: 1rem;
+}
+
+/* ======================================================
+   AFSNIT 06C – KALENDER FARVER FOR ANTAL OPGAVER
+   ====================================================== */
+
+.calendar-day-empty {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.calendar-day-medium {
+    background-color: #facc15 !important; /* Gul */
+    color: #0f172a !important;
+}
+
+.calendar-day-busy {
+    background-color: #ef4444 !important; /* Rød */
+    color: white !important;
+}
+
+
+
+/* ======================================================
+   AFSNIT 07 – FORM ELEMENTER
+   ====================================================== */
+
+label {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+/* Dropdown pil */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23868e96' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+
+/* ======================================================
+   AFSNIT 08 – KNAPPER (OPDATERET)
+   ====================================================== */
+
+.btn {
+    padding: 0.75rem 1.6rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    background: var(--accent);
+    color: #0f172a;
+    transition: 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.btn:hover {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+}
+
+/* Række med knapper – bruges til Start/Stop */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+}
+
+/* Sekundær knap (f.eks. neutrale handlinger) */
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+}
+
+/* SPECIFIKT TIL TIDSREGISTRERING – GRØN & RØD KNAP */
+
+.btn-green {
+    background: #16a34a;            /* Grøn */
+    color: #0f172a;
+}
+
+.btn-green:hover {
+    background: #15803d;
+}
+
+.btn-red {
+    background: #dc2626;            /* Rød */
+    color: #fef2f2;
+}
+
+.btn-red:hover {
+    background: #b91c1c;
+}
+
+
+/* ======================================================
+   AFSNIT 09 – QUICK TIMER
+   ====================================================== */
+
+.quick-timer-display {
+    font-size: 2.4rem;
+    text-align: center;
+    padding: 1.3rem;
+    border-radius: 999px;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 25px var(--accent-soft);
+}
+
+/* ======================================================
+   AFSNIT 10 – CHIP LISTS (MULTI SELECT – OPDATERET)
+   ====================================================== */
+
+/* Container til medarbejder-valg (forsiden & planlægning) */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Selve chip-knappen – bruges til medarbejdere */
+.chip {
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.15s;
+    white-space: nowrap;
+}
+
+.chip:hover {
+    background: var(--accent-soft);
+}
+
+/* Når en medarbejder er valgt – grøn knap */
+.chip.selected {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* GAMLE KLASSER (chip-list / chip-check) BEHOLDES
+   så de ikke ødelægger andre steder i appen */
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chip-check {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+}
+
+.chip-check input {
+    width: auto;
+}
+
+
+
+/* ======================================================
+   AFSNIT 11 – TABLES (RETTET OG FLOT)
+   ====================================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.7rem;
+    font-size: 0.95rem;
+}
+
+table th {
+    background: var(--accent-strong);
+    color: white;
+    padding: 0.7rem;
+    text-align: left;
+    font-weight: bold;
+}
+
+table td {
+    padding: 0.7rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text);
+}
+
+table tr:nth-child(even) td {
+    background: var(--bg-elevated);
+}
+
+/* ======================================================
+   AFSNIT 12 – KALENDER
+   ====================================================== */
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.35rem;
+}
+
+.calendar-cell {
+    padding: 0.7rem;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    text-align: center;
+}
+
+.calendar-cell.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ======================================================
+   AFSNIT 13 – MOBILE SIDEBAR
+   ====================================================== */
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        transform: translateX(-100%);
+        transition: 0.2s;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+/* ======================================================
+   AFSNIT 98 – TIMER DISPLAY FIX (LYS + MØRK MODE)
+   ====================================================== */
+
+.quick-timer-display {
+    background-color: var(--bg-card);    /* Synlig baggrund */
+    color: var(--text);                  /* Læsbar tekst */
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    padding: 1.3rem;
+    font-size: 2.4rem;
+    text-align: center;
+    box-shadow: 0 0 20px var(--accent-soft);
+    font-weight: bold;
+}
+
+/* LYS MODE – tydelig kontrast */
+[data-theme="light"] .quick-timer-display {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 25px rgba(0,0,0,0.10);
+}
+
+
+/* ======================================================
+   AFSNIT 99 – FORCED TABLE HEADER FIX (OVERSKRIVER ALT)
+   ====================================================== */
+
+.page table th {
+    background-color: var(--accent-strong) !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 0.7rem !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+/* Alternativ baggrund hvis du vil have mørk header */
+.page table th.dark-header {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+.page table td {
+    color: var(--text) !important;
+    background-color: var(--bg-card) !important;
+}
