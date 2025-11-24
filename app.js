@@ -258,17 +258,32 @@ function updateLogList() {
 
 
 /* ======================================================
-   AFSNIT 9. – KUNDER
+   AFSNIT 9. – KUNDER (NY VERSION MED AL INFO)
 ====================================================== */
 
 function addCustomer() {
-    const n = document.getElementById("custName").value.trim();
-    if (!n) return;
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const email = document.getElementById("custEmail").value.trim();
+    const address = document.getElementById("custAddress").value.trim();
 
-    customers.push({ name: n });
+    if (!name) return;
+
+    customers.push({
+        name,
+        phone,
+        email,
+        address
+    });
+
     saveAll();
 
+    // Nulstil felter
     document.getElementById("custName").value = "";
+    document.getElementById("custPhone").value = "";
+    document.getElementById("custEmail").value = "";
+    document.getElementById("custAddress").value = "";
+
     renderCustomers();
 }
 
@@ -284,18 +299,26 @@ function renderCustomers() {
         return;
     }
 
-    customers.forEach((c, index) => {
+    customers.forEach((c) => {
+        // Kundeliste (vis ALT)
         const item = document.createElement("div");
         item.className = "list-item";
-        item.innerHTML = `<span>${c.name}</span>`;
+        item.innerHTML = `
+            <div><strong>${c.name}</strong></div>
+            <div>📞 ${c.phone || "-"}</div>
+            <div>📧 ${c.email || "-"}</div>
+            <div>🏠 ${c.address || "-"}</div>
+        `;
         list.appendChild(item);
 
+        // Dropdown-select
         const opt = document.createElement("option");
         opt.value = c.name;
         opt.textContent = c.name;
         select.appendChild(opt);
     });
 }
+
 
 
 /* ======================================================
