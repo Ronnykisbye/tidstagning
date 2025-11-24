@@ -75,12 +75,12 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR
+   AFSNIT 04 – SIDEBAR (RETTET VERSION)
    ====================================================== */
 
 .sidebar {
     width: 250px;
-    background: linear-gradient(180deg, #0f172a, #0b1120);
+    background: var(--bg-elevated); /* Skifter nu korrekt med tema */
     border-right: 1px solid var(--border-subtle);
     padding: 1.2rem;
 }
