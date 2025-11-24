@@ -5,42 +5,57 @@
 :root {
     /* DARK MODE DEFAULTS */
     --bg: #0f172a;
-    --bg-elevated: #1e293b;
-    --bg-card: #1e293b;
+    --bg-elevated: #020617;
+    --bg-card: #020617;
 
-    --text: #f1f5f9;
+    --text: #e5e7eb;
     --text-muted: #94a3b8;
 
-    --border-subtle: #334155;
+    --border-subtle: #1f2937;
 
     --accent: #22c55e;
-    --accent-soft: rgba(34, 197, 94, 0.15);
+    --accent-soft: rgba(34, 197, 94, 0.16);
     --accent-strong: #16a34a;
 
-    --radius: 14px;
-    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.22);
+    --danger: #ef4444;
+    --warning: #facc15;
+
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-pill: 999px;
+
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+
+    --transition-fast: 0.15s ease-out;
+    --transition-med: 0.25s ease-out;
+
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+
+    --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* ---------- LYS MODE ---------- */
 [data-theme="light"] {
-    --bg: #e5e7eb;        
-    --bg-elevated: #ffffff;
+    --bg: #e5e7eb;
+    --bg-elevated: #e5e7eb;
     --bg-card: #ffffff;
 
-    --text: #0f172a;      
-    --text-muted: #475569;
+    --text: #020617;
+    --text-muted: #4b5563;
 
     --border-subtle: #cbd5e1;
 
     --accent: #16a34a;
-    --accent-soft: rgba(34, 197, 94, 0.14);
+    --accent-soft: rgba(22, 163, 74, 0.14);
     --accent-strong: #15803d;
 
-    --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.15);
+    --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.18);
 }
 
 /* ======================================================
-   AFSNIT 02 – GLOBALT RESET
+   AFSNIT 02 – GLOBALT RESET & BODY
    ====================================================== */
 
 *,
@@ -49,65 +64,137 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: system-ui, sans-serif;
+    padding: 0;
+    height: 100%;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
+body {
+    font-family: var(--font-main);
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.12), transparent 55%),
+        var(--bg);
+    -webkit-font-smoothing: antialiased;
 }
-::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 8px;
+
+img,
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 1rem;
 }
 
 /* ======================================================
-   AFSNIT 03 – APP LAYOUT
+   AFSNIT 03 – APP LAYOUT (DESKTOP)
    ====================================================== */
 
 .app {
     display: flex;
     min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: rgba(15, 23, 42, 0.98);
+    border-right: 1px solid var(--border-subtle);
+    padding: 1.4rem 1.1rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.55);
+    z-index: 900;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.98),
+        rgba(12, 20, 38, 1)
+    );
+    padding: 0 1.4rem 2rem 1.4rem;
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR
+   AFSNIT 04 – SIDEBAR INDHOLD
    ====================================================== */
 
-.sidebar {
-    width: 250px;
-    background: linear-gradient(180deg, #0f172a, #0b1120);
-    border-right: 1px solid var(--border-subtle);
-    padding: 1.2rem;
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    background: radial-gradient(circle at 20% 0%, #bbf7d0 0, #22c55e 40%, #166534 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #022c22;
+    font-weight: 800;
+    font-size: 1.05rem;
+    box-shadow: 0 10px 20px rgba(22, 163, 74, 0.55);
+}
+
+.logo-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.sidebar nav {
+    margin-top: 0.5rem;
 }
 
 .sidebar ul {
     list-style: none;
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
 
 .sidebar li {
-    padding: 0.7rem 1rem;
-    border-radius: var(--radius);
-    margin-bottom: 0.3rem;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.25rem;
+    border-radius: var(--radius-md);
     color: var(--text-muted);
     cursor: pointer;
-    transition: 0.15s;
+    display: flex;
+    align-items: center;
+    transition: background var(--transition-fast), color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
 .sidebar li:hover {
     background: var(--accent-soft);
     color: var(--text);
+    transform: translateX(2px);
 }
 
 .sidebar li.active {
     background: var(--accent);
-    color: #0f172a;
+    color: #0b1120;
 }
 
 /* ======================================================
@@ -115,464 +202,578 @@ body {
    ====================================================== */
 
 .topbar {
-    height: 60px;
+    height: var(--topbar-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border-subtle);
-
-    padding: 0 1rem;
+    gap: 1rem;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 1200;
+    background: linear-gradient(
+        120deg,
+        rgba(15, 23, 42, 0.98),
+        rgba(15, 23, 42, 0.92)
+    );
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.3);
 }
 
-.lang-switcher {
+.topbar-center h1 {
+    font-size: 1.4rem;
+    margin: 0;
+    letter-spacing: 0.08em;
+}
+
+.topbar-right {
     display: flex;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.lang-btn {
-    padding: 0.3rem 0.6rem;
-    border-radius: 999px;
-    background: var(--accent);
-    color: #0f172a;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid var(--border-subtle);
-    transition: 0.15s;
-}
+/* ===== MENU KNAP (MOBIL) ===== */
 
-.lang-btn.active {
-    background: #0f172a;
-    color: #a7f3d0;
-}
-
-/* Tema-knap */
-#themeToggle {
-    margin-left: 0.6rem;
-    border-radius: 50%;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-card);
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
+.icon-btn {
+    border: none;
+    background: transparent;
     color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.icon-btn:hover {
+    background: rgba(15, 23, 42, 0.8);
+    transform: translateY(-1px);
 }
 
 /* ======================================================
-   AFSNIT 06 – PAGES & CARDS
+   AFSNIT 06 – SPROGKNAPPER & TEMA-KNAP
+   ====================================================== */
+
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.lang-btn {
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.7rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--text-muted);
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid transparent;
+    transition: background var(--transition-fast), color var(--transition-fast),
+        border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.lang-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(148, 163, 184, 0.6);
+}
+
+.lang-btn.active {
+    background: var(--accent);
+    color: #022c22;
+    border-color: transparent;
+}
+
+#themeToggle {
+    border-radius: 999px;
+    border: 1px solid rgba(234, 179, 8, 0.5);
+    background: radial-gradient(circle at 30% 0%, #fef9c3 0, #facc15 40%, #b45309 100%);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.4),
+        0 8px 18px rgba(250, 204, 21, 0.5);
+    color: #1f2937;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#themeToggle:hover {
+    transform: translateY(-1px) rotate(-4deg);
+    box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.6),
+        0 12px 26px rgba(250, 204, 21, 0.7);
+}
+
+/* ======================================================
+   AFSNIT 07 – SIDER & CARDS
    ====================================================== */
 
 .page {
     display: none;
-    padding: 1.5rem;
-    width: 100%;
+    padding-top: 1.2rem;
 }
 
 .page.visible {
     display: block;
 }
 
-.card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    padding: 1.4rem;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--border-subtle);
-    margin-bottom: 1.2rem;
+.page h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
 }
 
-/* Grids */
-.form-grid,
-.quick-grid,
-.calendar-layout {
-    display: grid;
-    gap: 1rem;
+.page h3 {
+    margin-top: 0;
+    font-size: 1.05rem;
 }
+
+.card,
+.quick-card,
+.form-card,
+.reset-card,
+.calendar-card,
+.table-card {
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 1));
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    padding: 1.2rem 1.4rem;
+    box-shadow: var(--shadow-soft);
+}
+
+/* ======================================================
+   AFSNIT 08 – FORMULARER
+   ====================================================== */
 
 .form-grid {
-    grid-template-columns: 1fr 1fr;
-}
-
-.quick-grid {
-    grid-template-columns: 1fr 1fr;
-}
-
-@media (max-width: 900px) {
-    .form-grid,
-    .quick-grid,
-    .calendar-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ======================================================
-   AFSNIT 6a – KALENDER LAYOUT FIX (PC)
-   ====================================================== */
-
-.calendar-layout {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, minmax(90px, 1fr));
-    gap: 0.45rem;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 1.2rem;
 }
-
-.calendar-grid button,
-.calendar-cell {
-    min-height: 65px;
-    font-size: 1rem;
-}
-
-/* ======================================================
-   AFSNIT 06C – KALENDER FARVER FOR ANTAL OPGAVER
-   ====================================================== */
-
-.calendar-day-empty {
-    background-color: #ffffff !important;
-    color: #0f172a !important;
-}
-
-.calendar-day-medium {
-    background-color: #facc15 !important; /* Gul */
-    color: #0f172a !important;
-}
-
-.calendar-day-busy {
-    background-color: #ef4444 !important; /* Rød */
-    color: white !important;
-}
-
-/* ======================================================
-   AFSNIT 06E – KALENDER HOVER & ANIMATION
-   ====================================================== */
-
-.calendar-cell {
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.calendar-cell:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    cursor: pointer;
-}
-
-/* ======================================================
-   AFSNIT 06F – TOOLTIP FOR KALENDER
-   ====================================================== */
-
-.calendar-tooltip {
-    position: absolute;
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--border-subtle);
-    padding: 0.6rem 0.8rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
-    font-size: 0.85rem;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-}
-
-
-
-/* ======================================================
-   AFSNIT 07 – FORM ELEMENTER
-   ====================================================== */
 
 label {
     display: block;
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin-bottom: 0.7rem;
+}
+
+label span {
+    display: block;
+    margin-bottom: 0.25rem;
 }
 
 input,
 select,
 textarea {
     width: 100%;
-    padding: 0.55rem 0.7rem;
-    border-radius: var(--radius);
+    padding: 0.55rem 0.6rem;
+    border-radius: 10px;
     border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
+    background: rgba(15, 23, 42, 0.9);
     color: var(--text);
-    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast);
 }
 
-/* Dropdown pil */
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='%23868e96' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 40px;
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+    background: rgba(15, 23, 42, 0.95);
 }
 
 /* ======================================================
-   AFSNIT 08 – KNAPPER
+   AFSNIT 09 – KNAPPER
    ====================================================== */
 
 .btn {
-    padding: 0.55rem 1.2rem;
-    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.55rem 1.15rem;
+    border-radius: var(--radius-pill);
     border: none;
     cursor: pointer;
-
-    font-size: 0.95rem;
-    font-weight: bold;
-
-    background: var(--accent);
-    color: #0f172a;
-
-    transition: 0.15s;
+    font-weight: 600;
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #022c22;
+    background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+    box-shadow: 0 12px 25px rgba(22, 163, 74, 0.5);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        filter var(--transition-fast);
 }
 
 .btn:hover {
-    background: var(--accent-strong);
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 16px 32px rgba(22, 163, 74, 0.6);
 }
 
 .btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.9);
     color: var(--text);
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
 }
 
 .btn-secondary:hover {
-    border-color: var(--accent);
+    background: rgba(15, 23, 42, 1);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.7);
 }
 
-/* =====================================================
-   AFSNIT 09 – CHIP SELECTED STATE
-   Visuel markering når en medarbejder er valgt
-   ===================================================== */
-
-.chip {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.6rem;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.2s;
+.btn-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.4rem;
 }
-
-/* GRØN markering når valgt */
-.chip.selected {
-    background: #1fae51;      /* samme grønne farve som Start-knappen */
-    color: #ffffff;
-    border-color: #1fae51;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
-    transform: translateY(-1px);
-}
-
 
 /* ======================================================
-   AFSNIT 10 – CHIP LISTS (MULTI SELECT)
+   AFSNIT 10 – QUICK TIMER (DASHBOARD)
+   ====================================================== */
+
+.quick-card {
+    margin-top: 0.8rem;
+}
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.quick-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.quick-mode {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: center;
+}
+
+.small-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.mode-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.86rem;
+}
+
+.mode-option input {
+    width: auto;
+}
+
+.quick-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.quick-timer {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 1));
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    min-width: 200px;
+    text-align: center;
+}
+
+/* status-tekst under quick timer */
+.status {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ======================================================
+   AFSNIT 11 – CHIP LIST (MEDARBEJDERE)
    ====================================================== */
 
 .chip-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
-.chip-check {
-    display: flex;
+.chip {
+    display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-
-    border: 1px solid var(--border-subtle);
-    border-radius: 999px;
+    justify-content: center;
     padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.9);
+    font-size: 0.85rem;
+    color: var(--text-muted);
     cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast),
+        border-color var(--transition-fast), box-shadow var(--transition-fast),
+        transform var(--transition-fast);
 }
 
-.chip-check input {
-    width: auto;
+.chip:hover {
+    background: rgba(15, 23, 42, 1);
+}
+
+.chip.selected {
+    background: var(--accent);
+    color: #f9fafb;
+    border-color: var(--accent-strong);
+    box-shadow: 0 10px 22px rgba(22, 163, 74, 0.7);
+    transform: translateY(-1px);
 }
 
 /* ======================================================
-   AFSNIT 11 – TABLES (RETTET OG FLOT)
+   AFSNIT 12 – TABELLER (TID & RAPPORTER)
    ====================================================== */
+
+.table-card {
+    margin-top: 1rem;
+}
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0.7rem;
-    font-size: 0.95rem;
+    margin-top: 0.4rem;
+    font-size: 0.88rem;
 }
 
-table th {
-    background: var(--accent-strong);
-    color: white;
-    padding: 0.7rem;
+th,
+td {
+    padding: 0.55rem 0.6rem;
     text-align: left;
-    font-weight: bold;
 }
 
-table td {
-    padding: 0.7rem;
+th {
+    font-weight: 600;
+    color: var(--text-muted);
     border-bottom: 1px solid var(--border-subtle);
-    color: var(--text);
 }
 
-table tr:nth-child(even) td {
-    background: var(--bg-elevated);
+tbody tr:nth-child(even) td {
+    background: rgba(15, 23, 42, 0.7);
+}
+
+tbody tr:hover td {
+    background: rgba(15, 23, 42, 0.95);
 }
 
 /* ======================================================
-   AFSNIT 12 – KALENDER
+   AFSNIT 13 – KALENDER LAYOUT
    ====================================================== */
+
+.calendar-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    margin-top: 0.8rem;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.calendar-weekdays span {
+    text-align: center;
+}
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0.35rem;
+    gap: 0.3rem;
 }
 
+/* ======================================================
+   AFSNIT 14 – KALENDER DAG-CELLS & FARVER
+   ====================================================== */
+
 .calendar-cell {
-    padding: 0.7rem;
-    background: var(--bg-card);
-    border-radius: var(--radius);
+    padding: 0.55rem 0.2rem;
+    border-radius: 10px;
     border: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.9);
     cursor: pointer;
     text-align: center;
+    font-size: 0.85rem;
+    position: relative;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast);
+}
+
+/* Hvid = ingen opgaver */
+.calendar-day-empty {
+    background-color: #ffffff !important;
+    color: #020617 !important;
+}
+
+/* Gul = 1–4 opgaver */
+.calendar-day-medium {
+    background-color: #facc15 !important;
+    color: #0f172a !important;
+}
+
+/* Rød = 5+ opgaver */
+.calendar-day-busy {
+    background-color: #ef4444 !important;
+    color: #f9fafb !important;
 }
 
 .calendar-cell.selected {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.55);
+    transform: translateY(-1px);
+}
+
+.calendar-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
 /* ======================================================
-   AFSNIT 13 – MOBILE SIDEBAR
+   AFSNIT 15 – DAGEN OPGAVER (HØJRE SIDE)
    ====================================================== */
 
-@media (max-width: 900px) {
+.day-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#selectedDayLabel {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+}
+
+#dayPlanList {
+    list-style: none;
+    margin: 0.4rem 0 0 0;
+    padding: 0;
+    font-size: 0.88rem;
+}
+
+#dayPlanList li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+/* ======================================================
+   AFSNIT 16 – DIVERSE TEKSTER
+   ====================================================== */
+
+#timerStatus {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+}
+
+/* ======================================================
+   AFSNIT 17 – RESPONSIVITET (TABLET & MOBIL)
+   ====================================================== */
+
+/* --- Tablet (max 1024px) --- */
+@media (max-width: 1024px) {
+    .app {
+        max-width: 100%;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calendar-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Mobil (max 768px) --- */
+@media (max-width: 768px) {
+    .app {
+        flex-direction: column;
+    }
+
+    /* Topbar fylder hele bredden */
+    .topbar {
+        padding: 0 0.75rem;
+    }
+
+    /* Sidebar bliver overlay der starter under topbar */
     .sidebar {
         position: fixed;
-        top: 0; left: 0; bottom: 0;
+        top: var(--topbar-height);
+        left: 0;
+        height: calc(100% - var(--topbar-height));
+        width: 78%;
+        max-width: 320px;
         transform: translateX(-100%);
-        transition: 0.2s;
+        opacity: 0;
+        visibility: hidden;
+        transition: transform var(--transition-med), opacity var(--transition-med),
+            visibility var(--transition-med);
+        box-shadow: 18px 0 40px rgba(0, 0, 0, 0.75);
     }
+
     .sidebar.open {
         transform: translateX(0);
-    }
-}
-
-/* ======================================================
-   AFSNIT 98 – TIMER DISPLAY FIX (LYS + MØRK MODE)
-   ====================================================== */
-
-.quick-timer-display {
-    background-color: var(--bg-card);    /* Synlig baggrund */
-    color: var(--text);                  /* Læsbar tekst */
-    border: 2px solid var(--accent);
-    border-radius: 999px;
-    padding: 1.3rem;
-    font-size: 2.4rem;
-    text-align: center;
-    box-shadow: 0 0 20px var(--accent-soft);
-    font-weight: bold;
-}
-
-/* LYS MODE – tydelig kontrast */
-[data-theme="light"] .quick-timer-display {
-    background-color: #ffffff;
-    color: #0f172a;
-    border-color: var(--accent-strong);
-    box-shadow: 0 0 25px rgba(0,0,0,0.10);
-}
-
-
-/* ======================================================
-   AFSNIT 99 – FORCED TABLE HEADER FIX (OVERSKRIVER ALT)
-   ====================================================== */
-
-.page table th {
-    background-color: var(--accent-strong) !important;
-    color: #ffffff !important;
-    font-weight: bold !important;
-    padding: 0.7rem !important;
-    text-align: left !important;
-    border-bottom: 1px solid var(--border-subtle) !important;
-}
-
-/* Alternativ baggrund hvis du vil have mørk header */
-.page table th.dark-header {
-    background-color: #1e293b !important;
-    color: #f8fafc !important;
-}
-
-.page table td {
-    color: var(--text) !important;
-    background-color: var(--bg-card) !important;
-}
-
-/* =====================================================
-   AFSNIT XX – MOBIL TOPBAR & SIDEBAR FIX
-   Retter overlap mellem topbar, menuknap og sidebar
-   ===================================================== */
-
-@media (max-width: 768px) {
-
-    /* Topbar: Flyt hele topbaren længere ned */
-    header, .topbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding-top: 14px !important; /* ekstra luft */
-        padding-bottom: 10px !important;
-        z-index: 3000; /* øverst på mobilen */
-        background: var(--bg-card);
+        opacity: 1;
+        visibility: visible;
     }
 
-    /* Hamburger-knap */
-    #menuToggle {
-        position: fixed;
-        top: 18px;    /* lidt ned fra top */
-        left: 14px;
-        z-index: 4000;    /* altid øverst */
+    .main {
+        padding: 0 0.75rem 1.5rem 0.75rem;
     }
 
-    /* Sprogknapper */
-    .lang-container {
-        margin-top: 52px !important; /* så de ikke overlapper menu */
-        z-index: 2500;
-    }
-
-    .lang-btn {
-        position: relative;
-        z-index: 2500;
-    }
-
-    /* Tema-knap (sol/halvmåne) */
-    #themeToggle {
-        margin-top: 50px !important;
-        position: relative;
-        z-index: 2500;
-    }
-
-    /* Sidebar: Flyt den ned så den ikke ligger under topbaren */
-    .sidebar {
-        top: 80px !important; /* flyt ned efter topbar */
-        height: calc(100% - 80px) !important;
-        z-index: 2000; /* under knapperne */
-    }
-
-    /* Hovedindhold må ikke lægge sig bag topbar */
     .page {
-        padding-top: 110px !important;
+        padding-top: 0.9rem;
+    }
+
+    .quick-timer {
+        width: 100%;
     }
 }
-
