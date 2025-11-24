@@ -411,6 +411,36 @@ function initCustomers() {
 }
 
 /* ======================================================
+   AFSNIT 05B – INIT DASHBOARD (GENOPBYGNING)
+   ====================================================== */
+
+function initDashboard() {
+    console.log("INIT DASHBOARD KØRER…");
+
+    // hent kunder + medarbejdere fra storage
+    loadCustomers?.();
+    loadEmployees?.();
+
+    // byg dropdown til kunder
+    if (typeof renderCustomerQuickSelect === "function") {
+        renderCustomerQuickSelect();
+    }
+
+    // byg medarbejderchips
+    if (typeof renderTimerEmployeeChips === "function") {
+        renderTimerEmployeeChips();
+    }
+
+    // start timer systemet
+    if (typeof initTimer === "function") {
+        initTimer();
+    }
+
+    console.log("DASHBOARD KLAR ✔");
+}
+
+
+/* ======================================================
    AFSNIT 06 – MEDARBEJDERE
    ====================================================== */
 
