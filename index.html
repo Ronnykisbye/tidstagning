@@ -16,22 +16,30 @@
     <div class="app">
 
         <!-- ======================================================
-             AFSNIT 03 – TOPBAR
-        ======================================================= -->
-        <header class="topbar">
-            <button id="menuToggle" class="menu-btn">☰</button>
+     AFSNIT 03 – TOPBAR (NY VERSION)
+======================================================= -->
+<header class="topbar">
 
-            <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
+    <!-- BURGER-MENU (kun mobil) -->
+    <button id="menuToggle" class="menu-btn">☰</button>
 
-            <div class="lang-switch">
-                <button class="lang-btn" data-lang="da">DK</button>
-                <button class="lang-btn" data-lang="en">GB</button>
-                <button class="lang-btn" data-lang="de">DE</button>
-                <button class="lang-btn" data-lang="lt">LT</button>
-            </div>
+    <!-- LOGO -->
+    <span class="logo-text" data-i18n="app_title">GreenTime Pro</span>
 
-            <button id="themeToggle" class="theme-btn">☀️</button>
-        </header>
+    <!-- SPROG + TEMA KNAPPER -->
+    <div class="topbar-controls">
+
+        <div class="lang-switch">
+            <button class="lang-btn" data-lang="da">DK</button>
+            <button class="lang-btn" data-lang="en">GB</button>
+            <button class="lang-btn" data-lang="de">DE</button>
+            <button class="lang-btn" data-lang="lt">LT</button>
+        </div>
+
+        <button id="themeToggle" class="theme-btn" title="Skift tema">☀️</button>
+    </div>
+</header>
+
 
         <!-- ======================================================
              AFSNIT 04 – BODY LAYOUT (SIDEBAR + CONTENT)
