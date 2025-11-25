@@ -553,18 +553,25 @@ select {
 
 
 /* ======================================================
-   AFSNIT 07 – KNAPPER (NEON)
+   AFSNIT 07 – KNAPPER (NEON + UNIVERSAL GUL TEKST)
    ====================================================== */
 
+/* ----------------------------------------
+   07A – STANDARD KNAPPER
+   ---------------------------------------- */
 .btn {
     padding: 0.7rem 1.4rem;
     border-radius: 999px;
     border: none;
     cursor: pointer;
+
     font-size: 0.95rem;
     font-weight: 600;
+
+    /* Tekst – universel gul, virker i både lys og mørk */
+    color: #facc15 !important;
+
     background: var(--accent);
-    color: #020617;
     transition: 0.18s ease;
     display: inline-flex;
     align-items: center;
@@ -577,10 +584,15 @@ select {
     box-shadow: 0 0 18px var(--accent-soft);
 }
 
+/* ----------------------------------------
+   07B – SEKUNDÆR KNAP
+   ---------------------------------------- */
 .btn-secondary {
     background: transparent;
-    border: 1px solid rgba(148, 163, 184, 0.7);
-    color: var(--text);
+    border: 1px solid var(--border-subtle);
+
+    /* Gul tekst */
+    color: #facc15 !important;
 }
 
 .btn-secondary:hover {
@@ -588,34 +600,50 @@ select {
     box-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
 }
 
+/* ----------------------------------------
+   07C – START (GRØN) KNAP
+   ---------------------------------------- */
+.btn-green {
+    background: radial-gradient(circle at top, var(--green), #16a34a);
+
+    /* Gul tekst */
+    color: #facc15 !important;
+
+    box-shadow: var(--green-glow);
+    padding: 0.85rem 1.8rem;
+    font-size: 1.02rem;
+}
+
+.btn-green:hover {
+    box-shadow: 0 0 28px rgba(34, 197, 94, 0.85);
+}
+
+/* ----------------------------------------
+   07D – STOP (RØD) KNAP
+   ---------------------------------------- */
+.btn-red {
+    background: radial-gradient(circle at top, #fb7185, #ef4444);
+
+    /* Gul tekst */
+    color: #facc15 !important;
+
+    box-shadow: var(--red-glow);
+    padding: 0.85rem 1.8rem;
+    font-size: 1.02rem;
+}
+
+.btn-red:hover {
+    box-shadow: 0 0 28px rgba(248, 113, 113, 0.9);
+}
+
+/* ----------------------------------------
+   07E – KNAP-RÆKKER
+   ---------------------------------------- */
 .btn-row {
     display: flex;
     gap: 0.8rem;
     justify-content: center;
     margin-top: 0.9rem;
-}
-
-/* Start/stop knapper (store) */
-.btn-green {
-    background: radial-gradient(circle at top, var(--green), #16a34a);
-    color: #022c22;
-    box-shadow: var(--green-glow);
-    padding: 0.85rem 1.8rem;
-    font-size: 1.02rem;
-}
-.btn-green:hover {
-    box-shadow: 0 0 28px rgba(34, 197, 94, 0.85);
-}
-
-.btn-red {
-    background: radial-gradient(circle at top, #fb7185, #ef4444);
-    color: #7f1d1d;
-    box-shadow: var(--red-glow);
-    padding: 0.85rem 1.8rem;
-    font-size: 1.02rem;
-}
-.btn-red:hover {
-    box-shadow: 0 0 28px rgba(248, 113, 113, 0.9);
 }
 
 /* ======================================================
