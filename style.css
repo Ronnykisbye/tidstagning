@@ -1,18 +1,39 @@
 /* ======================================================
-   AFSNIT 01D – GLOBAL KNAPTEKST (SIKKER VERSION)
+   AFSNIT 01D – GLOBAL TEMA-VARIABLER (FULDSTÆNDIG FIX)
    ====================================================== */
 
-/* Standard farver for dark mode */
-html {
-    --btn-text: #ffffff;    /* hvid knaptekst */
+/* ---------- DARK MODE (STANDARD) ---------- */
+:root {
+    --text: #e5e7eb;
+    --text-strong: #ffffff;
+    --text-muted: #94a3b8;
+
+    --btn-text: #ffffff;
 }
 
-/* Farver for light mode */
+/* ---------- LIGHT MODE ---------- */
 html[data-theme="light"] {
-    --btn-text: #1e293b;    /* mørk blå tekst */
+    --text: #0f172a;
+    --text-strong: #0f172a;
+    --text-muted: #475569;
+
+    --btn-text: #1e293b;
 }
 
-/* Gælder KUN knapper – og INGEN andre elementer */
+/* ---------- GLOBAL TEKSTSTYLING ---------- */
+body,
+h1, h2, h3, h4, h5, h6,
+label,
+span,
+p,
+td, th,
+input,
+select,
+textarea {
+    color: var(--text) !important;
+}
+
+/* ---------- GLOBAL KNAPTEKST ---------- */
 button,
 .btn,
 .btn-green,
@@ -21,6 +42,7 @@ button,
 .lang-btn {
     color: var(--btn-text) !important;
 }
+
 
 
 /* ======================================================
