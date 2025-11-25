@@ -1,39 +1,18 @@
 /* ======================================================
-   AFSNIT 01D – GLOBAL TEKST & KNAP-FARVER (FIXER LYS MODE)
+   AFSNIT 01D – GLOBAL KNAPTEKST (SIKKER VERSION)
    ====================================================== */
 
 /* Standard farver for dark mode */
-:root {
-    --txt: #e5e7eb;          /* lys tekst */
-    --txt-strong: #ffffff;
-    --txt-muted: #94a3b8;
-
-    --btn-text: #ffffff;     /* knapper i dark mode */
+html {
+    --btn-text: #ffffff;    /* hvid knaptekst */
 }
 
-/* Farver for light mode (ALT ser korrekt ud her) */
+/* Farver for light mode */
 html[data-theme="light"] {
-    --txt: #1e293b;          /* mørk tekst */
-    --txt-strong: #0f172a;
-    --txt-muted: #475569;
-
-    --btn-text: #1e293b;     /* knapper i lys mode (synlige!) */
+    --btn-text: #1e293b;    /* mørk blå tekst */
 }
 
-/* Gælder ALLE tekstelementer */
-body,
-h1, h2, h3, h4, h5, h6,
-label,
-span,
-p,
-td, th,
-input,
-select,
-textarea {
-    color: var(--txt) !important;
-}
-
-/* Gælder ALLE knapper */
+/* Gælder KUN knapper – og INGEN andre elementer */
 button,
 .btn,
 .btn-green,
@@ -42,6 +21,7 @@ button,
 .lang-btn {
     color: var(--btn-text) !important;
 }
+
 
 /* ======================================================
    AFSNIT 02 – GLOBALT RESET & BODY
