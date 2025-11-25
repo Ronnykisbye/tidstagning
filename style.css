@@ -201,29 +201,24 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR (NEON / FAST VENSTRE)
+   AFSNIT 04 – SIDEBAR (NEON / FAST VENSTRE) – UPDATED
    ====================================================== */
 
 .sidebar {
     width: 260px;
-
-    /* Dynamisk lys/mørk baggrund */
-    background: var(--bg-card);
-
-    /* Lys mode: blødere skygge / Mørk mode: neon */
+    background: var(--bg-card); /* dynamisk lys/mørk */
     border-right: 1px solid var(--border-subtle);
 
-    box-shadow: 
-        12px 0 45px rgba(15, 23, 42, 0.25),      /* Light mode */
-        12px 0 45px rgba(15, 23, 42, 0.9);       /* Dark mode */
+    /* Light mode: blød skygge — Dark mode: kraftigere */
+    box-shadow:
+        12px 0 45px rgba(15, 23, 42, 0.25),
+        12px 0 45px rgba(15, 23, 42, 0.9);
 
     padding: 1.6rem 1rem 2rem;
     position: relative;
     z-index: 40;
     transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
-
-
 
 /* Sidebar logo */
 .sidebar-logo {
@@ -240,7 +235,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at top, var(--neon-cyan), var(--neon-purple));
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
     color: #020617;
     font-weight: 800;
     box-shadow: var(--neon-glow-strong);
@@ -255,7 +250,7 @@ body {
     margin-left: 0.2rem;
 }
 
-/* Sidebar liste */
+/* Sidebar menu */
 .sidebar .nav ul {
     list-style: none;
     margin: 0;
@@ -272,39 +267,44 @@ body {
     padding: 0.55rem 0.8rem;
     border-radius: 0.8rem;
     font-size: 0.94rem;
-    color: var(--text-muted);
+
+    /* Dynamisk tekstfarve efter tema */
+    color: var(--text-primary);
+
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    border: 1px solid transparent;
+
+    /* Dynamisk border */
+    border: 1px solid var(--border-subtle);
+
+    background: var(--bg-card);
     transition: 0.18s ease;
 }
 
-/* Hover-effekt */
-.sidebar .nav li span::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background: radial-gradient(circle at left, rgba(34, 211, 238, 0.22), transparent 60%);
-    transition: opacity 0.18s ease;
-}
-
-.sidebar .nav li span:hover::before {
-    opacity: 1;
-}
-
+/* Hover */
 .sidebar .nav li span:hover {
-    color: #e5e7eb;
-    border-color: rgba(148, 163, 184, 0.6);
+    border-color: var(--neon-cyan);
+    color: var(--text);
+
+    box-shadow:
+        0 0 6px rgba(34, 211, 238, 0.25),
+        0 0 12px rgba(34, 211, 238, 0.12);
 }
 
-/* Aktiv side */
+/* Aktiv menu */
 .sidebar .nav li.active span {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(168, 85, 247, 0.16));
-    color: #f9fafb;
-    border-color: rgba(34, 211, 238, 0.7);
-    box-shadow: var(--neon-glow-soft);
+    background: linear-gradient(
+        135deg,
+        rgba(34, 211, 238, 0.22),
+        rgba(168, 85, 247, 0.22)
+    );
+    color: var(--text);
+    border-color: var(--neon-cyan);
+
+    box-shadow:
+        0 0 12px rgba(34, 211, 238, 0.28),
+        0 0 20px rgba(168, 85, 247, 0.20);
 }
 
 /* Mobil: sidebar som drawer */
