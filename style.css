@@ -540,97 +540,115 @@ select {
 
 
 /* ======================================================
-   AFSNIT 07 – KNAPPER (NEON + UNIVERSAL GUL TEKST)
+   AFSNIT 07 – KOMPONENTFARVER (LYS + MØRK MODE)
    ====================================================== */
 
-/* ----------------------------------------
-   07A – STANDARD KNAPPER
-   ---------------------------------------- */
-.btn {
-    padding: 0.7rem 1.4rem;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
+/* -------------------------
+      FELTER / INPUT
+---------------------------*/
 
-    font-size: 0.95rem;
-    font-weight: 600;
-
-    /* Tekst – universel gul, virker i både lys og mørk */
-    color: #facc15 !important;
-
-    background: var(--accent);
-    transition: 0.18s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-}
-
-.btn:hover {
-    background: var(--accent-strong);
-    box-shadow: 0 0 18px var(--accent-soft);
-}
-
-/* ----------------------------------------
-   07B – SEKUNDÆR KNAP
-   ---------------------------------------- */
-.btn-secondary {
-    background: transparent;
+input,
+textarea,
+select {
+    background: var(--bg-card);
+    color: var(--text-primary) !important;
     border: 1px solid var(--border-subtle);
-
-    /* Gul tekst */
-    color: #facc15 !important;
+    padding: 10px 14px;
+    outline: none;
+    border-radius: 8px;
+    transition: background 0.25s, color 0.25s, border 0.25s;
 }
 
-.btn-secondary:hover {
-    border-color: var(--neon-cyan);
-    box-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
+/* Lys mode – ekstra kontrast */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+    color: #1a1a1a !important;
+    border-color: #c8c8c8;
 }
 
-/* ----------------------------------------
-   07C – START (GRØN) KNAP
-   ---------------------------------------- */
-.btn-green {
-    background: radial-gradient(circle at top, var(--green), #16a34a);
-
-    /* Gul tekst */
-    color: #facc15 !important;
-
-    box-shadow: var(--green-glow);
-    padding: 0.85rem 1.8rem;
-    font-size: 1.02rem;
+/* Focus */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 6px var(--neon-blue);
 }
 
-.btn-green:hover {
-    box-shadow: 0 0 28px rgba(34, 197, 94, 0.85);
-}
+/* -------------------------
+      START/STOP KNAPPER
+---------------------------*/
 
-/* ----------------------------------------
-   07D – STOP (RØD) KNAP
-   ---------------------------------------- */
+.btn-green,
 .btn-red {
-    background: radial-gradient(circle at top, #fb7185, #ef4444);
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 14px;
+    border: none;
+    color: var(--button-text-color) !important;
+}
 
-    /* Gul tekst */
-    color: #facc15 !important;
+.btn-green {
+    background: var(--green);
+    box-shadow: var(--green-glow);
+}
 
+.btn-red {
+    background: var(--red);
     box-shadow: var(--red-glow);
-    padding: 0.85rem 1.8rem;
-    font-size: 1.02rem;
 }
 
-.btn-red:hover {
-    box-shadow: 0 0 28px rgba(248, 113, 113, 0.9);
+/* Hover (mørk mode) */
+[data-theme="dark"] .btn-green:hover {
+    background: #0fdc5d;
 }
 
-/* ----------------------------------------
-   07E – KNAP-RÆKKER
-   ---------------------------------------- */
-.btn-row {
-    display: flex;
-    gap: 0.8rem;
-    justify-content: center;
-    margin-top: 0.9rem;
+[data-theme="dark"] .btn-red:hover {
+    background: #ff4f48;
+}
+
+/* Hover (lys mode) */
+[data-theme="light"] .btn-green:hover {
+    background: #0cb94e;
+}
+
+[data-theme="light"] .btn-red:hover {
+    background: #e4443d;
+}
+
+/* -------------------------
+      CHIPS (MEDARBEJDERE)
+---------------------------*/
+
+.chip {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Lys mode – mørkere tekst så man kan se den */
+[data-theme="light"] .chip {
+    color: #1a1a1a;
+}
+
+/* Valgt chip */
+.chip.selected {
+    background: var(--neon-purple);
+    color: #fff !important;
+}
+
+/* -------------------------
+      SIDEMENU
+---------------------------*/
+
+.sidebar button,
+.sidebar a {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .sidebar button,
+[data-theme="light"] .sidebar a {
+    color: #1a1a1a;
 }
 
 /* ======================================================
