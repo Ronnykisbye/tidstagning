@@ -848,23 +848,26 @@ table tr:nth-child(even) td {
 }
 
 /* ======================================================
-   AFSNIT 99 – GLOBAL KNAPTEKST (OVERSKRIVER ALT)
+   AFSNIT 99 – GLOBAL KNAPTEKST (FINAL FIX)
    ====================================================== */
 
+/* Dark mode – hvid knaptekst */
 :root {
     --button-text-color: #ffffff;
 }
 
-[data-theme="light"] {
+/* Light mode – gul knaptekst */
+html[data-theme="light"] {
     --button-text-color: #facc15;
 }
 
-/* Dette er selve "kan ikke overskrives"-fixet */
+/* Gælder ALLE knapper i hele systemet */
 button,
 .btn,
 .btn-green,
 .btn-red,
 .btn-secondary,
+.lang-btn,
 .language-btn {
     color: var(--button-text-color) !important;
 }
