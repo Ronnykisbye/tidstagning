@@ -327,62 +327,83 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 05 – CONTENT / SIDER & KORT
+   AFSNIT 05 – CONTENT / SIDER & KORT (LIGHT + DARK MODE)
    ====================================================== */
 
+/* ---------------------------
+   05A – HOVED CONTENT-AREA
+   --------------------------- */
 .content {
     flex: 1;
     padding: 2.5rem 2.2rem;
+
+    /* Dynamisk baggrund */
     background: var(--bg-secondary);
+
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    transition: background 0.25s ease;
+
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
-
-/* Side-sektioner */
+/* ---------------------------
+   05B – PAGES / VISIBILITY
+   --------------------------- */
 .page {
     display: none;
     width: 100%;
     max-width: 1000px;
+    color: var(--text-primary);
 }
 
-/* Bruges af app.js */
 .page.visible {
     display: block;
 }
-.page.active {
-    display: block;
-}
 
-/* Overskrifter */
+/* ---------------------------
+   05C – TITLER
+   --------------------------- */
 .page h1 {
     font-size: 1.6rem;
     margin-bottom: 0.8rem;
-    color: #e5e7eb;
+    color: var(--text-primary);
 }
 
-/* Cards */
+/* ---------------------------
+   05D – STANDARD CARD
+   --------------------------- */
 .card {
-    background: rgba(15, 23, 42, 0.92);
+    background: var(--bg-card);
     border-radius: var(--radius);
     padding: 1.4rem 1.5rem;
-    border: 1px solid rgba(148, 163, 184, 0.45);
-    box-shadow: var(--shadow-soft);
+
+    border: 1px solid var(--border-subtle);
+
+    /* Light mode → blød skygge  
+       Dark mode → kraftigere */
+    box-shadow:
+        0 12px 22px rgba(0, 0, 0, 0.12),
+        0 18px 45px rgba(0, 0, 0, 0.35);
+
     margin-bottom: 1.4rem;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
+/* Stort kort */
 .card-large {
     max-width: 560px;
 }
 
-/* Tekst-hjælp */
+/* ---------------------------
+   05E – HJÆLPETEKST
+   --------------------------- */
 .help-text {
     margin-top: 0.65rem;
     font-size: 0.85rem;
     color: var(--text-muted);
 }
+
 
 /* ======================================================
    AFSNIT 06 – FORM ELEMENTER
