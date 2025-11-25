@@ -1,120 +1,67 @@
-GreenTime Pro – Digital tidsregistreringsplatform
+📘 README-FIL (klar til GitHub)
 
-GreenTime Pro er et moderne web-system udviklet til virksomheder, der ønsker at registrere tid hos kunder, planlægge besøg og holde styr på medarbejdernes arbejde.
-Appen er designet til både PC og mobil og understøtter flere sprog og både lys og mørk tilstand.
+(Du kan også lægge den i dit repo som README.md)
 
-🧩 1. Projektets formål
+GreenTime Pro – Projektbeskrivelse
 
-GreenTime Pro gør det muligt at:
+GreenTime Pro er en moderne web-app designet til et mindre servicefirma, hvor medarbejdere besøger kunder og registrerer den tid, de bruger på opgaver. Systemet skal være hurtigt, intuitivt og kunne bruges både på PC og smartphone.
 
-Registrere tid hos hver kunde
+🎯 Formål
 
-Udvælge de medarbejdere der deltager i besøget
+Appen skal gøre det nemt at:
 
-Starte og stoppe en timer for kunden
+Registrere tid på kunder
 
-Se både “I dag” og “Samlet tid”
+Vælge flere medarbejdere til samme kunde
 
-Oprette kunder og medarbejdere
+Se samlet antal arbejdstimer
 
-Planlægge besøg via en farvekodet kalender
+Planlægge opgaver i en kalender
 
-Se detaljeret tidsforbrug og køre rapporter
+Generere rapporter
 
-Fungere på både mobil og PC
+Se logfiler
 
-Understøtte flere sprog (DK, EN, DE, LT)
+Administrere kunder og medarbejdere
 
-Understøtte lys og mørk tilstand
+Alt skal fungere på både mobil og desktop – med sidebar på PC og burger-menu på mobil.
 
-🏗️ 2. Teknisk struktur
+🧩 Systemets hovedmoduler
+1. Dashboard (Tidsregistrering)
 
-Appen består af tre hovedfiler:
+Dropdown med kunder
 
-index.html
+Chips-knapper til medarbejdere
 
-Indeholder al HTML-strukturen
+Timer (Start/Stop)
 
-Alt indhold ligger i tydelige Afsnit 01–08
+Valg mellem “I dag” og “Samlet tid”
 
-Hver side (Dashboard, Kunder, Medarbejdere osv.) er en <section>
+Alt i alle sprog + lys/mørk mode
 
-Kun én side er synlig ad gangen
+2. Kunder
 
-style.css
+Opret kunde
 
-Styrer layout, farver og responsiv design
+Liste over kunder
 
-Underopdelt i mange afsnit, så du nemt kan finde ting
+Rediger og administrer
 
-Understøtter både light mode og dark mode
+3. Medarbejdere
 
-Bruges til knapper, chips, dropdowns, timer-display osv.
+Liste og styring
 
-app.js
+Chips til valg i dashboard
 
-Hovedmotoren
+4. Detaljeret tid
 
-Styrer navigation, sider, timer, sprog, tema og data
+Vis alle tidsregistreringer
 
-Organiseret i mange afsnit: Afsnit 01, 02, 03a, 03b, 04… 09
+Filtrer per kunde/medarbejder
 
-Indeholder funktioner til:
+5. Kalender
 
-Timer
-
-Kundeliste
-
-Medarbejderliste
-
-Kalender
-
-Sprogskift
-
-Tema
-
-Chips-knapper der bliver grønne/grå
-
-Start/Stop funktion
-
-Data gemt i localStorage
-
-🧱 3. Appens funktioner
-Dashboard – Tidsregistrering
-
-Vælg kunde (dropdown)
-
-Vælg medarbejdere (knapper/chips som skifter farve ved valg)
-
-Timer (start/stop)
-
-To tilstande: I dag / Samlet tid
-
-Timeren viser altid korrekt tid
-
-Alle data gemmes automatisk
-
-Kunder
-
-Opret ny kunde
-
-Se kundeliste
-
-Viser navn, telefon, email og adresse
-
-Bruges i alle dropdowns
-
-Medarbejdere
-
-Tilføj medarbejdere
-
-Vises som chips i dashboard
-
-Kan vælges fra/til
-
-Farver skifter automatisk i lys/mørk tilstand
-
-Kalender
+Viser antal besøg per dag
 
 Farvekoder:
 
@@ -124,121 +71,89 @@ Farvekoder:
 
 4+ kunder = rød
 
-Man kan bladre frem og tilbage
+Klik for at se detaljer
 
-Viser hurtigt travle dage
+6. Logs
 
-Rapporter
+Liste over alle handlinger
 
-Find kunde
+7. Rapporter
 
-Se alt tidsforbrug
+Timer summeret per kunde
 
-Mulighed for nulstilling
+8. Indstillinger
 
-Viser samlet timer + antal medarbejdere
+Sprogvalg
 
-🌍 4. Multisprog
+Tema (lys/mørk)
 
-Appen bruger data-i18n="" til alle tekster
-Sprog gemmes i localStorage og skifter uden reload.
-Understøttede sprog:
+🛠 Sådan arbejder vi
 
-Dansk (DK)
+Vi arbejder struktureret i trin:
 
-Engelsk (GB)
+Jeg uploader mine tre filer (index.html, style.css, app.js).
 
-Tysk (DE)
+Du analyserer dem og rører kun det jeg beder om.
 
-Litauisk (LT)
+Du laver kun hele afsnit – aldrig små klip.
 
-🌗 5. Lys & Mørk mode
+Du fortæller præcis, hvor i filen jeg skal indsætte afsnittet.
 
-Skiftes med sol/måne-knap
+Vi holder styr på:
 
-Hele appen styres via CSS-variabler
+farver i lys/mørk mode
 
-Timer, chips, sidebar, tekst – alt skifter automatisk
+sidebar-placering
 
-Gemmes i localStorage
+responsive layout
 
-🔄 6. Datahåndtering
+sprog i hele appen
 
-Alle data gemmes i browseren via localStorage, fx:
+Vi bygger altid trin for trin, så appen ikke går i stykker.
 
-gtp_customers
+🎨 Designregler
 
-gtp_employees
+Moderne og lækkert
 
-gtp_active_timer
+Medium-neon glow
 
-gtp_quick_timer
+Store knapper (2× normal størrelse)
 
-gtp_theme
+Alt skal matche:
 
-gtp_lang
-
-Data går aldrig tabt, selv hvis browseren lukkes.
-
-⚙️ 7. Navigation
-
-Kun én side er synlig ad gangen.
-Følgende styrer hele navigationen:
-
-showPage("dashboardPage");
-
-
-Sidebar-knapper har data-page="".
-
-📱 8. Mobil & PC design
 PC
-
-Venstremenu er altid synlig
-
-Content ligger i højre område
 
 Mobil
 
-Burger-menu (side-menu gemt)
+Lys mode
 
-Content fylder hele skærmen
+Mørk mode
 
-Store knapper og touch-optimeret design
+🌍 Sprogsystem
 
-🔧 9. Sådan arbejder vi videre (meget vigtigt)
+Appen understøtter:
 
-Når vi arbejder i nye sessioner:
+Dansk
 
-Du skriver: “fortsæt”
+Engelsk
 
-Jeg fortsætter præcis hvor vi slap
+Tysk
 
-Vi arbejder altid SBS (ét trin ad gangen)
+Litauisk
 
-Jeg laver aldrig noget, før du skriver “klar”
+Alle tekster skal have data-i18n="".
 
-Vi ødelægger aldrig funktioner der virker
+🔥 Vores vigtigste regel
 
-Du downloader filerne, uploader dem igen i ny session
+👉 Vi må aldrig ødelægge noget som allerede virker.
+Når vi retter noget, er det altid hele afsnit, ikke små patches.
 
-Jeg arbejder KUN ud fra filerne du uploader
+📂 Filer du skal uploade i ny session
 
-Alt kodes i tydelige afsnit (Afsnit 01, 02, 03a osv.)
+Upload disse tre filer:
 
-⭐ 10. Visionen for GreenTime Pro
+index.html
 
-Målet er at lave:
+style.css
 
-Den bedste digitale tidsregistreringsapp
-
-Moderne UI
-
-Hurtig at bruge
-
-Driftssikker
-
-Let at udvide
-
-Utrolig flot i både lys og mørk tilstand
-
-Perfekt til real-life brug hos et firma
+app.js
