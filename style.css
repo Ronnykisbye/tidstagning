@@ -406,9 +406,12 @@ body {
 
 
 /* ======================================================
-   AFSNIT 06 – FORM ELEMENTER
+   AFSNIT 06 – FORM ELEMENTER (LIGHT + DARK MODE)
    ====================================================== */
 
+/* -----------------------------------
+   06A – GENERELT FORM-STYLING
+   ----------------------------------- */
 label {
     display: block;
     font-size: 0.86rem;
@@ -416,40 +419,108 @@ label {
     color: var(--text-muted);
 }
 
+/* Input, textarea, select */
 .input,
 textarea,
 select {
     width: 100%;
     padding: 0.6rem 0.8rem;
     border-radius: 0.75rem;
-    border: 1px solid rgba(148, 163, 184, 0.55);
-    background: radial-gradient(circle at top, #020617, #020617);
-    color: var(--text);
+    border: 1px solid var(--border-subtle);
+
+    /* Dynamisk baggrund */
+    background: var(--bg-card);
+    color: var(--text-primary);
+
     font-size: 0.95rem;
     transition: 0.18s ease;
 }
 
+/* Placeholder */
 .input::placeholder,
 textarea::placeholder {
-    color: rgba(148, 163, 184, 0.85);
+    color: var(--text-muted);
 }
 
+/* Focus styling */
 .input:focus,
 textarea:focus,
 select:focus {
     outline: none;
     border-color: var(--neon-cyan);
-    box-shadow: 0 0 16px rgba(34, 211, 238, 0.6);
+    box-shadow: 0 0 16px rgba(34, 211, 238, 0.5);
 }
 
-/* Dropdown pil */
+/* Select pil */
 select {
     appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='%239ca3af' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%236b7280' width='20' height='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 8l5 5 5-5'/></svg>");
     background-repeat: no-repeat;
     background-position: right 10px center;
     padding-right: 2.2rem;
 }
+
+/* -----------------------------------
+   06B – RADIOS
+   ----------------------------------- */
+.radio-row {
+    display: flex;
+    gap: 1.2rem;
+    margin: 0.6rem 0 1rem;
+    flex-wrap: wrap;
+}
+
+.radio-row label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.radio-row input[type="radio"] {
+    accent-color: var(--neon-cyan);
+}
+
+/* -----------------------------------
+   06C – CHIPS (MEDARBEJDERE)
+   ----------------------------------- */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0.5rem 0 0.8rem;
+}
+
+.chip {
+    padding: 0.38rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+
+    /* Dynamisk baggrund */
+    background: var(--bg-card);
+
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: 0.18s ease;
+}
+
+/* Hover */
+.chip:hover {
+    border-color: var(--neon-cyan);
+    color: var(--text-primary);
+}
+
+/* SELECTED chip (neon) */
+.chip.selected {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    color: #020617;
+    border-color: transparent;
+    box-shadow: 0 0 14px rgba(34, 211, 238, 0.45);
+}
+
+
 
 /* ======================================================
    AFSNIT 07 – KNAPPER (NEON)
