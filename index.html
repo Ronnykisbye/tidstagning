@@ -10,10 +10,28 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- ======================================================
-         AFSNIT 02 – APP WRAPPER
-    ======================================================= -->
-    <div class="app-container">
+    <!-- ========================================================= -->
+<!-- AFSNIT 02 – APP WRAPPER (KORREKT VERSION) -->
+<!-- ========================================================= -->
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <ul>
+            <li data-page="dashboardPage" data-i18n="menu_dashboard">Tidsregistrering</li>
+            <li data-page="customersPage" data-i18n="menu_customers">Kunder</li>
+            <li data-page="employeesPage" data-i18n="menu_employees">Medarbejdere</li>
+            <li data-page="detailsPage" data-i18n="menu_details">Detaljeret tid</li>
+            <li data-page="calendarPage" data-i18n="menu_calendar">Plan & kalender</li>
+            <li data-page="logsPage" data-i18n="menu_logs">Logs</li>
+            <li data-page="reportsPage" data-i18n="menu_reports">Rapporter</li>
+            <li data-page="settingsPage" data-i18n="menu_settings">Indstillinger</li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="contentArea" class="content">
 
         <!-- ======================================================
              AFSNIT 03 – TOPBAR
