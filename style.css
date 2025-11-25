@@ -517,59 +517,85 @@ select {
     box-shadow: 0 0 14px rgba(34, 211, 238, 0.45);
 }
 
-
-
 /* ======================================================
    AFSNIT 07 – KNAPPER (STABIL VERSION)
    ====================================================== */
 
-.btn,
-.btn-green,
-.btn-red,
-.btn-secondary,
-.lang-btn {
-    border: none;
-    cursor: pointer;
-    padding: 0.6rem 1.4rem;
-    border-radius: 999px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    transition: 0.2s ease;
+/* Fælles knap-stil */
+.btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--btn-text) !important;
+    gap: 0.25rem;
+
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.18s ease;
+    background: var(--bg-secondary);
+    color: var(--text);
+}
+
+/* Hover – virker i begge temaer */
+.btn:hover {
+    background: var(--bg-card);
+    box-shadow: 0 0 14px rgba(0,0,0,0.15);
 }
 
 /* Grøn start-knap */
 .btn-green {
-    background: radial-gradient(circle at top, #22c55e, #15803d);
-    box-shadow: 0 0 12px rgba(34, 197, 94, 0.55);
+    background: #16a34a;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 0 14px rgba(34,197,94,0.45);
 }
+
 .btn-green:hover {
-    box-shadow: 0 0 22px rgba(34, 197, 94, 0.85);
+    background: #22c55e;
+    box-shadow: 0 0 22px rgba(34,197,94,0.65);
 }
 
 /* Rød stop-knap */
 .btn-red {
-    background: radial-gradient(circle at top, #fb7185, #ef4444);
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
-}
-.btn-red:hover {
-    box-shadow: 0 0 22px rgba(239, 68, 68, 0.85);
+    background: #ef4444;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 0 14px rgba(239,68,68,0.45);
 }
 
-/* Sekundær knap (sprog + små knapper) */
-.btn-secondary,
-.lang-btn {
-    background: transparent;
-    border: 1px solid var(--border-subtle);
+.btn-red:hover {
+    background: #f87171;
+    box-shadow: 0 0 22px rgba(239,68,68,0.75);
 }
-.btn-secondary:hover,
-.lang-btn:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 12px var(--accent-soft);
+
+/* Chips (medarbejdere) – uændret neon */
+.chip {
+    background: #0f172a;
+    padding: 0.45rem 0.9rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-weight: 500;
+    cursor: pointer;
 }
+
+.chip.selected {
+    background: linear-gradient(90deg, #06b6d4, #7c3aed);
+    color: white;
+}
+
+/* Knaprække */
+.btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.2rem;
+}
+
+
 
 /* ======================================================
    AFSNIT 08 – TIMER (DISPLAY + RADIO)
