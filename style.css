@@ -102,6 +102,30 @@
     }
 }
 
+/* ======================================================
+   AFSNIT 01D – GLOBAL KNAPTEKST (KAN IKKE OVERSKRIVES)
+   ====================================================== */
+
+/* Mørk mode – hvid knaptekst */
+:root {
+    --button-text-color: #ffffff;
+}
+
+/* Lys mode – gul knaptekst */
+[data-theme="light"] {
+    --button-text-color: #facc15;
+}
+
+/* Gælder ALLE knapper, uanset afsnit */
+button,
+.btn,
+.btn-green,
+.btn-red,
+.btn-secondary {
+    color: var(--button-text-color) !important;
+}
+
+
 
 /* ======================================================
    AFSNIT 02 – GLOBALT RESET & BODY
