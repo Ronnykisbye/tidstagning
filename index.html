@@ -10,14 +10,16 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- ========================================================= -->
-<!-- AFSNIT 02 – APP WRAPPER (KORREKT VERSION) -->
-<!-- ========================================================= -->
+  <!-- ============================================== -->
+<!-- AFSNIT 02 – APP WRAPPER (KORREKT LAYOUT)       -->
+<!-- ============================================== -->
 
 <div class="app">
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (venstre menu) -->
     <aside class="sidebar">
+        <div class="logo">GreenTime Pro</div>
+
         <ul>
             <li data-page="dashboardPage" data-i18n="menu_dashboard">Tidsregistrering</li>
             <li data-page="customersPage" data-i18n="menu_customers">Kunder</li>
@@ -30,8 +32,12 @@
         </ul>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- HOVEDINDHOLD (alt der skifter når man klikker i menuen) -->
     <main id="contentArea" class="content">
+
+        <!-- her vises siderne dynamisk via showPage() -->
+        <!-- DINE eksisterende <section id="dashboardPage"> osv bliver stående som de er -->
+
 
         <!-- ======================================================
              AFSNIT 03 – TOPBAR
