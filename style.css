@@ -520,115 +520,55 @@ select {
 
 
 /* ======================================================
-   AFSNIT 07 – KOMPONENTFARVER (LYS + MØRK MODE)
+   AFSNIT 07 – KNAPPER (STABIL VERSION)
    ====================================================== */
 
-/* -------------------------
-      FELTER / INPUT
----------------------------*/
-
-input,
-textarea,
-select {
-    background: var(--bg-card);
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-subtle);
-    padding: 10px 14px;
-    outline: none;
-    border-radius: 8px;
-    transition: background 0.25s, color 0.25s, border 0.25s;
-}
-
-/* Lys mode – ekstra kontrast */
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] select {
-    color: #1a1a1a !important;
-    border-color: #c8c8c8;
-}
-
-/* Focus */
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 6px var(--neon-blue);
-}
-
-/* -------------------------
-      START/STOP KNAPPER
----------------------------*/
-
+.btn,
 .btn-green,
-.btn-red {
-    font-weight: 600;
-    padding: 10px 22px;
-    border-radius: 14px;
+.btn-red,
+.btn-secondary,
+.lang-btn {
     border: none;
-    color: var(--button-text-color) !important;
+    cursor: pointer;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--btn-text) !important;
 }
 
+/* Grøn start-knap */
 .btn-green {
-    background: var(--green);
-    box-shadow: var(--green-glow);
+    background: radial-gradient(circle at top, #22c55e, #15803d);
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.55);
+}
+.btn-green:hover {
+    box-shadow: 0 0 22px rgba(34, 197, 94, 0.85);
 }
 
+/* Rød stop-knap */
 .btn-red {
-    background: var(--red);
-    box-shadow: var(--red-glow);
+    background: radial-gradient(circle at top, #fb7185, #ef4444);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.55);
+}
+.btn-red:hover {
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.85);
 }
 
-/* Hover (mørk mode) */
-[data-theme="dark"] .btn-green:hover {
-    background: #0fdc5d;
-}
-
-[data-theme="dark"] .btn-red:hover {
-    background: #ff4f48;
-}
-
-/* Hover (lys mode) */
-[data-theme="light"] .btn-green:hover {
-    background: #0cb94e;
-}
-
-[data-theme="light"] .btn-red:hover {
-    background: #e4443d;
-}
-
-/* -------------------------
-      CHIPS (MEDARBEJDERE)
----------------------------*/
-
-.chip {
-    background: var(--bg-elevated);
-    color: var(--text-primary);
+/* Sekundær knap (sprog + små knapper) */
+.btn-secondary,
+.lang-btn {
+    background: transparent;
     border: 1px solid var(--border-subtle);
 }
-
-/* Lys mode – mørkere tekst så man kan se den */
-[data-theme="light"] .chip {
-    color: #1a1a1a;
-}
-
-/* Valgt chip */
-.chip.selected {
-    background: var(--neon-purple);
-    color: #fff !important;
-}
-
-/* -------------------------
-      SIDEMENU
----------------------------*/
-
-.sidebar button,
-.sidebar a {
-    color: var(--text-primary);
-}
-
-[data-theme="light"] .sidebar button,
-[data-theme="light"] .sidebar a {
-    color: #1a1a1a;
+.btn-secondary:hover,
+.lang-btn:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-soft);
 }
 
 /* ======================================================
