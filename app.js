@@ -216,35 +216,52 @@ function initLanguage() {
     });
 }
 
-/* =======================================
-   03F – LYS/MØRK TEMA (RETTET VERSION)
-   ======================================= */
-function initTheme() {
-    // Sæt tema direkte på dokumentet
-    document.documentElement.dataset.theme = currentTheme;
+/* ============================================================
+   03F – LYS/MØRK TEMA (STABIL & KORREKT VERSION)
+   ============================================================ */
+
+// Standard tema hvis intet er gemt
+let currentTheme = "light";
+
+// Hent gemt tema
+const saved = localStorage.getItem(STORAGE_KEYS.theme);
+if (saved) {
+    try {
+        currentTheme = JSON.parse(saved);
+    } catch (e) {
+        currentTheme = "light";
+    }
 }
 
+// Påfør tema ved load
+function initTheme() {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+}
+
+// Init knap & logik
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
-    // Sæt korrekt ikon ved load
-    btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+    // Sæt ikon korrekt ved load
+    btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
+
         // Skift tema
-        currentTheme = currentTheme === "light" ? "dark" : "light";
+        currentTheme = (currentTheme === "light") ? "dark" : "light";
 
-        // Opdatér HTML dataset
-        document.documentElement.dataset.theme = currentTheme;
+        // Sæt på HTML – ingen blink længere
+        document.documentElement.setAttribute("data-theme", currentTheme);
 
-        // VIGTIGT: Gem **før** alt andet overskriver det
+        // Gem tema
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
 
-        // Opdatér ikon
-        btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
+        // Skift ikon
+        btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
     });
 }
+
 
 
 
