@@ -1,77 +1,107 @@
 /* ======================================================
    AFSNIT 01 – ROOT VARIABLER (THEME ENGINE)
+   Lys Neon-Tech Mode + Dark Mode
    ====================================================== */
 
+/* ------------------------------------
+   01A – DARK MODE (STANDARD)
+   ------------------------------------ */
 :root {
-    /* Basis (mørk som default) */
+    /* Baggrunde */
     --bg: #020617;
-    --bg-elevated: #020617;
-    --bg-card: #020617;
+    --bg-primary: #020617;
+    --bg-secondary: #0f172a;
+    --bg-card: #0f172a;
+    --bg-elevated: #1e293b;
 
+    /* Tekst */
     --text: #e5e7eb;
-    --text-muted: #9ca3af;
+    --text-primary: #e5e7eb;
+    --text-muted: #94a3b8;
 
-    --border-subtle: #1f2937;
-
-    --accent: #22c55e;
-    --accent-soft: rgba(34, 197, 94, 0.18);
-    --accent-strong: #16a34a;
-
-    --radius: 14px;
-    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    /* Border */
+    --border-subtle: #1f2a3d;
 
     /* Neon farver */
     --neon-cyan: #22d3ee;
     --neon-purple: #a855f7;
     --neon-blue: #2563eb;
 
+    /* Glow */
     --neon-glow-soft: 0 0 18px rgba(34, 211, 238, 0.35);
     --neon-glow-strong: 0 0 32px rgba(168, 85, 247, 0.55);
 
+    /* Grøn / Rød */
     --green: #22c55e;
     --green-glow: 0 0 18px rgba(34, 197, 94, 0.55);
     --red: #ef4444;
     --red-glow: 0 0 18px rgba(248, 113, 113, 0.6);
 
-    /* Brugte alias-navne (fra tidligere fil) */
-    --bg-primary: var(--bg);
-    --bg-secondary: #020617;
-    --text-primary: var(--text);
-    --border-color: var(--border-subtle);
+    /* UI generelt */
+    --radius: 14px;
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
 }
 
-/* ---------- LYS MODE (RET TIL NY VERSION) ---------- */
+/* ------------------------------------
+   01B – LIGHT MODE (Lys Neon-Tech)
+   ------------------------------------ */
 [data-theme="light"] {
-    --bg: #f1f5f9;              /* Lys, men ikke hvid – bedre kontrast */
-    --bg-elevated: #ffffff;
+    /* Baggrunde – Neon Lys Tech */
+    --bg: #f2f4f8;
+    --bg-primary: #f2f4f8;
+    --bg-secondary: #ffffff;
     --bg-card: #ffffff;
+    --bg-elevated: #ffffff;
 
-    --text: #111827;            /* Mørk tekst – altid læsbar */
-    --text-muted: #374151;
+    /* Tekst */
+    --text: #0f172a;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
 
-    --border-subtle: #cbd5e1;
+    /* Border */
+    --border-subtle: #cfd8e3;
 
-    --accent: #16a34a;
-    --accent-soft: rgba(22, 163, 74, 0.18);
-    --accent-strong: #15803d;
-
-    --shadow-soft: 0 12px 22px rgba(0, 0, 0, 0.15);
-
-    /* Sikrer neon tydelig i lys mode */
+    /* Neon i lys udgave */
     --neon-cyan: #06b6d4;
-    --neon-purple: #8b5cf6;
+    --neon-purple: #7c3aed;
     --neon-blue: #3b82f6;
 
+    /* Glow i lys version */
+    --neon-glow-soft: 0 0 8px rgba(6, 182, 212, 0.25);
+    --neon-glow-strong: 0 0 18px rgba(124, 58, 237, 0.28);
+
+    /* Grøn/rød i lys */
     --green: #16a34a;
+    --green-glow: 0 0 10px rgba(34, 197, 94, 0.32);
     --red: #dc2626;
+    --red-glow: 0 0 10px rgba(239, 68, 68, 0.35);
 
-    --green-glow: 0 0 18px rgba(34, 197, 94, 0.35);
-    --red-glow: 0 0 18px rgba(248, 113, 113, 0.45);
-
-    --bg-primary: var(--bg);
-    --bg-secondary: #f8fafc;
-    --text-primary: var(--text);
+    /* UI */
+    --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.12);
 }
+
+/* ------------------------------------
+   01C – AUTO SYSTEM MODE
+   (IKKE brugt endnu, men klar fremtidssikring)
+   ------------------------------------ */
+@media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+        --bg: #f2f4f8;
+        --bg-primary: #f2f4f8;
+        --bg-secondary: #ffffff;
+        --bg-card: #ffffff;
+        --text: #0f172a;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root[data-theme="auto"] {
+        --bg: #020617;
+        --bg-card: #0f172a;
+        --text: #e5e7eb;
+    }
+}
+
 
 /* ======================================================
    AFSNIT 02 – GLOBALT RESET & BODY
