@@ -40,25 +40,36 @@
     --border-color: var(--border-subtle);
 }
 
-/* ---------- LYS MODE ---------- */
+/* ---------- LYS MODE (RET TIL NY VERSION) ---------- */
 [data-theme="light"] {
-    --bg: #e5e7eb;
-    --bg-elevated: #f9fafb;
+    --bg: #f1f5f9;              /* Lys, men ikke hvid – bedre kontrast */
+    --bg-elevated: #ffffff;
     --bg-card: #ffffff;
 
-    --text: #020617;
-    --text-muted: #4b5563;
+    --text: #111827;            /* Mørk tekst – altid læsbar */
+    --text-muted: #374151;
 
-    --border-subtle: #d1d5db;
+    --border-subtle: #cbd5e1;
 
     --accent: #16a34a;
-    --accent-soft: rgba(22, 163, 74, 0.15);
+    --accent-soft: rgba(22, 163, 74, 0.18);
     --accent-strong: #15803d;
 
-    --shadow-soft: 0 12px 32px rgba(15, 23, 42, 0.25);
+    --shadow-soft: 0 12px 22px rgba(0, 0, 0, 0.15);
+
+    /* Sikrer neon tydelig i lys mode */
+    --neon-cyan: #06b6d4;
+    --neon-purple: #8b5cf6;
+    --neon-blue: #3b82f6;
+
+    --green: #16a34a;
+    --red: #dc2626;
+
+    --green-glow: 0 0 18px rgba(34, 197, 94, 0.35);
+    --red-glow: 0 0 18px rgba(248, 113, 113, 0.45);
 
     --bg-primary: var(--bg);
-    --bg-secondary: #f3f4f6;
+    --bg-secondary: #f8fafc;
     --text-primary: var(--text);
 }
 
