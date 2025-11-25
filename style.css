@@ -1,131 +1,47 @@
 /* ======================================================
-   AFSNIT 01 – ROOT VARIABLER (THEME ENGINE)
-   Lys Neon-Tech Mode + Dark Mode
+   AFSNIT 01D – GLOBAL TEKST & KNAP-FARVER (FIXER LYS MODE)
    ====================================================== */
 
-/* ------------------------------------
-   01A – DARK MODE (STANDARD)
-   ------------------------------------ */
+/* Standard farver for dark mode */
 :root {
-    /* Baggrunde */
-    --bg: #020617;
-    --bg-primary: #020617;
-    --bg-secondary: #0f172a;
-    --bg-card: #0f172a;
-    --bg-elevated: #1e293b;
+    --txt: #e5e7eb;          /* lys tekst */
+    --txt-strong: #ffffff;
+    --txt-muted: #94a3b8;
 
-    /* Tekst */
-    --text: #e5e7eb;
-    --text-primary: #e5e7eb;
-    --text-muted: #94a3b8;
-
-    /* Border */
-    --border-subtle: #1f2a3d;
-
-    /* Neon farver */
-    --neon-cyan: #22d3ee;
-    --neon-purple: #a855f7;
-    --neon-blue: #2563eb;
-
-    /* Glow */
-    --neon-glow-soft: 0 0 18px rgba(34, 211, 238, 0.35);
-    --neon-glow-strong: 0 0 32px rgba(168, 85, 247, 0.55);
-
-    /* Grøn / Rød */
-    --green: #22c55e;
-    --green-glow: 0 0 18px rgba(34, 197, 94, 0.55);
-    --red: #ef4444;
-    --red-glow: 0 0 18px rgba(248, 113, 113, 0.6);
-
-    /* UI generelt */
-    --radius: 14px;
-    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    --btn-text: #ffffff;     /* knapper i dark mode */
 }
 
-/* ------------------------------------
-   01B – LIGHT MODE (Lys Neon-Tech)
-   ------------------------------------ */
-[data-theme="light"] {
-    /* Baggrunde – Neon Lys Tech */
-    --bg: #f2f4f8;
-    --bg-primary: #f2f4f8;
-    --bg-secondary: #ffffff;
-    --bg-card: #ffffff;
-    --bg-elevated: #ffffff;
+/* Farver for light mode (ALT ser korrekt ud her) */
+html[data-theme="light"] {
+    --txt: #1e293b;          /* mørk tekst */
+    --txt-strong: #0f172a;
+    --txt-muted: #475569;
 
-    /* Tekst */
-    --text: #0f172a;
-    --text-primary: #0f172a;
-    --text-muted: #64748b;
-
-    /* Border */
-    --border-subtle: #cfd8e3;
-
-    /* Neon i lys udgave */
-    --neon-cyan: #06b6d4;
-    --neon-purple: #7c3aed;
-    --neon-blue: #3b82f6;
-
-    /* Glow i lys version */
-    --neon-glow-soft: 0 0 8px rgba(6, 182, 212, 0.25);
-    --neon-glow-strong: 0 0 18px rgba(124, 58, 237, 0.28);
-
-    /* Grøn/rød i lys */
-    --green: #16a34a;
-    --green-glow: 0 0 10px rgba(34, 197, 94, 0.32);
-    --red: #dc2626;
-    --red-glow: 0 0 10px rgba(239, 68, 68, 0.35);
-
-    /* UI */
-    --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.12);
+    --btn-text: #1e293b;     /* knapper i lys mode (synlige!) */
 }
 
-/* ------------------------------------
-   01C – AUTO SYSTEM MODE
-   (IKKE brugt endnu, men klar fremtidssikring)
-   ------------------------------------ */
-@media (prefers-color-scheme: light) {
-    :root[data-theme="auto"] {
-        --bg: #f2f4f8;
-        --bg-primary: #f2f4f8;
-        --bg-secondary: #ffffff;
-        --bg-card: #ffffff;
-        --text: #0f172a;
-    }
+/* Gælder ALLE tekstelementer */
+body,
+h1, h2, h3, h4, h5, h6,
+label,
+span,
+p,
+td, th,
+input,
+select,
+textarea {
+    color: var(--txt) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root[data-theme="auto"] {
-        --bg: #020617;
-        --bg-card: #0f172a;
-        --text: #e5e7eb;
-    }
-}
-
-/* ======================================================
-   AFSNIT 01D – GLOBAL KNAPTEKST (KAN IKKE OVERSKRIVES)
-   ====================================================== */
-
-/* Mørk mode – hvid knaptekst */
-:root {
-    --button-text-color: #ffffff;
-}
-
-/* Lys mode – gul knaptekst */
-[data-theme="light"] {
-    --button-text-color: #facc15;
-}
-
-/* Gælder ALLE knapper, uanset afsnit */
+/* Gælder ALLE knapper */
 button,
 .btn,
 .btn-green,
 .btn-red,
-.btn-secondary {
-    color: var(--button-text-color) !important;
+.btn-secondary,
+.lang-btn {
+    color: var(--btn-text) !important;
 }
-
-
 
 /* ======================================================
    AFSNIT 02 – GLOBALT RESET & BODY
