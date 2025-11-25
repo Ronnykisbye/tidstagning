@@ -217,9 +217,10 @@ function initLanguage() {
 }
 
 /* =======================================
-   03F – LYS/MØRK TEMA
+   03F – LYS/MØRK TEMA (RETTET VERSION)
    ======================================= */
 function initTheme() {
+    // Sæt tema direkte på dokumentet
     document.documentElement.dataset.theme = currentTheme;
 }
 
@@ -227,15 +228,24 @@ function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
+    // Sæt korrekt ikon ved load
     btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
 
     btn.addEventListener("click", () => {
+        // Skift tema
         currentTheme = currentTheme === "light" ? "dark" : "light";
+
+        // Opdatér HTML dataset
         document.documentElement.dataset.theme = currentTheme;
+
+        // VIGTIGT: Gem **før** alt andet overskriver det
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+
+        // Opdatér ikon
         btn.textContent = currentTheme === "light" ? "☀️" : "🌙";
     });
 }
+
 
 
 /* ======================================================
