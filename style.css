@@ -883,3 +883,26 @@ table tr:nth-child(even) td {
         max-width: 100%;
     }
 }
+
+/* ======================================================
+   AFSNIT 99 – GLOBAL KNAPTEKST (OVERSKRIVER ALT)
+   ====================================================== */
+
+:root {
+    --button-text-color: #ffffff;
+}
+
+[data-theme="light"] {
+    --button-text-color: #facc15;
+}
+
+/* Dette er selve "kan ikke overskrives"-fixet */
+button,
+.btn,
+.btn-green,
+.btn-red,
+.btn-secondary,
+.language-btn {
+    color: var(--button-text-color) !important;
+}
+
