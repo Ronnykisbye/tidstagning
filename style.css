@@ -1,96 +1,192 @@
 /* ======================================================
-   AFSNIT 01 – CSS VARIABLER (LIGHT / DARK)
-   Samlet farveskema ét sted
-   ====================================================== */
-
+   AFSNIT 01 – VARIABLER & FARVER (NEON DARK THEME)
+====================================================== */
 :root {
-    /* Baggrunde */
-    --bg-primary: #0b1120;
-    --bg-secondary: #0f172a;
-    --bg-card: #111827;
+    --bg-main: #0b1624;
+    --bg-card: #141f32;
+    --bg-hover: #1f2d46;
+    --bg-sidebar: #0d1b2e;
 
-    /* Sidebar */
-    --sidebar-bg: #0f172a;
-    --sidebar-active: rgba(56,189,248,0.20);
+    --text-primary: #ffffff;
+    --text-secondary: #a8b3c7;
 
-    /* Tekst */
-    --text: #e5e7eb;
-    --text-strong: #ffffff;
-    --text-muted: #94a3b8;
+    --neon-blue: #4cb3ff;
+    --neon-blue-soft: rgba(76, 179, 255, 0.4);
 
-    /* Inputs */
-    --input-bg: #1e293b;
-    --input-text: #ffffff;
-    --input-border: rgba(255,255,255,0.15);
+    --border-soft: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.18);
 
-    /* Knapper */
-    --btn-start-bg: #16a34a;
-    --btn-start-text: #ffffff;
-
-    --btn-stop-bg: #dc2626;
-    --btn-stop-text: #ffffff;
-
-    --btn-primary-bg: #38bdf8;
-    --btn-primary-text: #0b1120;
-
-    --btn-warning-bg: #eab308;
-    --btn-warning-text: #0f172a;
-
-    /* Kalender farvekoder */
-    --cal-empty: #ffffff10;
-    --cal-medium: #facc1533;
-    --cal-busy: #dc262633;
+    --radius: 10px;
+    --shadow-neon: 0 0 10px rgba(76,179,255,0.6);
 }
 
-/* ------------ Light mode ------------ */
-[data-theme="light"] {
-    --bg-primary: #f4f4f4;
-    --bg-secondary: #ffffff;
-    --bg-card: #ffffff;
+/* ======================================================
+   AFSNIT 02 – BASISLAYOUT
+====================================================== */
 
-    --sidebar-bg: #ffffff;
-    --sidebar-active: rgba(2,132,199,0.20);
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: "Segoe UI", sans-serif;
+    height: 100%;
+}
 
-    --text: #1e293b;
-    --text-strong: #0f172a;
-    --text-muted: #64748b;
+#appWrapper {
+    display: flex;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
 
-    --input-bg: #f0f0f0;
-    --input-text: #1e293b;
-    --input-border: rgba(0,0,0,0.15);
+/* Scrollbar dark-mode */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #1f2d46;
+    border-radius: 4px;
+}
 
-    --btn-start-bg: #22c55e;
-    --btn-stop-bg: #ef4444;
-    --btn-primary-bg: #0284c7;
-    --btn-primary-text: #ffffff;
+/* Standard card */
+.card {
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-soft);
+}
 
-    --btn-warning-bg: #facc15;
-    --btn-warning-text: #0f172a;
+/* Felttitel */
+.field-title {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+}
 
-    --cal-empty: #00000008;
-    --cal-medium: #facc1544;
-    --cal-busy: #ef444444;
+/* Headings */
+h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 
 
 /* ======================================================
-   AFSNIT 02 – BASIS LAYOUT
-   (Grid, fonts, body, wrapper)
-   ====================================================== */
-
-html, body {
-    margin: 0;
-    padding: 0;
-    color: var(--text);
-    background: var(--bg-primary);
-    font-family: Arial, sans-serif;
+   AFSNIT 03 – TOPBAR
+====================================================== */
+#topbar {
+    height: 60px;
+    background: #0d1b2e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-soft);
+    position: sticky;
+    top: 0;
+    z-index: 50;
 }
 
-#appWrapper {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    height: 100vh;
+#logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+}
+
+#pageTitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Sprogknapper */
+.lang-selector {
+    display: flex;
+    gap: 6px;
+}
+
+.lang-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.lang-btn.active {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: var(--shadow-neon);
+}
+
+/* Tema-knap */
+.theme-btn {
+    margin-left: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--neon-blue);
+    padding: 6px 10px;
+    border-radius: 50%;
+    color: var(--neon-blue);
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.theme-btn:hover {
+    box-shadow: var(--shadow-neon);
+}
+
+/* Mobil toggler */
+.mobile-menu-btn {
+    display: none;
+    margin-left: 10px;
+}
+
+/* ======================================================
+   AFSNIT 04 – SIDEBAR
+====================================================== */
+#sidebar {
+    width: 230px;
+    background: var(--bg-sidebar);
+    padding-top: 20px;
+    border-right: 1px solid var(--border-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: 0.2s;
+}
+
+.menu-item:hover {
+    background: var(--bg-hover);
+}
+
+.menu-item.active {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: var(--shadow-neon);
+}
+
+/* ======================================================
+   AFSNIT 05 – MAIN CONTENT
+====================================================== */
+
+#mainContent {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
 }
 
 .page {
@@ -101,159 +197,62 @@ html, body {
     display: block;
 }
 
-.card {
-    background: var(--bg-card);
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-
 
 /* ======================================================
-   AFSNIT 03 – TOPBAR
-   ====================================================== */
-
-#topbar {
-    grid-column: 1 / span 2;
-    height: 55px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--text-muted);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-}
-
-.topbar-left {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.topbar-center {
-    font-size: 18px;
-}
-
-.topbar-right {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.lang-btn.active {
-    border-bottom: 2px solid var(--btn-primary-bg);
-}
-
-.mobile-only {
-    display: none;
-}
-
-/* mobile breakpoint */
-@media (max-width: 768px) {
-    #appWrapper {
-        grid-template-columns: 1fr;
-    }
-    #sidebar {
-        display: none;
-    }
-    #sidebar.open {
-        display: block;
-    }
-    .mobile-only {
-        display: inline-block;
-    }
-}
-
-
-/* ======================================================
-   AFSNIT 04 – SIDEBAR
-   ====================================================== */
-
-#sidebar {
-    background: var(--sidebar-bg);
-    padding: 20px 10px;
-    border-right: 1px solid var(--text-muted);
-}
-
-.menu-item {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 12px;
-    margin-bottom: 10px;
-    background: transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-    color: var(--text);
-}
-
-.menu-item:hover {
-    background: var(--sidebar-active);
-}
-
-.menu-item.active {
-    background: var(--sidebar-active);
-    font-weight: bold;
-}
-
-
-
-/* ======================================================
-   AFSNIT 05 – KNAPPER (START/STOP/PRIMARY/WARNING)
-   ====================================================== */
-
-button {
-    cursor: pointer;
-    border: none;
-    padding: 10px 16px;
-    font-size: 15px;
-    border-radius: 6px;
-    transition: 0.2s;
-}
-
-.btn-start {
-    background: var(--btn-start-bg);
-    color: var(--btn-start-text);
-}
-
-.btn-stop {
-    background: var(--btn-stop-bg);
-    color: var(--btn-stop-text);
-}
-
-.btn-primary {
-    background: var(--btn-primary-bg);
-    color: var(--btn-primary-text);
-}
-
-.btn-warning {
-    background: var(--btn-warning-bg);
-    color: var(--btn-warning-text);
-}
-
-button:hover {
-    opacity: 0.85;
-}
-
-
-
-/* ======================================================
-   AFSNIT 06 – INPUT, TABEL, GENEREL UI
-   ====================================================== */
-
-/* Inputs */
-input, select {
+   AFSNIT 06 – INPUTS
+====================================================== */
+input, select, textarea {
     width: 100%;
     padding: 10px;
-    margin-bottom: 12px;
-    background: var(--input-bg);
-    color: var(--input-text);
-    border: 1px solid var(--input-border);
-    border-radius: 6px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+    background: #0f1a2c;
+    color: var(--text-primary);
+    margin-bottom: 15px;
 }
 
-/* Chips / medarbejdere-lister */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+    box-shadow: var(--shadow-neon);
+}
+
+/* ======================================================
+   AFSNIT 07 – KNAPPER
+====================================================== */
+.btn-green {
+    background: #39d98a;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-green:hover {
+    box-shadow: 0 0 8px rgba(57,217,138,0.6);
+}
+
+.btn-red {
+    background: #ff5f5f;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-red:hover {
+    box-shadow: 0 0 8px rgba(255,95,95,0.6);
+}
+
+/* ======================================================
+   AFSNIT 08 – CHIP LISTS
+====================================================== */
 .chip-container {
     display: flex;
     flex-wrap: wrap;
@@ -261,248 +260,96 @@ input, select {
 }
 
 .chip {
-    padding: 8px 14px;
-    background: var(--bg-secondary);
-    color: var(--text);
-    border: 1px solid var(--input-border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-soft);
+    padding: 6px 12px;
     border-radius: 20px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .chip.selected {
-    background: var(--btn-primary-bg);
-    color: var(--btn-primary-text);
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: var(--shadow-neon);
 }
 
-/* Tabeller */
-.table {
+/* ======================================================
+   AFSNIT 09 – TABEL
+====================================================== */
+table.data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
-.table th {
-    background: var(--bg-secondary);
-    padding: 10px;
+table.data-table th,
+table.data-table td {
+    border-bottom: 1px solid var(--border-soft);
+    padding: 10px 8px;
     text-align: left;
-    border-bottom: 1px solid var(--text-muted);
 }
 
-.table td {
-    padding: 8px;
-    border-bottom: 1px solid var(--input-border);
+table.data-table th {
+    color: var(--neon-blue);
 }
 
-/* Quick timer */
-.quick-timer-box {
-    text-align: center;
-}
-
-.quick-timer-display {
-    font-size: 32px;
+/* ======================================================
+   AFSNIT 10 – TIMER DISPLAY
+====================================================== */
+.timer-display {
+    font-size: 2.2rem;
     font-weight: bold;
     margin-bottom: 15px;
+    text-shadow: var(--shadow-neon);
 }
 
-.quick-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
 /* ======================================================
-   AFSNIT 07 – KALENDER
-   ====================================================== */
-
+   AFSNIT 11 – KALENDER
+====================================================== */
 .calendar-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    background: var(--bg-secondary);
-    padding: 10px;
-    border-radius: 6px;
     margin-bottom: 15px;
+    gap: 10px;
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: 8px;
     margin-bottom: 20px;
 }
 
 .calendar-cell {
-    padding: 12px;
-    text-align: center;
     background: var(--bg-card);
-    border-radius: 6px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    text-align: center;
+    padding: 12px 0;
     cursor: pointer;
-    border: 1px solid var(--input-border);
     transition: 0.2s;
-    color: var(--text);
 }
 
-/* farvekoder fra appen */
-.calendar-day-empty {
-    background: var(--cal-empty);
+.calendar-cell:hover {
+    background: var(--bg-hover);
 }
 
 .calendar-day-medium {
-    background: var(--cal-medium);
+    border-color: #ffbf47;
 }
 
 .calendar-day-busy {
-    background: var(--cal-busy);
+    border-color: #ff4f4f;
 }
 
 .calendar-cell.selected {
-    outline: 2px solid var(--btn-primary-bg);
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: var(--shadow-neon);
 }
-
-
-
-/* ======================================================
-   AFSNIT 08 – DAGENS DETALJER
-   ====================================================== */
-
-#selectedDayLabel {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-#dayPlanList {
-    list-style: none;
-    padding-left: 0;
-}
-
-#dayPlanList li {
-    padding: 8px 10px;
-    background: var(--bg-secondary);
-    margin-bottom: 6px;
-    border-radius: 6px;
-    border: 1px solid var(--input-border);
-}
-
-
-
-/* ======================================================
-   AFSNIT 09 – RESPONSIVE DESIGN
-   ====================================================== */
-
-@media (max-width: 900px) {
-
-    #appWrapper {
-        grid-template-columns: 1fr;
-    }
-
-    #sidebar {
-        display: none;
-        position: absolute;
-        width: 220px;
-        height: 100vh;
-        left: 0;
-        top: 55px;
-        background: var(--sidebar-bg);
-        z-index: 50;
-        padding-top: 20px;
-    }
-
-    #sidebar.open {
-        display: block;
-    }
-
-    .mobile-only {
-        display: inline-block;
-    }
-}
-
-
-
-/* ======================================================
-   AFSNIT 10 – UTILITY CLASSES
-   ====================================================== */
-
-.hidden {
-    display: none !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.mt-10 { margin-top: 10px; }
-.mt-20 { margin-top: 20px; }
-.mb-10 { margin-bottom: 10px; }
-.mb-20 { margin-bottom: 20px; }
-
-.bold { font-weight: bold; }
-
-.w-100 { width: 100%; }
-
-
-/* ======================================================
-   AFSNIT 11 – SPROGKNAPPER (MODERNE GLASS + NEON)
-   ====================================================== */
-
-.lang-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 12px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 50px;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.08);
-}
-
-.lang-btn {
-    position: relative;
-    padding: 8px 16px;
-    font-size: 13px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-
-    color: var(--text-muted);
-    background: rgba(255,255,255,0.08);
-
-    transition: 0.25s ease;
-    font-weight: 600;
-}
-
-/* hover-effekt */
-.lang-btn:hover {
-    color: var(--text-strong);
-    background: rgba(255,255,255,0.14);
-}
-
-/* AKTIV KNAP – med glow-strip under */
-.lang-btn.active {
-    color: #ffffff;
-    background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
-
-    box-shadow:
-        0 4px 12px rgba(56,189,248,0.35),
-        inset 0 0 6px rgba(0,0,0,0.25);
-}
-
-/* Glød UNDER knappen — neon lys nederst */
-.lang-btn.active::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 20%;
-    width: 60%;
-    height: 6px;
-
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    filter: blur(6px);
-    border-radius: 10px;
-    opacity: 0.9;
-
-    pointer-events: none;
-}
-
 
 /* ======================================================
    AFSNIT 12 – TEMA-KNAP (MODERNE GLASS + NEON)
