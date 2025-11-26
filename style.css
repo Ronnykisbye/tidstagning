@@ -152,6 +152,39 @@ html, body {
     overflow-y: auto;
 }
 
+
+/* ======================================================
+   AFSNIT 06 – TEMA-KNAP (GENSKABT VERSION)
+====================================================== */
+
+#themeToggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--neon-blue);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: 0.25s;
+    box-shadow: 0 0 10px var(--neon-blue-soft);
+}
+
+#themeToggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 14px var(--neon-blue-soft);
+}
+
+/* Genskaber korrekt placering i topbar */
+#topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 /* ======================================================
    AFSNIT 10 – GLOBALT LAYOUT FOR ALLE SIDER
 ====================================================== */
