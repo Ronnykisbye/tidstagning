@@ -246,37 +246,22 @@ function initThemeToggle() {
     });
 }
 
+
 /* ======================================================
-   AFSNIT 03E – SIDEBAR TOGGLE (STABIL VERSION)
+   AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
    ====================================================== */
 
-/*
-   Din sidebar er statisk i desktop-versionen,
-   og der er ingen toggle-knap i layoutet endnu.
-
-   Men app.js kalder stadig initSidebarToggle(),
-   og derfor laver vi en sikker, tom funktion,
-   som ikke ændrer noget – men forhindrer fejl.
-*/
-
 function initSidebarToggle() {
-    // Kig efter en toggle-knap (på mobil)
+    // Bruges kun hvis der findes en mobil knap
     const btn = document.getElementById("sidebarToggle");
     const sidebar = document.getElementById("sidebar");
 
-    // Hvis ingen knap findes → gør ingenting
     if (!btn || !sidebar) return;
 
-    // Fremtidssikring: simple toggle
     btn.addEventListener("click", () => {
         sidebar.classList.toggle("open");
     });
 }
-
-/* ======================================================
-   AFSNIT 04 – NAVIGATION & SIDEBAR
-   (Stabil version – påvirker intet andet)
-====================================================== */
 
 function initNavigation() {
     const sidebar = document.getElementById("sidebar");
@@ -303,30 +288,29 @@ function initNavigation() {
             const page = btn.dataset.page;
             if (!page) return;
 
-            // skjul alle sider
             allPages.forEach(pg => pg.classList.remove("page-visible"));
 
-            // vis valgt side
             const newPage = document.getElementById(page);
             if (newPage) {
                 newPage.classList.add("page-visible");
             }
 
-            // aktiv menu-knap
             menuButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
 
-            // opdater sidetitlen
             const title = document.getElementById("pageTitle");
             if (title) {
                 title.textContent = btn.textContent.trim();
             }
 
-            // luk menu på mobil
             sidebar.classList.remove("open");
         });
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    initNavigation();
+});
 
 /* ======================================================
    AUTO-INDLÆSNING AF NAVIGATION
