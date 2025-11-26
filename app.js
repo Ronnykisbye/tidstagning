@@ -413,24 +413,28 @@ function initLanguage() {
 
 
 /* ======================================================
-   AFSNIT 04 – TEMA TOGGLE (MATCHER EARLY LOADER)
-   ====================================================== */
+   TEMA – DARK/LIGHT MODE (GENSKABT)
+====================================================== */
+
+function initTheme() {
+    const saved = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", saved);
+}
 
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
-    if (!btn) return;
-
-    const current = document.documentElement.getAttribute("data-theme");
-    btn.textContent = current === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
-        const now = document.documentElement.getAttribute("data-theme") || "dark";
-        const next = now === "light" ? "dark" : "light";
+        let current = document.documentElement.getAttribute("data-theme");
+        let next = current === "dark" ? "light" : "dark";
+
         document.documentElement.setAttribute("data-theme", next);
-        btn.textContent = next === "light" ? "🌙" : "🌞";
-        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(next));
+        localStorage.setItem("theme", next);
     });
 }
+
+initTheme();
+initThemeToggle();
 
 
 
