@@ -15,19 +15,47 @@
     ======================================================= -->
     <div class="app">
 
- <!-- ============================
-     AFSNIT 03 – TOPBAR
-============================== -->
-<header class="topbar">
-    <div class="language-buttons">
-        <button class="lang-btn" data-lang="da">DK</button>
-        <button class="lang-btn" data-lang="en">GB</button>
-        <button class="lang-btn" data-lang="de">DE</button>
-        <button class="lang-btn" data-lang="lt">LT</button>
-    </div>
+    <!-- ======================================================
+         AFSNIT 03 – TOPBAR
+    ====================================================== -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <!-- Burger-menu til mobil -->
+            <button class="menu-toggle" id="menuToggle" aria-label="Åbn/luk menu">
+                ☰
+            </button>
 
-    <button id="themeToggle" class="theme-toggle">🌙</button>
-</header>
+            <!-- Logo / tekst -->
+            <div class="logo-text">
+                <span class="logo-main">GreenTime Pro</span>
+                <span class="logo-sub">Smart tidsregistrering</span>
+            </div>
+        </div>
+
+        <!-- Sidetitel i midten -->
+        <div class="topbar-center">
+            <h1 id="pageTitle" data-i18n="page_title_tidsregistrering">
+                Tidsregistrering
+            </h1>
+        </div>
+
+        <!-- Sprogknapper + tema-knap til højre -->
+        <div class="topbar-right">
+            <div class="lang-switch">
+                <button class="lang-btn active" data-lang="da">DK</button>
+                <button class="lang-btn" data-lang="en">GB</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="lt">LT</button>
+            </div>
+
+            <button id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Skift mellem lyst og mørkt tema">
+                ☀️
+            </button>
+        </div>
+    </header>
+
 
 
         <!-- ======================================================
