@@ -96,19 +96,12 @@ function loadAll() {
     activeTimer = safeParse(STORAGE_KEYS.activeTimer, null);
     quickTimer  = safeParse(STORAGE_KEYS.quickTimer, null);
 
-    currentTheme = safeParse(STORAGE_KEYS.theme, "light");
-    currentLang  = safeParse(STORAGE_KEYS.lang, "da");
-}
+    // VIGTIGT: Samme fallback som early theme loader i index.html
+    // Hvis der IKKE er gemt noget tema → brug "dark"
+    currentTheme = safeParse(STORAGE_KEYS.theme, "dark");
 
-function saveAll() {
-    localStorage.setItem(STORAGE_KEYS.customers, JSON.stringify(customers));
-    localStorage.setItem(STORAGE_KEYS.employees, JSON.stringify(employees));
-    localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
-    localStorage.setItem(STORAGE_KEYS.plans, JSON.stringify(plans));
-    localStorage.setItem(STORAGE_KEYS.activeTimer, JSON.stringify(activeTimer));
-    localStorage.setItem(STORAGE_KEYS.quickTimer, JSON.stringify(quickTimer));
-    localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
-    localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+    // Sprog: "da" som standard
+    currentLang  = safeParse(STORAGE_KEYS.lang, "da");
 }
 
 /* ======================================================
