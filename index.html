@@ -14,37 +14,8 @@
          - Sætter data-theme på <html>, FØR CSS loader
          - Skal matche fallback i app.js (currentTheme = "dark")
     ======================================================= -->
-    <script>
-    (function () {
-        try {
-            // Læs gemt tema fra samme nøgle som app.js bruger
-            var raw = localStorage.getItem("gtp_theme");   // STORAGE_KEYS.theme
+    <script src="theme-init.js"></script>
 
-            var theme = "dark"; // fallback – SAMME som i loadAll()
-
-            if (raw) {
-                // Prøv først at parse som JSON ("\"light\"" / "\"dark\"")
-                try {
-                    var parsed = JSON.parse(raw);
-                    if (parsed === "light" || parsed === "dark") {
-                        theme = parsed;
-                    }
-                } catch (e) {
-                    // Hvis det ikke er gyldigt JSON, tjek rå-værdien
-                    if (raw === "light" || raw === "dark") {
-                        theme = raw;
-                    }
-                }
-            }
-
-            // Sæt valgt tema på <html>
-            document.documentElement.setAttribute("data-theme", theme);
-        } catch (e) {
-            // Fejlsikker fallback
-            document.documentElement.setAttribute("data-theme", "dark");
-        }
-    })();
-    </script>
 
     <!-- CSS loader EFTER vi har sat det rigtige tema -->
     <link rel="stylesheet" href="style.css" />
