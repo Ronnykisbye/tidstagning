@@ -1,8 +1,9 @@
 /* ======================================================
-   AFSNIT 01 – VARIABLER & TEMA FARVER (NEON DARK MODE)
+     AFSNIT 01 – ROOT VARIABLES + DARK/LIGHT MODE
 ====================================================== */
 
 :root {
+    /* ----- Dark Mode (default) ----- */
     --bg-main: #0b1624;
     --bg-sidebar: #0d1b2e;
     --card-bg: #141f32;
@@ -14,7 +15,7 @@
     --text-strong: #e6ecf4;
 
     --neon-blue: #4cb3ff;
-    --neon-blue-soft: rgba(76,179,255,0.4);
+    --neon-blue-soft: rgba(76,179,255,0.35);
 
     --card-border: rgba(255,255,255,0.08);
     --card-shadow: 0 0 12px rgba(0,0,0,0.25);
@@ -22,53 +23,41 @@
     --radius: 10px;
 }
 
-/* ======================================================
-   LIGHT MODE VARIABLER
-====================================================== */
-
-[data-theme="light"] {
-    --bg-main: #f5f8fc;
-    --bg-sidebar: #ffffff;
+/* ----- LIGHT MODE ----- */
+html[data-theme="light"] {
+    --bg-main: #f5f7fa;
+    --bg-sidebar: #e4e8ee;
     --card-bg: #ffffff;
-    --bg-hover: #e6eef7;
+    --bg-hover: #d9e2ee;
 
-    --text-primary: #1b1f27;
-    --text-secondary: #2b3342;
-    --text-muted: #556072;
-    --text-strong: #0a0d12;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-muted: #666666;
+    --text-strong: #111111;
 
     --neon-blue: #0077ff;
-    --neon-blue-soft: rgba(0,119,255,0.35);
+    --neon-blue-soft: rgba(0,119,255,0.25);
 
     --card-border: rgba(0,0,0,0.1);
-    --card-shadow: 0 0 12px rgba(0,0,0,0.08);
+    --card-shadow: 0 0 12px rgba(0,0,0,0.05);
 }
 
-
-/* ======================================================
-   AFSNIT 02 – GLOBAL BASICS
-====================================================== */
-
-html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg-main);
-    font-family: "Segoe UI", sans-serif;
-    color: var(--text-primary);
-    height: 100%;
-}
-
+/* SCROLLBAR */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-thumb {
     background: #1f2d46;
     border-radius: 4px;
 }
 
+/* ======================================================
+     AFSNIT 02 – LAYOUT / WRAPPER
+====================================================== */
+
 #appWrapper {
     display: flex;
-    height: calc(100vh - 60px);
-    overflow: hidden;
+    min-height: 100vh;  /* FIXER HOPPE-PROBLEMET */
 }
+
 
 /* ======================================================
    AFSNIT 03 – TOPBAR
@@ -163,6 +152,21 @@ html, body {
     background: var(--neon-blue);
     color: #000;
     box-shadow: 0 0 10px var(--neon-blue-soft);
+}
+/* Desktop: skjul hamburger-menu */
+#sidebarToggle {
+    display: none;
+}
+
+/* Mobil: vis hamburger */
+@media (max-width: 900px) {
+    #sidebarToggle {
+        display: block;
+    }
+    #sidebar {
+        position: absolute;
+        z-index: 999;
+    }
 }
 
 /* ======================================================
