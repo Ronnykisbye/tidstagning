@@ -10,6 +10,33 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+   
+  <!-- ======================================================
+     AFSNIT 01B – EARLY THEME LOADER (FJERNER 1-SEC BLINK)
+     Sætter korrekt light/dark tema FØR CSS loader.
+====================================================== -->
+<script>
+(function() {
+    try {
+        // Læs gemt tema fra localStorage
+        const saved = localStorage.getItem("currentTheme");
+
+        // Hvis intet er gemt → brug dark som fallback
+        const theme = saved === "light" ? "light" : "dark";
+
+        // Sæt temaet direkte på <html>
+        document.documentElement.setAttribute("data-theme", theme);
+
+    } catch (e) {
+        // Fejlsikret fallback
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
+})();
+</script>
+  
+    
+    
+    
     <!-- ======================================================
          AFSNIT 02 – APP WRAPPER
     ======================================================= -->
