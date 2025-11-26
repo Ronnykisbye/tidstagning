@@ -135,14 +135,16 @@
 </section>
 
          
-       <!-- ======================================================
+   <!-- ======================================================
      AFSNIT 07 – KUNDER
      ====================================================== -->
 <section id="customers" class="page">
 
     <h2 data-i18n="menu_customers">Kunder</h2>
 
+    <!-- Opret kunde -->
     <div class="card">
+
         <div class="field-title">Navn</div>
         <input id="custName" type="text" />
 
@@ -158,18 +160,25 @@
         <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
     </div>
 
-    <table id="customerTable" class="table">
-        <thead>
-            <tr>
-                <th data-i18n="cust_name">Navn</th>
-                <th data-i18n="cust_phone">Telefon</th>
-                <th data-i18n="cust_email">Email</th>
-                <th data-i18n="cust_address">Adresse</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <!-- ★ OVERSKRIFT DIREKTE OVER TABELLEN ★ -->
+    <div class="card">
 
+        <div class="field-title">Oversigt over kunder</div>
+
+        <table id="customerTable" class="table">
+            <thead>
+                <tr>
+                    <th data-i18n="cust_name">Navn</th>
+                    <th data-i18n="cust_phone">Telefon</th>
+                    <th data-i18n="cust_email">Email</th>
+                    <th data-i18n="cust_address">Adresse</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Nulstil -->
     <div class="card">
         <div class="field-title">Nulstil tid for kunde</div>
         <select id="resetCustomerSelect"></select>
@@ -180,6 +189,7 @@
     </div>
 
 </section>
+
 
 
         <!-- ======================================================
