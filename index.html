@@ -157,14 +157,15 @@
         <div class="field-title" data-i18n="cust_address">Adresse</div>
         <input id="custAddress" type="text" />
 
-        <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
+        <button id="saveCustomerBtn" class="btn-primary" data-i18n="cust_save">Gem kunde</button>
     </div>
 
-    <!-- ★ RIGTIG OVERSKRIFT OVER TABELLEN ★ -->
+    <!-- Tabel med overskrift -->
     <div class="card">
-        <h3 class="field-title" style="margin-bottom:14px;" data-i18n="cust_overview">
+
+        <div class="table-title" data-i18n="cust_overview">
             Oversigt over kunder
-        </h3>
+        </div>
 
         <table id="customerTable" class="table">
             <thead>
@@ -177,20 +178,23 @@
             </thead>
             <tbody></tbody>
         </table>
+
     </div>
 
     <!-- Nulstil -->
     <div class="card">
-        <div class="field-title">Nulstil tid for kunde</div>
+        <div class="field-title" data-i18n="cust_reset_label">Nulstil tid for kunde</div>
+
         <select id="resetCustomerSelect"></select>
 
-        <button id="resetCustomerTimeBtn" class="btn-warning">Nulstil</button>
+        <button id="resetCustomerTimeBtn" class="btn-warning" data-i18n="cust_reset_btn">
+            Nulstil
+        </button>
 
         <div id="resetCustomerInfo"></div>
     </div>
 
 </section>
-
 
         <!-- ======================================================
      AFSNIT 08 – MEDARBEJDERE
