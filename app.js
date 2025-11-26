@@ -246,6 +246,32 @@ function initThemeToggle() {
     });
 }
 
+/* ======================================================
+   AFSNIT 03E – SIDEBAR TOGGLE (STABIL VERSION)
+   ====================================================== */
+
+/*
+   Din sidebar er statisk i desktop-versionen,
+   og der er ingen toggle-knap i layoutet endnu.
+
+   Men app.js kalder stadig initSidebarToggle(),
+   og derfor laver vi en sikker, tom funktion,
+   som ikke ændrer noget – men forhindrer fejl.
+*/
+
+function initSidebarToggle() {
+    // Kig efter en toggle-knap (på mobil)
+    const btn = document.getElementById("sidebarToggle");
+    const sidebar = document.getElementById("sidebar");
+
+    // Hvis ingen knap findes → gør ingenting
+    if (!btn || !sidebar) return;
+
+    // Fremtidssikring: simple toggle
+    btn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+    });
+}
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR
