@@ -66,130 +66,46 @@ body {
 }
 
 
-/* ======================================================
-   AFSNIT 03 – APP STRUKTUR (TOPBAR + BODY)
-   ====================================================== */
+/* ===============================
+   AFSNIT 03 – TOPBAR (STABIL VERSION)
+=================================== */
 
-/* Hele appen */
-.app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Topbar – logo til venstre, sprog + tema samlet til højre */
 .topbar {
+    width: 100%;
+    height: 60px;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 16px;
-    padding: 12px 20px;
-    background: var(--bg-card);
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-/* Menu-knap (vises kun på mobil senere, men beholder styling) */
-.menu-btn {
-    display: none;
-    font-size: 26px;
+    gap: 20px;
+    padding: 0 20px;
     background: transparent;
-    border: none;
-    color: var(--text-primary);
-    cursor: pointer;
 }
 
-/* Logo-tekst – står til venstre */
-.logo-text {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-/* Wrapper til sprogknapper (ligger til højre) */
-.lang-switch {
-    margin-left: auto;              /* skubber sprogområdet til højre */
+.language-buttons {
     display: flex;
-    align-items: center;
     gap: 10px;
 }
 
-/* Sprogknapper – DK / GB / DE / LT */
 .lang-btn {
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-secondary);
-    color: var(--btn-text) !important;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,0,0,0.18);
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.1s ease;
-}
-
-/* Hover-effekt på sprogknapper */
-.lang-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 14px rgba(0,0,0,0.28);
-}
-
-/* Aktivt sprog – tydelig neon-pill */
-.lang-btn.active {
-    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-    border-color: transparent;
-    color: #000 !important;
-    box-shadow:
-        0 0 12px rgba(0,255,255,0.55),
-        0 0 18px rgba(120,120,255,0.45);
-}
-
-/* Tema-knap – står lige efter sprogknapperne */
-.theme-btn {
-    margin-left: 8px;
-    width: 34px;
-    height: 34px;
-    border-radius: 999px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,0,0,0.18);
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.1s ease;
-}
-
-.theme-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 14px rgba(0,0,0,0.28);
-}
-
-/* Layout for body-området under topbaren */
-.app-body {
-    display: flex;
-    flex: 1;
-}
-
-/* Sidebar */
-.sidebar {
-    width: 260px;
     background: var(--bg-card);
-    padding: 20px 0;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.15);
-    transition: background 0.25s ease, color 0.25s ease;
+    color: var(--text);
+    transition: 0.2s ease;
+}
+
+.lang-btn:hover {
+    background: var(--bg-elevated);
+}
+
+.theme-toggle {
+    font-size: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 
