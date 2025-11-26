@@ -1,6 +1,7 @@
-console.log("LOADER GREEN TIME PRO – APP.JS v2");
 
-console.log("LOADER GREEN TIME PRO – APP.JS v2");
+console.log("LOADER DENNE APP.JS → VERSION 777");
+
+
 
 /* ======================================================
    AFSNIT 01 – GLOBAL STATE & HJÆLPEFUNKTIONER
@@ -17,8 +18,10 @@ let quickIntervalId = null;
 let activeTimer = null;
 
 let currentLang = "da";
-let calendarMonth = new Date();
-let selectedCalendarDate = null;
+let currentTheme = "light";
+
+let calendarMonth = new Date(); // den måned der vises i kalenderen
+let selectedCalendarDate = null; // "yyyy-mm-dd" string
 
 const STORAGE_KEYS = {
     customers: "gtp_customers",
@@ -37,10 +40,6 @@ function uuid() {
 
 function toDateString(d) {
     return d.toISOString().slice(0, 10);
-}
-
-function parseDateString(dateStr) {
-    return new Date(`${dateStr}T00:00:00`);
 }
 
 function formatTimeFromSeconds(sec) {
@@ -80,27 +79,13 @@ function getLocaleForLang(lang) {
     }
 }
 
-/* Demo-data til første gang / tom app */
-function seedDemoDataIfEmpty() {
-    if (!customers || customers.length === 0) {
-        customers = [
-            { id: uuid(), name: "Lars",  phone: "12345678", email: "lars@example.com",  address: "Hornbæk" },
-            { id: uuid(), name: "Ronny", phone: "22345678", email: "ronny@example.com", address: "Helsingør" }
-        ];
-    }
-
-    if (!employees || employees.length === 0) {
-        employees = [
-            { id: uuid(), name: "lars",  email: "lars@firma.dk",  role: "employee" },
-            { id: uuid(), name: "ronny", email: "ronny@firma.dk", role: "employee" },
-            { id: uuid(), name: "emma",  email: "emma@firma.dk",  role: "employee" },
-            { id: uuid(), name: "lasse", email: "lasse@firma.dk", role: "employee" }
-        ];
-    }
+function parseDateString(dateStr) {
+    // "yyyy-mm-dd" -> Date
+    return new Date(`${dateStr}T00:00:00`);
 }
 
 /* ======================================================
-   AFSNIT 02 – LOCAL STORAGE (LOAD / SAVE)
+   AFSNIT 02 – LOCAL STORAGE
    ====================================================== */
 
 function loadAll() {
@@ -108,34 +93,24 @@ function loadAll() {
     employees   = safeParse(STORAGE_KEYS.employees, []);
     logs        = safeParse(STORAGE_KEYS.logs, []);
     plans       = safeParse(STORAGE_KEYS.plans, []);
-
     activeTimer = safeParse(STORAGE_KEYS.activeTimer, null);
     quickTimer  = safeParse(STORAGE_KEYS.quickTimer, null);
 
-    currentLang = safeParse(STORAGE_KEYS.lang, "da");
+    // VIGTIGT: Samme fallback som early theme loader i index.html
+    // Hvis der IKKE er gemt noget tema → brug "dark"
+    currentTheme = safeParse(STORAGE_KEYS.theme, "dark");
 
-    // <-- VIGTIGT: fyld på med demo-data hvis alt er tomt
-    seedDemoDataIfEmpty();
-
-    // Gem dem, så de ligger i localStorage fremover
-    saveAll();
+    // Sprog: "da" som standard
+    currentLang  = safeParse(STORAGE_KEYS.lang, "da");
 }
-
-function saveAll() {
-    localStorage.setItem(STORAGE_KEYS.customers, JSON.stringify(customers));
-    localStorage.setItem(STORAGE_KEYS.employees, JSON.stringify(employees));
-    localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(logs));
-    localStorage.setItem(STORAGE_KEYS.plans, JSON.stringify(plans));
-    localStorage.setItem(STORAGE_KEYS.activeTimer, JSON.stringify(activeTimer));
-    localStorage.setItem(STORAGE_KEYS.quickTimer, JSON.stringify(quickTimer));
-}
-
-
 
 /* ======================================================
-   AFSNIT 03 – I18N (TEKSTER & SPROG)
+   AFSNIT 03 – SPROG & TEMA  (SAMLET OG FEJLFRI VERSION)
    ====================================================== */
 
+/* ==========================
+   03A – OVERSÆTTELSER
+   ========================== */
 const translations = {
     da: {
         app_title: "GreenTime Pro",
@@ -146,54 +121,7 @@ const translations = {
         menu_schedule: "Plan & kalender",
         menu_logs: "Logs",
         menu_reports: "Rapporter",
-        menu_settings: "Indstillinger",
-
-        title_customer: "Kunde",
-        title_customer_select: "Vælg kunde",
-        title_employee_list: "Medarbejderen hos kunden",
-        title_mode: "Mode",
-        title_day: "Dag",
-        title_total: "Total",
-        title_time: "Tid",
-        title_note: "Note",
-        title_duration: "Varighed",
-        title_date: "Dato",
-        title_starttime: "Starttid",
-
-        cust_name: "Navn",
-        cust_phone: "Telefon",
-        cust_email: "Email",
-        cust_address: "Adresse",
-        cust_save: "Gem kunde",
-        cust_overview: "Oversigt over kunder",
-        cust_reset_label: "Nulstil tid for kunde",
-        cust_reset_btn: "Nulstil",
-
-        emp_name: "Navn",
-        emp_email: "Email",
-        emp_role: "Rolle",
-        emp_save: "Gem medarbejder",
-        role_employee: "Medarbejder",
-        role_admin: "Administrator",
-
-        timer_start: "Start",
-        timer_stop: "Stop",
-        timer_status: "Status",
-
-        log_today: "Registreringer i dag",
-        log_start: "Start",
-        log_end: "Slut",
-        log_duration: "Minutter",
-        log_customer: "Kunde",
-        log_employee: "Medarbejder",
-
-        plan_month: "Kalendermåned",
-        plan_day_tasks: "Dagens opgaver",
-        plan_save: "Gem plan",
-
-        report_customer: "Kunde",
-        report_employee: "Medarbejder",
-        report_output: "Resultat"
+        menu_settings: "Indstillinger"
     },
 
     en: {
@@ -205,54 +133,7 @@ const translations = {
         menu_schedule: "Plan & calendar",
         menu_logs: "Logs",
         menu_reports: "Reports",
-        menu_settings: "Settings",
-
-        title_customer: "Customer",
-        title_customer_select: "Select customer",
-        title_employee_list: "Employees at customer",
-        title_mode: "Mode",
-        title_day: "Day",
-        title_total: "Total",
-        title_time: "Time",
-        title_note: "Note",
-        title_duration: "Duration",
-        title_date: "Date",
-        title_starttime: "Start time",
-
-        cust_name: "Name",
-        cust_phone: "Phone",
-        cust_email: "Email",
-        cust_address: "Address",
-        cust_save: "Save customer",
-        cust_overview: "Customer overview",
-        cust_reset_label: "Reset customer time",
-        cust_reset_btn: "Reset",
-
-        emp_name: "Name",
-        emp_email: "Email",
-        emp_role: "Role",
-        emp_save: "Save employee",
-        role_employee: "Employee",
-        role_admin: "Administrator",
-
-        timer_start: "Start",
-        timer_stop: "Stop",
-        timer_status: "Status",
-
-        log_today: "Today’s registrations",
-        log_start: "Start",
-        log_end: "End",
-        log_duration: "Minutes",
-        log_customer: "Customer",
-        log_employee: "Employee",
-
-        plan_month: "Calendar month",
-        plan_day_tasks: "Tasks of the day",
-        plan_save: "Save plan",
-
-        report_customer: "Customer",
-        report_employee: "Employee",
-        report_output: "Result"
+        menu_settings: "Settings"
     },
 
     de: {
@@ -264,54 +145,7 @@ const translations = {
         menu_schedule: "Plan & Kalender",
         menu_logs: "Protokolle",
         menu_reports: "Berichte",
-        menu_settings: "Einstellungen",
-
-        title_customer: "Kunde",
-        title_customer_select: "Kunde wählen",
-        title_employee_list: "Mitarbeiter beim Kunden",
-        title_mode: "Modus",
-        title_day: "Tag",
-        title_total: "Gesamt",
-        title_time: "Zeit",
-        title_note: "Notiz",
-        title_duration: "Dauer",
-        title_date: "Datum",
-        title_starttime: "Startzeit",
-
-        cust_name: "Name",
-        cust_phone: "Telefon",
-        cust_email: "E-Mail",
-        cust_address: "Adresse",
-        cust_save: "Kunde speichern",
-        cust_overview: "Kundenübersicht",
-        cust_reset_label: "Zeit für Kunde zurücksetzen",
-        cust_reset_btn: "Zurücksetzen",
-
-        emp_name: "Name",
-        emp_email: "E-Mail",
-        emp_role: "Rolle",
-        emp_save: "Mitarbeiter speichern",
-        role_employee: "Mitarbeiter",
-        role_admin: "Administrator",
-
-        timer_start: "Start",
-        timer_stop: "Stopp",
-        timer_status: "Status",
-
-        log_today: "Heutige Einträge",
-        log_start: "Start",
-        log_end: "Ende",
-        log_duration: "Minuten",
-        log_customer: "Kunde",
-        log_employee: "Mitarbeiter",
-
-        plan_month: "Kalendermonat",
-        plan_day_tasks: "Aufgaben des Tages",
-        plan_save: "Plan speichern",
-
-        report_customer: "Kunde",
-        report_employee: "Mitarbeiter",
-        report_output: "Ergebnis"
+        menu_settings: "Einstellungen"
     },
 
     lt: {
@@ -323,77 +157,40 @@ const translations = {
         menu_schedule: "Planavimas ir kalendorius",
         menu_logs: "Žurnalai",
         menu_reports: "Ataskaitos",
-        menu_settings: "Nustatymai",
-
-        title_customer: "Klientas",
-        title_customer_select: "Pasirinkite klientą",
-        title_employee_list: "Darbuotojai pas klientą",
-        title_mode: "Režimas",
-        title_day: "Diena",
-        title_total: "Iš viso",
-        title_time: "Laikas",
-        title_note: "Pastaba",
-        title_duration: "Trukmė",
-        title_date: "Data",
-        title_starttime: "Pradžios laikas",
-
-        cust_name: "Vardas",
-        cust_phone: "Telefonas",
-        cust_email: "El. paštas",
-        cust_address: "Adresas",
-        cust_save: "Išsaugoti klientą",
-        cust_overview: "Klientų sąrašas",
-        cust_reset_label: "Atstatyti kliento laiką",
-        cust_reset_btn: "Atstatyti",
-
-        emp_name: "Vardas",
-        emp_email: "El. paštas",
-        emp_role: "Vaidmuo",
-        emp_save: "Išsaugoti darbuotoją",
-        role_employee: "Darbuotojas",
-        role_admin: "Administratorius",
-
-        timer_start: "Pradėti",
-        timer_stop: "Stabdyti",
-        timer_status: "Būsena",
-
-        log_today: "Šiandienos įrašai",
-        log_start: "Pradžia",
-        log_end: "Pabaiga",
-        log_duration: "Minutės",
-        log_customer: "Klientas",
-        log_employee: "Darbuotojas",
-
-        plan_month: "Kalendorinis mėnuo",
-        plan_day_tasks: "Dienos užduotys",
-        plan_save: "Išsaugoti planą",
-
-        report_customer: "Klientas",
-        report_employee: "Darbuotojas",
-        report_output: "Rezultatas"
+        menu_settings: "Nustatymai"
     }
 };
 
+/* ==========================
+   03B – OVERSÆTTELSESFUNKTION
+   ========================== */
 function t(key) {
-    const pack = translations[currentLang] || translations["da"];
-    return pack[key] || translations["da"][key] || "";
+    const langPack = translations[currentLang] || translations["da"];
+    return langPack[key] || translations["da"][key] || "";
 }
 
+/* =======================================
+   03C – ANVEND OVERSÆTTELSER PÅ ELEMENTER
+   ======================================= */
 function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
-        if (!key) return;
-        const txt = t(key);
-        if (txt) el.textContent = txt;
+        if (key) el.textContent = t(key);
     });
 }
 
+/* =======================================
+   03D – MARKÉR AKTIV SPROGKNAP
+   ======================================= */
 function applyLangActiveButton() {
     document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.lang === currentLang);
     });
 }
 
+/* =======================================
+   03E – INITIALISER SPROG
+   ======================================= */
 function initLanguage() {
     applyLangActiveButton();
     applyTranslations();
@@ -402,82 +199,131 @@ function initLanguage() {
         btn.addEventListener("click", () => {
             const lang = btn.dataset.lang;
             if (!lang) return;
+
             currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
+
             applyLangActiveButton();
             applyTranslations();
         });
     });
 }
 
+/* ============================================================
+   03F – LYS/MØRK TEMA (REN VERSION – FJERNER 1-SEKUND BLINK)
+   ============================================================ */
 
-
-/* ======================================================
-   TEMA – DARK/LIGHT MODE (GENSKABT)
-====================================================== */
+/* VIGTIGT:
+   Temaet LOADES nu KUN i index.html (EARLY THEME LOADER).
+   Derfor skal app.js IKKE sætte tema ved load.
+*/
 
 function initTheme() {
-    const saved = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", saved);
+    // tom – vi lader index.html bestemme initialt tema
 }
 
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    // Korrekt ikon ved load
+    const current = document.documentElement.getAttribute("data-theme");
+    btn.textContent = current === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
-        let current = document.documentElement.getAttribute("data-theme");
-        let next = current === "dark" ? "light" : "dark";
+        // Skift tema
+        const now = document.documentElement.getAttribute("data-theme");
+        const next = now === "light" ? "dark" : "light";
 
+        // Opdater HTML
         document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("theme", next);
+
+        // Gem rigtigt
+        localStorage.setItem("gtp_theme", JSON.stringify(next));
+
+        // Opdater ikon
+        btn.textContent = next === "light" ? "🌙" : "🌞";
     });
 }
 
-initTheme();
-initThemeToggle();
-
-
 
 /* ======================================================
-   AFSNIT 05 – NAVIGATION / SIDEBAR
+   AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
    ====================================================== */
+
+function initSidebarToggle() {
+    // Bruges kun hvis der findes en mobil knap
+    const btn = document.getElementById("sidebarToggle");
+    const sidebar = document.getElementById("sidebar");
+
+    if (!btn || !sidebar) return;
+
+    btn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+    });
+}
 
 function initNavigation() {
     const sidebar = document.getElementById("sidebar");
     const menuButtons = document.querySelectorAll(".menu-item");
-    const allPages = document.querySelectorAll(".page");
-    const pageTitle = document.getElementById("pageTitle");
+    const allPages = document.querySelectorAll("section");
     const menuToggle = document.getElementById("menuToggle");
 
-    if (menuToggle && sidebar) {
+    if (!sidebar || !menuButtons || !allPages) return;
+
+    /* ---------------------------------------------
+       MOBIL: ÅBN/LUK SIDEBAR
+    --------------------------------------------- */
+    if (menuToggle) {
         menuToggle.addEventListener("click", () => {
             sidebar.classList.toggle("open");
         });
     }
 
+    /* ---------------------------------------------
+       SKIFT SIDE VED MENUKLIK
+    --------------------------------------------- */
     menuButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             const page = btn.dataset.page;
             if (!page) return;
 
-            allPages.forEach(p => p.classList.remove("page-visible"));
+            allPages.forEach(pg => pg.classList.remove("page-visible"));
+
             const newPage = document.getElementById(page);
-            if (newPage) newPage.classList.add("page-visible");
+            if (newPage) {
+                newPage.classList.add("page-visible");
+            }
 
             menuButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
 
-            if (pageTitle) pageTitle.textContent = btn.textContent.trim();
+            const title = document.getElementById("pageTitle");
+            if (title) {
+                title.textContent = btn.textContent.trim();
+            }
 
-            if (sidebar) sidebar.classList.remove("open");
+            sidebar.classList.remove("open");
         });
     });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    initNavigation();
+});
+
+/* ======================================================
+   AUTO-INDLÆSNING AF NAVIGATION
+====================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    initNavigation();
+});
+
 
 
 /* ======================================================
-   AFSNIT 06 – KUNDER
+   AFSNIT 05 – KUNDER
    ====================================================== */
 
 function refreshCustomerSelects() {
@@ -485,28 +331,28 @@ function refreshCustomerSelects() {
         "quickCustomerSelect",
         "timerCustomerSelect",
         "planCustomerSelect",
-        "reportCustomerSelect",
-        "resetCustomerSelect"
+        "reportCustomerSelect"
     ];
 
-    ids.forEach(id => {
-        const sel = document.getElementById(id);
+    ids.forEach(selectId => {
+        const sel = document.getElementById(selectId);
         if (!sel) return;
-
         sel.innerHTML = "";
 
-        const isReport = id === "reportCustomerSelect";
-        const placeholderKey = isReport ? "cust_overview" : "title_customer_select";
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = t(placeholderKey) || "";
-        sel.appendChild(opt);
+        const isReport = selectId === "reportCustomerSelect";
+        const placeholder = isReport ? t("placeholder_all_customers")
+                                     : t("placeholder_select_customer");
+
+        const optEmpty = document.createElement("option");
+        optEmpty.value = "";
+        optEmpty.textContent = placeholder;
+        sel.appendChild(optEmpty);
 
         customers.forEach(c => {
-            const o = document.createElement("option");
-            o.value = c.id;
-            o.textContent = c.name;
-            sel.appendChild(o);
+            const opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.name;
+            sel.appendChild(opt);
         });
     });
 }
@@ -515,29 +361,35 @@ function renderCustomerTable() {
     const table = document.getElementById("customerTable");
     if (!table) return;
     const tbody = table.querySelector("tbody");
-    tbody.innerHTML = "";
+    if (!tbody) return;
 
+    tbody.innerHTML = "";
     customers.forEach(c => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${c.name}</td>
-            <td>${c.phone}</td>
-            <td>${c.email}</td>
-            <td>${c.address}</td>
+            <td>${c.name || ""}</td>
+            <td>${c.phone || ""}</td>
+            <td>${c.email || ""}</td>
+            <td>${c.address || ""}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
 function initCustomers() {
-    const btn = document.getElementById("saveCustomerBtn");
-    if (!btn) return;
+    const saveBtn = document.getElementById("saveCustomerBtn");
+    if (!saveBtn) return;
 
-    btn.addEventListener("click", () => {
-        const name  = document.getElementById("custName").value.trim();
-        const phone = document.getElementById("custPhone").value.trim();
-        const email = document.getElementById("custEmail").value.trim();
-        const addr  = document.getElementById("custAddress").value.trim();
+    saveBtn.addEventListener("click", () => {
+        const nameInput  = document.getElementById("custName");
+        const phoneInput = document.getElementById("custPhone");
+        const emailInput = document.getElementById("custEmail");
+        const addrInput  = document.getElementById("custAddress");
+
+        const name  = nameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const email = emailInput.value.trim();
+        const addr  = addrInput.value.trim();
 
         if (!name) {
             alert("Skriv et navn på kunden.");
@@ -552,120 +404,170 @@ function initCustomers() {
             address: addr
         });
 
+        nameInput.value = "";
+        phoneInput.value = "";
+        emailInput.value = "";
+        addrInput.value = "";
+
         saveAll();
         renderCustomerTable();
         refreshCustomerSelects();
-
-        document.getElementById("custName").value = "";
-        document.getElementById("custPhone").value = "";
-        document.getElementById("custEmail").value = "";
-        document.getElementById("custAddress").value = "";
     });
 
     const resetBtn = document.getElementById("resetCustomerTimeBtn");
     if (resetBtn) {
         resetBtn.addEventListener("click", () => {
             const sel = document.getElementById("resetCustomerSelect");
-            if (!sel.value) {
-                alert("Vælg en kunde.");
+            if (!sel) return;
+            const customerId = sel.value;
+            if (!customerId) {
+                alert(t("msg_reset_choose_customer"));
                 return;
             }
+
             const before = logs.length;
-            logs = logs.filter(l => l.customerId !== sel.value);
+            logs = logs.filter(l => l.customerId !== customerId);
             const removed = before - logs.length;
 
             saveAll();
             renderTodayLogs();
+            initReports();
 
             const info = document.getElementById("resetCustomerInfo");
-            if (info) info.textContent = `Slettede ${removed} registreringer for kunden.`;
+            if (info) {
+                info.textContent = `${t("msg_reset_done_prefix")} ${removed} ${t("msg_reset_done_suffix")}`;
+            }
         });
     }
 }
 
+/* ======================================================
+   AFSNIT 05B – INIT DASHBOARD (GENOPBYGNING)
+   ====================================================== */
+
+function initDashboard() {
+    console.log("INIT DASHBOARD KØRER…");
+
+    // hent kunder + medarbejdere fra storage
+    loadCustomers?.();
+    loadEmployees?.();
+
+    // byg dropdown til kunder
+    if (typeof renderCustomerQuickSelect === "function") {
+        renderCustomerQuickSelect();
+    }
+
+    // byg medarbejderchips
+    if (typeof renderTimerEmployeeChips === "function") {
+        renderTimerEmployeeChips();
+    }
+
+    // start timer systemet
+    if (typeof initTimer === "function") {
+        initTimer();
+    }
+
+    console.log("DASHBOARD KLAR ✔");
+}
 
 
 /* ======================================================
-   AFSNIT 07 – MEDARBEJDERE
+   AFSNIT 06 – MEDARBEJDERE
    ====================================================== */
 
 function renderEmployeeTable() {
     const table = document.getElementById("employeeTable");
     if (!table) return;
     const tbody = table.querySelector("tbody");
-    tbody.innerHTML = "";
+    if (!tbody) return;
 
+    tbody.innerHTML = "";
     employees.forEach(e => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${e.name}</td>
-            <td>${e.email}</td>
-            <td>${e.role}</td>
+            <td>${e.name || ""}</td>
+            <td>${e.email || ""}</td>
+            <td>${e.role || ""}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
 function refreshEmployeeSelects() {
-    const ids = ["timerEmployeeSelect", "reportEmployeeSelect"];
+    const ids = [
+        "timerEmployeeSelect",
+        "reportEmployeeSelect"
+    ];
 
-    ids.forEach(id => {
-        const sel = document.getElementById(id);
+    ids.forEach(selectId => {
+        const sel = document.getElementById(selectId);
         if (!sel) return;
-
         sel.innerHTML = "";
 
-        const isReport = id === "reportEmployeeSelect";
-        const placeholder = isReport ? t("report_employee") : t("emp_name");
+        const isReport = selectId === "reportEmployeeSelect";
+        const placeholder = isReport ? t("placeholder_all_employees")
+                                     : t("placeholder_select_employee");
 
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = placeholder;
-        sel.appendChild(opt);
+        const optEmpty = document.createElement("option");
+        optEmpty.value = "";
+        optEmpty.textContent = placeholder;
+        sel.appendChild(optEmpty);
 
         employees.forEach(e => {
-            const o = document.createElement("option");
-            o.value = e.id;
-            o.textContent = e.name;
-            sel.appendChild(o);
+            const opt = document.createElement("option");
+            opt.value = e.id;
+            opt.textContent = e.name;
+            sel.appendChild(opt);
         });
     });
 }
 
 function renderEmployeeChips() {
-    const lists = [
-        document.getElementById("quickEmployeeList"),
-        document.getElementById("planEmployeeList")
-    ];
+    const quickBox = document.getElementById("quickEmployeeList");
+    const planBox  = document.getElementById("planEmployeeList");
 
-    lists.forEach(list => {
-        if (!list) return;
-        list.innerHTML = "";
+    if (quickBox) quickBox.innerHTML = "";
+    if (planBox)  planBox.innerHTML  = "";
 
-        employees.forEach(e => {
+    employees.forEach(e => {
+        if (quickBox) {
             const chip = document.createElement("button");
             chip.type = "button";
             chip.className = "chip";
             chip.dataset.id = e.id;
             chip.textContent = e.name;
-
             chip.addEventListener("click", () => {
                 chip.classList.toggle("selected");
             });
+            quickBox.appendChild(chip);
+        }
 
-            list.appendChild(chip);
-        });
+        if (planBox) {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "chip";
+            chip.dataset.id = e.id;
+            chip.textContent = e.name;
+            chip.addEventListener("click", () => {
+                chip.classList.toggle("selected");
+            });
+            planBox.appendChild(chip);
+        }
     });
 }
 
 function initEmployees() {
-    const btn = document.getElementById("saveEmployeeBtn");
-    if (!btn) return;
+    const saveBtn = document.getElementById("saveEmployeeBtn");
+    if (!saveBtn) return;
 
-    btn.addEventListener("click", () => {
-        const name  = document.getElementById("empName").value.trim();
-        const email = document.getElementById("empEmail").value.trim();
-        const role  = document.getElementById("empRole").value;
+    saveBtn.addEventListener("click", () => {
+        const nameInput  = document.getElementById("empName");
+        const emailInput = document.getElementById("empEmail");
+        const roleSelect = document.getElementById("empRole");
+
+        const name  = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const role  = roleSelect.value || "employee";
 
         if (!name) {
             alert("Skriv et navn på medarbejderen.");
@@ -676,41 +578,39 @@ function initEmployees() {
             id: uuid(),
             name,
             email,
-            role
+            role: role === "admin" ? t("role_admin") : t("role_employee")
         });
+
+        nameInput.value = "";
+        emailInput.value = "";
+        roleSelect.value = "employee";
 
         saveAll();
         renderEmployeeTable();
         refreshEmployeeSelects();
         renderEmployeeChips();
-
-        document.getElementById("empName").value = "";
-        document.getElementById("empEmail").value = "";
-        document.getElementById("empRole").value = "employee";
     });
 }
 
-
-
 /* ======================================================
-   AFSNIT 08 – CHIP-HJÆLPER
+   AFSNIT 07 – CHIP-HJÆLPEFUNKTIONER
    ====================================================== */
 
 function getSelectedIdsFromChipList(containerId) {
     const box = document.getElementById(containerId);
     if (!box) return [];
-    return [...box.querySelectorAll(".chip.selected")].map(chip => chip.dataset.id);
+    return Array.from(box.querySelectorAll(".chip.selected")).map(chip => chip.dataset.id);
 }
 
-
-
 /* ======================================================
-   AFSNIT 09 – QUICK TIMER (FORSIDE)
+   AFSNIT 08 – QUICK TIMER (FORSIDE)
    ====================================================== */
 
 function updateQuickTimerDisplay() {
     const display = document.getElementById("quickTimerDisplay");
     if (!display) return;
+
+    display.classList.add("quick-timer-display");
 
     if (!quickTimer) {
         display.textContent = "00:00:00";
@@ -719,20 +619,26 @@ function updateQuickTimerDisplay() {
 
     const start = new Date(quickTimer.start);
     const now = new Date();
-    const diffSec = Math.floor((now - start) / 1000);
+    const diffSec = Math.max(0, Math.floor((now - start) / 1000));
     display.textContent = formatTimeFromSeconds(diffSec);
 }
 
 function stopQuickInterval() {
-    if (quickIntervalId) clearInterval(quickIntervalId);
-    quickIntervalId = null;
+    if (quickIntervalId != null) {
+        clearInterval(quickIntervalId);
+        quickIntervalId = null;
+    }
 }
 
 function initQuickTimer() {
     const startBtn = document.getElementById("quickStartBtn");
     const stopBtn  = document.getElementById("quickStopBtn");
+    const modeDay  = document.getElementById("quickModeDay");
+    const modeTot  = document.getElementById("quickModeTotal");
+
     if (!startBtn || !stopBtn) return;
 
+    // Hvis der allerede ligger en quickTimer i storage
     if (quickTimer && quickTimer.start) {
         quickIntervalId = setInterval(updateQuickTimerDisplay, 1000);
         updateQuickTimerDisplay();
@@ -740,21 +646,22 @@ function initQuickTimer() {
 
     startBtn.addEventListener("click", () => {
         const customerSel = document.getElementById("quickCustomerSelect");
-        const customerId  = customerSel.value;
+        const customerId  = customerSel ? customerSel.value : "";
 
         if (!customerId) {
-            alert("Vælg en kunde.");
+            alert(t("msg_select_customer"));
             return;
         }
 
         const employeeIds = getSelectedIdsFromChipList("quickEmployeeList");
         if (!employeeIds.length) {
-            alert("Vælg en eller flere medarbejdere.");
+            alert(t("msg_select_employees"));
             return;
         }
 
         let mode = "day";
-        if (document.getElementById("quickModeTotal").checked) mode = "total";
+        if (modeDay && modeDay.checked) mode = "day";
+        if (modeTot && modeTot.checked) mode = "total";
 
         quickTimer = {
             id: uuid(),
@@ -763,8 +670,8 @@ function initQuickTimer() {
             mode,
             start: new Date().toISOString()
         };
-
         saveAll();
+
         stopQuickInterval();
         quickIntervalId = setInterval(updateQuickTimerDisplay, 1000);
         updateQuickTimerDisplay();
@@ -774,9 +681,10 @@ function initQuickTimer() {
         if (!quickTimer) return;
 
         const start = new Date(quickTimer.start);
-        const now = new Date();
-        const diffSec = Math.floor((now - start) / 1000);
+        const now   = new Date();
+        const diffSec = Math.max(0, Math.floor((now - start) / 1000));
         const minutes = Math.max(1, Math.round(diffSec / 60));
+
         const dateStr = toDateString(start);
 
         quickTimer.employeeIds.forEach(empId => {
@@ -796,13 +704,12 @@ function initQuickTimer() {
         updateQuickTimerDisplay();
         saveAll();
         renderTodayLogs();
+        initReports();
     });
 }
 
-
-
 /* ======================================================
-   AFSNIT 10 – DETALJERET TIMER
+   AFSNIT 09 – DETALJERET TIMER & DAGENS LOGS
    ====================================================== */
 
 function initDetailedTimer() {
@@ -817,18 +724,18 @@ function initDetailedTimer() {
         const eName = getEmployeeName(activeTimer.employeeId);
         statusEl.textContent = `${cName} / ${eName}`;
     } else if (statusEl) {
-        statusEl.textContent = "Ingen aktiv timer";
+        statusEl.textContent = t("timer_no_active");
     }
 
     startBtn.addEventListener("click", () => {
         const custSel = document.getElementById("timerCustomerSelect");
         const empSel  = document.getElementById("timerEmployeeSelect");
 
-        const customerId = custSel.value;
-        const employeeId = empSel.value;
+        const customerId = custSel ? custSel.value : "";
+        const employeeId = empSel  ? empSel.value  : "";
 
         if (!customerId || !employeeId) {
-            alert("Vælg kunde og medarbejder.");
+            alert(t("msg_select_customer_employee"));
             return;
         }
 
@@ -839,24 +746,22 @@ function initDetailedTimer() {
             start: new Date().toISOString(),
             date: toDateString(new Date())
         };
-
         saveAll();
 
         if (statusEl) {
-            statusEl.textContent =
-                `${getCustomerName(customerId)} / ${getEmployeeName(employeeId)}`;
+            statusEl.textContent = `${getCustomerName(customerId)} / ${getEmployeeName(employeeId)}`;
         }
     });
 
     stopBtn.addEventListener("click", () => {
         if (!activeTimer) {
-            alert("Ingen aktiv timer.");
+            alert(t("timer_no_active"));
             return;
         }
 
         const now = new Date();
         const start = new Date(activeTimer.start);
-        const diffSec = Math.floor((now - start) / 1000);
+        const diffSec = Math.max(0, Math.floor((now - start) / 1000));
         const minutes = Math.max(1, Math.round(diffSec / 60));
 
         logs.push({
@@ -872,21 +777,20 @@ function initDetailedTimer() {
         activeTimer = null;
         saveAll();
         renderTodayLogs();
+        initReports();
 
-        if (statusEl) statusEl.textContent = "Ingen aktiv timer";
+        if (statusEl) {
+            statusEl.textContent = t("timer_no_active");
+        }
     });
 }
-
-
-
-/* ======================================================
-   AFSNIT 11 – DAGENS LOGS
-   ====================================================== */
 
 function renderTodayLogs() {
     const table = document.getElementById("timeLogTable");
     if (!table) return;
     const tbody = table.querySelector("tbody");
+    if (!tbody) return;
+
     tbody.innerHTML = "";
 
     const todayStr = toDateString(new Date());
@@ -894,34 +798,39 @@ function renderTodayLogs() {
 
     todaysLogs.forEach(l => {
         const tr = document.createElement("tr");
-
         const start = new Date(l.start);
         const end   = new Date(l.end);
 
         tr.innerHTML = `
-            <td>${start.toLocaleTimeString(getLocaleForLang(currentLang), {hour:"2-digit", minute:"2-digit"})}</td>
-            <td>${end.toLocaleTimeString(getLocaleForLang(currentLang), {hour:"2-digit", minute:"2-digit"})}</td>
+            <td>${start.toLocaleTimeString(getLocaleForLang(currentLang), { hour: "2-digit", minute: "2-digit" })}</td>
+            <td>${end.toLocaleTimeString(getLocaleForLang(currentLang), { hour: "2-digit", minute: "2-digit" })}</td>
             <td>${l.durationMinutes}</td>
             <td>${getCustomerName(l.customerId)}</td>
             <td>${getEmployeeName(l.employeeId)}</td>
         `;
-
         tbody.appendChild(tr);
     });
 }
 
-
+/* ======================================================
+   AFSNIT 10 – NULSTIL TID FOR KUNDE
+   (selve logikken sidder i initCustomers)
+   ====================================================== */
+// Se initCustomers ovenfor – her er kun heading for strukturens skyld.
 
 /* ======================================================
-   AFSNIT 12 – PLANLÆGNING (OPRET PLAN)
+   AFSNIT 11 – PLANLÆGNING (VARIGHED I HALVE TIMER)
    ====================================================== */
 
 function setupPlanDurationInput() {
-    const inp = document.getElementById("planDuration");
-    if (!inp) return;
-    inp.min = "0.5";
-    inp.max = "8";
-    inp.step = "0.5";
+    const durationInput = document.getElementById("planDuration");
+    if (!durationInput) return;
+
+    // Vi bruger stadig <input type="number">, men tolker det som timer i trin á 0,5
+    durationInput.min = "0.5";
+    durationInput.max = "8";
+    durationInput.step = "0.5";
+    durationInput.placeholder = "0,5 – 8";
 }
 
 function initPlanning() {
@@ -944,11 +853,20 @@ function initPlanning() {
         const employeeIds = getSelectedIdsFromChipList("planEmployeeList");
         const note       = noteInput.value.trim();
 
-        if (!dateStr)  { alert("Vælg dato."); return; }
-        if (!startTime){ alert("Vælg starttid."); return; }
-        if (!customerId){ alert("Vælg kunde."); return; }
+        if (!dateStr) {
+            alert(t("msg_select_date"));
+            return;
+        }
+        if (!startTime) {
+            alert(t("msg_select_start"));
+            return;
+        }
+        if (!customerId) {
+            alert(t("msg_select_customer_plan"));
+            return;
+        }
         if (isNaN(durationHr) || durationHr < 0.5 || durationHr > 8) {
-            alert("Varigheden skal være 0,5–8 timer.");
+            alert(t("msg_duration_invalid"));
             return;
         }
 
@@ -964,12 +882,13 @@ function initPlanning() {
             note
         });
 
+        // ryd felter (dato lader vi stå, så man kan oprette flere på samme dag)
+        // start & duration nulstilles
         startInput.value = "";
         durationInput.value = "";
         noteInput.value = "";
-        document
-            .querySelectorAll("#planEmployeeList .chip.selected")
-            .forEach(chip => chip.classList.remove("selected"));
+        const chips = document.querySelectorAll("#planEmployeeList .chip.selected");
+        chips.forEach(chip => chip.classList.remove("selected"));
 
         saveAll();
 
@@ -979,10 +898,8 @@ function initPlanning() {
     });
 }
 
-
-
 /* ======================================================
-   AFSNIT 13 – KALENDER
+   AFSNIT 12 – KALENDER
    ====================================================== */
 
 function renderCalendar() {
@@ -1007,17 +924,18 @@ function renderCalendar() {
     const lastOfMonth  = new Date(year, month + 1, 0);
     const daysInMonth  = lastOfMonth.getDate();
 
-    const weekday = firstOfMonth.getDay();
+    // mandag = 0
+    const weekday = firstOfMonth.getDay(); // søndag=0, mandag=1...
     const mondayIndex = (weekday + 6) % 7;
 
     for (let i = 0; i < mondayIndex; i++) {
         const emptyCell = document.createElement("div");
-        emptyCell.className = "calendar-cell calendar-day-empty";
+        emptyCell.className = "calendar-cell";
         cellsContainer.appendChild(emptyCell);
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const dayPlans = plans.filter(p => p.date === dateStr);
         const count = dayPlans.length;
 
@@ -1037,7 +955,7 @@ function renderCalendar() {
             cell.classList.add("selected");
         }
 
-        cell.textContent = day;
+        cell.textContent = day.toString();
 
         cell.addEventListener("click", () => {
             selectedCalendarDate = dateStr;
@@ -1050,20 +968,23 @@ function renderCalendar() {
     }
 }
 
+/* ======================================================
+   AFSNIT 13 – DAGEN OPGAVER (DETAILLISTE)
+   ====================================================== */
+
 function renderDayDetails(dateStr) {
     const label = document.getElementById("selectedDayLabel");
     const list  = document.getElementById("dayPlanList");
     if (!label || !list) return;
 
     if (!dateStr) {
-        label.textContent = t("plan_day_tasks");
+        label.textContent = t("schedule_selected_day");
         list.innerHTML = "";
         return;
     }
 
     const locale = getLocaleForLang(currentLang);
     const d = parseDateString(dateStr);
-
     label.textContent = d.toLocaleDateString(locale, {
         weekday: "short",
         year: "numeric",
@@ -1076,117 +997,120 @@ function renderDayDetails(dateStr) {
 
     if (!dayPlans.length) {
         const li = document.createElement("li");
-        li.textContent = "Ingen planer for denne dag";
+        li.textContent = t("msg_no_plans_for_day");
         list.appendChild(li);
         return;
     }
 
     dayPlans.forEach(p => {
         const li = document.createElement("li");
-        const durHr = p.durationMinutes / 60;
-        const durText = String(durHr).replace(".", ",");
+        const durHr = (p.durationMinutes || 0) / 60;
+        const durText = durHr ? `${durHr.toString().replace(".", ",")} t` : "";
+        const customerName = getCustomerName(p.customerId);
+        const employeesNames = (p.employeeIds || []).map(getEmployeeName).filter(Boolean).join(", ");
 
-        li.innerHTML = `
-            <strong>${p.startTime}</strong> – ${durText}t<br>
-            Kunde: ${getCustomerName(p.customerId)}<br>
-            Note: ${p.note || ""}
-        `;
+        li.textContent = `${p.startTime || ""} – ${durText} – ${customerName}${
+            employeesNames ? " (" + employeesNames + ")" : ""
+        }${p.note ? " – " + p.note : ""}`;
 
         list.appendChild(li);
     });
 }
-
-function initCalendarMonthSwitch() {
-    const prevBtn = document.getElementById("calPrevMonth");
-    const nextBtn = document.getElementById("calNextMonth");
-
-    if (prevBtn) {
-        prevBtn.addEventListener("click", () => {
-            calendarMonth.setMonth(calendarMonth.getMonth() - 1);
-            renderCalendar();
-            renderDayDetails(selectedCalendarDate);
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener("click", () => {
-            calendarMonth.setMonth(calendarMonth.getMonth() + 1);
-            renderCalendar();
-            renderDayDetails(selectedCalendarDate);
-        });
-    }
-}
-
-
 
 /* ======================================================
    AFSNIT 14 – RAPPORTER
    ====================================================== */
 
 function initReports() {
-    const customerSel = document.getElementById("reportCustomerSelect");
-    const employeeSel = document.getElementById("reportEmployeeSelect");
-    if (!customerSel || !employeeSel) return;
+    refreshCustomerSelects();
+    refreshEmployeeSelects();
+    renderReportsTable([]);
 
-    function renderReport() {
-        const out = document.getElementById("reportOutput");
-        if (!out) return;
+    const runBtn = document.getElementById("runReportBtn");
+    if (!runBtn) return;
 
-        const custId = customerSel.value;
-        const empId  = employeeSel.value;
+    runBtn.addEventListener("click", () => {
+        const fromInput = document.getElementById("reportDateFrom");
+        const toInput   = document.getElementById("reportDateTo");
+        const custSel   = document.getElementById("reportCustomerSelect");
+        const empSel    = document.getElementById("reportEmployeeSelect");
 
-        let filtered = logs.slice();
-        if (custId) filtered = filtered.filter(l => l.customerId === custId);
-        if (empId)  filtered = filtered.filter(l => l.employeeId === empId);
+        const fromStr = fromInput.value;
+        const toStr   = toInput.value;
+        const customerId = custSel.value;
+        const employeeId = empSel.value;
 
-        if (!filtered.length) {
-            out.textContent = "Ingen data til rapport.";
-            return;
+        let result = logs.slice();
+
+        if (fromStr) {
+            result = result.filter(l => l.date >= fromStr);
+        }
+        if (toStr) {
+            result = result.filter(l => l.date <= toStr);
+        }
+        if (customerId) {
+            result = result.filter(l => l.customerId === customerId);
+        }
+        if (employeeId) {
+            result = result.filter(l => l.employeeId === employeeId);
         }
 
-        const totalMinutes = filtered.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
-
-        const perDay = {};
-        filtered.forEach(l => {
-            perDay[l.date] = (perDay[l.date] || 0) + (l.durationMinutes || 0);
-        });
-
-        let html = "";
-        html += `<p><strong>Poster:</strong> ${filtered.length}</p>`;
-        html += `<p><strong>Samlet tid:</strong> ${totalMinutes} min</p>`;
-        html += "<h4>Dage</h4>";
-        html += "<ul>";
-        Object.keys(perDay).sort().forEach(d => {
-            html += `<li>${d}: ${perDay[d]} min</li>`;
-        });
-        html += "</ul>";
-
-        out.innerHTML = html;
-    }
-
-    customerSel.addEventListener("change", renderReport);
-    employeeSel.addEventListener("change", renderReport);
+        renderReportsTable(result);
+    });
 }
 
+function renderReportsTable(rows) {
+    const table = document.getElementById("reportTable");
+    const summary = document.getElementById("reportSummary");
+    if (!table) return;
 
+    const tbody = table.querySelector("tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    rows.forEach(l => {
+        const tr = document.createElement("tr");
+        const start = new Date(l.start);
+        const end   = new Date(l.end);
+
+        tr.innerHTML = `
+            <td>${l.date}</td>
+            <td>${start.toLocaleTimeString(getLocaleForLang(currentLang), { hour: "2-digit", minute: "2-digit" })}</td>
+            <td>${end.toLocaleTimeString(getLocaleForLang(currentLang), { hour: "2-digit", minute: "2-digit" })}</td>
+            <td>${l.durationMinutes}</td>
+            <td>${getCustomerName(l.customerId)}</td>
+            <td>${getEmployeeName(l.employeeId)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (summary) {
+        summary.textContent = `${t("msg_report_summary_prefix")} ${rows.length} ${t("msg_report_summary_suffix")}`;
+    }
+}
 
 /* ======================================================
-   AFSNIT 15 – INIT-KÆDE (STARTER HELE APPEN)
+   AFSNIT 15 – INITIALISERING
    ====================================================== */
 
-function initApp() {
+window.addEventListener("load", () => {
     loadAll();
-    initLanguage();
+
+    initTheme();
     initThemeToggle();
+
+    initLanguage();
+
     initNavigation();
+    initSidebarToggle();
 
-    refreshCustomerSelects();
     renderCustomerTable();
-    initCustomers();
-
     renderEmployeeTable();
+    refreshCustomerSelects();
     refreshEmployeeSelects();
     renderEmployeeChips();
+
+    initCustomers();
     initEmployees();
 
     initQuickTimer();
@@ -1194,11 +1118,8 @@ function initApp() {
     renderTodayLogs();
 
     initPlanning();
-    initCalendarMonthSwitch();
     renderCalendar();
     renderDayDetails(selectedCalendarDate);
 
     initReports();
-}
-
-document.addEventListener("DOMContentLoaded", initApp);
+});
