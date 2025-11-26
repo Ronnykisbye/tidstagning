@@ -493,3 +493,127 @@ table.data-table th {
     margin-bottom: 15px;
 }
 
+/* ======================================================
+   AFSNIT – GLOBALT LAYOUT FOR ALLE SIDER
+   (ENS SPACING, ENS BOKSE, ENS FELTER)
+====================================================== */
+
+/* Hele siden */
+.page {
+    display: none;
+    padding: 25px;
+}
+
+.page-visible {
+    display: block;
+}
+
+/* ------------------------------------------------------
+   Overskrifter
+------------------------------------------------------ */
+.page h2 {
+    margin: 0 0 20px 0;
+    padding-bottom: 5px;
+    font-size: 1.6rem;
+    color: var(--neon-blue);
+}
+
+.page h3 {
+    margin: 25px 0 10px 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    opacity: 0.9;
+}
+
+/* Små felt-overskrifter */
+.field-title,
+.section-subtitle {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+}
+
+/* ------------------------------------------------------
+   Sektion-bokse (formulardele, underafsnit)
+------------------------------------------------------ */
+.section-block {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-bottom: 30px;
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+/* Indre afstand mellem felter */
+.section-block .input-row {
+    margin-bottom: 18px;
+}
+
+/* ------------------------------------------------------
+   Inputfelter (ens spacing)
+------------------------------------------------------ */
+input,
+select,
+textarea {
+    margin-bottom: 15px !important;
+}
+
+/* ------------------------------------------------------
+   Tabeller – ens layout på ALLE sider
+------------------------------------------------------ */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 10px;
+    color: var(--neon-blue);
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.data-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--text-primary);
+}
+
+/* Mere luft før tabellen begynder */
+.table-wrapper {
+    margin-top: 20px;
+}
+
+/* ------------------------------------------------------
+   Chips (medarbejdere / kunder)
+------------------------------------------------------ */
+.chip-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ------------------------------------------------------
+   Sektion afstand (global margin mellem moduler)
+------------------------------------------------------ */
+.page-section {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* ------------------------------------------------------
+   Knapper – ekstra spacing
+------------------------------------------------------ */
+.btn-row {
+    margin-top: 15px;
+}
+
+/* Sikrer start/stop knapper ikke klistrer sammen */
+.btn-row button {
+    margin-right: 10px;
+}
