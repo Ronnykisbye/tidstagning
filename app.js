@@ -217,50 +217,42 @@ function initLanguage() {
 }
 
 /* ============================================================
-   03F – LYS/MØRK TEMA (STABIL & KORREKT VERSION)
+   03F – LYS/MØRK TEMA (STABIL VERSION – BRUGER GLOBAL currentTheme)
    ============================================================ */
 
-// Standard tema hvis intet er gemt
-let currentTheme = "light";
+/* VIGTIGT:
+   - currentTheme er allerede defineret i AFSNIT 01 og
+     bliver sat i loadAll()
+   - derfor må vi IKKE lave `let currentTheme` igen her.
+*/
 
-// Hent gemt tema
-const saved = localStorage.getItem(STORAGE_KEYS.theme);
-if (saved) {
-    try {
-        currentTheme = JSON.parse(saved);
-    } catch (e) {
-        currentTheme = "light";
-    }
-}
-
-// Påfør tema ved load
 function initTheme() {
+    // Sæt tema direkte på <html data-theme="...">
     document.documentElement.setAttribute("data-theme", currentTheme);
 }
 
-// Init knap & logik
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
     if (!btn) return;
 
-    // Sæt ikon korrekt ved load
+    // Korrekt ikon ved load
     btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
-
         // Skift tema
         currentTheme = (currentTheme === "light") ? "dark" : "light";
 
-        // Sæt på HTML – ingen blink længere
+        // Opdatér HTML
         document.documentElement.setAttribute("data-theme", currentTheme);
 
-        // Gem tema
+        // Gem i localStorage
         localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
 
-        // Skift ikon
+        // Opdatér ikon
         btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
     });
 }
+
 
 
 
