@@ -1,47 +1,51 @@
 /* ======================================================
-   AFSNIT 01D – GLOBAL TEMA-VARIABLER (FULDSTÆNDIG FIX)
+   AFSNIT 01 – TEMA: DARK & LIGHT MODE (REN VERSION)
    ====================================================== */
 
-/* ---------- DARK MODE (STANDARD) ---------- */
+/* STANDARD (DARK MODE) */
 :root {
+    /* Baggrunde */
+    --bg-primary: #0b1120;
+    --bg-secondary: #0f172a;
+    --bg-sidebar: #111827;
+    --bg-card: #111827;
+
+    /* Tekst */
     --text: #e5e7eb;
     --text-strong: #ffffff;
     --text-muted: #94a3b8;
 
-    --btn-text: #ffffff;
+    /* Kanter */
+    --border-subtle: rgba(255,255,255,0.08);
+
+    /* Neon */
+    --neon-blue: #38bdf8;
+    --neon-purple: #7c3aed;
+
+    /* Knaptekst */
+    --button-text-color: #ffffff;
 }
 
-/* ---------- LIGHT MODE ---------- */
+/* LIGHT MODE */
 html[data-theme="light"] {
-    --text: #0f172a;
+    /* Baggrunde */
+    --bg-primary: #f3f4f6;
+    --bg-secondary: #ffffff;
+    --bg-sidebar: #e5e7eb;
+    --bg-card: #ffffff;
+
+    /* Tekst */
+    --text: #1e293b;
     --text-strong: #0f172a;
     --text-muted: #475569;
 
-    --btn-text: #1e293b;
+    /* Kanter */
+    --border-subtle: rgba(0,0,0,0.1);
+
+    /* Knaptekst */
+    --button-text-color: #111827;
 }
 
-/* ---------- GLOBAL TEKSTSTYLING ---------- */
-body,
-h1, h2, h3, h4, h5, h6,
-label,
-span,
-p,
-td, th,
-input,
-select,
-textarea {
-    color: var(--text) !important;
-}
-
-/* ---------- GLOBAL KNAPTEKST ---------- */
-button,
-.btn,
-.btn-green,
-.btn-red,
-.btn-secondary,
-.lang-btn {
-    color: var(--btn-text) !important;
-}
 
 /* ======================================================
    FIX – KORREKT TEMA (LIGHT + DARK MODE)
@@ -289,18 +293,18 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR & CONTENT LAYOUT
-====================================================== */
+   AFSNIT 04 – SIDEBAR & CONTENT LAYOUT (REN VERSION)
+   ====================================================== */
 
 :root {
     --sidebar-width: 240px;
 }
 
-/* SIDEBAR WRAPPER */
 #sidebar {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
     background: var(--bg-sidebar);
+    color: var(--text);
     height: 100vh;
     position: fixed;
     top: 0;
@@ -310,20 +314,39 @@ html[data-theme="dark"] .theme-toggle {
     z-index: 30;
 }
 
-/* SIDEBAR TEKST - HEADER */
-.sidebar-header {
-    margin-bottom: 22px;
+.sidebar-menu .menu-item {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    text-align: left;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    transition: 0.2s ease;
 }
-.sidebar-logo {
-    font-size: 1.4rem;
-    font-weight: 700;
+
+.sidebar-menu .menu-item:hover:not(.active) {
+    background: rgba(255,255,255,0.08);
     color: var(--text-strong);
 }
-.sidebar-subtitle {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
+
+.sidebar-menu .menu-item.active {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #0b1120;
+    font-weight: 700;
+    box-shadow:
+        0 0 12px rgba(56,189,248,0.45),
+        0 0 20px rgba(124,58,237,0.35);
 }
+
+#contentArea {
+    margin-left: var(--sidebar-width);
+    padding: 40px 50px;
+}
+
 
 /* ======================================================
    MENU-ITEMS – NYE FARVER (LYS + MØRK MODE)
