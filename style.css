@@ -1,49 +1,42 @@
 /* ======================================================
-   AFSNIT 01 – TEMA: DARK & LIGHT MODE (REN VERSION)
+   AFSNIT 01 – TEMA (ÉN VERSION – KONFLIKTER FJERNET)
    ====================================================== */
 
-/* STANDARD (DARK MODE) */
+/* Dark Mode (default) */
 :root {
-    /* Baggrunde */
     --bg-primary: #0b1120;
     --bg-secondary: #0f172a;
-    --bg-sidebar: #111827;
+    --bg-sidebar: #0f172a;
     --bg-card: #111827;
 
-    /* Tekst */
     --text: #e5e7eb;
     --text-strong: #ffffff;
     --text-muted: #94a3b8;
 
-    /* Kanter */
     --border-subtle: rgba(255,255,255,0.08);
 
-    /* Neon */
     --neon-blue: #38bdf8;
     --neon-purple: #7c3aed;
 
-    /* Knaptekst */
     --button-text-color: #ffffff;
+
+    --sidebar-width: 240px;
 }
 
-/* LIGHT MODE */
+/* Light Mode */
 html[data-theme="light"] {
-    /* Baggrunde */
-    --bg-primary: #f3f4f6;
+    --bg-primary: #f5f7fa;
     --bg-secondary: #ffffff;
-    --bg-sidebar: #e5e7eb;
+    --bg-sidebar: #e2e8f0;
     --bg-card: #ffffff;
 
-    /* Tekst */
     --text: #1e293b;
     --text-strong: #0f172a;
     --text-muted: #475569;
 
-    /* Kanter */
-    --border-subtle: rgba(0,0,0,0.1);
+    --border-subtle: rgba(0,0,0,0.08);
 
-    /* Knaptekst */
-    --button-text-color: #111827;
+    --button-text-color: #0f172a;
 }
 
 
@@ -291,60 +284,62 @@ html[data-theme="dark"] .theme-toggle {
         display: inline-flex;
     }
 }
-
 /* ======================================================
-   AFSNIT 04 – SIDEBAR & CONTENT LAYOUT (REN VERSION)
+   AFSNIT 04 – SIDEBAR (REN & STABIL VERSION)
    ====================================================== */
-
-:root {
-    --sidebar-width: 240px;
-}
 
 #sidebar {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
-    background: var(--bg-sidebar);
-    color: var(--text);
     height: 100vh;
+
     position: fixed;
     top: 0;
     left: 0;
+
+    background: var(--bg-sidebar);
+    color: var(--text);
+
     padding: 24px 20px;
+
     box-shadow: 12px 0 40px rgba(0,0,0,0.35);
     z-index: 30;
+
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
+/* Menu items – base */
 .sidebar-menu .menu-item {
-    display: block;
     width: 100%;
     padding: 12px 14px;
-    text-align: left;
-    border-radius: 12px;
-    font-size: 0.9rem;
     background: transparent;
     border: none;
+
+    border-radius: 12px;
+
+    text-align: left;
+    font-size: 0.9rem;
     cursor: pointer;
+
     color: var(--text);
-    transition: 0.2s ease;
+    transition: 0.22s ease;
 }
 
-.sidebar-menu .menu-item:hover:not(.active) {
-    background: rgba(255,255,255,0.08);
+/* Hover */
+.sidebar-menu .menu-item:hover {
+    background: rgba(255,255,255,0.10);
     color: var(--text-strong);
 }
 
+/* Active */
 .sidebar-menu .menu-item.active {
     background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    color: #0b1120;
+    color: #0b1120 !important;
     font-weight: 700;
+
     box-shadow:
         0 0 12px rgba(56,189,248,0.45),
         0 0 20px rgba(124,58,237,0.35);
-}
-
-#contentArea {
-    margin-left: var(--sidebar-width);
-    padding: 40px 50px;
 }
 
 
