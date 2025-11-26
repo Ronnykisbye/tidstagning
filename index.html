@@ -97,146 +97,150 @@
 
 
         <!-- ======================================================
-             AFSNIT 06 – DASHBOARD / QUICK TIMER
-             (QUICK START / QUICK STOP / CHIPS)
-             ====================================================== -->
-        <section id="dashboard" class="page page-visible">
+     AFSNIT 06 – DASHBOARD / QUICK TIMER
+     ====================================================== -->
+<section id="dashboard" class="page page-visible">
 
-            <h2 data-i18n="menu_dashboard">Tidsregistrering</h2>
+    <h2 data-i18n="menu_dashboard">Tidsregistrering</h2>
 
-            <div class="card">
-                <label data-i18n="customers">Kunder</label>
-                <select id="quickCustomerSelect"></select>
-            </div>
+    <div class="card">
+        <div class="field-title">Kunde</div>
+        <select id="quickCustomerSelect"></select>
+    </div>
 
-            <div class="card">
-                <label data-i18n="employees">Medarbejdere</label>
-                <div id="quickEmployeeList" class="chip-container"></div>
-            </div>
+    <div class="card">
+        <div class="field-title">Medarbejderen hos kunden</div>
+        <div id="quickEmployeeList" class="chip-container"></div>
+    </div>
 
-            <div class="card">
-                <label>Mode</label>
-                <div class="quick-modes">
-                    <label><input type="radio" id="quickModeDay" name="quickMode" checked> Dag</label>
-                    <label><input type="radio" id="quickModeTotal" name="quickMode"> Total</label>
-                </div>
-            </div>
+    <div class="card">
+        <div class="field-title">Mode</div>
+        <div class="quick-modes">
+            <label><input type="radio" id="quickModeDay" name="quickMode" checked> Dag</label>
+            <label><input type="radio" id="quickModeTotal" name="quickMode"> Total</label>
+        </div>
+    </div>
 
-            <div class="card quick-timer-box">
-                <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
+    <div class="card quick-timer-box">
+        <div class="field-title">Tid</div>
 
-                <div class="quick-buttons">
-                    <button id="quickStartBtn" class="btn-start">Start</button>
-                    <button id="quickStopBtn" class="btn-stop">Stop</button>
-                </div>
-            </div>
+        <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
 
-        </section>
-        <!-- ======================================================
-             AFSNIT 07 – KUNDER
-             ====================================================== -->
-        <section id="customers" class="page">
+        <div class="quick-buttons">
+            <button id="quickStartBtn" class="btn-start">Start</button>
+            <button id="quickStopBtn" class="btn-stop">Stop</button>
+        </div>
+    </div>
 
-            <h2 data-i18n="menu_customers">Kunder</h2>
+</section>
 
-            <div class="card">
-                <label data-i18n="cust_name">Navn</label>
-                <input id="custName" type="text" />
+         
+       <!-- ======================================================
+     AFSNIT 07 – KUNDER
+     ====================================================== -->
+<section id="customers" class="page">
 
-                <label data-i18n="cust_phone">Telefon</label>
-                <input id="custPhone" type="text" />
+    <h2 data-i18n="menu_customers">Kunder</h2>
 
-                <label data-i18n="cust_email">Email</label>
-                <input id="custEmail" type="email" />
+    <div class="card">
+        <div class="field-title">Navn</div>
+        <input id="custName" type="text" />
 
-                <label data-i18n="cust_address">Adresse</label>
-                <input id="custAddress" type="text" />
+        <div class="field-title">Telefon</div>
+        <input id="custPhone" type="text" />
 
-                <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
-            </div>
+        <div class="field-title">Email</div>
+        <input id="custEmail" type="email" />
 
-            <table id="customerTable" class="table">
-                <thead>
-                    <tr>
-                        <th data-i18n="cust_name">Navn</th>
-                        <th data-i18n="cust_phone">Telefon</th>
-                        <th data-i18n="cust_email">Email</th>
-                        <th data-i18n="cust_address">Adresse</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="field-title">Adresse</div>
+        <input id="custAddress" type="text" />
 
-            <div class="card">
-                <label data-i18n="reset_time_for">Nulstil tid for kunde</label>
-                <select id="resetCustomerSelect"></select>
+        <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
+    </div>
 
-                <button id="resetCustomerTimeBtn" class="btn-warning">Nulstil</button>
+    <table id="customerTable" class="table">
+        <thead>
+            <tr>
+                <th data-i18n="cust_name">Navn</th>
+                <th data-i18n="cust_phone">Telefon</th>
+                <th data-i18n="cust_email">Email</th>
+                <th data-i18n="cust_address">Adresse</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-                <div id="resetCustomerInfo"></div>
-            </div>
+    <div class="card">
+        <div class="field-title">Nulstil tid for kunde</div>
+        <select id="resetCustomerSelect"></select>
 
-        </section>
+        <button id="resetCustomerTimeBtn" class="btn-warning">Nulstil</button>
 
+        <div id="resetCustomerInfo"></div>
+    </div>
 
-        <!-- ======================================================
-             AFSNIT 08 – MEDARBEJDERE
-             ====================================================== -->
-        <section id="employees" class="page">
-
-            <h2 data-i18n="menu_employees">Medarbejdere</h2>
-
-            <div class="card">
-                <label data-i18n="emp_name">Navn</label>
-                <input id="empName" type="text" />
-
-                <label data-i18n="emp_email">Email</label>
-                <input id="empEmail" type="email" />
-
-                <label data-i18n="emp_role">Rolle</label>
-                <select id="empRole">
-                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
-                    <option value="admin" data-i18n="role_admin">Administrator</option>
-                </select>
-
-                <button id="saveEmployeeBtn" class="btn-primary">Gem medarbejder</button>
-            </div>
-
-            <table id="employeeTable" class="table">
-                <thead>
-                    <tr>
-                        <th data-i18n="emp_name">Navn</th>
-                        <th data-i18n="emp_email">Email</th>
-                        <th data-i18n="emp_role">Rolle</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-        </section>
+</section>
 
 
         <!-- ======================================================
-             AFSNIT 09 – DETALJERET TIMER
-             ====================================================== -->
-        <section id="detailedtimer" class="page">
+     AFSNIT 08 – MEDARBEJDERE
+     ====================================================== -->
+<section id="employees" class="page">
 
-            <h2 data-i18n="menu_time_tracking">Detaljeret tid</h2>
+    <h2 data-i18n="menu_employees">Medarbejdere</h2>
 
-            <div class="card">
-                <label data-i18n="customers">Kunde</label>
-                <select id="timerCustomerSelect"></select>
+    <div class="card">
+        <div class="field-title">Navn</div>
+        <input id="empName" type="text" />
 
-                <label data-i18n="employees">Medarbejder</label>
-                <select id="timerEmployeeSelect"></select>
+        <div class="field-title">Email</div>
+        <input id="empEmail" type="email" />
 
-                <div id="timerStatus" class="timer-status"></div>
+        <div class="field-title">Rolle</div>
+        <select id="empRole">
+            <option value="employee" data-i18n="role_employee">Medarbejder</option>
+            <option value="admin" data-i18n="role_admin">Administrator</option>
+        </select>
 
-                <button id="startTimerBtn" class="btn-start">Start</button>
-                <button id="stopTimerBtn" class="btn-stop">Stop</button>
-            </div>
+        <button id="saveEmployeeBtn" class="btn-primary">Gem medarbejder</button>
+    </div>
 
-        </section>
+    <table id="employeeTable" class="table">
+        <thead>
+            <tr>
+                <th data-i18n="emp_name">Navn</th>
+                <th data-i18n="emp_email">Email</th>
+                <th data-i18n="emp_role">Rolle</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</section>
+
+
+       <!-- ======================================================
+     AFSNIT 09 – DETALJERET TIMER
+     ====================================================== -->
+<section id="detailedtimer" class="page">
+
+    <h2 data-i18n="menu_time_tracking">Detaljeret tid</h2>
+
+    <div class="card">
+
+        <div class="field-title">Kunde</div>
+        <select id="timerCustomerSelect"></select>
+
+        <div class="field-title">Medarbejder</div>
+        <select id="timerEmployeeSelect"></select>
+
+        <div id="timerStatus" class="timer-status"></div>
+
+        <button id="startTimerBtn" class="btn-start">Start</button>
+        <button id="stopTimerBtn" class="btn-stop">Stop</button>
+    </div>
+
+</section>
 
 
         <!-- ======================================================
