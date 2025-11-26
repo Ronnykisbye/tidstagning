@@ -217,18 +217,16 @@ function initLanguage() {
 }
 
 /* ============================================================
-   03F – LYS/MØRK TEMA (STABIL VERSION – BRUGER GLOBAL currentTheme)
+   03F – LYS/MØRK TEMA (REN VERSION – FJERNER 1-SEKUND BLINK)
    ============================================================ */
 
 /* VIGTIGT:
-   - currentTheme er allerede defineret i AFSNIT 01 og
-     bliver sat i loadAll()
-   - derfor må vi IKKE lave `let currentTheme` igen her.
+   Temaet LOADES nu KUN i index.html (EARLY THEME LOADER).
+   Derfor skal app.js IKKE sætte tema ved load.
 */
 
 function initTheme() {
-    // Sæt tema direkte på <html data-theme="...">
-    document.documentElement.setAttribute("data-theme", currentTheme);
+    // tom – vi lader index.html bestemme initialt tema
 }
 
 function initThemeToggle() {
@@ -236,25 +234,24 @@ function initThemeToggle() {
     if (!btn) return;
 
     // Korrekt ikon ved load
-    btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
+    const current = document.documentElement.getAttribute("data-theme");
+    btn.textContent = current === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
         // Skift tema
-        currentTheme = (currentTheme === "light") ? "dark" : "light";
+        const now = document.documentElement.getAttribute("data-theme");
+        const next = now === "light" ? "dark" : "light";
 
-        // Opdatér HTML
-        document.documentElement.setAttribute("data-theme", currentTheme);
+        // Opdater HTML
+        document.documentElement.setAttribute("data-theme", next);
 
-        // Gem i localStorage
-        localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(currentTheme));
+        // Gem rigtigt
+        localStorage.setItem("gtp_theme", JSON.stringify(next));
 
-        // Opdatér ikon
-        btn.textContent = currentTheme === "light" ? "🌙" : "🌞";
+        // Opdater ikon
+        btn.textContent = next === "light" ? "🌙" : "🌞";
     });
 }
-
-
-
 
 
 /* ======================================================
