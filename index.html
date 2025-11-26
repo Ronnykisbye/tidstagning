@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-   <!DOCTYPE html>
-<html lang="da">
-<head>
     <!-- ======================================================
          AFSNIT 01 – META & CSS
     ======================================================= -->
@@ -12,10 +9,10 @@
     <title>GreenTime Pro</title>
 
     <!-- ======================================================
-         AFSNIT 01B – EARLY THEME LOADER (KORREKT VERSION)
+         AFSNIT 01B – EARLY THEME LOADER
          - Læser tema fra localStorage ("gtp_theme")
          - Sætter data-theme på <html>, FØR CSS loader
-         - Forhindrer 1-sekunds blink i dark mode
+         - Skal matche fallback i app.js (currentTheme = "dark")
     ======================================================= -->
     <script>
     (function () {
@@ -23,17 +20,17 @@
             // Læs gemt tema fra samme nøgle som app.js bruger
             var raw = localStorage.getItem("gtp_theme");   // STORAGE_KEYS.theme
 
-            var theme = "dark"; // fallback
+            var theme = "dark"; // fallback – SAMME som i loadAll()
 
             if (raw) {
-                // Prøv først at parse som JSON (app.js gemmer "light"/"dark" som JSON-string)
+                // Prøv først at parse som JSON ("\"light\"" / "\"dark\"")
                 try {
                     var parsed = JSON.parse(raw);
                     if (parsed === "light" || parsed === "dark") {
                         theme = parsed;
                     }
                 } catch (e) {
-                    // Hvis det ikke er gyldigt JSON, tjek om rå-værdien er "light"/"dark"
+                    // Hvis det ikke er gyldigt JSON, tjek rå-værdien
                     if (raw === "light" || raw === "dark") {
                         theme = raw;
                     }
@@ -49,17 +46,16 @@
     })();
     </script>
 
-    <!-- CSS loader nu EFTER vi har sat det rigtige tema -->
+    <!-- CSS loader EFTER vi har sat det rigtige tema -->
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    
-    
     <!-- ======================================================
          AFSNIT 02 – APP WRAPPER
     ======================================================= -->
     <div class="app">
+
 
    <!-- ======================================================
      AFSNIT 03 – TOPBAR
