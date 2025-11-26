@@ -129,29 +129,31 @@ html[data-theme="light"] {
     background: var(--bg-sidebar);
     border-right: 1px solid rgba(255,255,255,0.05);
     height: 100vh;
-
     position: fixed;
-    top: 60px; /* Topbar er 60px */
+    top: 60px;
     left: 0;
-
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
-
     z-index: 90;
 }
 
-/* Sidebar links */
+/* ------------------------------------------------------
+   DESKTOP: Skjul hamburger-menuen  (MEGET VIGTIG!)
+   ------------------------------------------------------ */
+#sidebarToggle {
+    display: none !important;   /* ← Tving skjult på PC */
+}
+
+/* Sidebar menu items */
 .menu-item {
     padding: 12px 20px;
     background: transparent;
-    border: none;
     color: var(--text-secondary);
     font-size: 0.95rem;
-    text-align: left;
-
-    cursor: pointer;
+    border: none;
     border-radius: var(--radius);
+    cursor: pointer;
     transition: 0.25s;
 }
 
@@ -165,16 +167,13 @@ html[data-theme="light"] {
     box-shadow: 0 0 10px var(--neon-blue-soft);
 }
 
-/* Desktop: hamburger skjult */
-#sidebarToggle {
-    display: none;
-}
-
-/* Mobil: hamburger synlig + sidebar flytter */
+/* ------------------------------------------------------
+   MOBIL: Vis hamburger-menuen
+   ------------------------------------------------------ */
 @media (max-width: 900px) {
 
     #sidebarToggle {
-        display: block;
+        display: block !important; /* ← nu vises den */
         position: fixed;
         top: 12px;
         right: 15px;
@@ -182,8 +181,6 @@ html[data-theme="light"] {
     }
 
     #sidebar {
-        position: fixed;
-        top: 60px;
         left: -260px;
         transition: 0.3s ease;
     }
@@ -192,6 +189,7 @@ html[data-theme="light"] {
         left: 0;
     }
 }
+
 
 /* ======================================================
    AFSNIT 05 – MAIN CONTENT
