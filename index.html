@@ -15,25 +15,20 @@
     ======================================================= -->
     <div class="app">
 
-  <!-- ======================================================
-     AFSNIT 03 – TOPBAR (SPROG + TEMA)
-====================================================== -->
+ <!-- ============================
+     AFSNIT 03 – TOPBAR
+============================== -->
 <header class="topbar">
-    <div class="topbar-left"></div>
-
-    <div class="topbar-center">
-        <button class="lang-btn" onclick="setLanguage('da')">DK</button>
-        <button class="lang-btn" onclick="setLanguage('gb')">GB</button>
-        <button class="lang-btn" onclick="setLanguage('de')">DE</button>
-        <button class="lang-btn" onclick="setLanguage('lt')">LT</button>
-
-        <button id="themeToggle" class="theme-btn" onclick="toggleTheme()">
-            🌙
-        </button>
+    <div class="language-buttons">
+        <button class="lang-btn" data-lang="da">DK</button>
+        <button class="lang-btn" data-lang="en">GB</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="lt">LT</button>
     </div>
 
-    <div class="topbar-right"></div>
+    <button id="themeToggle" class="theme-toggle">🌙</button>
 </header>
+
 
         <!-- ======================================================
              AFSNIT 04 – BODY LAYOUT (SIDEBAR + CONTENT)
