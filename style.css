@@ -1,46 +1,119 @@
 /* ======================================================
-   AFSNIT 01 – CSS VARIABLER
-====================================================== */
+   AFSNIT 01 – CSS VARIABLER (LIGHT / DARK)
+   Samlet farveskema ét sted
+   ====================================================== */
 
 :root {
+    /* Baggrunde */
     --bg-primary: #0b1120;
     --bg-secondary: #0f172a;
+    --bg-card: #111827;
+
+    /* Sidebar */
+    --sidebar-bg: #0f172a;
+    --sidebar-active: rgba(56,189,248,0.20);
+
+    /* Tekst */
     --text: #e5e7eb;
+    --text-strong: #ffffff;
     --text-muted: #94a3b8;
-    --card: #1e293b;
-    --sidebar: #111827;
-    --sidebar-active: #2563eb55;
+
+    /* Inputs */
+    --input-bg: #1e293b;
+    --input-text: #ffffff;
+    --input-border: rgba(255,255,255,0.15);
+
+    /* Knapper */
+    --btn-start-bg: #16a34a;
+    --btn-start-text: #ffffff;
+
+    --btn-stop-bg: #dc2626;
+    --btn-stop-text: #ffffff;
+
+    --btn-primary-bg: #38bdf8;
+    --btn-primary-text: #0b1120;
+
+    --btn-warning-bg: #eab308;
+    --btn-warning-text: #0f172a;
+
+    /* Kalender farvekoder */
+    --cal-empty: #ffffff10;
+    --cal-medium: #facc1533;
+    --cal-busy: #dc262633;
 }
 
+/* ------------ Light mode ------------ */
 [data-theme="light"] {
-    --bg-primary: #f2f2f2;
+    --bg-primary: #f4f4f4;
     --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+
+    --sidebar-bg: #ffffff;
+    --sidebar-active: rgba(2,132,199,0.20);
+
     --text: #1e293b;
-    --text-muted: #4b5563;
-    --card: #ffffff;
-    --sidebar: #ffffff;
-    --sidebar-active: #2563eb22;
+    --text-strong: #0f172a;
+    --text-muted: #64748b;
+
+    --input-bg: #f0f0f0;
+    --input-text: #1e293b;
+    --input-border: rgba(0,0,0,0.15);
+
+    --btn-start-bg: #22c55e;
+    --btn-stop-bg: #ef4444;
+    --btn-primary-bg: #0284c7;
+    --btn-primary-text: #ffffff;
+
+    --btn-warning-bg: #facc15;
+    --btn-warning-text: #0f172a;
+
+    --cal-empty: #00000008;
+    --cal-medium: #facc1544;
+    --cal-busy: #ef444444;
 }
+
+
 
 /* ======================================================
-   AFSNIT 02 – LAYOUT
-====================================================== */
-body {
+   AFSNIT 02 – BASIS LAYOUT
+   (Grid, fonts, body, wrapper)
+   ====================================================== */
+
+html, body {
     margin: 0;
-    background: var(--bg-primary);
+    padding: 0;
     color: var(--text);
+    background: var(--bg-primary);
     font-family: Arial, sans-serif;
 }
 
 #appWrapper {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 240px 1fr;
     height: 100vh;
 }
 
+.page {
+    display: none;
+}
+
+.page-visible {
+    display: block;
+}
+
+.card {
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+
 /* ======================================================
    AFSNIT 03 – TOPBAR
-====================================================== */
+   ====================================================== */
+
 #topbar {
     grid-column: 1 / span 2;
     height: 55px;
@@ -52,33 +125,316 @@ body {
     padding: 0 15px;
 }
 
+.topbar-left {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.topbar-center {
+    font-size: 18px;
+}
+
+.topbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.lang-btn.active {
+    border-bottom: 2px solid var(--btn-primary-bg);
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* mobile breakpoint */
+@media (max-width: 768px) {
+    #appWrapper {
+        grid-template-columns: 1fr;
+    }
+    #sidebar {
+        display: none;
+    }
+    #sidebar.open {
+        display: block;
+    }
+    .mobile-only {
+        display: inline-block;
+    }
+}
+
+
 /* ======================================================
    AFSNIT 04 – SIDEBAR
-====================================================== */
+   ====================================================== */
+
 #sidebar {
-    background: var(--sidebar);
-    padding: 15px;
+    background: var(--sidebar-bg);
+    padding: 20px 10px;
+    border-right: 1px solid var(--text-muted);
 }
 
 .menu-item {
-    padding: 10px;
-    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 10px;
     background: transparent;
-    cursor: pointer;
     border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--text);
+}
+
+.menu-item:hover {
+    background: var(--sidebar-active);
 }
 
 .menu-item.active {
     background: var(--sidebar-active);
+    font-weight: bold;
 }
+
+
 
 /* ======================================================
-   AFSNIT 05 – INDHOLD
-====================================================== */
-#pageContent {
-    padding: 20px;
+   AFSNIT 05 – KNAPPER (START/STOP/PRIMARY/WARNING)
+   ====================================================== */
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 16px;
+    font-size: 15px;
+    border-radius: 6px;
+    transition: 0.2s;
 }
 
-.page.hidden {
-    display: none;
+.btn-start {
+    background: var(--btn-start-bg);
+    color: var(--btn-start-text);
 }
+
+.btn-stop {
+    background: var(--btn-stop-bg);
+    color: var(--btn-stop-text);
+}
+
+.btn-primary {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+.btn-warning {
+    background: var(--btn-warning-bg);
+    color: var(--btn-warning-text);
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+
+
+/* ======================================================
+   AFSNIT 06 – INPUT, TABEL, GENEREL UI
+   ====================================================== */
+
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+}
+
+/* Chips / medarbejdere-lister */
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    padding: 8px 14px;
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--input-border);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.chip.selected {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+/* Tabeller */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.table th {
+    background: var(--bg-secondary);
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--text-muted);
+}
+
+.table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--input-border);
+}
+
+/* Quick timer */
+.quick-timer-box {
+    text-align: center;
+}
+
+.quick-timer-display {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.quick-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+/* ======================================================
+   AFSNIT 07 – KALENDER
+   ====================================================== */
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-secondary);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.calendar-cell {
+    padding: 12px;
+    text-align: center;
+    background: var(--bg-card);
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid var(--input-border);
+    transition: 0.2s;
+    color: var(--text);
+}
+
+/* farvekoder fra appen */
+.calendar-day-empty {
+    background: var(--cal-empty);
+}
+
+.calendar-day-medium {
+    background: var(--cal-medium);
+}
+
+.calendar-day-busy {
+    background: var(--cal-busy);
+}
+
+.calendar-cell.selected {
+    outline: 2px solid var(--btn-primary-bg);
+}
+
+
+
+/* ======================================================
+   AFSNIT 08 – DAGENS DETALJER
+   ====================================================== */
+
+#selectedDayLabel {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#dayPlanList {
+    list-style: none;
+    padding-left: 0;
+}
+
+#dayPlanList li {
+    padding: 8px 10px;
+    background: var(--bg-secondary);
+    margin-bottom: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border);
+}
+
+
+
+/* ======================================================
+   AFSNIT 09 – RESPONSIVE DESIGN
+   ====================================================== */
+
+@media (max-width: 900px) {
+
+    #appWrapper {
+        grid-template-columns: 1fr;
+    }
+
+    #sidebar {
+        display: none;
+        position: absolute;
+        width: 220px;
+        height: 100vh;
+        left: 0;
+        top: 55px;
+        background: var(--sidebar-bg);
+        z-index: 50;
+        padding-top: 20px;
+    }
+
+    #sidebar.open {
+        display: block;
+    }
+
+    .mobile-only {
+        display: inline-block;
+    }
+}
+
+
+
+/* ======================================================
+   AFSNIT 10 – UTILITY CLASSES
+   ====================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+
+.bold { font-weight: bold; }
+
+.w-100 { width: 100%; }
