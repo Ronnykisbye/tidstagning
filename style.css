@@ -251,84 +251,75 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR + LAYOUT
+   AFSNIT 04 – SIDEBAR & CONTENT LAYOUT
 ====================================================== */
 
-/* Sidebar står fast i venstre side */
-.sidebar {
-    width: 240px;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
+:root {
+    --sidebar-width: 240px; /* ENS STØRRELSE FOR ALT */
+}
+
+/* Selve sidemenuen */
+#sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background: var(--bg-sidebar);
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    padding-top: 80px; /* plads til topbar */
-    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.35);
-    z-index: 15;
+    padding: 24px 20px;
+    box-shadow: 12px 0 40px rgba(0,0,0,0.35);
+    z-index: 30; /* Sidebar skal altid ligge OVER alt indhold */
 }
 
-/* Sidebar menu styling */
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 0 18px;
-}
-
-.menu-item {
-    padding: 10px 14px;
+/* Menu-items */
+.sidebar-menu .menu-item {
+    display: block;
+    width: 100%;
     text-align: left;
-    border-radius: 8px;
-    background: transparent;
-    border: none;
-    color: var(--sidebar-text);
+    padding: 12px 14px;
+    border-radius: 12px;
     font-size: 0.9rem;
+    color: var(--text-muted);
+    background: transparent;
     cursor: pointer;
+    border: none;
     transition: 0.2s ease;
 }
 
-.menu-item:hover {
+.sidebar-menu .menu-item:hover {
     background: rgba(255,255,255,0.08);
+    color: var(--text-strong);
 }
 
-.menu-item.active {
+.sidebar-menu .menu-item.active {
     background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    color: #0f172a;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+    color: #0b1120;
+    box-shadow: 0 0 14px rgba(56,189,248,0.45);
 }
 
-/* ===============================================
-   HOVEDINDHOLD – DETTE FLYTTER DET HELE PÅ PLADS
-=============================================== */
+/* ------------------------------------------------------
+   MAIN CONTENT (DETTE ER DET VIGTIGE FIX)
+------------------------------------------------------ */
+
 #contentArea {
-    margin-left: 260px;       /* ✔ flyt indhold væk fra sidemenu */
-    margin-top: 100px;        /* ✔ under topbar */
-    padding: 20px 40px;
-    max-width: calc(100% - 260px);
-    transition: margin 0.25s ease;
+    margin-left: var(--sidebar-width); /* 🎯 Flyt ALT indhold til højre */
+    padding: 40px 50px;
+    transition: margin-left 0.25s ease;
 }
 
-/* Mobile layout */
+/* Mobil – sidebar skjules, og content skal fylde hele bredden */
 @media (max-width: 880px) {
-
-    .sidebar {
-        transform: translateX(-260px);
-        transition: transform 0.3s ease;
-        width: 240px;
+    #contentArea {
+        margin-left: 0;
     }
-
-    .sidebar.open {
+    #sidebar {
+        transform: translateX(-100%);
+    }
+    #sidebar.open {
         transform: translateX(0);
     }
-
-    #contentArea {
-        margin-left: 0;           /* ✔ indholdet fylder hele skærmen */
-        max-width: 100%;
-        padding: 20px;
-    }
 }
-
 
 
 /* ======================================================
