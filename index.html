@@ -2,8 +2,8 @@
 <html lang="da">
 
 <!-- ======================================================
-     AFSNIT 01 – META + TEMA INITIALISERING UDEN BLINK
-====================================================== -->
+     AFSNIT 01 – META & EARLY THEME LOADER
+     ====================================================== -->
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,9 +12,9 @@
     <script>
         (function () {
             try {
-                var t = localStorage.getItem("gtp_theme");
-                try { t = JSON.parse(t); } catch (e) { }
-                document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
+                let t = localStorage.getItem("gtp_theme");
+                try { t = JSON.parse(t); } catch (e) {}
+                document.documentElement.setAttribute("data-theme", t || "dark");
             } catch (e) {
                 document.documentElement.setAttribute("data-theme", "dark");
             }
@@ -26,101 +26,320 @@
 
 <!-- ======================================================
      AFSNIT 02 – APP WRAPPER
-====================================================== -->
+     ====================================================== -->
 <body>
-    <div id="appWrapper">
-
-        <!-- ======================================================
-             AFSNIT 03 – TOPBAR
-        ======================================================= -->
-        <header id="topbar">
-            <div class="topbar-left">GreenTime Pro</div>
-            <div class="topbar-center" id="pageTitle">Tidsregistrering</div>
-            <div class="topbar-right">
-                <button class="langBtn" data-lang="da">DK</button>
-                <button class="langBtn" data-lang="en">EN</button>
-                <button class="langBtn" data-lang="de">DE</button>
-                <button class="langBtn" data-lang="lt">LT</button>
-
-                <button id="themeToggle">☀️/🌙</button>
-            </div>
-        </header>
-
-        <!-- ======================================================
-             AFSNIT 04 – SIDEBAR
-        ======================================================= -->
-        <aside id="sidebar">
-            <div class="menu-item" data-page="timer">⏱ Timer</div>
-            <div class="menu-item" data-page="logs">📄 Logs</div>
-            <div class="menu-item" data-page="employees">👥 Medarbejdere</div>
-            <div class="menu-item" data-page="customers">🏢 Kunder</div>
-            <div class="menu-item" data-page="planning">📅 Planlægning</div>
-            <div class="menu-item" data-page="reports">📊 Rapporter</div>
-        </aside>
-
-        <!-- ======================================================
-             AFSNIT 05 – HOVEDINDHOLD
-        ======================================================= -->
-        <main id="pageContent">
-
-            <!-- ======================================================
-                 AFSNIT 06 – SIDE: TIMER (STANDARD)
-            ======================================================= -->
-            <section class="page" id="page-timer">
-                <h2 data-i18n="timer_title">Tidsregistrering</h2>
-                <button id="startTimer">Start</button>
-                <button id="stopTimer">Stop</button>
-                <div id="timerDisplay">00:00:00</div>
-            </section>
-
-            <!-- ======================================================
-                 AFSNIT 07 – SIDE: LOGS
-            ======================================================= -->
-            <section class="page hidden" id="page-logs">
-                <h2>Logs</h2>
-                <div id="logList"></div>
-            </section>
-
-            <!-- ======================================================
-                 AFSNIT 08 – SIDE: MEDARBEJDERE
-            ======================================================= -->
-            <section class="page hidden" id="page-employees">
-                <h2>Medarbejdere</h2>
-                <div id="employeeList"></div>
-            </section>
-
-            <!-- ======================================================
-                 AFSNIT 09 – SIDE: KUNDER
-            ======================================================= -->
-            <section class="page hidden" id="page-customers">
-                <h2>Kunder</h2>
-                <div id="customerList"></div>
-            </section>
-
-            <!-- ======================================================
-                 AFSNIT 10 – SIDE: PLANLÆGNING
-            ======================================================= -->
-            <section class="page hidden" id="page-planning">
-                <h2>Planlægning</h2>
-                <div>Kalender kommer her</div>
-            </section>
-
-            <!-- ======================================================
-                 AFSNIT 11 – SIDE: RAPPORTER
-            ======================================================= -->
-            <section class="page hidden" id="page-reports">
-                <h2>Rapporter</h2>
-                <div id="reportOutput"></div>
-            </section>
-
-        </main>
-
-    </div>
+<div id="appWrapper">
 
     <!-- ======================================================
-         AFSNIT 12 – APP SCRIPT
-    ======================================================= -->
-    <script src="app.js"></script>
+         AFSNIT 03 – TOPBAR
+         ====================================================== -->
+    <header id="topbar">
+        <div class="topbar-left" data-i18n="app_title">GreenTime Pro</div>
+        <div class="topbar-center" id="pageTitle">Tidsregistrering</div>
+
+        <div class="topbar-right">
+            <button class="lang-btn" data-lang="da">DK</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="de">DE</button>
+            <button class="lang-btn" data-lang="lt">LT</button>
+
+            <button id="themeToggle">🌞</button>
+
+            <button id="menuToggle" class="mobile-only">☰</button>
+        </div>
+    </header>
+
+    <!-- ======================================================
+         AFSNIT 04 – SIDEBAR
+         ====================================================== -->
+    <aside id="sidebar">
+        <div class="menu-item active" data-page="dashboard">
+            <span>⏱</span>
+            <span data-i18n="menu_dashboard">Tidsregistrering</span>
+        </div>
+
+        <div class="menu-item" data-page="customers">
+            <span>🏢</span>
+            <span data-i18n="menu_customers">Kunder</span>
+        </div>
+
+        <div class="menu-item" data-page="employees">
+            <span>👥</span>
+            <span data-i18n="menu_employees">Medarbejdere</span>
+        </div>
+
+        <div class="menu-item" data-page="detailedtimer">
+            <span>⏳</span>
+            <span data-i18n="menu_time_tracking">Detaljeret tid</span>
+        </div>
+
+        <div class="menu-item" data-page="planning">
+            <span>📅</span>
+            <span data-i18n="menu_schedule">Plan & kalender</span>
+        </div>
+
+        <div class="menu-item" data-page="logs">
+            <span>📄</span>
+            <span data-i18n="menu_logs">Logs</span>
+        </div>
+
+        <div class="menu-item" data-page="reports">
+            <span>📊</span>
+            <span data-i18n="menu_reports">Rapporter</span>
+        </div>
+    </aside>
+
+
+    <!-- ======================================================
+         AFSNIT 05 – HOVEDINDHOLD
+         ====================================================== -->
+    <main id="pageContent">
+
+
+        <!-- ======================================================
+             AFSNIT 06 – DASHBOARD / QUICK TIMER
+             (QUICK START / QUICK STOP / CHIPS)
+             ====================================================== -->
+        <section id="dashboard" class="page page-visible">
+
+            <h2 data-i18n="menu_dashboard">Tidsregistrering</h2>
+
+            <div class="card">
+                <label data-i18n="customers">Kunder</label>
+                <select id="quickCustomerSelect"></select>
+            </div>
+
+            <div class="card">
+                <label data-i18n="employees">Medarbejdere</label>
+                <div id="quickEmployeeList" class="chip-container"></div>
+            </div>
+
+            <div class="card">
+                <label>Mode</label>
+                <div class="quick-modes">
+                    <label><input type="radio" id="quickModeDay" name="quickMode" checked> Dag</label>
+                    <label><input type="radio" id="quickModeTotal" name="quickMode"> Total</label>
+                </div>
+            </div>
+
+            <div class="card quick-timer-box">
+                <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
+
+                <div class="quick-buttons">
+                    <button id="quickStartBtn" class="btn-start">Start</button>
+                    <button id="quickStopBtn" class="btn-stop">Stop</button>
+                </div>
+            </div>
+
+        </section>
+        <!-- ======================================================
+             AFSNIT 07 – KUNDER
+             ====================================================== -->
+        <section id="customers" class="page">
+
+            <h2 data-i18n="menu_customers">Kunder</h2>
+
+            <div class="card">
+                <label data-i18n="cust_name">Navn</label>
+                <input id="custName" type="text" />
+
+                <label data-i18n="cust_phone">Telefon</label>
+                <input id="custPhone" type="text" />
+
+                <label data-i18n="cust_email">Email</label>
+                <input id="custEmail" type="email" />
+
+                <label data-i18n="cust_address">Adresse</label>
+                <input id="custAddress" type="text" />
+
+                <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
+            </div>
+
+            <table id="customerTable" class="table">
+                <thead>
+                    <tr>
+                        <th data-i18n="cust_name">Navn</th>
+                        <th data-i18n="cust_phone">Telefon</th>
+                        <th data-i18n="cust_email">Email</th>
+                        <th data-i18n="cust_address">Adresse</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="card">
+                <label data-i18n="reset_time_for">Nulstil tid for kunde</label>
+                <select id="resetCustomerSelect"></select>
+
+                <button id="resetCustomerTimeBtn" class="btn-warning">Nulstil</button>
+
+                <div id="resetCustomerInfo"></div>
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             AFSNIT 08 – MEDARBEJDERE
+             ====================================================== -->
+        <section id="employees" class="page">
+
+            <h2 data-i18n="menu_employees">Medarbejdere</h2>
+
+            <div class="card">
+                <label data-i18n="emp_name">Navn</label>
+                <input id="empName" type="text" />
+
+                <label data-i18n="emp_email">Email</label>
+                <input id="empEmail" type="email" />
+
+                <label data-i18n="emp_role">Rolle</label>
+                <select id="empRole">
+                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
+                    <option value="admin" data-i18n="role_admin">Administrator</option>
+                </select>
+
+                <button id="saveEmployeeBtn" class="btn-primary">Gem medarbejder</button>
+            </div>
+
+            <table id="employeeTable" class="table">
+                <thead>
+                    <tr>
+                        <th data-i18n="emp_name">Navn</th>
+                        <th data-i18n="emp_email">Email</th>
+                        <th data-i18n="emp_role">Rolle</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+
+        <!-- ======================================================
+             AFSNIT 09 – DETALJERET TIMER
+             ====================================================== -->
+        <section id="detailedtimer" class="page">
+
+            <h2 data-i18n="menu_time_tracking">Detaljeret tid</h2>
+
+            <div class="card">
+                <label data-i18n="customers">Kunde</label>
+                <select id="timerCustomerSelect"></select>
+
+                <label data-i18n="employees">Medarbejder</label>
+                <select id="timerEmployeeSelect"></select>
+
+                <div id="timerStatus" class="timer-status"></div>
+
+                <button id="startTimerBtn" class="btn-start">Start</button>
+                <button id="stopTimerBtn" class="btn-stop">Stop</button>
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             AFSNIT 10 – DAGENS LOGS
+             ====================================================== -->
+        <section id="logs" class="page">
+
+            <h2 data-i18n="menu_logs">Dagens logs</h2>
+
+            <table id="timeLogTable" class="table">
+                <thead>
+                    <tr>
+                        <th data-i18n="log_start">Start</th>
+                        <th data-i18n="log_end">Slut</th>
+                        <th data-i18n="log_duration">Minutter</th>
+                        <th data-i18n="log_customer">Kunde</th>
+                        <th data-i18n="log_employee">Medarbejder</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </section>
+
+
+        <!-- ======================================================
+             AFSNIT 11 – PLANLÆGNING + KALENDER
+             ====================================================== -->
+        <section id="planning" class="page">
+
+            <h2 data-i18n="menu_schedule">Plan & kalender</h2>
+
+            <!-- Kalender-top -->
+            <div class="calendar-header">
+                <button id="calPrevMonth">◀</button>
+                <div id="calMonthLabel"></div>
+                <button id="calNextMonth">▶</button>
+            </div>
+
+            <!-- Kalender-raster -->
+            <div id="calendarCells" class="calendar-grid"></div>
+
+            <div class="card">
+                <label id="selectedDayLabel"></label>
+                <ul id="dayPlanList"></ul>
+            </div>
+
+            <div class="card">
+                <label data-i18n="plan_date">Dato</label>
+                <input type="date" id="planDate" />
+
+                <label data-i18n="plan_start">Starttid</label>
+                <input type="time" id="planStart" />
+
+                <label data-i18n="plan_duration">Varighed (timer)</label>
+                <input type="number" id="planDuration" />
+
+                <label data-i18n="customers">Kunde</label>
+                <select id="planCustomerSelect"></select>
+
+                <label data-i18n="employees">Medarbejdere</label>
+                <div id="planEmployeeList" class="chip-container"></div>
+
+                <label data-i18n="plan_note">Note</label>
+                <input id="planNote" type="text" />
+
+                <button id="savePlanBtn" class="btn-primary">Gem plan</button>
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             AFSNIT 12 – RAPPORTER
+             ====================================================== -->
+        <section id="reports" class="page">
+
+            <h2 data-i18n="menu_reports">Rapporter</h2>
+
+            <div class="card">
+                <label data-i18n="customers">Kunder</label>
+                <select id="reportCustomerSelect"></select>
+
+                <label data-i18n="employees">Medarbejdere</label>
+                <select id="reportEmployeeSelect"></select>
+            </div>
+
+            <div id="reportOutput"></div>
+
+        </section>
+
+
+    </main> <!-- /pageContent -->
+
+</div> <!-- /appWrapper -->
+
+
+<!-- ======================================================
+     AFSNIT 999 – SCRIPT
+     ====================================================== -->
+<script src="app.js"></script>
 
 </body>
 </html>
+
+     
