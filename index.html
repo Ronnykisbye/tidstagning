@@ -1,61 +1,339 @@
 <!DOCTYPE html>
-<html lang="da" data-theme="dark">
+<html lang="da">
 <head>
-    <meta charset="UTF-8">
+    <!-- ======================================================
+         AFSNIT 01 – META & TEMA-INITIALISERING (ANTI-BLINK)
+    ======================================================= -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GreenTime Pro</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-</head>
 
+    <!-- Sætter data-theme FØR CSS loader → ingen blink -->
+    <script>
+        (function () {
+            var stored = null;
+            try {
+                stored = JSON.parse(localStorage.getItem("gtp_theme"));
+            } catch (e) {}
+
+            var theme = (stored === "light" || stored === "dark") ? stored : "dark";
+            document.documentElement.setAttribute("data-theme", theme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="style.css" />
+</head>
 <body>
 
 <!-- ======================================================
-     AFSNIT 01 – TOPBAR
-====================================================== -->
-<header id="topbar">
-    <div id="topbar-left">
-        <div id="appLogo">GreenTime Pro</div>
-    </div>
-
-    <div id="topbar-center">
-        <div id="pageTitle">–</div>
-    </div>
-
-    <div id="topbar-right">
-        <button class="lang-btn" data-lang="da">DK</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="de">DE</button>
-        <button class="lang-btn" data-lang="lt">LT</button>
-
-        <button id="themeToggle">☀️</button>
-        <button id="sidebarToggle">☰</button>
-    </div>
-</header>
-
-
-<!-- ======================================================
      AFSNIT 02 – APP WRAPPER
-====================================================== -->
-<div id="appWrapper">
+======================================================= -->
+<div class="app-shell">
 
     <!-- ==================================================
-         SIDEBAR
+         AFSNIT 03 – TOPBAR
     =================================================== -->
-    <nav id="sidebar">
-        <button class="menu-item" data-page="timer">⏱</button>
-        <button class="menu-item" data-page="customers">👤</button>
-        <button class="menu-item" data-page="employees">👥</button>
-        <button class="menu-item" data-page="logs">📄</button>
-    </nav>
+    <header class="topbar">
+        <!-- Venstre: logo + mobil-menu -->
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle" aria-label="Åbn/luk menu">
+                ☰
+            </button>
+
+            <div class="logo-text">
+                <span class="logo-main" data-i18n="app_title">GreenTime Pro</span>
+                <span class="logo-sub">Smart tidsregistrering</span>
+            </div>
+        </div>
+
+        <!-- Center: side-titel -->
+        <div class="topbar-center">
+            <h1 id="pageTitle" data-i18n="menu_dashboard">Tidsregistrering</h1>
+        </div>
+
+        <!-- Højre: sprog + tema -->
+        <div class="topbar-right">
+            <!-- Sprogknapper -->
+            <div class="lang-switch">
+                <button class="lang-btn" data-lang="da">DK</button>
+                <button class="lang-btn" data-lang="en">GB</button>
+                <button class="lang-btn" data-lang="de">DE</button>
+                <button class="lang-btn" data-lang="lt">LT</button>
+            </div>
+
+            <!-- Tema-knap -->
+            <button id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Skift mellem lyst og mørkt tema">
+                🌙
+            </button>
+        </div>
+    </header>
 
     <!-- ==================================================
-         MAINCONTENT
+         AFSNIT 04 – LAYOUT (SIDEBAR + CONTENT)
     =================================================== -->
-    <main id="mainContent"></main>
+    <div class="layout">
+        <!-- Sidebar / hovedmenu -->
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <button class="menu-item active"
+                        data-page="dashboardPage"
+                        data-i18n="menu_dashboard">
+                    Tidsregistrering
+                </button>
+                <button class="menu-item"
+                        data-page="customersPage"
+                        data-i18n="menu_customers">
+                    Kunder
+                </button>
+                <button class="menu-item"
+                        data-page="employeesPage"
+                        data-i18n="menu_employees">
+                    Medarbejdere
+                </button>
+                <button class="menu-item"
+                        data-page="logsPage"
+                        data-i18n="menu_logs">
+                    Logs
+                </button>
+                <button class="menu-item"
+                        data-page="reportsPage"
+                        data-i18n="menu_reports">
+                    Rapporter
+                </button>
+                <button class="menu-item"
+                        data-page="settingsPage"
+                        data-i18n="menu_settings">
+                    Indstillinger
+                </button>
+            </nav>
+        </aside>
 
+        <!-- Hovedindhold -->
+        <main class="content">
+
+            <!-- ==============================================
+                 SIDE 01 – TIDSREGISTRERING (DASHBOARD)
+            =============================================== -->
+            <section id="dashboardPage" class="page visible">
+                <div class="page-header">
+                    <h2 data-i18n="page_dashboard_title">Tidsregistrering</h2>
+                    <p class="page-sub" data-i18n="page_dashboard_sub">
+                        Start og stop tid for opgaver – hurtigt overblik.
+                    </p>
+                </div>
+
+                <div class="card timer-card">
+                    <div class="timer-display-wrapper">
+                        <div class="timer-display" id="timerDisplay">00:00:00</div>
+                    </div>
+                    <div class="timer-buttons">
+                        <button id="timerStartBtn" class="btn btn-success">
+                            <span data-i18n="btn_start">Start</span>
+                        </button>
+                        <button id="timerStopBtn" class="btn btn-danger">
+                            <span data-i18n="btn_stop">Stop</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==============================================
+                 SIDE 02 – KUNDER
+            =============================================== -->
+            <section id="customersPage" class="page">
+                <div class="page-header">
+                    <h2 data-i18n="page_customers_title">Kunder</h2>
+                    <p class="page-sub" data-i18n="page_customers_sub">
+                        Opret og vedligehold din kundeliste.
+                    </p>
+                </div>
+
+                <div class="page-grid">
+                    <!-- Formular -->
+                    <div class="card">
+                        <h3 data-i18n="customers_form_title">Ny kunde</h3>
+                        <form id="customerForm" class="form-grid">
+                            <label>
+                                <span data-i18n="label_name">Navn</span>
+                                <input type="text" id="customerName" required />
+                            </label>
+                            <label>
+                                <span data-i18n="label_phone">Telefon</span>
+                                <input type="text" id="customerPhone" />
+                            </label>
+                            <label>
+                                <span data-i18n="label_email">Email</span>
+                                <input type="email" id="customerEmail" />
+                            </label>
+                            <label class="full-width">
+                                <span data-i18n="label_address">Adresse</span>
+                                <input type="text" id="customerAddress" />
+                            </label>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <span data-i18n="btn_save_customer">Gem kunde</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Oversigt -->
+                    <div class="card">
+                        <h3 data-i18n="customers_list_title">Oversigt over kunder</h3>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="col_name">Navn</th>
+                                        <th data-i18n="col_phone">Telefon</th>
+                                        <th data-i18n="col_email">Email</th>
+                                        <th data-i18n="col_address">Adresse</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customersTableBody">
+                                    <!-- udfyldes via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==============================================
+                 SIDE 03 – MEDARBEJDERE
+            =============================================== -->
+            <section id="employeesPage" class="page">
+                <div class="page-header">
+                    <h2 data-i18n="page_employees_title">Medarbejdere</h2>
+                    <p class="page-sub" data-i18n="page_employees_sub">
+                        Hold styr på medarbejdere og roller.
+                    </p>
+                </div>
+
+                <div class="page-grid">
+                    <!-- Formular -->
+                    <div class="card">
+                        <h3 data-i18n="employees_form_title">Ny medarbejder</h3>
+                        <form id="employeeForm" class="form-grid">
+                            <label>
+                                <span data-i18n="label_name">Navn</span>
+                                <input type="text" id="employeeName" required />
+                            </label>
+                            <label>
+                                <span data-i18n="label_email">Email</span>
+                                <input type="email" id="employeeEmail" />
+                            </label>
+                            <label>
+                                <span data-i18n="label_role">Rolle</span>
+                                <select id="employeeRole">
+                                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
+                                    <option value="admin" data-i18n="role_admin">Admin</option>
+                                </select>
+                            </label>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <span data-i18n="btn_save_employee">Gem medarbejder</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Oversigt -->
+                    <div class="card">
+                        <h3 data-i18n="employees_list_title">Liste over medarbejdere</h3>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="col_name">Navn</th>
+                                        <th data-i18n="col_email">Email</th>
+                                        <th data-i18n="col_role">Rolle</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeesTableBody">
+                                    <!-- udfyldes via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==============================================
+                 SIDE 04 – LOGS
+            =============================================== -->
+            <section id="logsPage" class="page">
+                <div class="page-header">
+                    <h2 data-i18n="page_logs_title">Logs</h2>
+                    <p class="page-sub" data-i18n="page_logs_sub">
+                        Historik over registreret arbejdstid.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-i18n="col_log_time">Tidspunkt</th>
+                                    <th data-i18n="col_log_duration">Varighed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsTableBody">
+                                <!-- udfyldes via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==============================================
+                 SIDE 05 – RAPPORTER
+            =============================================== -->
+            <section id="reportsPage" class="page">
+                <div class="page-header">
+                    <h2 data-i18n="page_reports_title">Rapporter</h2>
+                    <p class="page-sub" data-i18n="page_reports_sub">
+                        Fremtidig placering til grafer og rapporter.
+                    </p>
+                </div>
+
+                <div class="card placeholder-card">
+                    <p data-i18n="reports_placeholder">
+                        Her kan du senere tilføje dashboards, grafer og eksport.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ==============================================
+                 SIDE 06 – INDSTILLINGER
+            =============================================== -->
+            <section id="settingsPage" class="page">
+                <div class="page-header">
+                    <h2 data-i18n="page_settings_title">Indstillinger</h2>
+                    <p class="page-sub" data-i18n="page_settings_sub">
+                        Konfiguration af appen.
+                    </p>
+                </div>
+
+                <div class="card placeholder-card">
+                    <p data-i18n="settings_placeholder">
+                        Her kan du senere justere avancerede indstillinger.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+    </div>
 </div>
 
+<!-- ======================================================
+     AFSNIT 06 – SCRIPT
+======================================================= -->
 <script src="app.js"></script>
-
 </body>
 </html>
