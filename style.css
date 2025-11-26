@@ -562,3 +562,18 @@ input, select {
 
     pointer-events: none;
 }
+
+
+/* ======================================================
+   AFSNIT 13 – FELT OVERSKRIFTER
+   ====================================================== */
+
+.field-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
