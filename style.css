@@ -23,6 +23,29 @@
 }
 
 /* ======================================================
+   LIGHT MODE VARIABLER
+====================================================== */
+
+[data-theme="light"] {
+    --bg-main: #f5f8fc;
+    --bg-sidebar: #ffffff;
+    --card-bg: #ffffff;
+    --bg-hover: #e6eef7;
+
+    --text-primary: #1b1f27;
+    --text-secondary: #2b3342;
+    --text-muted: #556072;
+    --text-strong: #0a0d12;
+
+    --neon-blue: #0077ff;
+    --neon-blue-soft: rgba(0,119,255,0.35);
+
+    --card-border: rgba(0,0,0,0.1);
+    --card-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+
+/* ======================================================
    AFSNIT 02 – GLOBAL BASICS
 ====================================================== */
 
