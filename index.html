@@ -50,99 +50,52 @@
     </header>
 
     <!-- ======================================================
-         AFSNIT 04 – SIDEBAR
-         ====================================================== -->
-    <aside id="sidebar">
-        <div class="menu-item active" data-page="dashboard">
-            <span>⏱</span>
-            <span data-i18n="menu_dashboard">Tidsregistrering</span>
-        </div>
-
-        <div class="menu-item" data-page="customers">
-            <span>🏢</span>
-            <span data-i18n="menu_customers">Kunder</span>
-        </div>
-
-        <div class="menu-item" data-page="employees">
-            <span>👥</span>
-            <span data-i18n="menu_employees">Medarbejdere</span>
-        </div>
-
-        <div class="menu-item" data-page="detailedtimer">
-            <span>⏳</span>
-            <span data-i18n="menu_time_tracking">Detaljeret tid</span>
-        </div>
-
-        <div class="menu-item" data-page="planning">
-            <span>📅</span>
-            <span data-i18n="menu_schedule">Plan & kalender</span>
-        </div>
-
-        <div class="menu-item" data-page="logs">
-            <span>📄</span>
-            <span data-i18n="menu_logs">Logs</span>
-        </div>
-
-        <div class="menu-item" data-page="reports">
-            <span>📊</span>
-            <span data-i18n="menu_reports">Rapporter</span>
-        </div>
-    </aside>
-
-
-    <!-- ======================================================
-         AFSNIT 05 – HOVEDINDHOLD
-         ====================================================== -->
-    <main id="pageContent">
-
-
-        <!-- ======================================================
-     AFSNIT 06 – DASHBOARD / QUICK TIMER
-     ====================================================== -->
+     AFSNIT 04 – DASHBOARD / QUICK TIMER
+====================================================== -->
 <section id="dashboard" class="page page-visible">
 
     <h2 data-i18n="menu_dashboard">Tidsregistrering</h2>
 
     <div class="card">
-        <div class="field-title">Kunde</div>
-        <select id="quickCustomerSelect"></select>
+        <div class="field-title" data-i18n="title_customer">Kunde</div>
+        <select id="quickCustomerSelect">
+            <option data-i18n="title_customer_select">Vælg kunde</option>
+        </select>
     </div>
 
     <div class="card">
-        <div class="field-title">Medarbejderen hos kunden</div>
+        <div class="field-title" data-i18n="title_employee_list">Medarbejderen hos kunden</div>
         <div id="quickEmployeeList" class="chip-container"></div>
     </div>
 
     <div class="card">
-        <div class="field-title">Mode</div>
+        <div class="field-title" data-i18n="title_mode">Mode</div>
         <div class="quick-modes">
-            <label><input type="radio" id="quickModeDay" name="quickMode" checked> Dag</label>
-            <label><input type="radio" id="quickModeTotal" name="quickMode"> Total</label>
+            <label><input type="radio" id="quickModeDay" name="quickMode" checked> <span data-i18n="title_day">Dag</span></label>
+            <label><input type="radio" id="quickModeTotal" name="quickMode"> <span data-i18n="title_total">Total</span></label>
         </div>
     </div>
 
     <div class="card quick-timer-box">
-        <div class="field-title">Tid</div>
+        <div class="field-title" data-i18n="title_time">Tid</div>
 
         <div id="quickTimerDisplay" class="quick-timer-display">00:00:00</div>
 
         <div class="quick-buttons">
-            <button id="quickStartBtn" class="btn-start">Start</button>
-            <button id="quickStopBtn" class="btn-stop">Stop</button>
+            <button id="quickStartBtn" class="btn-start" data-i18n="timer_start">Start</button>
+            <button id="quickStopBtn" class="btn-stop" data-i18n="timer_stop">Stop</button>
         </div>
     </div>
 
 </section>
 
-         
 <!-- ======================================================
-     AFSNIT 07 – KUNDER
-     ====================================================== -->
+     AFSNIT 05 – KUNDER
+====================================================== -->
 <section id="customers" class="page">
 
     <h2 data-i18n="menu_customers">Kunder</h2>
 
-    <!-- Opret kunde -->
     <div class="card">
 
         <div class="field-title" data-i18n="cust_name">Navn</div>
@@ -160,12 +113,8 @@
         <button id="saveCustomerBtn" class="btn-primary" data-i18n="cust_save">Gem kunde</button>
     </div>
 
-    <!-- Tabel med overskrift -->
     <div class="card">
-
-        <div class="table-title" data-i18n="cust_overview">
-            Oversigt over kunder
-        </div>
+        <div class="table-title" data-i18n="cust_overview">Oversigt over kunder</div>
 
         <table id="customerTable" class="table">
             <thead>
@@ -178,45 +127,43 @@
             </thead>
             <tbody></tbody>
         </table>
-
     </div>
 
-    <!-- Nulstil -->
     <div class="card">
-        <div class="field-title" data-i18n="cust_reset_label">Nulstil tid for kunde</div>
 
+        <div class="field-title" data-i18n="cust_reset_label">Nulstil tid for kunde</div>
         <select id="resetCustomerSelect"></select>
 
-        <button id="resetCustomerTimeBtn" class="btn-warning" data-i18n="cust_reset_btn">
-            Nulstil
-        </button>
+        <button id="resetCustomerTimeBtn" class="btn-warning" data-i18n="cust_reset_btn">Nulstil</button>
 
         <div id="resetCustomerInfo"></div>
     </div>
 
 </section>
 
-        <!-- ======================================================
-     AFSNIT 08 – MEDARBEJDERE
-     ====================================================== -->
+<!-- ======================================================
+     AFSNIT 06 – MEDARBEJDERE
+====================================================== -->
 <section id="employees" class="page">
 
     <h2 data-i18n="menu_employees">Medarbejdere</h2>
 
     <div class="card">
-        <div class="field-title">Navn</div>
+
+        <div class="field-title" data-i18n="emp_name">Navn</div>
         <input id="empName" type="text" />
 
-        <div class="field-title">Email</div>
+        <div class="field-title" data-i18n="emp_email">Email</div>
         <input id="empEmail" type="email" />
 
-        <div class="field-title">Rolle</div>
+        <div class="field-title" data-i18n="emp_role">Rolle</div>
         <select id="empRole">
             <option value="employee" data-i18n="role_employee">Medarbejder</option>
             <option value="admin" data-i18n="role_admin">Administrator</option>
         </select>
 
-        <button id="saveEmployeeBtn" class="btn-primary">Gem medarbejder</button>
+        <button id="saveEmployeeBtn" class="btn-primary" data-i18n="emp_save">Gem medarbejder</button>
+
     </div>
 
     <table id="employeeTable" class="table">
@@ -232,40 +179,38 @@
 
 </section>
 
-
-       <!-- ======================================================
-     AFSNIT 09 – DETALJERET TIMER
-     ====================================================== -->
+<!-- ======================================================
+     AFSNIT 07 – DETALJERET TIMER
+====================================================== -->
 <section id="detailedtimer" class="page">
 
     <h2 data-i18n="menu_time_tracking">Detaljeret tid</h2>
 
     <div class="card">
 
-        <div class="field-title">Kunde</div>
+        <div class="field-title" data-i18n="title_customer">Kunde</div>
         <select id="timerCustomerSelect"></select>
 
-        <div class="field-title">Medarbejder</div>
+        <div class="field-title" data-i18n="emp_name">Medarbejder</div>
         <select id="timerEmployeeSelect"></select>
 
         <div id="timerStatus" class="timer-status"></div>
 
-        <button id="startTimerBtn" class="btn-start">Start</button>
-        <button id="stopTimerBtn" class="btn-stop">Stop</button>
+        <button id="startTimerBtn" class="btn-start" data-i18n="timer_start">Start</button>
+        <button id="stopTimerBtn" class="btn-stop" data-i18n="timer_stop">Stop</button>
     </div>
 
 </section>
 
-
-       <!-- ======================================================
-     AFSNIT 10 – DAGENS LOGS
-     ====================================================== -->
+<!-- ======================================================
+     AFSNIT 08 – LOGS
+====================================================== -->
 <section id="logs" class="page">
 
     <h2 data-i18n="menu_logs">Dagens logs</h2>
 
     <div class="card">
-        <div class="field-title">Registreringer i dag</div>
+        <div class="field-title" data-i18n="log_today">Registreringer i dag</div>
 
         <table id="timeLogTable" class="table">
             <thead>
@@ -282,6 +227,80 @@
     </div>
 
 </section>
+
+<!-- ======================================================
+     AFSNIT 09 – PLANLÆGNING
+====================================================== -->
+<section id="planning" class="page">
+
+    <h2 data-i18n="menu_schedule">Plan & kalender</h2>
+
+    <div class="card">
+        <div class="field-title" data-i18n="plan_month">Kalendermåned</div>
+
+        <div class="calendar-header">
+            <button id="calPrevMonth">◀</button>
+            <div id="calMonthLabel"></div>
+            <button id="calNextMonth">▶</button>
+        </div>
+
+        <div class="calendar-grid" id="calendarCells"></div>
+    </div>
+
+    <div class="card">
+        <div class="field-title" data-i18n="plan_day_tasks">Dagens opgaver</div>
+        <label id="selectedDayLabel"></label>
+        <ul id="dayPlanList"></ul>
+    </div>
+
+    <div class="card">
+
+        <div class="field-title" data-i18n="title_date">Dato</div>
+        <input type="date" id="planDate">
+
+        <div class="field-title" data-i18n="title_starttime">Starttid</div>
+        <input type="time" id="planStart">
+
+        <div class="field-title" data-i18n="title_duration">Varighed</div>
+        <input type="number" id="planDuration" min="0.5" max="8" step="0.5">
+
+        <div class="field-title" data-i18n="title_customer">Kunde</div>
+        <select id="planCustomerSelect"></select>
+
+        <div class="field-title" data-i18n="emp_name">Medarbejdere</div>
+        <div id="planEmployeeList" class="chip-container"></div>
+
+        <div class="field-title" data-i18n="title_note">Note</div>
+        <input id="planNote" type="text">
+
+        <button id="savePlanBtn" class="btn-primary" data-i18n="plan_save">Gem plan</button>
+    </div>
+
+</section>
+
+<!-- ======================================================
+     AFSNIT 10 – RAPPORTER
+====================================================== -->
+<section id="reports" class="page">
+
+    <h2 data-i18n="menu_reports">Rapporter</h2>
+
+    <div class="card">
+
+        <div class="field-title" data-i18n="report_customer">Kunde</div>
+        <select id="reportCustomerSelect"></select>
+
+        <div class="field-title" data-i18n="report_employee">Medarbejder</div>
+        <select id="reportEmployeeSelect"></select>
+    </div>
+
+    <div class="card">
+        <div class="field-title" data-i18n="report_output">Resultat</div>
+        <div id="reportOutput"></div>
+    </div>
+
+</section>
+
 
 
         <!-- ======================================================
