@@ -243,99 +243,111 @@
 </section>
 
 
-        <!-- ======================================================
-             AFSNIT 10 – DAGENS LOGS
-             ====================================================== -->
-        <section id="logs" class="page">
+       <!-- ======================================================
+     AFSNIT 10 – DAGENS LOGS
+     ====================================================== -->
+<section id="logs" class="page">
 
-            <h2 data-i18n="menu_logs">Dagens logs</h2>
+    <h2 data-i18n="menu_logs">Dagens logs</h2>
 
-            <table id="timeLogTable" class="table">
-                <thead>
-                    <tr>
-                        <th data-i18n="log_start">Start</th>
-                        <th data-i18n="log_end">Slut</th>
-                        <th data-i18n="log_duration">Minutter</th>
-                        <th data-i18n="log_customer">Kunde</th>
-                        <th data-i18n="log_employee">Medarbejder</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <div class="card">
+        <div class="field-title">Registreringer i dag</div>
 
-        </section>
+        <table id="timeLogTable" class="table">
+            <thead>
+                <tr>
+                    <th data-i18n="log_start">Start</th>
+                    <th data-i18n="log_end">Slut</th>
+                    <th data-i18n="log_duration">Minutter</th>
+                    <th data-i18n="log_customer">Kunde</th>
+                    <th data-i18n="log_employee">Medarbejder</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-
-        <!-- ======================================================
-             AFSNIT 11 – PLANLÆGNING + KALENDER
-             ====================================================== -->
-        <section id="planning" class="page">
-
-            <h2 data-i18n="menu_schedule">Plan & kalender</h2>
-
-            <!-- Kalender-top -->
-            <div class="calendar-header">
-                <button id="calPrevMonth">◀</button>
-                <div id="calMonthLabel"></div>
-                <button id="calNextMonth">▶</button>
-            </div>
-
-            <!-- Kalender-raster -->
-            <div id="calendarCells" class="calendar-grid"></div>
-
-            <div class="card">
-                <label id="selectedDayLabel"></label>
-                <ul id="dayPlanList"></ul>
-            </div>
-
-            <div class="card">
-                <label data-i18n="plan_date">Dato</label>
-                <input type="date" id="planDate" />
-
-                <label data-i18n="plan_start">Starttid</label>
-                <input type="time" id="planStart" />
-
-                <label data-i18n="plan_duration">Varighed (timer)</label>
-                <input type="number" id="planDuration" />
-
-                <label data-i18n="customers">Kunde</label>
-                <select id="planCustomerSelect"></select>
-
-                <label data-i18n="employees">Medarbejdere</label>
-                <div id="planEmployeeList" class="chip-container"></div>
-
-                <label data-i18n="plan_note">Note</label>
-                <input id="planNote" type="text" />
-
-                <button id="savePlanBtn" class="btn-primary">Gem plan</button>
-            </div>
-
-        </section>
+</section>
 
 
         <!-- ======================================================
-             AFSNIT 12 – RAPPORTER
-             ====================================================== -->
-        <section id="reports" class="page">
+     AFSNIT 11 – PLANLÆGNING / KALENDER
+     ====================================================== -->
+<section id="planning" class="page">
 
-            <h2 data-i18n="menu_reports">Rapporter</h2>
+    <h2 data-i18n="menu_schedule">Plan & kalender</h2>
 
-            <div class="card">
-                <label data-i18n="customers">Kunder</label>
-                <select id="reportCustomerSelect"></select>
+    <!-- Kalender: top + navigation -->
+    <div class="card">
+        <div class="field-title">Kalendermåned</div>
 
-                <label data-i18n="employees">Medarbejdere</label>
-                <select id="reportEmployeeSelect"></select>
-            </div>
+        <div class="calendar-header">
+            <button id="calPrevMonth">◀</button>
+            <div id="calMonthLabel"></div>
+            <button id="calNextMonth">▶</button>
+        </div>
 
-            <div id="reportOutput"></div>
+        <div class="calendar-grid" id="calendarCells"></div>
+    </div>
 
-        </section>
+    <!-- Dag-oversigt -->
+    <div class="card">
+        <div class="field-title">Dagens opgaver</div>
+        <label id="selectedDayLabel"></label>
+        <ul id="dayPlanList"></ul>
+    </div>
+
+    <!-- Opret ny plan -->
+    <div class="card">
+
+        <div class="field-title">Dato</div>
+        <input type="date" id="planDate">
+
+        <div class="field-title">Starttid</div>
+        <input type="time" id="planStart">
+
+        <div class="field-title">Varighed (timer)</div>
+        <input type="number" id="planDuration" min="0.5" max="8" step="0.5">
+
+        <div class="field-title">Kunde</div>
+        <select id="planCustomerSelect"></select>
+
+        <div class="field-title">Medarbejdere</div>
+        <div id="planEmployeeList" class="chip-container"></div>
+
+        <div class="field-title">Note</div>
+        <input id="planNote" type="text">
+
+        <button id="savePlanBtn" class="btn-primary">Gem plan</button>
+    </div>
+
+</section>
 
 
-    </main> <!-- /pageContent -->
 
-</div> <!-- /appWrapper -->
+     <!-- ======================================================
+     AFSNIT 12 – RAPPORTER
+     ====================================================== -->
+<section id="reports" class="page">
+
+    <h2 data-i18n="menu_reports">Rapporter</h2>
+
+    <div class="card">
+
+        <div class="field-title">Kunde</div>
+        <select id="reportCustomerSelect"></select>
+
+        <div class="field-title">Medarbejder</div>
+        <select id="reportEmployeeSelect"></select>
+
+    </div>
+
+    <div class="card">
+        <div class="field-title">Resultat</div>
+        <div id="reportOutput"></div>
+    </div>
+
+</section>
 
 
 <!-- ======================================================
