@@ -577,3 +577,27 @@ input, select {
     text-transform: uppercase;
     letter-spacing: 0.6px;
 }
+
+/* ======================================================
+   AFSNIT XX – TYDELIGE OVERSKRIFTER (FULD I18N)
+   ====================================================== */
+
+.field-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-strong);   /* ALDRIG text-muted igen */
+    margin-bottom: 6px;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.table-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-strong);
+    margin-bottom: 12px;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
