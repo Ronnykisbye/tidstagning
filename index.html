@@ -135,7 +135,7 @@
 </section>
 
          
-   <!-- ======================================================
+<!-- ======================================================
      AFSNIT 07 – KUNDER
      ====================================================== -->
 <section id="customers" class="page">
@@ -145,25 +145,26 @@
     <!-- Opret kunde -->
     <div class="card">
 
-        <div class="field-title">Navn</div>
+        <div class="field-title" data-i18n="cust_name">Navn</div>
         <input id="custName" type="text" />
 
-        <div class="field-title">Telefon</div>
+        <div class="field-title" data-i18n="cust_phone">Telefon</div>
         <input id="custPhone" type="text" />
 
-        <div class="field-title">Email</div>
+        <div class="field-title" data-i18n="cust_email">Email</div>
         <input id="custEmail" type="email" />
 
-        <div class="field-title">Adresse</div>
+        <div class="field-title" data-i18n="cust_address">Adresse</div>
         <input id="custAddress" type="text" />
 
         <button id="saveCustomerBtn" class="btn-primary">Gem kunde</button>
     </div>
 
-    <!-- ★ OVERSKRIFT DIREKTE OVER TABELLEN ★ -->
+    <!-- ★ RIGTIG OVERSKRIFT OVER TABELLEN ★ -->
     <div class="card">
-
-        <div class="field-title">Oversigt over kunder</div>
+        <h3 class="field-title" style="margin-bottom:14px;" data-i18n="cust_overview">
+            Oversigt over kunder
+        </h3>
 
         <table id="customerTable" class="table">
             <thead>
@@ -189,7 +190,6 @@
     </div>
 
 </section>
-
 
 
         <!-- ======================================================
