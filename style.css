@@ -120,76 +120,39 @@ html[data-theme="light"] {
 
 /* Tema-knap FJERNET HER – ligger nu i AFSNIT 06 */
 
-/* ======================================================
-   AFSNIT 04 – SIDEBAR
-   ====================================================== */
+/* ===============================================
+   AFSNIT 04 – HAMBURGER VISNING (KORREKTION)
+   =============================================== */
 
-#sidebar {
-    width: 240px;
-    background: var(--bg-sidebar);
-    border-right: 1px solid rgba(255,255,255,0.05);
-    height: 100vh;
-    position: fixed;
-    top: 60px;
-    left: 0;
-    padding-top: 20px;
-    display: flex;
-    flex-direction: column;
-    z-index: 90;
-}
-
-/* ------------------------------------------------------
-   DESKTOP: Skjul hamburger-menuen  (MEGET VIGTIG!)
-   ------------------------------------------------------ */
+/* PC: Altid skjult */
 #sidebarToggle {
-    display: none !important;   /* ← Tving skjult på PC */
+    display: none !important;
 }
 
-/* Sidebar menu items */
-.menu-item {
-    padding: 12px 20px;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.menu-item:hover {
-    background: var(--bg-hover);
-}
-
-.menu-item.active {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: 0 0 10px var(--neon-blue-soft);
-}
-
-/* ------------------------------------------------------
-   MOBIL: Vis hamburger-menuen
-   ------------------------------------------------------ */
+/* Mobil: vis hamburger + slide-menu */
 @media (max-width: 900px) {
 
     #sidebarToggle {
-        display: block !important; /* ← nu vises den */
+        display: block !important;
         position: fixed;
-        top: 12px;
-        right: 15px;
-        z-index: 999;
+        top: 14px;
+        right: 20px;
+        z-index: 9999;
     }
 
     #sidebar {
-        left: -260px;
+        position: fixed;
+        top: 60px;                 /* topbar-højde */
+        left: -240px;              /* skjult */
+        width: 230px;
         transition: 0.3s ease;
+        z-index: 9998;
     }
 
     #sidebar.open {
         left: 0;
     }
 }
-
 
 /* ======================================================
    AFSNIT 05 – MAIN CONTENT
