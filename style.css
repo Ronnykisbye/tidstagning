@@ -43,6 +43,44 @@ button,
     color: var(--btn-text) !important;
 }
 
+/* ======================================================
+   FIX – KORREKT TEMA (LIGHT + DARK MODE)
+   ====================================================== */
+
+/* STANDARD (DARK MODE) */
+:root {
+    --bg-primary: #0b1120;
+    --bg-secondary: #0f172a;
+    --bg-sidebar: #0f172a;
+    --bg-card: #111827;
+
+    --text: #e5e7eb;
+    --text-strong: #ffffff;
+    --text-muted: #94a3b8;
+
+    --border-subtle: rgba(255,255,255,0.08);
+
+    --neon-blue: #38bdf8;
+    --neon-purple: #7c3aed;
+
+    --button-text-color: #ffffff;
+}
+
+/* LIGHT MODE – MANGLEDE I DIN FIL (derfor blink) */
+html[data-theme="light"] {
+    --bg-primary: #f5f7fa;      /* lys, venlig baggrund */
+    --bg-secondary: #ffffff;    /* hvide cards */
+    --bg-sidebar: #e2e8f0;      /* lys grå sidebar */
+    --bg-card: #ffffff;
+
+    --text: #1e293b;            /* mørk tekst */
+    --text-strong: #0f172a;     
+    --text-muted: #475569;
+
+    --border-subtle: rgba(0,0,0,0.08);
+
+    --button-text-color: #0f172a;
+}
 
 
 /* ======================================================
