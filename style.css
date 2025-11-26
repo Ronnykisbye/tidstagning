@@ -55,8 +55,10 @@ html[data-theme="light"] {
 
 #appWrapper {
     display: flex;
-    min-height: 100vh;  /* FIXER HOPPE-PROBLEMET */
+    height: calc(100% - 72px);
+    padding-top: 72px;
 }
+
 
 
 /* ======================================================
