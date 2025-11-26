@@ -251,116 +251,98 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 /* ======================================================
-   AFSNIT 04 – NAVIGATION & SIDEBAR
+   AFSNIT 04 – SIDEBAR (STABIL VERSION)
    ====================================================== */
 
 #sidebar {
-    width: 240px;
-    min-height: 100vh;
-    background: var(--bg-card);
-    color: var(--text);
-    border-right: 1px solid var(--border-subtle);
-    padding: 0;
     position: fixed;
-    top: 58px; /* Matcher topbar højde */
+    top: 60px; /* under topbar */
     left: 0;
+    width: 240px;
+    height: calc(100vh - 60px);
+    background: var(--bg-elevated);
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.45);
+    border-right: 1px solid var(--border-subtle);
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
     z-index: 15;
-    box-shadow: 18px 0 45px rgba(0,0,0,0.25);
-    overflow-y: auto;
 }
 
-/* Header inde i sidebaren */
+/* Header i sidebar */
+
 .sidebar-header {
-    padding: 18px 20px;
+    padding: 0 20px 16px 20px;
 }
 
-#sidebar .sidebar-logo {
-    font-size: 1.35rem;
-    font-weight: 700;
+.sidebar-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
     color: var(--text-strong);
 }
 
-#sidebar .sidebar-subtitle {
-    font-size: 0.75rem;
+.sidebar-subtitle {
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
-/* Menu container */
+/* Menu-liste */
+
 .sidebar-menu {
-    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    padding: 0 8px;
+    gap: 6px;
+    padding: 0 14px;
 }
 
-/* Menu knapper */
 .menu-item {
-    display: block;
     width: 100%;
     text-align: left;
     border: none;
-    padding: 13px 16px;
-    margin-bottom: 4px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
     background: transparent;
-    color: var(--text);
-    font-size: 0.95rem;
-    border-radius: 12px;
     cursor: pointer;
-    transition:
-        background 0.18s ease,
-        color 0.18s ease,
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
+    color: var(--text);
+    transition: 0.2s ease;
 }
 
-/* Hover */
 .menu-item:hover {
-    background: var(--hover-bg);
-    transform: translateX(4px);
-}
-
-/* Aktiv knap (den valgte side) */
-.menu-item.active {
-    background: var(--neon-glow-soft);
+    background: var(--bg-card);
     color: var(--text-strong);
-    font-weight: 600;
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
 }
 
-/* MØRK TILSTAND */
-html[data-theme="dark"] #sidebar {
-    background: #0f172a;
-    color: #e2e8f0;
+.menu-item.active {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: white;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
 }
 
-html[data-theme="dark"] .menu-item:hover {
-    background: rgba(255,255,255,0.06);
-}
+/* Responsiv sidebar — mobil */
 
-html[data-theme="dark"] .menu-item.active {
-    background: rgba(56,189,248,0.25);
-    color: #fff;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.85);
-}
-
-/* Mobilvisning */
 @media (max-width: 880px) {
+
     #sidebar {
         position: fixed;
-        top: 58px; /* topbar højde */
-        left: -260px; /* skjult */
-        transition: left 0.3s ease;
+        top: 0;
+        left: -260px;
         width: 240px;
+        height: 100vh;
+        transition: left 0.25s ease;
+        z-index: 50;
     }
 
     #sidebar.open {
         left: 0;
     }
 
-    .menu-item {
-        padding: 14px 18px;
+    .menu-toggle {
+        display: inline-flex !important;
     }
 }
+
 
 /* ======================================================
    AFSNIT 05 – CONTENT / SIDER & KORT (LIGHT + DARK MODE)
