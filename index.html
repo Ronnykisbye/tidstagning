@@ -2,17 +2,32 @@
 <html lang="da">
 <head>
     <!-- ======================================================
-         AFSNIT 01 – META & CSS
+         AFSNIT 01 – META & TEMA-INITIALISERING (EARLY THEME)
     ======================================================= -->
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>GreenTime Pro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenTime Pro</title>
 
-<script src="theme-init.js"></script>
-<link rel="stylesheet" href="style.css">
+    <!-- Lille inline-script uden kommentarer, der sætter data-theme,
+         før CSS bliver indlæst, så vi undgår blink -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem("gtp_theme");
+                if (saved) {
+                    try { saved = JSON.parse(saved); } catch (e) {}
+                }
+                var theme = saved === "light" ? "light" : "dark";
+                document.documentElement.setAttribute("data-theme", theme);
+            } catch (e) {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        })();
+    </script>
 
+    <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+
 
     <!-- ======================================================
          AFSNIT 02 – APP WRAPPER
