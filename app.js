@@ -126,7 +126,17 @@ const translations = {
         menu_logs: "Logs",
         menu_reports: "Rapporter",
         menu_settings: "Indstillinger"
+       cust_name: "Navn",
+         cust_phone: "Telefon",
+         cust_email: "Email",
+         cust_address: "Adresse",
+         cust_save: "Gem kunde",
+         cust_overview: "Oversigt over kunder",
+         cust_reset_label: "Nulstil tid for kunde",
+         cust_reset_btn: "Nulstil", 
+       
     },
+   
     en: {
         app_title: "GreenTime Pro",
         menu_dashboard: "Time tracking",
@@ -137,6 +147,16 @@ const translations = {
         menu_logs: "Logs",
         menu_reports: "Reports",
         menu_settings: "Settings"
+         cust_name: "Name",
+cust_phone: "Phone",
+cust_email: "Email",
+cust_address: "Address",
+cust_save: "Save customer",
+cust_overview: "Customer overview",
+cust_reset_label: "Reset customer time",
+cust_reset_btn: "Reset",
+           
+
     },
     de: {
         app_title: "GreenTime Pro",
@@ -148,6 +168,16 @@ const translations = {
         menu_logs: "Protokolle",
         menu_reports: "Berichte",
         menu_settings: "Einstellungen"
+cust_name: "Name",
+cust_phone: "Telefon",
+cust_email: "E-Mail",
+cust_address: "Adresse",
+cust_save: "Kunde speichern",
+cust_overview: "Kundenübersicht",
+cust_reset_label: "Zeit für Kunde zurücksetzen",
+cust_reset_btn: "Zurücksetzen",
+
+       
     },
     lt: {
         app_title: "GreenTime Pro",
@@ -159,6 +189,15 @@ const translations = {
         menu_logs: "Žurnalai",
         menu_reports: "Ataskaitos",
         menu_settings: "Nustatymai"
+cust_name: "Vardas",
+cust_phone: "Telefonas",
+cust_email: "El. paštas",
+cust_address: "Adresas",
+cust_save: "Išsaugoti klientą",
+cust_overview: "Klientų sąrašas",
+cust_reset_label: "Atstatyti kliento laiką",
+cust_reset_btn: "Atstatyti",
+
     }
 };
 
