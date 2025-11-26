@@ -251,128 +251,114 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR (NEON / FAST VENSTRE) – UPDATED
+   AFSNIT 04 – NAVIGATION & SIDEBAR
    ====================================================== */
 
-.sidebar {
-    width: 260px;
-    background: var(--bg-card); /* dynamisk lys/mørk */
+#sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: var(--bg-card);
+    color: var(--text);
     border-right: 1px solid var(--border-subtle);
-
-    /* Light mode: blød skygge — Dark mode: kraftigere */
-    box-shadow:
-        12px 0 45px rgba(15, 23, 42, 0.25),
-        12px 0 45px rgba(15, 23, 42, 0.9);
-
-    padding: 1.6rem 1rem 2rem;
-    position: relative;
-    z-index: 40;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    padding: 0;
+    position: fixed;
+    top: 58px; /* Matcher topbar højde */
+    left: 0;
+    z-index: 15;
+    box-shadow: 18px 0 45px rgba(0,0,0,0.25);
+    overflow-y: auto;
 }
 
-/* Sidebar logo */
-.sidebar-logo {
+/* Header inde i sidebaren */
+.sidebar-header {
+    padding: 18px 20px;
+}
+
+#sidebar .sidebar-logo {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+#sidebar .sidebar-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Menu container */
+.sidebar-menu {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
-    gap: 0.15rem;
+    padding: 0 8px;
 }
 
-.sidebar-logo-main {
-    width: 42px;
-    height: 42px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-    color: #020617;
-    font-weight: 800;
-    box-shadow: var(--neon-glow-strong);
-    font-size: 1.1rem;
-}
-
-.sidebar-logo-sub {
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: var(--text-muted);
-    margin-left: 0.2rem;
-}
-
-/* Sidebar menu */
-.sidebar .nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.sidebar .nav li {
-    margin-bottom: 0.45rem;
-}
-
-.sidebar .nav li span {
+/* Menu knapper */
+.menu-item {
     display: block;
     width: 100%;
-    padding: 0.55rem 0.8rem;
-    border-radius: 0.8rem;
-    font-size: 0.94rem;
-
-    /* Dynamisk tekstfarve efter tema */
-    color: var(--text-primary);
-
+    text-align: left;
+    border: none;
+    padding: 13px 16px;
+    margin-bottom: 4px;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.95rem;
+    border-radius: 12px;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-
-    /* Dynamisk border */
-    border: 1px solid var(--border-subtle);
-
-    background: var(--bg-card);
-    transition: 0.18s ease;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 /* Hover */
-.sidebar .nav li span:hover {
-    border-color: var(--neon-cyan);
-    color: var(--text);
-
-    box-shadow:
-        0 0 6px rgba(34, 211, 238, 0.25),
-        0 0 12px rgba(34, 211, 238, 0.12);
+.menu-item:hover {
+    background: var(--hover-bg);
+    transform: translateX(4px);
 }
 
-/* Aktiv menu */
-.sidebar .nav li.active span {
-    background: linear-gradient(
-        135deg,
-        rgba(34, 211, 238, 0.22),
-        rgba(168, 85, 247, 0.22)
-    );
-    color: var(--text);
-    border-color: var(--neon-cyan);
-
-    box-shadow:
-        0 0 12px rgba(34, 211, 238, 0.28),
-        0 0 20px rgba(168, 85, 247, 0.20);
+/* Aktiv knap (den valgte side) */
+.menu-item.active {
+    background: var(--neon-glow-soft);
+    color: var(--text-strong);
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
 }
 
-/* Mobil: sidebar som drawer */
-@media (max-width: 900px) {
-    .sidebar {
+/* MØRK TILSTAND */
+html[data-theme="dark"] #sidebar {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+html[data-theme="dark"] .menu-item:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+html[data-theme="dark"] .menu-item.active {
+    background: rgba(56,189,248,0.25);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.85);
+}
+
+/* Mobilvisning */
+@media (max-width: 880px) {
+    #sidebar {
         position: fixed;
-        top: 60px;
-        left: 0;
-        bottom: 0;
-        transform: translateX(-100%);
-        transition: transform 0.2s ease;
-    }
-    .sidebar.open {
-        transform: translateX(0);
+        top: 58px; /* topbar højde */
+        left: -260px; /* skjult */
+        transition: left 0.3s ease;
+        width: 240px;
     }
 
-    .app-body {
-        padding-top: 0;
+    #sidebar.open {
+        left: 0;
+    }
+
+    .menu-item {
+        padding: 14px 18px;
     }
 }
 
