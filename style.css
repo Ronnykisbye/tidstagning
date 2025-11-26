@@ -251,91 +251,80 @@ html[data-theme="dark"] .theme-toggle {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR (FAST + KORREKT OFFSET)
+   AFSNIT 04 – SIDEBAR + LAYOUT
 ====================================================== */
 
-#sidebar {
-    width: 230px;
+/* Sidebar står fast i venstre side */
+.sidebar {
+    width: 240px;
     background: var(--sidebar-bg);
-    color: var(--text-strong);
+    color: var(--sidebar-text);
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
-    padding: 24px 18px;
-    box-shadow: 8px 0 30px rgba(15, 23, 42, 0.35);
+    padding-top: 80px; /* plads til topbar */
+    box-shadow: 8px 0 30px rgba(0, 0, 0, 0.35);
     z-index: 15;
-    overflow-y: auto;
 }
 
-/* Sidebar header */
-.sidebar-header {
-    margin-bottom: 24px;
-}
-
-.sidebar-logo {
-    font-weight: 800;
-    font-size: 1.05rem;
-}
-
-.sidebar-subtitle {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* Menu */
+/* Sidebar menu styling */
 .sidebar-menu {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    padding: 0 18px;
 }
 
 .menu-item {
-    width: 100%;
     padding: 10px 14px;
     text-align: left;
+    border-radius: 8px;
     background: transparent;
     border: none;
-    border-radius: 12px;
-    color: var(--text-strong);
+    color: var(--sidebar-text);
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .menu-item:hover {
-    background: rgba(148, 163, 184, 0.15);
+    background: rgba(255,255,255,0.08);
 }
 
 .menu-item.active {
     background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    color: #0b1120;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    color: #0f172a;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
 }
 
-/* ======================================================
-   HOVEDINDHOLD POSITIONS-FIX  (VIGTIGT!)
-====================================================== */
-
+/* ===============================================
+   HOVEDINDHOLD – DETTE FLYTTER DET HELE PÅ PLADS
+=============================================== */
 #contentArea {
-    margin-left: 230px;  /* <- DETTE FLYTTER DIT INDHOLD VÆK FRA MENUEN */
-    padding: 32px;
-    min-height: 100vh;
-    transition: margin-left 0.2s ease;
+    margin-left: 260px;       /* ✔ flyt indhold væk fra sidemenu */
+    margin-top: 100px;        /* ✔ under topbar */
+    padding: 20px 40px;
+    max-width: calc(100% - 260px);
+    transition: margin 0.25s ease;
 }
 
-/* Mobil-udgave */
+/* Mobile layout */
 @media (max-width: 880px) {
-    #sidebar {
-        transform: translateX(-240px);
-        transition: transform 0.25s ease;
+
+    .sidebar {
+        transform: translateX(-260px);
+        transition: transform 0.3s ease;
+        width: 240px;
     }
 
-    #sidebar.open {
+    .sidebar.open {
         transform: translateX(0);
     }
 
     #contentArea {
-        margin-left: 0;
+        margin-left: 0;           /* ✔ indholdet fylder hele skærmen */
+        max-width: 100%;
         padding: 20px;
     }
 }
