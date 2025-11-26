@@ -50,133 +50,118 @@ html[data-theme="light"] {
 }
 
 /* ======================================================
-     AFSNIT 02 – LAYOUT / WRAPPER
+     AFSNIT 02 – LAYOUT / WRAPPER (KORRIGERET)
 ====================================================== */
 
 #appWrapper {
     display: flex;
-    height: calc(100% - 72px);
-    padding-top: 72px;
+    height: calc(100vh - 60px);   /* 60px matcher din topbar */
+    padding-top: 60px;            /* så intet ryger bag topbar */
+    overflow: hidden;
 }
 
 
 
 /* ======================================================
-   AFSNIT 03 – TOPBAR
-   ====================================================== */
+   AFSNIT 03 – TOPBAR (GENSKABT)
+====================================================== */
 
 #topbar {
     width: 100%;
     height: 60px;
     background: var(--bg-main);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 25px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
 }
 
-/* Venstre: Logo */
+/* Venstre logo */
 #topbar-title {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--text-primary);
-    user-select: none;
 }
 
-/* Midten: sidetitel */
+/* Midtertitel */
 #pageTitle {
     font-size: 1.05rem;
     color: var(--text-secondary);
-    opacity: 0.9;
 }
 
-/* Højre: sprog + tema */
+/* Højre sektion – sprog & tema */
 #topbar-right {
     display: flex;
     align-items: center;
-    gap: 12px;        /* AFSTAND MELLEM KNAPPER */
+    gap: 10px;        /* afstanden mellem knapper */
 }
 
-/* Sprogknapper */
-.lang-btn {
-    padding: 6px 14px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: var(--text-secondary);
-    border-radius: 14px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.lang-btn:hover {
-    background: var(--bg-hover);
-}
-
-.lang-btn.active {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: 0 0 10px var(--neon-blue-soft);
-}
-
-/* Tema-knap (lys/mørk mode) */
+/* Tema-knappen */
 #themeToggle {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background: var(--card-bg);
     border: 2px solid var(--neon-blue);
-    box-shadow: 0 0 12px var(--neon-blue-soft);
+    color: var(--neon-blue);
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 10px var(--neon-blue-soft);
     transition: 0.25s;
 }
 
 #themeToggle:hover {
-    box-shadow: 0 0 18px var(--neon-blue);
-    transform: scale(1.06);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--neon-blue);
 }
 
+/* ======================================================
+   AFSNIT 04 – HAMBURGER / SIDEBAR FIX
+====================================================== */
 
-/* ===============================================
-   AFSNIT 04 – HAMBURGER VISNING (KORREKTION)
-   =============================================== */
-
-/* PC: Altid skjult */
+/* PC – ingen hamburger */
 #sidebarToggle {
     display: none !important;
 }
 
-/* Mobil: vis hamburger + slide-menu */
+/* Mobil */
 @media (max-width: 900px) {
 
+    /* vis hamburger */
     #sidebarToggle {
         display: block !important;
         position: fixed;
-        top: 14px;
-        right: 20px;
-        z-index: 9999;
+        top: 12px;
+        right: 18px;
+        z-index: 2000;
     }
 
+    /* mobil sidebar */
     #sidebar {
         position: fixed;
-        top: 60px;                 /* topbar-højde */
-        left: -240px;              /* skjult */
+        top: 60px;
+        left: -240px;
         width: 230px;
         transition: 0.3s ease;
-        z-index: 9998;
+        z-index: 1999;
     }
 
     #sidebar.open {
         left: 0;
     }
 }
+
 
 /* ======================================================
    AFSNIT 05 – MAIN CONTENT
