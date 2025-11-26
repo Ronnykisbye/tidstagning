@@ -1,36 +1,44 @@
 /* ======================================================
-   AFSNIT 01 – VARIABLER & FARVER (NEON DARK THEME)
+   AFSNIT 01 – VARIABLER & TEMA FARVER (NEON DARK MODE)
 ====================================================== */
+
 :root {
     --bg-main: #0b1624;
-    --bg-card: #141f32;
-    --bg-hover: #1f2d46;
     --bg-sidebar: #0d1b2e;
+    --card-bg: #141f32;
+    --bg-hover: #1f2d46;
 
     --text-primary: #ffffff;
     --text-secondary: #a8b3c7;
+    --text-muted: #8c9bb2;
+    --text-strong: #e6ecf4;
 
     --neon-blue: #4cb3ff;
-    --neon-blue-soft: rgba(76, 179, 255, 0.4);
+    --neon-blue-soft: rgba(76,179,255,0.4);
 
-    --border-soft: rgba(255,255,255,0.08);
-    --border-strong: rgba(255,255,255,0.18);
+    --card-border: rgba(255,255,255,0.08);
+    --card-shadow: 0 0 12px rgba(0,0,0,0.25);
 
     --radius: 10px;
-    --shadow-neon: 0 0 10px rgba(76,179,255,0.6);
 }
 
 /* ======================================================
-   AFSNIT 02 – BASISLAYOUT
+   AFSNIT 02 – GLOBAL BASICS
 ====================================================== */
 
 html, body {
     margin: 0;
     padding: 0;
     background: var(--bg-main);
-    color: var(--text-primary);
     font-family: "Segoe UI", sans-serif;
+    color: var(--text-primary);
     height: 100%;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb {
+    background: #1f2d46;
+    border-radius: 4px;
 }
 
 #appWrapper {
@@ -39,54 +47,18 @@ html, body {
     overflow: hidden;
 }
 
-/* Scrollbar dark-mode */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-thumb {
-    background: #1f2d46;
-    border-radius: 4px;
-}
-
-/* Standard card */
-.card {
-    background: var(--bg-card);
-    padding: 15px;
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-    border: 1px solid var(--border-soft);
-}
-
-/* Felttitel */
-.field-title {
-    font-size: 0.85rem;
-    font-weight: bold;
-    margin-bottom: 6px;
-    color: var(--text-secondary);
-}
-
-/* Headings */
-h2, h3 {
-    margin-top: 10px;
-    margin-bottom: 15px;
-}
-
-
-
 /* ======================================================
    AFSNIT 03 – TOPBAR
 ====================================================== */
+
 #topbar {
     height: 60px;
-    background: #0d1b2e;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--card-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    border-bottom: 1px solid var(--border-soft);
-    position: sticky;
-    top: 0;
-    z-index: 50;
 }
 
 #logo {
@@ -97,86 +69,77 @@ h2, h3 {
 
 #pageTitle {
     font-size: 1rem;
-    opacity: 0.9;
+    color: var(--text-secondary);
 }
 
 /* Sprogknapper */
-.lang-selector {
-    display: flex;
-    gap: 6px;
-}
+.lang-selector { display: flex; gap: 6px; }
 
 .lang-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-soft);
-    color: var(--text-secondary);
     padding: 6px 12px;
     border-radius: 20px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-secondary);
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.25s;
 }
 
 .lang-btn.active {
     background: var(--neon-blue);
     color: #000;
-    box-shadow: var(--shadow-neon);
+    box-shadow: 0 0 10px var(--neon-blue-soft);
 }
 
 /* Tema-knap */
-.theme-btn {
+#themeToggle {
     margin-left: 10px;
-    background: var(--bg-card);
-    border: 1px solid var(--neon-blue);
-    padding: 6px 10px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--neon-blue);
     color: var(--neon-blue);
     cursor: pointer;
     transition: 0.25s;
 }
 
-.theme-btn:hover {
-    box-shadow: var(--shadow-neon);
-}
-
-/* Mobil toggler */
-.mobile-menu-btn {
-    display: none;
-    margin-left: 10px;
+#themeToggle:hover {
+    box-shadow: 0 0 10px var(--neon-blue-soft);
 }
 
 /* ======================================================
    AFSNIT 04 – SIDEBAR
 ====================================================== */
+
 #sidebar {
     width: 230px;
     background: var(--bg-sidebar);
     padding-top: 20px;
-    border-right: 1px solid var(--border-soft);
+    border-right: 1px solid var(--card-border);
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
 .menu-item {
     padding: 12px 20px;
     background: transparent;
     border: none;
-    text-align: left;
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    text-align: left;
     cursor: pointer;
+    font-size: 0.95rem;
+    transition: 0.25s;
     border-radius: var(--radius);
-    transition: 0.2s;
 }
 
-.menu-item:hover {
-    background: var(--bg-hover);
-}
+.menu-item:hover { background: var(--bg-hover); }
 
 .menu-item.active {
     background: var(--neon-blue);
     color: #000;
-    box-shadow: var(--shadow-neon);
+    box-shadow: 0 0 10px var(--neon-blue-soft);
 }
 
 /* ======================================================
@@ -189,507 +152,104 @@ h2, h3 {
     overflow-y: auto;
 }
 
-.page {
-    display: none;
-}
-
-.page-visible {
-    display: block;
-}
-
-
 /* ======================================================
-   AFSNIT 06 – INPUTS
+   AFSNIT 10 – GLOBALT LAYOUT FOR ALLE SIDER
 ====================================================== */
-input, select, textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-soft);
-    background: #0f1a2c;
-    color: var(--text-primary);
-    margin-bottom: 15px;
-}
 
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--neon-blue);
-    box-shadow: var(--shadow-neon);
-}
+.page { display: none; padding: 24px; }
+.page-visible { display: block; }
 
-/* ======================================================
-   AFSNIT 07 – KNAPPER
-====================================================== */
-.btn-green {
-    background: #39d98a;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    color: #000;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.btn-green:hover {
-    box-shadow: 0 0 8px rgba(57,217,138,0.6);
-}
-
-.btn-red {
-    background: #ff5f5f;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    color: #000;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.btn-red:hover {
-    box-shadow: 0 0 8px rgba(255,95,95,0.6);
-}
-
-/* ======================================================
-   AFSNIT 08 – CHIP LISTS
-====================================================== */
-.chip-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.chip {
-    background: var(--bg-card);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-soft);
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.chip.selected {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: var(--shadow-neon);
-}
-
-/* ======================================================
-   AFSNIT 09 – TABEL
-====================================================== */
-table.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-table.data-table th,
-table.data-table td {
-    border-bottom: 1px solid var(--border-soft);
-    padding: 10px 8px;
-    text-align: left;
-}
-
-table.data-table th {
-    color: var(--neon-blue);
-}
-
-/* ======================================================
-   AFSNIT 10 – TIMER DISPLAY
-====================================================== */
-.timer-display {
-    font-size: 2.2rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-shadow: var(--shadow-neon);
-}
-
-/* ======================================================
-   AFSNIT 11 – KALENDER
-====================================================== */
-.calendar-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-    gap: 10px;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.calendar-cell {
-    background: var(--bg-card);
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius);
-    text-align: center;
-    padding: 12px 0;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.calendar-cell:hover {
-    background: var(--bg-hover);
-}
-
-.calendar-day-medium {
-    border-color: #ffbf47;
-}
-
-.calendar-day-busy {
-    border-color: #ff4f4f;
-}
-
-.calendar-cell.selected {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: var(--shadow-neon);
-}
-
-/* ======================================================
-   AFSNIT 12 – TEMA-KNAP (MODERNE GLASS + NEON)
-   ====================================================== */
-
-#themeToggle {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-
-    background: rgba(255,255,255,0.08);
-    color: #ffffff;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 20px;
-    transition: 0.25s ease;
-
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.1);
-    position: relative;
-}
-
-/* Hover */
-#themeToggle:hover {
-    background: rgba(255,255,255,0.16);
-    transform: scale(1.07);
-}
-
-/* AKTIVT THEME – glow farver */
-[data-theme="light"] #themeToggle,
-#themeToggle.active {
-    background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
-    box-shadow:
-        0 4px 16px rgba(56,189,248,0.45),
-        inset 0 0 8px rgba(0,0,0,0.3);
-    color: #ffffff;
-}
-
-/* Glow-strip under knappen */
-#themeToggle::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 25%;
-    width: 50%;
-    height: 7px;
-
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    filter: blur(6px);
-    border-radius: 12px;
-    opacity: 0.8;
-
-    pointer-events: none;
-}
-
-
-/* ======================================================
-   AFSNIT 13 – FELT OVERSKRIFTER
-   ====================================================== */
-
-.field-title {
-    font-size: 13px;
+/* Store sideoverskrifter */
+.page-title, .page h2 {
+    font-size: 26px;
     font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-
-/* ======================================================
-   AFSNIT XX – TYDELIGE OVERSKRIFTER (FULD I18N)
-   ====================================================== */
-
-.field-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-strong);   /* ALDRIG text-muted igen */
-    margin-bottom: 6px;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-
-.table-title {
-    font-size: 14px;
-    font-weight: 700;
+    margin-bottom: 24px;
     color: var(--text-strong);
-    margin-bottom: 12px;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
 }
 
-/* ======================================================
-   AFSNIT – SECTION CARDS / CONTAINERS (NEON STYLE)
-====================================================== */
-
-.section-block {
-    background: var(--bg-card);
-    padding: 20px;
-    border-radius: var(--radius);
-    margin-bottom: 25px;
-    border: 1px solid var(--border-soft);
-    box-shadow: 0 0 12px rgba(0,0,0,0.25);
-}
-
-.section-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: var(--neon-blue);
-}
-
-.section-subtitle {
+/* Felt-overskrifter */
+.field-title {
     font-size: 0.85rem;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-}
-
-/* Ens spacing mellem felter */
-.input-row {
-    margin-bottom: 15px;
-}
-
-/* Mellemrum mellem sektioner */
-.page-section {
-    margin-top: 25px;
-}
-
-/* Titel justering */
-.page h2, 
-.page h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-
-/* ======================================================
-   AFSNIT – GLOBALT LAYOUT FOR ALLE SIDER
-   (ENS SPACING, ENS BOKSE, ENS FELTER)
-====================================================== */
-
-/* Hele siden */
-.page {
-    display: none;
-    padding: 25px;
-}
-
-.page-visible {
-    display: block;
-}
-
-/* ------------------------------------------------------
-   Overskrifter
------------------------------------------------------- */
-.page h2 {
-    margin: 0 0 20px 0;
-    padding-bottom: 5px;
-    font-size: 1.6rem;
-    color: var(--neon-blue);
-}
-
-.page h3 {
-    margin: 25px 0 10px 0;
-    font-size: 1.1rem;
-    color: var(--text-primary);
-    opacity: 0.9;
-}
-
-/* Små felt-overskrifter */
-.field-title,
-.section-subtitle {
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 6px;
-    color: var(--text-secondary);
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-/* ------------------------------------------------------
-   Sektion-bokse (formulardele, underafsnit)
------------------------------------------------------- */
+/* Sektioner */
 .section-block {
-    background: var(--bg-card);
+    background: var(--card-bg);
     padding: 20px;
     border-radius: var(--radius);
-    margin-bottom: 30px;
-    border: 1px solid var(--border-soft);
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    border: 1px solid var(--card-border);
+    margin-bottom: 32px;
+    box-shadow: var(--card-shadow);
 }
 
-/* Indre afstand mellem felter */
-.section-block .input-row {
-    margin-bottom: 18px;
+/* Grid form (kunder/medarbejdere) */
+.section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
 }
 
-/* ------------------------------------------------------
-   Inputfelter (ens spacing)
------------------------------------------------------- */
-input,
-select,
-textarea {
-    margin-bottom: 15px !important;
+@media (max-width: 800px) {
+    .section-grid { grid-template-columns: 1fr; }
 }
 
-/* ------------------------------------------------------
-   Tabeller – ens layout på ALLE sider
------------------------------------------------------- */
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.data-table th {
-    text-align: left;
-    padding: 10px;
-    color: var(--neon-blue);
-    font-weight: bold;
-    border-bottom: 1px solid var(--border-soft);
-}
-
-.data-table td {
-    padding: 10px;
-    border-bottom: 1px solid var(--border-soft);
-    color: var(--text-primary);
-}
-
-/* Mere luft før tabellen begynder */
-.table-wrapper {
-    margin-top: 20px;
-}
-
-/* ------------------------------------------------------
-   Chips (medarbejdere / kunder)
------------------------------------------------------- */
-.chip-container {
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-/* ------------------------------------------------------
-   Sektion afstand (global margin mellem moduler)
------------------------------------------------------- */
-.page-section {
-    margin-top: 30px;
-    margin-bottom: 20px;
-}
-
-/* ------------------------------------------------------
-   Knapper – ekstra spacing
------------------------------------------------------- */
-.btn-row {
-    margin-top: 15px;
-}
-
-/* Sikrer start/stop knapper ikke klistrer sammen */
-.btn-row button {
-    margin-right: 10px;
-}
-
+.button-row { margin-top: 12px; display: flex; gap: 12px; }
+.page-section { margin-top: 32px; margin-bottom: 20px; }
 
 /* ======================================================
-   AFSNIT – TABEL (FULDT RESPONSIV + FULD BREDDE + NEON)
+   AFSNIT 11 – TABEL (A + C)
 ====================================================== */
 
-/* Wrapper til spacing og fuld bredde */
 .table-wrapper {
     width: 100%;
     margin-top: 20px;
-    overflow-x: auto; /* gør mobil-visning perfekt */
+    overflow-x: auto;
 }
 
-/* Selve tabellen */
 .data-table {
-    width: 100%;                 /* fuld bredde på desktop */
-    min-width: 680px;            /* så kolonner ikke klemmer sammen */
+    width: 100%;
+    min-width: 680px;
     border-collapse: collapse;
-    background: var(--bg-card);
-    border-radius: var(--radius);
+    background: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
     overflow: hidden;
 }
 
-/* Tabel-overskrifter */
 .data-table th {
     padding: 12px 10px;
-    font-weight: 600;
     color: var(--neon-blue);
-    font-size: 0.95rem;
-    border-bottom: 1px solid var(--border-soft);
-    white-space: nowrap;  /* undgår linjeskift i titler */
+    border-bottom: 1px solid var(--card-border);
+    background: rgba(255,255,255,0.03);
+    white-space: nowrap;
 }
 
-/* Tabel-celler */
 .data-table td {
     padding: 10px;
     color: var(--text-primary);
-    border-bottom: 1px solid var(--border-soft);
-    font-size: 0.9rem;
+    border-bottom: 1px solid var(--card-border);
 }
 
-/* Sidste række uden border */
-.data-table tr:last-child td {
-    border-bottom: none;
-}
+.data-table tr:hover { background: var(--bg-hover); }
 
-/* Hover-effekt på rækker */
-.data-table tr:hover {
-    background: var(--bg-hover);
-}
-
-/* ======================================================
-   RESPONSIV TABEL (MOBIL)
-====================================================== */
 @media (max-width: 768px) {
-
-    /* Vi laver mobile-kort-stil automatisk */
-    .data-table,
-    .data-table thead,
-    .data-table tbody,
-    .data-table th,
-    .data-table td,
-    .data-table tr {
+    .data-table, .data-table thead, .data-table tbody,
+    .data-table th, .data-table td, .data-table tr {
         display: block;
         width: 100%;
     }
 
     .data-table tr {
         margin-bottom: 15px;
-        background: var(--bg-card);
-        padding: 10px;
-        border-radius: var(--radius);
+        padding: 12px;
+        border-radius: 10px;
         box-shadow: 0 0 6px rgba(0,0,0,0.4);
+        background: var(--card-bg);
     }
 
     .data-table td {
@@ -697,18 +257,139 @@ textarea {
         padding: 6px 0;
     }
 
-    /* Titel-label på hver celle */
     .data-table td::before {
         content: attr(data-label);
-        font-weight: bold;
+        font-weight: 600;
         color: var(--neon-blue);
         display: block;
         margin-bottom: 3px;
+        text-transform: uppercase;
         font-size: 0.85rem;
     }
 
-    /* Skjul thead for mobil */
-    .data-table thead {
-        display: none;
-    }
+    .data-table thead { display: none; }
 }
+
+/* ======================================================
+   AFSNIT 12 – KNAPPER (NEON GLOW)
+====================================================== */
+
+.btn { padding: 10px 20px; border-radius: 10px; font-weight: 600;
+      cursor: pointer; transition: 0.25s; font-size: 0.95rem; }
+
+.btn-green { background: #39d98a; color: #000; box-shadow: 0 0 8px rgba(57,217,138,0.4); }
+.btn-green:hover { transform: translateY(-2px); box-shadow: 0 0 12px rgba(57,217,138,0.7); }
+
+.btn-red { background: #ff5f5f; color: #000; box-shadow: 0 0 8px rgba(255,95,95,0.4); }
+.btn-red:hover { transform: translateY(-2px); box-shadow: 0 0 12px rgba(255,95,95,0.7); }
+
+.btn-blue { background: var(--neon-blue); color: #000; box-shadow: 0 0 8px var(--neon-blue-soft); }
+.btn-blue:hover { transform: translateY(-2px); box-shadow: 0 0 14px var(--neon-blue-soft); }
+
+/* ======================================================
+   AFSNIT 13 – INPUTS / FELTER
+====================================================== */
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    background: #0f1a2c;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    margin-bottom: 18px;
+    transition: 0.25s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 10px var(--neon-blue-soft);
+    outline: none;
+}
+
+/* ======================================================
+   AFSNIT 14 – CHIPS
+====================================================== */
+
+.chip-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.chip {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.chip.selected {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 12px var(--neon-blue-soft);
+    font-weight: 600;
+}
+
+/* ======================================================
+   AFSNIT 15 – KALENDER
+====================================================== */
+
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.calendar-header button {
+    background: var(--card-bg);
+    border: 1px solid var(--neon-blue);
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--neon-blue);
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.calendar-header button:hover {
+    box-shadow: 0 0 12px var(--neon-blue-soft);
+}
+
+#calMonthLabel {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--neon-blue);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-cell {
+    background: var(--card-bg);
+    padding: 14px 0;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.calendar-cell:hover { background: var(--bg-hover); }
+
+.calendar-cell.selected {
+    background: var(--neon-blue);
+    color: #000;
+    box-shadow: 0 0 12px var(--neon-blue-soft);
+}
+
+.calendar-day-medium { border-color: #ffbf47; }
+.calendar-day-busy { border-color: #ff5757; }
