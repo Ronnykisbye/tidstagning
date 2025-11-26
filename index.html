@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
+   <!DOCTYPE html>
+<html lang="da">
+<head>
     <!-- ======================================================
          AFSNIT 01 – META & CSS
     ======================================================= -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GreenTime Pro</title>
+
+    <!-- ======================================================
+         AFSNIT 01B – EARLY THEME LOADER (KORREKT VERSION)
+         - Læser tema fra localStorage ("gtp_theme")
+         - Sætter data-theme på <html>, FØR CSS loader
+         - Forhindrer 1-sekunds blink i dark mode
+    ======================================================= -->
+    <script>
+    (function () {
+        try {
+            // Læs gemt tema fra samme nøgle som app.js bruger
+            var raw = localStorage.getItem("gtp_theme");   // STORAGE_KEYS.theme
+
+            var theme = "dark"; // fallback
+
+            if (raw) {
+                // Prøv først at parse som JSON (app.js gemmer "light"/"dark" som JSON-string)
+                try {
+                    var parsed = JSON.parse(raw);
+                    if (parsed === "light" || parsed === "dark") {
+                        theme = parsed;
+                    }
+                } catch (e) {
+                    // Hvis det ikke er gyldigt JSON, tjek om rå-værdien er "light"/"dark"
+                    if (raw === "light" || raw === "dark") {
+                        theme = raw;
+                    }
+                }
+            }
+
+            // Sæt valgt tema på <html>
+            document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+            // Fejlsikker fallback
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
+    })();
+    </script>
+
+    <!-- CSS loader nu EFTER vi har sat det rigtige tema -->
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-   
-  <!-- ======================================================
-     AFSNIT 01B – EARLY THEME LOADER (FJERNER 1-SEC BLINK)
-     Sætter korrekt light/dark tema FØR CSS loader.
-====================================================== -->
-<script>
-(function() {
-    try {
-        // Læs gemt tema fra localStorage
-        const saved = localStorage.getItem("currentTheme");
 
-        // Hvis intet er gemt → brug dark som fallback
-        const theme = saved === "light" ? "light" : "dark";
-
-        // Sæt temaet direkte på <html>
-        document.documentElement.setAttribute("data-theme", theme);
-
-    } catch (e) {
-        // Fejlsikret fallback
-        document.documentElement.setAttribute("data-theme", "dark");
-    }
-})();
-</script>
-  
-    
     
     
     <!-- ======================================================
