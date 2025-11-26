@@ -259,55 +259,46 @@ function initThemeToggle() {
 
 /* ======================================================
    AFSNIT 04 – NAVIGATION & SIDEBAR (STABIL VERSION)
-   ====================================================== */
+====================================================== */
 
-function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(p => {
-        p.classList.toggle("visible", p.id === pageId);
-    });
-}
-
+/* Skift mellem sider */
 function initNavigation() {
-    // FANGER ALLE MENUPUNKTER I SIDEBAR – robust selector!
-    const menuItems = document.querySelectorAll(".sidebar li[data-page]");
+    const menuButtons = document.querySelectorAll(".menu-item");
+    const pages = document.querySelectorAll("section.page");
+    const title = document.getElementById("pageTitle");
 
-    if (!menuItems.length) {
-        console.error("FEJL: Ingen menu-items fundet i .sidebar. Tjek HTML-strukturen.");
-        return;
-    }
+    if (!menuButtons.length || !pages.length) return;
 
-    menuItems.forEach(li => {
-        li.addEventListener("click", () => {
-            const pageId = li.dataset.page;
-            if (!pageId) return;
+    menuButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const target = btn.dataset.page;
+            if (!target) return;
 
-            // aktiv markering
-            menuItems.forEach(m => m.classList.remove("active"));
-            li.classList.add("active");
+            /* Fjern aktiv klasse fra alle */
+            menuButtons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
 
-            // vis side
-            showPage(pageId);
+            /* Skjul alle sider */
+            pages.forEach(p => p.classList.remove("visible"));
 
-            // luk sidebar på mobil
-            const sidebar = document.querySelector(".sidebar");
-            if (sidebar) sidebar.classList.remove("open");
+            /* Vis target side */
+            const pageToShow = document.getElementById(target);
+            if (pageToShow) pageToShow.classList.add("visible");
+
+            /* Opdater topbar titel */
+            const i18nKey = btn.dataset.i18n;
+            if (i18nKey && translations[currentLang][i18nKey]) {
+                title.textContent = translations[currentLang][i18nKey];
+            }
         });
     });
-
-    // startside
-    showPage("dashboardPage");
 }
 
-function initSidebarToggle() {
-    const btn = document.getElementById("menuToggle");
-    const sidebar = document.querySelector(".sidebar");
-
-    if (!btn || !sidebar) return;
-
-    btn.addEventListener("click", () => {
-        sidebar.classList.toggle("open");
-    });
+/* Kør efter load */
+function initSidebar() {
+    initNavigation();
 }
+
 
 
 /* ======================================================
