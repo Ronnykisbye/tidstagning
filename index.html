@@ -15,46 +15,55 @@
     ======================================================= -->
     <div class="app">
 
-    <!-- ======================================================
-         AFSNIT 03 – TOPBAR
-    ====================================================== -->
-    <header class="topbar">
-        <div class="topbar-left">
-            <!-- Burger-menu til mobil -->
-            <button class="menu-toggle" id="menuToggle" aria-label="Åbn/luk menu">
-                ☰
-            </button>
+   <!-- ======================================================
+     AFSNIT 03 – TOPBAR
+====================================================== -->
+<header class="topbar">
 
-            <!-- Logo / tekst -->
-            <div class="logo-text">
-                <span class="logo-main">GreenTime Pro</span>
-                <span class="logo-sub">Smart tidsregistrering</span>
-            </div>
+    <!-- Venstre side: Logo + mobil-menu -->
+    <div class="topbar-left">
+
+        <!-- Burger-menu (kun mobil) -->
+        <button class="menu-toggle" id="menuToggle" aria-label="Åbn/luk menu">
+            ☰
+        </button>
+
+        <!-- Logo / tekst -->
+        <div class="logo-text">
+            <span class="logo-main">GreenTime Pro</span>
+            <span class="logo-sub">Smart tidsregistrering</span>
+        </div>
+    </div>
+
+
+    <!-- Midten: Sidetitel -->
+    <div class="topbar-center">
+        <h1 id="pageTitle" data-i18n="page_title_tidsregistrering">
+            Tidsregistrering
+        </h1>
+    </div>
+
+
+    <!-- Højre side: Sprog + Tema-knap -->
+    <div class="topbar-right">
+
+        <!-- Sprogknapper -->
+        <div class="lang-switch">
+            <button class="lang-btn" data-lang="da">DK</button>
+            <button class="lang-btn" data-lang="en">GB</button>
+            <button class="lang-btn" data-lang="de">DE</button">
+            <button class="lang-btn" data-lang="lt">LT</button>
         </div>
 
-        <!-- Sidetitel i midten -->
-        <div class="topbar-center">
-            <h1 id="pageTitle" data-i18n="page_title_tidsregistrering">
-                Tidsregistrering
-            </h1>
-        </div>
+        <!-- Tema-knap -->
+        <button id="themeToggle"
+                class="theme-toggle"
+                aria-label="Skift mellem lyst og mørkt tema">
+            ☀️
+        </button>
+    </div>
 
-        <!-- Sprogknapper + tema-knap til højre -->
-        <div class="topbar-right">
-            <div class="lang-switch">
-                <button class="lang-btn active" data-lang="da">DK</button>
-                <button class="lang-btn" data-lang="en">GB</button>
-                <button class="lang-btn" data-lang="de">DE</button>
-                <button class="lang-btn" data-lang="lt">LT</button>
-            </div>
-
-            <button id="themeToggle"
-                    class="theme-toggle"
-                    aria-label="Skift mellem lyst og mørkt tema">
-                ☀️
-            </button>
-        </div>
-    </header>
+</header>
 
 
 
