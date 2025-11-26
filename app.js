@@ -1,4 +1,4 @@
-console.log("LOADER DENNE APP.JS → VERSION GREEN-TIME-PRO");
+console.log("LOADER GREEN TIME PRO – APP.JS v2");
 
 /* ======================================================
    AFSNIT 01 – GLOBAL STATE & HJÆLPEFUNKTIONER
@@ -15,8 +15,6 @@ let quickIntervalId = null;
 let activeTimer = null;
 
 let currentLang = "da";
-let currentTheme = "dark";
-
 let calendarMonth = new Date();
 let selectedCalendarDate = null;
 
@@ -37,6 +35,10 @@ function uuid() {
 
 function toDateString(d) {
     return d.toISOString().slice(0, 10);
+}
+
+function parseDateString(dateStr) {
+    return new Date(`${dateStr}T00:00:00`);
 }
 
 function formatTimeFromSeconds(sec) {
@@ -67,10 +69,6 @@ function getEmployeeName(id) {
     return e ? e.name : "";
 }
 
-function parseDateString(dateStr) {
-    return new Date(`${dateStr}T00:00:00`);
-}
-
 function getLocaleForLang(lang) {
     switch (lang) {
         case "en": return "en-GB";
@@ -95,8 +93,7 @@ function loadAll() {
     activeTimer = safeParse(STORAGE_KEYS.activeTimer, null);
     quickTimer  = safeParse(STORAGE_KEYS.quickTimer, null);
 
-    currentTheme = safeParse(STORAGE_KEYS.theme, "dark");
-    currentLang  = safeParse(STORAGE_KEYS.lang, "da");
+    currentLang = safeParse(STORAGE_KEYS.lang, "da");
 }
 
 function saveAll() {
@@ -111,8 +108,7 @@ function saveAll() {
 
 
 /* ======================================================
-   AFSNIT 03 – SPROG & TEMA
-   (REN VERSION – MATCHER INDEX.HTML EARLY LOADER)
+   AFSNIT 03 – I18N (TEKSTER & SPROG)
    ====================================================== */
 
 const translations = {
@@ -125,18 +121,56 @@ const translations = {
         menu_schedule: "Plan & kalender",
         menu_logs: "Logs",
         menu_reports: "Rapporter",
-        menu_settings: "Indstillinger"
-       cust_name: "Navn",
-         cust_phone: "Telefon",
-         cust_email: "Email",
-         cust_address: "Adresse",
-         cust_save: "Gem kunde",
-         cust_overview: "Oversigt over kunder",
-         cust_reset_label: "Nulstil tid for kunde",
-         cust_reset_btn: "Nulstil", 
-       
+        menu_settings: "Indstillinger",
+
+        title_customer: "Kunde",
+        title_customer_select: "Vælg kunde",
+        title_employee_list: "Medarbejderen hos kunden",
+        title_mode: "Mode",
+        title_day: "Dag",
+        title_total: "Total",
+        title_time: "Tid",
+        title_note: "Note",
+        title_duration: "Varighed",
+        title_date: "Dato",
+        title_starttime: "Starttid",
+
+        cust_name: "Navn",
+        cust_phone: "Telefon",
+        cust_email: "Email",
+        cust_address: "Adresse",
+        cust_save: "Gem kunde",
+        cust_overview: "Oversigt over kunder",
+        cust_reset_label: "Nulstil tid for kunde",
+        cust_reset_btn: "Nulstil",
+
+        emp_name: "Navn",
+        emp_email: "Email",
+        emp_role: "Rolle",
+        emp_save: "Gem medarbejder",
+        role_employee: "Medarbejder",
+        role_admin: "Administrator",
+
+        timer_start: "Start",
+        timer_stop: "Stop",
+        timer_status: "Status",
+
+        log_today: "Registreringer i dag",
+        log_start: "Start",
+        log_end: "Slut",
+        log_duration: "Minutter",
+        log_customer: "Kunde",
+        log_employee: "Medarbejder",
+
+        plan_month: "Kalendermåned",
+        plan_day_tasks: "Dagens opgaver",
+        plan_save: "Gem plan",
+
+        report_customer: "Kunde",
+        report_employee: "Medarbejder",
+        report_output: "Resultat"
     },
-   
+
     en: {
         app_title: "GreenTime Pro",
         menu_dashboard: "Time tracking",
@@ -146,18 +180,56 @@ const translations = {
         menu_schedule: "Plan & calendar",
         menu_logs: "Logs",
         menu_reports: "Reports",
-        menu_settings: "Settings"
-         cust_name: "Name",
-cust_phone: "Phone",
-cust_email: "Email",
-cust_address: "Address",
-cust_save: "Save customer",
-cust_overview: "Customer overview",
-cust_reset_label: "Reset customer time",
-cust_reset_btn: "Reset",
-           
+        menu_settings: "Settings",
 
+        title_customer: "Customer",
+        title_customer_select: "Select customer",
+        title_employee_list: "Employees at customer",
+        title_mode: "Mode",
+        title_day: "Day",
+        title_total: "Total",
+        title_time: "Time",
+        title_note: "Note",
+        title_duration: "Duration",
+        title_date: "Date",
+        title_starttime: "Start time",
+
+        cust_name: "Name",
+        cust_phone: "Phone",
+        cust_email: "Email",
+        cust_address: "Address",
+        cust_save: "Save customer",
+        cust_overview: "Customer overview",
+        cust_reset_label: "Reset customer time",
+        cust_reset_btn: "Reset",
+
+        emp_name: "Name",
+        emp_email: "Email",
+        emp_role: "Role",
+        emp_save: "Save employee",
+        role_employee: "Employee",
+        role_admin: "Administrator",
+
+        timer_start: "Start",
+        timer_stop: "Stop",
+        timer_status: "Status",
+
+        log_today: "Today’s registrations",
+        log_start: "Start",
+        log_end: "End",
+        log_duration: "Minutes",
+        log_customer: "Customer",
+        log_employee: "Employee",
+
+        plan_month: "Calendar month",
+        plan_day_tasks: "Tasks of the day",
+        plan_save: "Save plan",
+
+        report_customer: "Customer",
+        report_employee: "Employee",
+        report_output: "Result"
     },
+
     de: {
         app_title: "GreenTime Pro",
         menu_dashboard: "Zeiterfassung",
@@ -167,18 +239,56 @@ cust_reset_btn: "Reset",
         menu_schedule: "Plan & Kalender",
         menu_logs: "Protokolle",
         menu_reports: "Berichte",
-        menu_settings: "Einstellungen"
-cust_name: "Name",
-cust_phone: "Telefon",
-cust_email: "E-Mail",
-cust_address: "Adresse",
-cust_save: "Kunde speichern",
-cust_overview: "Kundenübersicht",
-cust_reset_label: "Zeit für Kunde zurücksetzen",
-cust_reset_btn: "Zurücksetzen",
+        menu_settings: "Einstellungen",
 
-       
+        title_customer: "Kunde",
+        title_customer_select: "Kunde wählen",
+        title_employee_list: "Mitarbeiter beim Kunden",
+        title_mode: "Modus",
+        title_day: "Tag",
+        title_total: "Gesamt",
+        title_time: "Zeit",
+        title_note: "Notiz",
+        title_duration: "Dauer",
+        title_date: "Datum",
+        title_starttime: "Startzeit",
+
+        cust_name: "Name",
+        cust_phone: "Telefon",
+        cust_email: "E-Mail",
+        cust_address: "Adresse",
+        cust_save: "Kunde speichern",
+        cust_overview: "Kundenübersicht",
+        cust_reset_label: "Zeit für Kunde zurücksetzen",
+        cust_reset_btn: "Zurücksetzen",
+
+        emp_name: "Name",
+        emp_email: "E-Mail",
+        emp_role: "Rolle",
+        emp_save: "Mitarbeiter speichern",
+        role_employee: "Mitarbeiter",
+        role_admin: "Administrator",
+
+        timer_start: "Start",
+        timer_stop: "Stopp",
+        timer_status: "Status",
+
+        log_today: "Heutige Einträge",
+        log_start: "Start",
+        log_end: "Ende",
+        log_duration: "Minuten",
+        log_customer: "Kunde",
+        log_employee: "Mitarbeiter",
+
+        plan_month: "Kalendermonat",
+        plan_day_tasks: "Aufgaben des Tages",
+        plan_save: "Plan speichern",
+
+        report_customer: "Kunde",
+        report_employee: "Mitarbeiter",
+        report_output: "Ergebnis"
     },
+
     lt: {
         app_title: "GreenTime Pro",
         menu_dashboard: "Laiko registracija",
@@ -188,28 +298,68 @@ cust_reset_btn: "Zurücksetzen",
         menu_schedule: "Planavimas ir kalendorius",
         menu_logs: "Žurnalai",
         menu_reports: "Ataskaitos",
-        menu_settings: "Nustatymai"
-cust_name: "Vardas",
-cust_phone: "Telefonas",
-cust_email: "El. paštas",
-cust_address: "Adresas",
-cust_save: "Išsaugoti klientą",
-cust_overview: "Klientų sąrašas",
-cust_reset_label: "Atstatyti kliento laiką",
-cust_reset_btn: "Atstatyti",
+        menu_settings: "Nustatymai",
 
+        title_customer: "Klientas",
+        title_customer_select: "Pasirinkite klientą",
+        title_employee_list: "Darbuotojai pas klientą",
+        title_mode: "Režimas",
+        title_day: "Diena",
+        title_total: "Iš viso",
+        title_time: "Laikas",
+        title_note: "Pastaba",
+        title_duration: "Trukmė",
+        title_date: "Data",
+        title_starttime: "Pradžios laikas",
+
+        cust_name: "Vardas",
+        cust_phone: "Telefonas",
+        cust_email: "El. paštas",
+        cust_address: "Adresas",
+        cust_save: "Išsaugoti klientą",
+        cust_overview: "Klientų sąrašas",
+        cust_reset_label: "Atstatyti kliento laiką",
+        cust_reset_btn: "Atstatyti",
+
+        emp_name: "Vardas",
+        emp_email: "El. paštas",
+        emp_role: "Vaidmuo",
+        emp_save: "Išsaugoti darbuotoją",
+        role_employee: "Darbuotojas",
+        role_admin: "Administratorius",
+
+        timer_start: "Pradėti",
+        timer_stop: "Stabdyti",
+        timer_status: "Būsena",
+
+        log_today: "Šiandienos įrašai",
+        log_start: "Pradžia",
+        log_end: "Pabaiga",
+        log_duration: "Minutės",
+        log_customer: "Klientas",
+        log_employee: "Darbuotojas",
+
+        plan_month: "Kalendorinis mėnuo",
+        plan_day_tasks: "Dienos užduotys",
+        plan_save: "Išsaugoti planą",
+
+        report_customer: "Klientas",
+        report_employee: "Darbuotojas",
+        report_output: "Rezultatas"
     }
 };
 
 function t(key) {
-    const langPack = translations[currentLang] || translations["da"];
-    return langPack[key] || translations["da"][key] || "";
+    const pack = translations[currentLang] || translations["da"];
+    return pack[key] || translations["da"][key] || "";
 }
 
 function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
-        if (key) el.textContent = t(key);
+        if (!key) return;
+        const txt = t(key);
+        if (txt) el.textContent = txt;
     });
 }
 
@@ -225,7 +375,9 @@ function initLanguage() {
 
     document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            currentLang = btn.dataset.lang;
+            const lang = btn.dataset.lang;
+            if (!lang) return;
+            currentLang = lang;
             localStorage.setItem(STORAGE_KEYS.lang, JSON.stringify(currentLang));
             applyLangActiveButton();
             applyTranslations();
@@ -234,7 +386,10 @@ function initLanguage() {
 }
 
 
-/* ------------------------ TEMA ------------------------ */
+
+/* ======================================================
+   AFSNIT 04 – TEMA TOGGLE (MATCHER EARLY LOADER)
+   ====================================================== */
 
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
@@ -244,7 +399,7 @@ function initThemeToggle() {
     btn.textContent = current === "light" ? "🌙" : "🌞";
 
     btn.addEventListener("click", () => {
-        const now = document.documentElement.getAttribute("data-theme");
+        const now = document.documentElement.getAttribute("data-theme") || "dark";
         const next = now === "light" ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", next);
         btn.textContent = next === "light" ? "🌙" : "🌞";
@@ -255,7 +410,7 @@ function initThemeToggle() {
 
 
 /* ======================================================
-   AFSNIT 04 – NAVIGATION / SIDEBAR
+   AFSNIT 05 – NAVIGATION / SIDEBAR
    ====================================================== */
 
 function initNavigation() {
@@ -263,9 +418,9 @@ function initNavigation() {
     const menuButtons = document.querySelectorAll(".menu-item");
     const allPages = document.querySelectorAll(".page");
     const pageTitle = document.getElementById("pageTitle");
-
     const menuToggle = document.getElementById("menuToggle");
-    if (menuToggle) {
+
+    if (menuToggle && sidebar) {
         menuToggle.addEventListener("click", () => {
             sidebar.classList.toggle("open");
         });
@@ -285,14 +440,15 @@ function initNavigation() {
 
             if (pageTitle) pageTitle.textContent = btn.textContent.trim();
 
-            sidebar.classList.remove("open");
+            if (sidebar) sidebar.classList.remove("open");
         });
     });
 }
 
 
+
 /* ======================================================
-   AFSNIT 05 – KUNDER
+   AFSNIT 06 – KUNDER
    ====================================================== */
 
 function refreshCustomerSelects() {
@@ -311,11 +467,10 @@ function refreshCustomerSelects() {
         sel.innerHTML = "";
 
         const isReport = id === "reportCustomerSelect";
-        const placeholder = isReport ? "Alle kunder" : "Vælg kunde";
-
+        const placeholderKey = isReport ? "cust_overview" : "title_customer_select";
         const opt = document.createElement("option");
         opt.value = "";
-        opt.textContent = placeholder;
+        opt.textContent = t(placeholderKey) || "";
         sel.appendChild(opt);
 
         customers.forEach(c => {
@@ -330,7 +485,6 @@ function refreshCustomerSelects() {
 function renderCustomerTable() {
     const table = document.getElementById("customerTable");
     if (!table) return;
-
     const tbody = table.querySelector("tbody");
     tbody.innerHTML = "";
 
@@ -387,7 +541,6 @@ function initCustomers() {
                 alert("Vælg en kunde.");
                 return;
             }
-
             const before = logs.length;
             logs = logs.filter(l => l.customerId !== sel.value);
             const removed = before - logs.length;
@@ -395,8 +548,8 @@ function initCustomers() {
             saveAll();
             renderTodayLogs();
 
-            document.getElementById("resetCustomerInfo").textContent =
-                `Slettede ${removed} registreringer for kunden.`;
+            const info = document.getElementById("resetCustomerInfo");
+            if (info) info.textContent = `Slettede ${removed} registreringer for kunden.`;
         });
     }
 }
@@ -404,13 +557,12 @@ function initCustomers() {
 
 
 /* ======================================================
-   AFSNIT 06 – MEDARBEJDERE
+   AFSNIT 07 – MEDARBEJDERE
    ====================================================== */
 
 function renderEmployeeTable() {
     const table = document.getElementById("employeeTable");
     if (!table) return;
-
     const tbody = table.querySelector("tbody");
     tbody.innerHTML = "";
 
@@ -426,10 +578,7 @@ function renderEmployeeTable() {
 }
 
 function refreshEmployeeSelects() {
-    const ids = [
-        "timerEmployeeSelect",
-        "reportEmployeeSelect"
-    ];
+    const ids = ["timerEmployeeSelect", "reportEmployeeSelect"];
 
     ids.forEach(id => {
         const sel = document.getElementById(id);
@@ -438,7 +587,7 @@ function refreshEmployeeSelects() {
         sel.innerHTML = "";
 
         const isReport = id === "reportEmployeeSelect";
-        const placeholder = isReport ? "Alle medarbejdere" : "Vælg medarbejder";
+        const placeholder = isReport ? t("report_employee") : t("emp_name");
 
         const opt = document.createElement("option");
         opt.value = "";
@@ -515,7 +664,7 @@ function initEmployees() {
 
 
 /* ======================================================
-   AFSNIT 07 – CHIP-HJÆLPEFUNKTIONER
+   AFSNIT 08 – CHIP-HJÆLPER
    ====================================================== */
 
 function getSelectedIdsFromChipList(containerId) {
@@ -527,7 +676,7 @@ function getSelectedIdsFromChipList(containerId) {
 
 
 /* ======================================================
-   AFSNIT 08 – QUICK TIMER (FORSIDE)
+   AFSNIT 09 – QUICK TIMER (FORSIDE)
    ====================================================== */
 
 function updateQuickTimerDisplay() {
@@ -542,7 +691,6 @@ function updateQuickTimerDisplay() {
     const start = new Date(quickTimer.start);
     const now = new Date();
     const diffSec = Math.floor((now - start) / 1000);
-
     display.textContent = formatTimeFromSeconds(diffSec);
 }
 
@@ -588,7 +736,6 @@ function initQuickTimer() {
         };
 
         saveAll();
-
         stopQuickInterval();
         quickIntervalId = setInterval(updateQuickTimerDisplay, 1000);
         updateQuickTimerDisplay();
@@ -619,12 +766,14 @@ function initQuickTimer() {
         stopQuickInterval();
         updateQuickTimerDisplay();
         saveAll();
+        renderTodayLogs();
     });
 }
 
 
+
 /* ======================================================
-   AFSNIT 09 – DETALJERET TIMER
+   AFSNIT 10 – DETALJERET TIMER
    ====================================================== */
 
 function initDetailedTimer() {
@@ -634,7 +783,6 @@ function initDetailedTimer() {
 
     if (!startBtn || !stopBtn) return;
 
-    // Vis igangværende timer ved load
     if (activeTimer && statusEl) {
         const cName = getCustomerName(activeTimer.customerId);
         const eName = getEmployeeName(activeTimer.employeeId);
@@ -643,7 +791,6 @@ function initDetailedTimer() {
         statusEl.textContent = "Ingen aktiv timer";
     }
 
-    /* ---------- START ---------- */
     startBtn.addEventListener("click", () => {
         const custSel = document.getElementById("timerCustomerSelect");
         const empSel  = document.getElementById("timerEmployeeSelect");
@@ -672,7 +819,6 @@ function initDetailedTimer() {
         }
     });
 
-    /* ---------- STOP ---------- */
     stopBtn.addEventListener("click", () => {
         if (!activeTimer) {
             alert("Ingen aktiv timer.");
@@ -705,13 +851,12 @@ function initDetailedTimer() {
 
 
 /* ======================================================
-   AFSNIT 10 – DAGENS LOGS
+   AFSNIT 11 – DAGENS LOGS
    ====================================================== */
 
 function renderTodayLogs() {
     const table = document.getElementById("timeLogTable");
     if (!table) return;
-
     const tbody = table.querySelector("tbody");
     tbody.innerHTML = "";
 
@@ -739,17 +884,15 @@ function renderTodayLogs() {
 
 
 /* ======================================================
-   AFSNIT 11 – PLANLÆGNING (KALENDER + OPGAVER)
+   AFSNIT 12 – PLANLÆGNING (OPRET PLAN)
    ====================================================== */
 
 function setupPlanDurationInput() {
     const inp = document.getElementById("planDuration");
     if (!inp) return;
-
     inp.min = "0.5";
     inp.max = "8";
     inp.step = "0.5";
-    inp.placeholder = "0,5 – 8";
 }
 
 function initPlanning() {
@@ -792,11 +935,11 @@ function initPlanning() {
             note
         });
 
-        // ryd
         startInput.value = "";
         durationInput.value = "";
         noteInput.value = "";
-        document.querySelectorAll("#planEmployeeList .chip.selected")
+        document
+            .querySelectorAll("#planEmployeeList .chip.selected")
             .forEach(chip => chip.classList.remove("selected"));
 
         saveAll();
@@ -808,8 +951,9 @@ function initPlanning() {
 }
 
 
+
 /* ======================================================
-   AFSNIT 12 – KALENDER (RENDER HELE MÅNEDEN)
+   AFSNIT 13 – KALENDER
    ====================================================== */
 
 function renderCalendar() {
@@ -834,7 +978,6 @@ function renderCalendar() {
     const lastOfMonth  = new Date(year, month + 1, 0);
     const daysInMonth  = lastOfMonth.getDate();
 
-    // Søndag=0 → mandag=0
     const weekday = firstOfMonth.getDay();
     const mondayIndex = (weekday + 6) % 7;
 
@@ -878,19 +1021,13 @@ function renderCalendar() {
     }
 }
 
-
-
-/* ======================================================
-   AFSNIT 13 – DAGEN OPGAVER (LISTE)
-   ====================================================== */
-
 function renderDayDetails(dateStr) {
     const label = document.getElementById("selectedDayLabel");
     const list  = document.getElementById("dayPlanList");
     if (!label || !list) return;
 
     if (!dateStr) {
-        label.textContent = "Vælg en dato";
+        label.textContent = t("plan_day_tasks");
         list.innerHTML = "";
         return;
     }
@@ -921,20 +1058,14 @@ function renderDayDetails(dateStr) {
         const durText = String(durHr).replace(".", ",");
 
         li.innerHTML = `
-            <strong>${p.startTime}</strong> – ${durText}t  
-            <br>Kunde: ${getCustomerName(p.customerId)}  
-            <br>Note: ${p.note || ""}
+            <strong>${p.startTime}</strong> – ${durText}t<br>
+            Kunde: ${getCustomerName(p.customerId)}<br>
+            Note: ${p.note || ""}
         `;
 
         list.appendChild(li);
     });
 }
-
-
-
-/* ======================================================
-   AFSNIT 14 – SKIFT MÅNED (FORRIGE / NÆSTE)
-   ====================================================== */
 
 function initCalendarMonthSwitch() {
     const prevBtn = document.getElementById("calPrevMonth");
@@ -960,6 +1091,57 @@ function initCalendarMonthSwitch() {
 
 
 /* ======================================================
+   AFSNIT 14 – RAPPORTER
+   ====================================================== */
+
+function initReports() {
+    const customerSel = document.getElementById("reportCustomerSelect");
+    const employeeSel = document.getElementById("reportEmployeeSelect");
+    if (!customerSel || !employeeSel) return;
+
+    function renderReport() {
+        const out = document.getElementById("reportOutput");
+        if (!out) return;
+
+        const custId = customerSel.value;
+        const empId  = employeeSel.value;
+
+        let filtered = logs.slice();
+        if (custId) filtered = filtered.filter(l => l.customerId === custId);
+        if (empId)  filtered = filtered.filter(l => l.employeeId === empId);
+
+        if (!filtered.length) {
+            out.textContent = "Ingen data til rapport.";
+            return;
+        }
+
+        const totalMinutes = filtered.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
+
+        const perDay = {};
+        filtered.forEach(l => {
+            perDay[l.date] = (perDay[l.date] || 0) + (l.durationMinutes || 0);
+        });
+
+        let html = "";
+        html += `<p><strong>Poster:</strong> ${filtered.length}</p>`;
+        html += `<p><strong>Samlet tid:</strong> ${totalMinutes} min</p>`;
+        html += "<h4>Dage</h4>";
+        html += "<ul>";
+        Object.keys(perDay).sort().forEach(d => {
+            html += `<li>${d}: ${perDay[d]} min</li>`;
+        });
+        html += "</ul>";
+
+        out.innerHTML = html;
+    }
+
+    customerSel.addEventListener("change", renderReport);
+    employeeSel.addEventListener("change", renderReport);
+}
+
+
+
+/* ======================================================
    AFSNIT 15 – INIT-KÆDE (STARTER HELE APPEN)
    ====================================================== */
 
@@ -968,20 +1150,26 @@ function initApp() {
     initLanguage();
     initThemeToggle();
     initNavigation();
+
     refreshCustomerSelects();
     renderCustomerTable();
     initCustomers();
+
     renderEmployeeTable();
     refreshEmployeeSelects();
     renderEmployeeChips();
     initEmployees();
+
     initQuickTimer();
     initDetailedTimer();
     renderTodayLogs();
+
     initPlanning();
     initCalendarMonthSwitch();
     renderCalendar();
     renderDayDetails(selectedCalendarDate);
+
+    initReports();
 }
 
 document.addEventListener("DOMContentLoaded", initApp);
