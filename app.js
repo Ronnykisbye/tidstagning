@@ -1,5 +1,7 @@
 console.log("LOADER GREEN TIME PRO – APP.JS v2");
 
+console.log("LOADER GREEN TIME PRO – APP.JS v2");
+
 /* ======================================================
    AFSNIT 01 – GLOBAL STATE & HJÆLPEFUNKTIONER
    ====================================================== */
@@ -78,7 +80,24 @@ function getLocaleForLang(lang) {
     }
 }
 
+/* Demo-data til første gang / tom app */
+function seedDemoDataIfEmpty() {
+    if (!customers || customers.length === 0) {
+        customers = [
+            { id: uuid(), name: "Lars",  phone: "12345678", email: "lars@example.com",  address: "Hornbæk" },
+            { id: uuid(), name: "Ronny", phone: "22345678", email: "ronny@example.com", address: "Helsingør" }
+        ];
+    }
 
+    if (!employees || employees.length === 0) {
+        employees = [
+            { id: uuid(), name: "lars",  email: "lars@firma.dk",  role: "employee" },
+            { id: uuid(), name: "ronny", email: "ronny@firma.dk", role: "employee" },
+            { id: uuid(), name: "emma",  email: "emma@firma.dk",  role: "employee" },
+            { id: uuid(), name: "lasse", email: "lasse@firma.dk", role: "employee" }
+        ];
+    }
+}
 
 /* ======================================================
    AFSNIT 02 – LOCAL STORAGE (LOAD / SAVE)
@@ -94,6 +113,12 @@ function loadAll() {
     quickTimer  = safeParse(STORAGE_KEYS.quickTimer, null);
 
     currentLang = safeParse(STORAGE_KEYS.lang, "da");
+
+    // <-- VIGTIGT: fyld på med demo-data hvis alt er tomt
+    seedDemoDataIfEmpty();
+
+    // Gem dem, så de ligger i localStorage fremover
+    saveAll();
 }
 
 function saveAll() {
