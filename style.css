@@ -1,262 +1,580 @@
 /* ======================================================
-   AFSNIT 01 – VARIABLER (FARVER, RADIUS, GLOWS)
-====================================================== */
+   AFSNIT 01 – TEMA & FARVEVARIABLER
+   ====================================================== */
 
+/* Dark mode (default) */
 :root {
-    --bg-main: #07111f;
-    --bg-sidebar: #0b1624;
-    --bg-card: #0f1c32;
-    --bg-hover: #16263d;
+    --bg-body: #020617;
+    --bg-topbar: #0b1120;
+    --bg-sidebar: #020617;
+    --bg-card: #020617;
+    --bg-card-elevated: #020617;
 
-    --text-primary: #ffffff;
-    --text-secondary: #a8c1e3;
-    --text-muted: #7b90ac;
+    --text: #e5e7eb;
+    --text-strong: #f9fafb;
+    --text-muted: #94a3b8;
 
-    --neon-blue: #4cb3ff;
-    --neon-blue-soft: rgba(76,179,255,0.35);
+    --border-subtle: rgba(148, 163, 184, 0.35);
 
-    --radius: 12px;
+    --accent: #22c55e;
+    --accent-soft: rgba(34, 197, 94, 0.2);
+
+    --danger: #ef4444;
+    --danger-soft: rgba(239, 68, 68, 0.2);
+
+    --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.8);
+
+    --neon-blue: #38bdf8;
+    --neon-purple: #6366f1;
 }
 
-html[data-theme="light"] {
-    --bg-main: #f4f7fb;
-    --bg-sidebar: #ffffff;
+/* Light mode */
+[data-theme="light"] {
+    --bg-body: #f3f4f6;
+    --bg-topbar: #ffffff;
+    --bg-sidebar: #f9fafb;
     --bg-card: #ffffff;
-    --bg-hover: #e9eef5;
+    --bg-card-elevated: #ffffff;
 
-    --text-primary: #0a0f1a;
-    --text-secondary: #3a4a63;
-    --text-muted: #6b7a91;
+    --text: #020617;
+    --text-strong: #020617;
+    --text-muted: #6b7280;
 
-    --neon-blue: #0077ff;
-    --neon-blue-soft: rgba(0,119,255,0.25);
+    --border-subtle: rgba(148, 163, 184, 0.5);
+
+    --accent: #16a34a;
+    --accent-soft: rgba(22, 163, 74, 0.15);
+
+    --danger: #dc2626;
+    --danger-soft: rgba(220, 38, 38, 0.15);
+
+    --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.18);
 }
 
 /* ======================================================
-   AFSNIT 02 – RESET
-====================================================== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg-main); color: var(--text-primary); }
+   AFSNIT 02 – GENERELT LAYOUT
+   ====================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
+    color: var(--text);
+}
+
+body {
+    background-color: var(--bg-body);
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
 /* ======================================================
    AFSNIT 03 – TOPBAR
-====================================================== */
-#topbar {
-    height: 60px;
-    background: var(--bg-sidebar);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+   ====================================================== */
 
-    position: fixed;
+.topbar {
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    padding: 0 20px;
-    z-index: 9999;
+    padding: 10px 24px;
+    background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.08), transparent),
+                var(--bg-topbar);
+    box-shadow:
+        0 1px 0 rgba(15, 23, 42, 0.6),
+        0 20px 40px rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(14px);
 }
 
-#appLogo {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: var(--neon-blue);
+.topbar-left,
+.topbar-center,
+.topbar-right {
+    display: flex;
+    align-items: center;
 }
+
+.topbar-left {
+    gap: 10px;
+}
+
+.topbar-center {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+}
+
+.topbar-right {
+    gap: 14px;
+}
+
+/* Logo */
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.logo-main {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--text-strong);
+}
+
+.logo-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Topbar – titel */
 
 #pageTitle {
     font-size: 1.1rem;
-    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
-#topbar-right {
+/* Burger-menu (kun mobil) */
+
+.menu-toggle {
+    display: none;
+    border: none;
+    border-radius: 999px;
+    width: 32px;
+    height: 32px;
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--text-strong);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* ======================================================
+   AFSNIT 04 – TOPBAR HØJRE (SPROG + TEMA)
+   ====================================================== */
+
+.topbar-right {
     display: flex;
-    gap: 10px;
     align-items: center;
+}
+
+/* Sprog-switch */
+
+.lang-switch {
+    display: inline-flex;
+    padding: 4px;
+    border-radius: 999px;
+    background: radial-gradient(circle at top, #1e293b, #020617);
+    box-shadow:
+        0 0 0 1px var(--border-subtle),
+        0 12px 30px rgba(15, 23, 42, 0.7);
 }
 
 .lang-btn {
+    border: none;
+    border-radius: 999px;
     padding: 6px 12px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text-secondary);
-    border-radius: var(--radius);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: .25s;
+    color: #e5e7eb;
+    background: transparent;
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease,
+        color 0.18s ease;
 }
+
+.lang-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(148, 163, 184, 0.25);
+}
+
 .lang-btn.active {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: 0 0 10px var(--neon-blue-soft);
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #0b1120;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.9);
 }
 
-#themeToggle {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--neon-blue);
-    color: var(--neon-blue);
-    background: var(--bg-card);
+/* Tema-knap – orange i light, blå i dark */
 
-    display: flex;
+.theme-toggle {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-
-    cursor: pointer;
-    transition: .25s;
-}
-#themeToggle:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px var(--neon-blue);
+    min-width: 40px;
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease;
 }
 
-#sidebarToggle {
-    display: none;
-    width: 40px; height: 40px;
-    border-radius: 8px;
-    border: 2px solid var(--neon-blue);
-    background: var(--bg-card);
-    color: var(--neon-blue);
+/* Light mode – orange "måne"-knap */
+[data-theme="light"] .theme-toggle {
+    background: radial-gradient(circle at top, #facc15, #ea580c);
+    color: #111827;
+    box-shadow: 0 0 14px rgba(250, 204, 21, 0.85);
 }
 
+/* Dark mode – blå "sol"-knap */
+[data-theme="dark"] .theme-toggle {
+    background: radial-gradient(circle at top, #0ea5e9, #4f46e5);
+    color: #e5e7eb;
+    box-shadow: 0 0 14px rgba(59, 130, 246, 0.85);
+}
 
-/* ======================================================
-   AFSNIT 04 – APP WRAPPER
-====================================================== */
-#appWrapper {
-    display: flex;
-    height: calc(100vh - 60px);
-    margin-top: 60px;
-    overflow: hidden;
+.theme-toggle:hover {
+    transform: translateY(-1px) scale(1.03);
+    filter: brightness(1.05);
 }
 
 /* ======================================================
-   AFSNIT 05 – SIDEBAR
-====================================================== */
-#sidebar {
-    width: 240px;
-    background: var(--bg-sidebar);
-    padding: 20px;
-    border-right: 1px solid rgba(255,255,255,0.08);
+   AFSNIT 05 – LAYOUT: SIDEBAR + CONTENT
+   ====================================================== */
 
+.layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    min-height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+
+.sidebar {
+    background: linear-gradient(to bottom, #020617, #020617);
+    border-right: 1px solid rgba(15, 23, 42, 0.9);
+    padding: 20px 14px;
+}
+
+.sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-
-    z-index: 900;
+    gap: 6px;
 }
 
 .menu-item {
-    padding: 14px;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius);
+    border-radius: 999px;
+    border: none;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--text-muted);
     cursor: pointer;
-    transition: .25s;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
-.menu-item:hover { background: var(--bg-hover); }
+.menu-item:hover {
+    background: rgba(15, 23, 42, 0.8);
+    transform: translateX(2px);
+}
+
 .menu-item.active {
-    background: var(--neon-blue);
-    color: #000;
-    box-shadow: 0 0 10px var(--neon-blue-soft);
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #020617;
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.9);
+}
+
+/* Content */
+
+.content {
+    padding: 24px 32px 40px;
+    background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.08), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 60%),
+                var(--bg-body);
 }
 
 /* ======================================================
-   AFSNIT 06 – MAIN CONTENT
-====================================================== */
-#mainContent {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
+   AFSNIT 06 – SIDER & KORT
+   ====================================================== */
+
+.page {
+    display: none;
 }
 
-/* ======================================================
-   AFSNIT 07 – INPUTS
-====================================================== */
-.label {
-    font-weight: bold;
-    color: var(--text-secondary);
-    margin-bottom: 6px;
+.page.visible {
     display: block;
 }
 
-input, select {
+.page-header {
+    margin-bottom: 18px;
+}
+
+.page-header h2 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+    color: var(--text-strong);
+}
+
+.page-sub {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    padding: 18px 20px;
+    border: 1px solid rgba(15, 23, 42, 0.9);
+}
+
+/* Side-layout for formular + liste */
+
+.page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+    gap: 20px;
+    align-items: flex-start;
+}
+
+/* ======================================================
+   AFSNIT 07 – TIDSREGISTRERING / TIMER-KORT
+   ====================================================== */
+
+.timer-card {
+    max-width: 520px;
+    margin-top: 10px;
+}
+
+.timer-display-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.timer-display {
     width: 100%;
-    padding: 12px;
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: var(--radius);
-    color: var(--text-primary);
-    margin-bottom: 20px;
-}
-
-/* ======================================================
-   AFSNIT 08 – CHIPS
-====================================================== */
-.chip {
-    padding: 8px 14px;
-    display: inline-block;
-    border-radius: var(--radius);
-    background: var(--bg-card);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text-primary);
-    cursor: pointer;
-    margin: 0 8px 8px 0;
-    transition: .25s;
-}
-.chip.active {
-    background: var(--neon-blue);
-    color: #000;
-}
-
-/* ======================================================
-   AFSNIT 09 – TIMER
-====================================================== */
-
-#timerDisplay {
+    max-width: 480px;
+    padding: 24px 16px;
+    border-radius: 999px;
     font-size: 2rem;
-    margin: 20px 0;
+    letter-spacing: 0.1em;
+    text-align: center;
+    background: #020617;
+    color: #e5e7eb;
+    box-shadow:
+        0 22px 45px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+.timer-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* ======================================================
+   AFSNIT 08 – FORMS & KNAPPER
+   ====================================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+}
+
+.form-grid label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+input,
+select {
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--text-strong);
+}
+
+[data-theme="light"] input,
+[data-theme="light"] select {
+    background: #ffffff;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
 }
 
 .btn {
-    padding: 12px 20px;
-    border-radius: var(--radius);
+    border-radius: 999px;
     border: none;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
-    margin-right: 10px;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
 }
 
-.btn-start { background: var(--neon-blue); color: #000; }
-.btn-stop { background: #ff5f5f; color: #fff; }
+.btn-primary {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #020617;
+    box-shadow: 0 0 14px rgba(79, 70, 229, 0.85);
+}
+
+.btn-success {
+    background: radial-gradient(circle at top, #22c55e, #16a34a);
+    color: #f9fafb;
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
+}
+
+.btn-danger {
+    background: radial-gradient(circle at top, #ef4444, #b91c1c);
+    color: #fee2e2;
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.9);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
 
 /* ======================================================
-   AFSNIT 10 – TABELLER
-====================================================== */
+   AFSNIT 09 – TABELLER (KUNDER / MEDARBEJDERE / LOGS)
+   ====================================================== */
+
+.table-wrapper {
+    margin-top: 8px;
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.95);
+}
+
+[data-theme="light"] .table-wrapper {
+    background: #ffffff;
+}
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    font-size: 0.85rem;
 }
-table th, table td {
-    padding: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+thead {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+[data-theme="light"] thead {
+    background: #e5e7eb;
+}
+
+th,
+td {
+    padding: 6px 10px;
+    text-align: left;
+}
+
+th {
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.8);
+}
+
+td {
+    color: var(--text-strong);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.7);
+}
+
+tbody tr:nth-child(odd) {
+    background: rgba(15, 23, 42, 0.8);
+}
+
+[data-theme="light"] tbody tr:nth-child(odd) {
+    background: #f9fafb;
 }
 
 /* ======================================================
-   AFSNIT 11 – MOBILE
-====================================================== */
-@media (max-width:900px){
-    #sidebarToggle { display: block; }
-    #sidebar {
-        position: fixed;
-        left: -240px;
-        transition: .3s;
-        top: 60px;
-        height: calc(100vh - 60px);
+   AFSNIT 10 – PLACEHOLDERS
+   ====================================================== */
+
+.placeholder-card {
+    max-width: 520px;
+}
+
+/* ======================================================
+   AFSNIT 11 – RESPONSIVITET
+   ====================================================== */
+
+@media (max-width: 880px) {
+    .layout {
+        grid-template-columns: 1fr;
     }
-    #sidebar.open { left: 0; }
+
+    .sidebar {
+        position: fixed;
+        inset: 56px 0 auto 0;
+        transform: translateX(-101%);
+        transition: transform 0.2s ease-out;
+        max-width: 260px;
+        z-index: 15;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+    }
+
+    .topbar-center {
+        display: none;
+    }
+
+    .content {
+        padding: 18px 16px 32px;
+    }
+
+    .page-grid {
+        grid-template-columns: 1fr;
+    }
 }
