@@ -122,50 +122,74 @@ html[data-theme="light"] {
 
 /* ======================================================
    AFSNIT 04 – SIDEBAR
-====================================================== */
+   ====================================================== */
 
 #sidebar {
-    width: 230px;
+    width: 240px;
     background: var(--bg-sidebar);
-    padding-top: 20px;
-    border-right: 1px solid var(--card-border);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    height: 100vh;
+
+    position: fixed;
+    top: 60px; /* Topbar er 60px */
+    left: 0;
+
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    padding-top: 20px;
+
+    z-index: 90;
 }
 
+/* Sidebar links */
 .menu-item {
     padding: 12px 20px;
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    text-align: left;
-    cursor: pointer;
     font-size: 0.95rem;
-    transition: 0.25s;
+    text-align: left;
+
+    cursor: pointer;
     border-radius: var(--radius);
+    transition: 0.25s;
 }
 
-.menu-item:hover { background: var(--bg-hover); }
+.menu-item:hover {
+    background: var(--bg-hover);
+}
 
 .menu-item.active {
     background: var(--neon-blue);
     color: #000;
     box-shadow: 0 0 10px var(--neon-blue-soft);
 }
-/* Desktop: skjul hamburger-menu */
+
+/* Desktop: hamburger skjult */
 #sidebarToggle {
     display: none;
 }
 
-/* Mobil: vis hamburger */
+/* Mobil: hamburger synlig + sidebar flytter */
 @media (max-width: 900px) {
+
     #sidebarToggle {
         display: block;
-    }
-    #sidebar {
-        position: absolute;
+        position: fixed;
+        top: 12px;
+        right: 15px;
         z-index: 999;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 60px;
+        left: -260px;
+        transition: 0.3s ease;
+    }
+
+    #sidebar.open {
+        left: 0;
     }
 }
 
