@@ -80,23 +80,29 @@ html[data-theme="light"] {
     z-index: 100;
 }
 
-/* Logo-tekst / titel */
+/* Venstre: Logo */
 #topbar-title {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--text-primary);
-    letter-spacing: 0.5px;
     user-select: none;
 }
 
-/* Sprogknap-gruppe */
-#langButtons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* Midten: sidetitel */
+#pageTitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    opacity: 0.9;
 }
 
-/* Enkelt sprogknap */
+/* Højre: sprog + tema */
+#topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;        /* AFSTAND MELLEM KNAPPER */
+}
+
+/* Sprogknapper */
 .lang-btn {
     padding: 6px 14px;
     background: transparent;
@@ -118,7 +124,23 @@ html[data-theme="light"] {
     box-shadow: 0 0 10px var(--neon-blue-soft);
 }
 
-/* Tema-knap FJERNET HER – ligger nu i AFSNIT 06 */
+/* Tema-knap (lys/mørk mode) */
+#themeToggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--neon-blue);
+    box-shadow: 0 0 12px var(--neon-blue-soft);
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#themeToggle:hover {
+    box-shadow: 0 0 18px var(--neon-blue);
+    transform: scale(1.06);
+}
+
 
 /* ===============================================
    AFSNIT 04 – HAMBURGER VISNING (KORREKTION)
