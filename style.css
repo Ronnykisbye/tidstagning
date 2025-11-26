@@ -67,22 +67,30 @@ body {
 
 
 /* ======================================================
-   AFSNIT 03 – TOPBAR
-   (sprogknapper + tema-knap)
+   AFSNIT 03 – TOPBAR (FAST / FIXED + SPROG + TEMA)
 ====================================================== */
 
 .topbar {
+    position: fixed;          /* FAST topbar */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 24px;
+
     background: var(--bg-primary);
     color: var(--text-strong);
     border-bottom: 1px solid var(--border-subtle);
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
-    position: sticky;
-    top: 0;
-    z-index: 20;
+}
+
+/* Sørger for at ALT indhold (sidebar + sider) starter under topbaren */
+.app {
+    padding-top: 72px;        /* ca. topbar-højde */
 }
 
 /* venstre side: logo + menu-toggle */
@@ -241,8 +249,6 @@ html[data-theme="dark"] .theme-toggle {
         display: inline-flex;
     }
 }
-
-
 
 /* ======================================================
    AFSNIT 04 – SIDEBAR (NEON / FAST VENSTRE) – UPDATED
