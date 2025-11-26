@@ -914,3 +914,32 @@ html[data-theme="dark"] .sidebar-menu .menu-item:not(.active) {
     color: #e2e8f0 !important;  /* lys grå/blå */
 }
 
+/* ============================================
+   FIX – SIDEBAR FARVER (OVERSKRIVER INGEN ANDET)
+   ============================================ */
+
+/* Tving kun menu-item i SIDEBAR til at bruge sidebar-farverne,
+   så globale knap-regler IKKE overskriver dem. */
+
+/* Normal state – mørk og lys mode */
+#sidebar .menu-item:not(.active) {
+    color: var(--text) !important;
+}
+
+/* Lys mode – tydelig mørk tekst */
+html[data-theme="light"] #sidebar .menu-item:not(.active) {
+    color: #1e293b !important;  /* navy */
+}
+
+/* Mørk mode – tydelig lys tekst */
+html[data-theme="dark"] #sidebar .menu-item:not(.active) {
+    color: #e2e8f0 !important;  /* blå-grå lys */
+}
+
+/* Hover */
+#sidebar .menu-item:hover:not(.active) {
+    background: rgba(255,255,255,0.12) !important;
+    color: var(--text-strong) !important;
+}
+
+/* ACTIVE bevares fra dit neon-design i AFSNIT 04 – ændres IKKE */
