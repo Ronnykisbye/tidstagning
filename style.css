@@ -110,7 +110,7 @@
 
 /* ======================================================
    AFSNIT 03 – TOPBAR
-   ====================================================== */
+====================================================== */
 
 .topbar {
     position: sticky;
@@ -120,13 +120,31 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 24px;
-    background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.08), transparent),
+
+    /* Baggrund fra tema-variabel */
+    background: radial-gradient(
+                    circle at top left,
+                    rgba(148, 163, 184, 0.08),
+                    transparent
+                ),
                 var(--bg-topbar);
+
+    /* Skygge (DARK MODE STANDARD) */
     box-shadow:
         0 1px 0 rgba(15, 23, 42, 0.6),
         0 20px 40px rgba(15, 23, 42, 0.6);
+
     backdrop-filter: blur(14px);
 }
+
+/* ⭐ LIGHT MODE SKYGGE-FIX */
+[data-theme="light"] .topbar {
+    box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.06),
+        0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Wrapper-sektioner */
 
 .topbar-left,
 .topbar-center,
@@ -170,7 +188,7 @@
     color: var(--text-muted);
 }
 
-/* Topbar – titel */
+/* Topbar – Titel */
 
 #pageTitle {
     font-size: 1.1rem;
@@ -180,7 +198,7 @@
     color: var(--text-muted);
 }
 
-/* Burger-menu (kun mobil) */
+/* Burger-menu (mobil) */
 
 .menu-toggle {
     display: none;
