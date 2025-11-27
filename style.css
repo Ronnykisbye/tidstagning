@@ -152,7 +152,7 @@
 
 
 /* ======================================================
-   AFSNIT 03 – TOPBAR
+   AFSNIT 03 – TOPBAR (RETTAF VERSION)
 ====================================================== */
 
 .topbar {
@@ -164,15 +164,9 @@
     justify-content: space-between;
     padding: 10px 24px;
 
-    /* Baggrund fra tema-variabel */
-    background: radial-gradient(
-                    circle at top left,
-                    rgba(148, 163, 184, 0.08),
-                    transparent
-                ),
-                var(--bg-topbar);
+    /* Mørk version uden lys overlay */
+    background: var(--bg-topbar);
 
-    /* Skygge (DARK MODE STANDARD) */
     box-shadow:
         0 1px 0 rgba(15, 23, 42, 0.6),
         0 20px 40px rgba(15, 23, 42, 0.6);
@@ -180,15 +174,19 @@
     backdrop-filter: blur(14px);
 }
 
-/* ⭐ LIGHT MODE SKYGGE-FIX */
+/* ⭐ LIGHT MODE – topbar med let lys glow */
 [data-theme="light"] .topbar {
+    background: radial-gradient(
+        circle at top left,
+        rgba(0,0,0,0.03),
+        transparent
+    ), var(--bg-topbar);
     box-shadow:
         0 1px 0 rgba(0, 0, 0, 0.06),
         0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* Wrapper-sektioner */
-
 .topbar-left,
 .topbar-center,
 .topbar-right {
@@ -211,7 +209,6 @@
 }
 
 /* Logo */
-
 .logo-text {
     display: flex;
     flex-direction: column;
@@ -232,7 +229,6 @@
 }
 
 /* Topbar – Titel */
-
 #pageTitle {
     font-size: 1.1rem;
     font-weight: 700;
@@ -242,7 +238,6 @@
 }
 
 /* Burger-menu (mobil) */
-
 .menu-toggle {
     display: none;
     border: none;
@@ -254,6 +249,7 @@
     font-size: 1.1rem;
     cursor: pointer;
 }
+
 
 /* ======================================================
    AFSNIT 04 – SPROGKNAPPER & TEMA-KNAP
