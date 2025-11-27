@@ -366,34 +366,35 @@ function initThemeToggle() {
 
 
 /* ======================================================
-   AFSNIT 06C – KUNDEVALG TIL TIMER
+   AFSNIT – KUNDEVALG TIL TIDSREGISTRERING
 ====================================================== */
 
-function initCustomerSelectForTimer() {
-    const select = document.getElementById("timerCustomerSelect");
+function renderTimereg() {
+    console.log("Render timereg...");
+
+    const select = document.getElementById("timeregCustomerSelect");
     if (!select) return;
 
-    // Hent kunder fra localStorage
-    const customers = JSON.parse(localStorage.getItem("gtp_customers")) || [];
-
-    // Byg første option: "Vælg en kunde" (på valgt sprog)
+    // ryd dropdown
     select.innerHTML = `
-        <option value="" disabled selected>
-            ${t("select_customer_placeholder")}
+        <option value="" data-i18n="timereg_choose_customer">
+            ${i18n.timereg_choose_customer[currentLang]}
         </option>
     `;
 
-    // Fyld dropdown med kunder
+    // hent kunder
+    const customers = JSON.parse(localStorage.getItem("customers") || "[]");
+
     customers.forEach(c => {
         const opt = document.createElement("option");
-        opt.value = c.name;
+        opt.value = c.id;
         opt.textContent = c.name;
         select.appendChild(opt);
     });
 
-    // Sørg for at tekster bliver opdateret, hvis sprog skiftes
-    applyTranslations();
+    updateI18nTexts();
 }
+
 
 
 /* ======================================================
