@@ -347,45 +347,31 @@ function initThemeToggle() {
 
 
 /* ======================================================
-   AFSNIT 06 – TIMER
+   AFSNIT 06C – KUNDEVALG TIL TIMER
 ====================================================== */
 
-let timerInterval = null;
-let timerSeconds = 0;
+function initCustomerSelectForTimer() {
+    const select = document.getElementById("timerCustomerSelect");
+    if (!select) return;
 
-function initTimer() {
-    const startBtn = document.getElementById("timerStartBtn");
-    const stopBtn = document.getElementById("timerStopBtn");
-    const display = document.getElementById("timerDisplay");
+    const customers = JSON.parse(localStorage.getItem("gtp_customers")) || [];
 
-    updateTimerDisplay(display);
+    // Først: placeholder "Vælg en kunde" – oversættelsesklar
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = t("select_customer_placeholder");
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.appendChild(placeholder);
 
-    startBtn?.addEventListener("click", () => startTimer(display));
-    stopBtn?.addEventListener("click", () => stopTimer());
+    // Indsæt kunder i dropdown
+    customers.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.name;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+    });
 }
-
-function startTimer(display) {
-    if (timerInterval) return;
-
-    timerInterval = setInterval(() => {
-        timerSeconds++;
-        updateTimerDisplay(display);
-    }, 1000);
-}
-
-function stopTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-}
-
-function updateTimerDisplay(display) {
-    if (!display) return;
-    const h = String(Math.floor(timerSeconds / 3600)).padStart(2, "0");
-    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, "0");
-    const s = String(timerSeconds % 60).padStart(2, "0");
-    display.textContent = `${h}:${m}:${s}`;
-}
-
 
 /* ======================================================
    AFSNIT 06B – DEMO DATA: KUNDER
