@@ -284,62 +284,89 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 05 – SIDEBAR (KORREKT VERTICAL LAYOUT)
+   AFSNIT 04 – SIDEBAR
    ====================================================== */
 
 .sidebar {
-    width: 240px;
-    background: var(--bg-sidebar);
-    color: var(--text-normal);
-    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    padding-top: 80px; /* så topbaren ikke dækker */
-    display: flex;
-    flex-direction: column;   /* VIGTIGT – gør menuen lodret */
-    gap: 6px;
+    width: 230px;
+    height: 100vh;
+    padding-top: 78px; /* så topbar ikke overlapper */
+    background: var(--bg-sidebar);
     box-shadow: inset -1px 0 0 var(--border-color);
-    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 20;
 }
 
-/* Menuen indeni sidebar */
+/* Sidebar logo */
+.sidebar-logo {
+    padding: 0 20px 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
 
-.sidebar a {
-    display: block;
-    padding: 14px 20px;
-    margin: 0 10px;
-    border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--text-normal);
-    text-decoration: none;
+.sidebar-logo .logo-main {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sidebar-logo .logo-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Menu stylings */
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+}
+
+.menu-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
     background: transparent;
-    transition: 0.2s ease;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-normal);
+    transition: 0.15s ease-in-out;
 }
 
-.sidebar a:hover {
-    background: var(--accent-hover);
+.menu-btn:hover {
+    background: var(--menu-hover-bg);
+    color: var(--text-strong);
+}
+
+.menu-btn.active {
+    background: var(--menu-active-bg);
     color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.20);
 }
 
-.sidebar a.active {
-    background: var(--accent);
-    color: #fff;
-    box-shadow: 0 0 12px rgba(0,0,0,0.25);
+/* CONTENT WRAPPER – rykker ind for at give plads til sidebar */
+.content-wrapper {
+    margin-left: 230px;
+    padding: 24px;
+    min-height: 100vh;
+    background: var(--bg-body);
+    transition: background 0.25s ease;
 }
 
-/* Mobil sidebar – skjult som udgangspunkt */
-
-.sidebar.hidden {
-    transform: translateX(-260px);
-}
-
-/* Mobil visning */
-
+/* Mobil sidebar */
 @media (max-width: 880px) {
+
     .sidebar {
-        position: fixed;
         transform: translateX(-260px);
         transition: transform 0.25s ease-in-out;
     }
@@ -347,7 +374,12 @@ body {
     .sidebar.visible {
         transform: translateX(0);
     }
+
+    .content-wrapper {
+        margin-left: 0 !important;
+    }
 }
+
 
 /* ======================================================
    AFSNIT 06 – PAGE SECTIONS & CARDS
