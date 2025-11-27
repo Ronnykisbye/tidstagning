@@ -284,100 +284,56 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 04 – SIDEBAR
-   ====================================================== */
+   AFSNIT 04 – SPROGKNAPPER (NEON + LIGHT/DARK MODE FIX)
+====================================================== */
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 230px;
-    height: 100vh;
-    padding-top: 78px; /* så topbar ikke overlapper */
-    background: var(--bg-sidebar);
-    box-shadow: inset -1px 0 0 var(--border-color);
+.lang-switch {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 20;
-}
-
-/* Sidebar logo */
-.sidebar-logo {
-    padding: 0 20px 16px 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.sidebar-logo .logo-main {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--text-strong);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.sidebar-logo .logo-sub {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* Menu stylings */
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
     gap: 6px;
-    padding: 10px;
 }
 
-.menu-btn {
-    width: 100%;
-    text-align: left;
-    padding: 12px 14px;
-    background: transparent;
-    border: none;
+.lang-btn {
+    padding: 6px 10px;
+    height: 32px;
+    line-height: 18px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+
     border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
+    border: 1px solid var(--border-color);
+
+    background: var(--bg-card);
+    color: var(--text-muted);
+
     cursor: pointer;
-    color: var(--text-normal);
-    transition: 0.15s ease-in-out;
+    transition: 0.18s ease-in-out;
 }
 
-.menu-btn:hover {
-    background: var(--menu-hover-bg);
+/* Hover */
+.lang-btn:hover {
+    background: rgba(99,102,241,0.20);
     color: var(--text-strong);
 }
 
-.menu-btn.active {
-    background: var(--menu-active-bg);
-    color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.20);
+/* Aktiv knap */
+.lang-btn.active {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 0 10px rgba(99,102,241,0.40);
 }
 
-/* CONTENT WRAPPER – rykker ind for at give plads til sidebar */
-.content-wrapper {
-    margin-left: 230px;
-    padding: 24px;
-    min-height: 100vh;
-    background: var(--bg-body);
-    transition: background 0.25s ease;
+/* Light mode – tydeligere farver */
+[data-theme="light"] .lang-btn {
+    background: #ffffff;
+    color: #475569;
 }
 
-/* Mobil sidebar */
-@media (max-width: 880px) {
-
-    .sidebar {
-        transform: translateX(-260px);
-        transition: transform 0.25s ease-in-out;
-    }
-
-    .sidebar.visible {
-        transform: translateX(0);
-    }
-
-    .content-wrapper {
-        margin-left: 0 !important;
-    }
+[data-theme="light"] .lang-btn.active {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #ffffff;
 }
 
 
