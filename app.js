@@ -20,6 +20,9 @@ const translations = {
         btn_start: "Start",
         btn_stop: "Stop",
 
+        /* Kundevalg til timer */
+        select_customer_placeholder: "Vælg en kunde",
+
         /* Kunder */
         customers_title: "Kunder",
         customers_sub: "Opret og vedligehold din kundeliste.",
@@ -68,6 +71,9 @@ const translations = {
         btn_start: "Start",
         btn_stop: "Stop",
 
+        /* Customer select for timer */
+        select_customer_placeholder: "Select a customer",
+
         customers_title: "Customers",
         customers_sub: "Create and maintain your customer list.",
         customers_new: "New customer",
@@ -110,6 +116,9 @@ const translations = {
         page_dashboard_sub: "Zeit für Aufgaben schnell starten und stoppen.",
         btn_start: "Start",
         btn_stop: "Stopp",
+
+        /* Kundenauswahl für Timer */
+        select_customer_placeholder: "Kunde auswählen",
 
         customers_title: "Kunden",
         customers_sub: "Erstellen und pflegen Sie Ihre Kundenliste.",
@@ -154,6 +163,9 @@ const translations = {
         btn_start: "Startas",
         btn_stop: "Stop",
 
+        /* Kliento pasirinkimas laikmačiui */
+        select_customer_placeholder: "Pasirinkite klientą",
+
         customers_title: "Klientai",
         customers_sub: "Kurti ir tvarkyti klientų sąrašą.",
         customers_new: "Naujas klientas",
@@ -190,6 +202,7 @@ function t(key) {
 }
 
 
+
 /* ======================================================
    AFSNIT 02 – INITIALISERING (KORREKT VERSION)
 ====================================================== */
@@ -199,16 +212,22 @@ document.addEventListener("DOMContentLoaded", () => {
     initLanguage();
     initLanguageButtons();
     initThemeToggle();
-    initTimer();
 
+    // Demo-data
     installDefaultCustomers();
     installDefaultEmployees();
 
+    // Formularer
     initCustomerForm();
     initEmployeeForm();
 
+    // Tabeller
     renderCustomers();
     renderEmployees();
+
+    // Timer + kunde-dropdown på dashboard
+    initTimer();
+    initCustomerSelectForTimer();
 });
 
 
@@ -354,24 +373,28 @@ function initCustomerSelectForTimer() {
     const select = document.getElementById("timerCustomerSelect");
     if (!select) return;
 
+    // Hent kunder fra localStorage
     const customers = JSON.parse(localStorage.getItem("gtp_customers")) || [];
 
-    // Først: placeholder "Vælg en kunde" – oversættelsesklar
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = t("select_customer_placeholder");
-    placeholder.disabled = true;
-    placeholder.selected = true;
-    select.appendChild(placeholder);
+    // Byg første option: "Vælg en kunde" (på valgt sprog)
+    select.innerHTML = `
+        <option value="" disabled selected>
+            ${t("select_customer_placeholder")}
+        </option>
+    `;
 
-    // Indsæt kunder i dropdown
+    // Fyld dropdown med kunder
     customers.forEach(c => {
         const opt = document.createElement("option");
         opt.value = c.name;
         opt.textContent = c.name;
         select.appendChild(opt);
     });
+
+    // Sørg for at tekster bliver opdateret, hvis sprog skiftes
+    applyTranslations();
 }
+
 
 /* ======================================================
    AFSNIT 06B – DEMO DATA: KUNDER
