@@ -383,19 +383,14 @@
     color: var(--text-muted);
 }
 
-/* Card komponent – rettet til korrekt lys/mørk mode */
+/* Card komponent */
 .card {
     background: var(--bg-card);
     border-radius: 18px;
     padding: 18px 20px;
-
-    /* 🔥 Dynamisk border der virker i begge modes */
     border: 1px solid var(--border-subtle);
-
-    /* 🔥 Dynamisk skygge */
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-soft);
 }
-
 
 /* Side-layout (formular + liste) */
 .page-grid {
@@ -405,11 +400,8 @@
 }
 
 
-
-
 /* ======================================================
-   AFSNIT 07 – TIMER (KORREKT LIGHT/DARK MODE VERSION)
-   Dette afsnit overskriver ALLE gamle timer-styles
+   AFSNIT 07 – TIMER VISNING (LYS/MØRK MODE KORREKT)
 ====================================================== */
 
 .timer-card {
@@ -419,7 +411,7 @@
     border-radius: 20px;
     padding: 20px 24px 32px;
     box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-subtle);
 }
 
 .timer-display-wrapper {
@@ -434,13 +426,13 @@
     padding: 30px 20px;
     border-radius: 999px;
     font-size: 2.2rem;
+    letter-spacing: 0.1em;
     text-align: center;
 
-    /* 🔥 Helt ny farvestyring – følger temaet perfekt */
+    /* Følger temaet – lys i light, mørk i dark */
     background: var(--bg-card);
     color: var(--text-strong);
 
-    /* 🔥 Blød skygge i begge temaer */
     box-shadow:
         0 12px 30px rgba(0, 0, 0, 0.12),
         0 0 0 1px rgba(0, 0, 0, 0.05);
@@ -452,7 +444,6 @@
     justify-content: center;
 }
 
-/* Start/stop knapper (forbliver ens i begge temaer) */
 .timer-buttons button {
     padding: 10px 22px;
     font-size: 1rem;
