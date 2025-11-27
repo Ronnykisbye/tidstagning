@@ -6,226 +6,187 @@ const translations = {
     da: {
         app_title: "GreenTime Pro",
 
-        // Knapper
-        btn_start: "Start",
-        btn_stop: "Stop",
-
-        // Kolonneoverskrifter
-        col_address: "Adresse",
-        col_email: "Email",
-        col_log_duration: "Varighed",
-        col_log_time: "Tidspunkt",
-        col_name: "Navn",
-        col_phone: "Telefon",
-        col_role: "Rolle",
-
-        // Kunder
-        customers_list: "Oversigt over kunder",
-        customers_new: "Ny kunde",
-        customers_save: "Gem kunde",
-        customers_sub: "Opret og vedligehold din kundeliste.",
-        customers_title: "Kunder",
-
-        // Medarbejdere
-        employees_list: "Liste over medarbejdere",
-        employees_new: "Ny medarbejder",
-        employees_save: "Gem medarbejder",
-        employees_sub: "Hold styr på medarbejdere og roller.",
-        employees_title: "Medarbejdere",
-
-        // Menu
-        menu_customers: "Kunder",
+        /* Menu */
         menu_dashboard: "Tidsregistrering",
+        menu_customers: "Kunder",
         menu_employees: "Medarbejdere",
         menu_logs: "Logs",
         menu_reports: "Rapporter",
         menu_settings: "Indstillinger",
 
-        // Side-overskrifter + undertekster
-        page_dashboard_sub: "Start og stop tid for opgaver – hurtigt overblik.",
+        /* Dashboard / Timer */
         page_dashboard_title: "Tidsregistrering",
+        page_dashboard_sub: "Start og stop tid for opgaver – hurtigt overblik.",
+        btn_start: "Start",
+        btn_stop: "Stop",
 
-        page_logs_sub: "Historik over registreret arbejdstid.",
-        page_logs_title: "Logs",
+        /* Kunder */
+        customers_title: "Kunder",
+        customers_sub: "Opret og vedligehold din kundeliste.",
+        customers_new: "Ny kunde",
+        customers_save: "Gem kunde",
+        customers_list: "Oversigt over kunder",
 
-        page_reports_sub: "Overblik over registreret tid.",
-        page_reports_title: "Rapporter",
+        /* Medarbejdere */
+        employees_title: "Medarbejdere",
+        employees_sub: "Hold styr på medarbejdere og roller.",
+        employees_new: "Ny medarbejder",
+        employees_save: "Gem medarbejder",
+        employees_list: "Liste over medarbejdere",
 
-        page_settings_sub: "Konfiguration af appen.",
-        page_settings_title: "Indstillinger",
+        /* Kolonner */
+        col_name: "Navn",
+        col_phone: "Telefon",
+        col_email: "Email",
+        col_address: "Adresse",
+        col_role: "Rolle",
 
-        // Placeholder-tekster
-        reports_placeholder: "Rapportmodulet kommer senere.",
-        settings_placeholder: "Her kan du senere justere avancerede indstillinger.",
+        /* Labels */
+        label_name: "Navn",
+        label_phone: "Telefon",
+        label_email: "Email",
+        label_address: "Adresse",
+        label_role: "Rolle",
 
-        // Roller
-        role_admin: "Admin",
-        role_employee: "Medarbejder"
+        /* Roller */
+        role_employee: "Medarbejder",
+        role_admin: "Admin"
     },
 
     en: {
         app_title: "GreenTime Pro",
 
-        btn_start: "Start",
-        btn_stop: "Stop",
-
-        col_address: "Address",
-        col_email: "Email",
-        col_log_duration: "Duration",
-        col_log_time: "Time",
-        col_name: "Name",
-        col_phone: "Phone",
-        col_role: "Role",
-
-        customers_list: "Customer overview",
-        customers_new: "New customer",
-        customers_save: "Save customer",
-        customers_sub: "Create and maintain your customer list.",
-        customers_title: "Customers",
-
-        employees_list: "Employee list",
-        employees_new: "New employee",
-        employees_save: "Save employee",
-        employees_sub: "Keep track of employees and roles.",
-        employees_title: "Employees",
-
+        menu_dashboard: "Time Tracking",
         menu_customers: "Customers",
-        menu_dashboard: "Time tracking",
         menu_employees: "Employees",
         menu_logs: "Logs",
         menu_reports: "Reports",
         menu_settings: "Settings",
 
+        page_dashboard_title: "Time Tracking",
         page_dashboard_sub: "Start and stop time for tasks – quick overview.",
-        page_dashboard_title: "Time tracking",
+        btn_start: "Start",
+        btn_stop: "Stop",
 
-        page_logs_sub: "History of recorded work time.",
-        page_logs_title: "Logs",
+        customers_title: "Customers",
+        customers_sub: "Create and maintain your customer list.",
+        customers_new: "New customer",
+        customers_save: "Save customer",
+        customers_list: "Customer overview",
 
-        page_reports_sub: "Overview of recorded time.",
-        page_reports_title: "Reports",
+        employees_title: "Employees",
+        employees_sub: "Manage employees and roles.",
+        employees_new: "New employee",
+        employees_save: "Save employee",
+        employees_list: "Employee list",
 
-        page_settings_sub: "Configuration of the app.",
-        page_settings_title: "Settings",
+        col_name: "Name",
+        col_phone: "Phone",
+        col_email: "Email",
+        col_address: "Address",
+        col_role: "Role",
 
-        reports_placeholder: "The reporting module will be added later.",
-        settings_placeholder: "Later you can adjust advanced settings here.",
+        label_name: "Name",
+        label_phone: "Phone",
+        label_email: "Email",
+        label_address: "Address",
+        label_role: "Role",
 
-        role_admin: "Admin",
-        role_employee: "Employee"
+        role_employee: "Employee",
+        role_admin: "Admin"
     },
 
     de: {
         app_title: "GreenTime Pro",
 
-        btn_start: "Start",
-        btn_stop: "Stopp",
-
-        col_address: "Adresse",
-        col_email: "E-Mail",
-        col_log_duration: "Dauer",
-        col_log_time: "Zeitpunkt",
-        col_name: "Name",
-        col_phone: "Telefon",
-        col_role: "Rolle",
-
-        customers_list: "Kundenübersicht",
-        customers_new: "Neuer Kunde",
-        customers_save: "Kunden speichern",
-        customers_sub: "Erstellen und pflegen Sie Ihre Kundenliste.",
-        customers_title: "Kunden",
-
-        employees_list: "Mitarbeiterliste",
-        employees_new: "Neuer Mitarbeiter",
-        employees_save: "Mitarbeiter speichern",
-        employees_sub: "Behalten Sie Mitarbeiter und Rollen im Überblick.",
-        employees_title: "Mitarbeiter",
-
-        menu_customers: "Kunden",
         menu_dashboard: "Zeiterfassung",
+        menu_customers: "Kunden",
         menu_employees: "Mitarbeiter",
         menu_logs: "Protokolle",
         menu_reports: "Berichte",
         menu_settings: "Einstellungen",
 
-        page_dashboard_sub: "Zeit für Aufgaben schnell starten und stoppen.",
         page_dashboard_title: "Zeiterfassung",
+        page_dashboard_sub: "Zeit für Aufgaben schnell starten und stoppen.",
+        btn_start: "Start",
+        btn_stop: "Stopp",
 
-        page_logs_sub: "Verlauf der erfassten Arbeitszeit.",
-        page_logs_title: "Protokolle",
+        customers_title: "Kunden",
+        customers_sub: "Erstellen und pflegen Sie Ihre Kundenliste.",
+        customers_new: "Neuer Kunde",
+        customers_save: "Kunden speichern",
+        customers_list: "Kundenübersicht",
 
-        page_reports_sub: "Übersicht über erfasste Zeiten.",
-        page_reports_title: "Berichte",
+        employees_title: "Mitarbeiter",
+        employees_sub: "Verwalten Sie Mitarbeiter und Rollen.",
+        employees_new: "Neuer Mitarbeiter",
+        employees_save: "Mitarbeiter speichern",
+        employees_list: "Mitarbeiterübersicht",
 
-        page_settings_sub: "Konfiguration der Anwendung.",
-        page_settings_title: "Einstellungen",
+        col_name: "Name",
+        col_phone: "Telefon",
+        col_email: "E-Mail",
+        col_address: "Adresse",
+        col_role: "Rolle",
 
-        reports_placeholder: "Das Berichtsmodul wird später hinzugefügt.",
-        settings_placeholder: "Hier können Sie später erweiterte Einstellungen anpassen.",
+        label_name: "Name",
+        label_phone: "Telefon",
+        label_email: "E-Mail",
+        label_address: "Adresse",
+        label_role: "Rolle",
 
-        role_admin: "Admin",
-        role_employee: "Mitarbeiter"
+        role_employee: "Mitarbeiter",
+        role_admin: "Admin"
     },
 
     lt: {
         app_title: "GreenTime Pro",
 
-        btn_start: "Pradėti",
-        btn_stop: "Stabdyti",
-
-        col_address: "Adresas",
-        col_email: "El. paštas",
-        col_log_duration: "Trukmė",
-        col_log_time: "Laikas",
-        col_name: "Vardas",
-        col_phone: "Telefonas",
-        col_role: "Rolė",
-
-        customers_list: "Klientų sąrašas",
-        customers_new: "Naujas klientas",
-        customers_save: "Išsaugoti klientą",
-        customers_sub: "Kurti ir tvarkyti klientų sąrašą.",
-        customers_title: "Klientai",
-
-        employees_list: "Darbuotojų sąrašas",
-        employees_new: "Naujas darbuotojas",
-        employees_save: "Išsaugoti darbuotoją",
-        employees_sub: "Stebėti darbuotojus ir jų roles.",
-        employees_title: "Darbuotojai",
-
-        menu_customers: "Klientai",
         menu_dashboard: "Laiko sekimas",
+        menu_customers: "Klientai",
         menu_employees: "Darbuotojai",
         menu_logs: "Žurnalai",
         menu_reports: "Ataskaitos",
         menu_settings: "Nustatymai",
 
-        page_dashboard_sub: "Greitai pradėkite ir sustabdykite užduočių laiką.",
         page_dashboard_title: "Laiko sekimas",
+        page_dashboard_sub: "Greitai pradėkite ir sustabdykite užduočių laiką.",
+        btn_start: "Startas",
+        btn_stop: "Stop",
 
-        page_logs_sub: "Užregistruoto darbo laiko istorija.",
-        page_logs_title: "Žurnalai",
+        customers_title: "Klientai",
+        customers_sub: "Kurti ir tvarkyti klientų sąrašą.",
+        customers_new: "Naujas klientas",
+        customers_save: "Išsaugoti klientą",
+        customers_list: "Klientų sąrašas",
 
-        page_reports_sub: "Užregistruoto laiko apžvalga.",
-        page_reports_title: "Ataskaitos",
+        employees_title: "Darbuotojai",
+        employees_sub: "Stebėti darbuotojus ir roles.",
+        employees_new: "Naujas darbuotojas",
+        employees_save: "Išsaugoti darbuotoją",
+        employees_list: "Darbuotojų sąrašas",
 
-        page_settings_sub: "Programos konfigūravimas.",
-        page_settings_title: "Nustatymai",
+        col_name: "Vardas",
+        col_phone: "Telefonas",
+        col_email: "El. paštas",
+        col_address: "Adresas",
+        col_role: "Rolė",
 
-        reports_placeholder: "Ataskaitų modulis bus pridėtas vėliau.",
-        settings_placeholder: "Vėliau čia galėsite koreguoti išplėstinius nustatymus.",
+        label_name: "Vardas",
+        label_phone: "Telefonas",
+        label_email: "El. paštas",
+        label_address: "Adresas",
+        label_role: "Rolė",
 
-        role_admin: "Administratorius",
-        role_employee: "Darbuotojas"
+        role_employee: "Darbuotojas",
+        role_admin: "Administratorius"
     }
 };
 
 let currentLang = "da";
 
 function t(key) {
-    return translations[currentLang]?.[key] || translations["da"][key] || key;
-}
-
+    return translations[currentLang]?.[key] || translations.da[key] || key;
 }
 
 
