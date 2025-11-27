@@ -74,12 +74,33 @@
 ================================================ -->
 <div class="content-wrapper">
 
-    <!-- ==============================================
-         SIDE – TIDSREGISTRERING (DASHBOARD)
-    ================================================ -->
-    <section id="dashboardPage" class="page active">
-        <h2>Tidsregistrering</h2>
-    </section>
+  <!-- ======================================================
+     SIDE – TIDSREGISTRERING
+====================================================== -->
+<section id="timereg" class="page active">
+
+    <!-- Overskrift -->
+    <h2 data-i18n="timereg_title">Tidsregistrering</h2>
+
+    <!-- Kunde dropdown -->
+    <div class="timereg-section">
+        <label data-i18n="timereg_customer_label">Kunde vi arbejder hos</label>
+
+        <select id="timeregCustomerSelect" class="dropdown">
+            <option value="" data-i18n="timereg_choose_customer">
+                Vælg en kunde
+            </option>
+        </select>
+    </div>
+
+    <!-- Display af tid -->
+    <div class="timereg-display">
+        <span id="timeregDisplayText" data-i18n="timereg_today_time">
+            Tid i dag: 0:00
+        </span>
+    </div>
+
+</section>
 
     <!-- ==============================================
          SIDE – KUNDER
