@@ -39,25 +39,34 @@
     </div>
 </header>
 
-<!-- ==============================================
-     SIDEBAR (GENSKABT)
-================================================ -->
-<div class="sidebar">
+<!-- ======================================================
+     SIDEBAR – VENSTRE MENU
+====================================================== -->
+<nav id="sidebar" class="sidebar">
+    
+    <!-- Logo -->
     <div class="sidebar-logo">
         <div class="logo-main">GREENTIME PRO</div>
         <div class="logo-sub">Smart tidsregistrering</div>
     </div>
 
-    <nav class="sidebar-menu">
-        <button class="menu-btn" data-page="dashboard">Tidsregistrering</button>
-        <button class="menu-btn" data-page="customers">Kunder</button>
-        <button class="menu-btn" data-page="employees">Medarbejdere</button>
-        <button class="menu-btn" data-page="planning">Planlægning</button>
-        <button class="menu-btn" data-page="logs">Logs</button>
-        <button class="menu-btn" data-page="reports">Rapporter</button>
-        <button class="menu-btn" data-page="settings">Indstillinger</button>
-    </nav>
-</div>
+    <!-- Menu -->
+    <div class="sidebar-menu">
+        <a href="#dashboardPage" data-page="dashboardPage"><i class="ri-timer-line"></i> <span data-i18n="menu_dashboard">Tidsregistrering</span></a>
+        <a href="#customersPage" data-page="customersPage"><i class="ri-user-3-line"></i> <span data-i18n="menu_customers">Kunder</span></a>
+        <a href="#employeesPage" data-page="employeesPage"><i class="ri-team-line"></i> <span data-i18n="menu_employees">Medarbejdere</span></a>
+        <a href="#planningPage" data-page="planningPage"><i class="ri-calendar-event-line"></i> <span data-i18n="menu_planning">Planlægning</span></a>
+        <a href="#logsPage" data-page="logsPage"><i class="ri-file-list-line"></i> <span data-i18n="menu_logs">Logs</span></a>
+        <a href="#reportsPage" data-page="reportsPage"><i class="ri-bar-chart-2-line"></i> <span data-i18n="menu_reports">Rapporter</span></a>
+        <a href="#settingsPage" data-page="settingsPage"><i class="ri-settings-3-line"></i> <span data-i18n="menu_settings">Indstillinger</span></a>
+    </div>
+
+</nav>
+
+<!-- Mobil-hamburger -->
+<button class="menu-toggle-mobile" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 
 <!-- ==============================================
      SIDE-INDHOLD WRAPPER
