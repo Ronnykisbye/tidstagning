@@ -349,28 +349,51 @@ function updateThemeButtonIcon() {
 }
 
 /* ======================================================
-   AFSNIT 05 – NAVIGATION & SIDEBAR
-   ====================================================== */
+   AFSNIT 05 – NAVIGATION & SIDEBAR (RETTET VERSION)
+   Denne version sikrer:
+   - Menu-knapper skifter side korrekt
+   - Aktiv menu får korrekt .active
+   - pageTitle skifter efter sprog
+   - Sidebar virker på mobil (open/close)
+   - Ingen fejl der stopper sprogsystemet
+====================================================== */
 
 function initSidebarNavigation() {
     const menuButtons = document.querySelectorAll(".menu-item");
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("menuToggle");
 
+    if (menuButtons.length === 0) {
+        console.error("Ingen menu-knapper fundet. Tjek HTML-strukturen.");
+        return;
+    }
+
+    /* --- Klik på menupunkt skifter side --- */
     menuButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             const pageId = btn.dataset.page;
-            if (!pageId) return;
+
+            if (!pageId) {
+                console.error("Menu-knap uden data-page:", btn);
+                return;
+            }
+
+            // Skift side
             showPage(pageId);
 
+            // Aktiv menu-styling
             menuButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
 
+            // Opdater titel i topbar
             updatePageTitleFromActiveMenu();
+
+            // Luk sidebar på mobil
             closeSidebarOnMobile();
         });
     });
 
-    const toggleBtn = document.getElementById("menuToggle");
-    const sidebar = document.getElementById("sidebar");
+    /* --- Mobil-toggle (☰ knap) --- */
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener("click", () => {
             sidebar.classList.toggle("open");
@@ -378,29 +401,46 @@ function initSidebarNavigation() {
     }
 }
 
+
+/* ======================================================
+   Viser en side og skjuler andre
+====================================================== */
 function showPage(pageId) {
-    currentPageId = pageId;
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.toggle("visible", page.id === pageId);
+    const pages = document.querySelectorAll(".page");
+
+    pages.forEach(page => {
+        const isVisible = (page.id === pageId);
+        page.classList.toggle("visible", isVisible);
     });
 }
 
+
+/* ======================================================
+   Opdaterer teksten i topbar midten (pageTitle)
+====================================================== */
 function updatePageTitleFromActiveMenu() {
     const active = document.querySelector(".menu-item.active");
     const pageTitleEl = document.getElementById("pageTitle");
-    if (!pageTitleEl || !active) return;
 
-    const i18nKey = active.dataset.i18n;
-    if (i18nKey) {
-        pageTitleEl.textContent = t(i18nKey);
+    if (!active || !pageTitleEl) return;
+
+    const key = active.dataset.i18n;
+
+    if (key) {
+        pageTitleEl.textContent = t(key);  // bruger sprog-systemet
     } else {
         pageTitleEl.textContent = active.textContent.trim();
     }
 }
 
+
+/* ======================================================
+   Luk sidebar når man klikker på menu i mobil-visning
+====================================================== */
 function closeSidebarOnMobile() {
     const sidebar = document.getElementById("sidebar");
     if (!sidebar) return;
+
     if (window.innerWidth <= 880) {
         sidebar.classList.remove("open");
     }
