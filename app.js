@@ -25,9 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
     initLanguageButtons();
     initThemeToggle();
     initTimer();
+
+    /* Pre-install demo data */
+    installDefaultCustomers();
+    installDefaultEmployees();
+
+    /* Init forms AFTER demo data is loaded */
     initCustomerForm();
     initEmployeeForm();
+
+    /* Render tables immediately */
+    renderCustomers();
+    renderEmployees();
 });
+
 
 /* ======================================================
    AFSNIT 03 – SPROG
