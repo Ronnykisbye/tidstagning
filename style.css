@@ -254,21 +254,30 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 05 – LAYOUT: SIDEBAR + CONTENT
-   ====================================================== */
+   AFSNIT 05 – LAYOUT: SIDEBAR + CONTENT (RETTET VERSION)
+   Denne version sikrer:
+   - Sidebar står KUN til venstre
+   - 2-kolonne GRID virker i desktop
+   - Sidebar opfører sig korrekt i mobil (open/close)
+   - Indhold fylder resten af skærmen
+   - Ingen overlap, ingen flimmer
+====================================================== */
 
 .layout {
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr);
     min-height: calc(100vh - 60px);
+    position: relative;
 }
 
 /* Sidebar */
-
 .sidebar {
     background: linear-gradient(to bottom, #020617, #020617);
     border-right: 1px solid rgba(15, 23, 42, 0.9);
     padding: 20px 14px;
+    position: relative;
+    z-index: 10;
+    height: 100%;
 }
 
 .sidebar-nav {
@@ -307,18 +316,22 @@ body {
     box-shadow: 0 0 18px rgba(59, 130, 246, 0.9);
 }
 
-/* Content */
-
+/* Content wrapper */
 .content {
     padding: 24px 32px 40px;
     background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.08), transparent 55%),
                 radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 60%),
                 var(--bg-body);
+    min-height: 100%;
 }
 
+
+
+
 /* ======================================================
-   AFSNIT 06 – SIDER & KORT
-   ====================================================== */
+   AFSNIT 06 – PAGE SECTIONS & CARDS
+   Sikrer side-skift virker, kun én side vises
+====================================================== */
 
 .page {
     display: none;
@@ -344,6 +357,7 @@ body {
     color: var(--text-muted);
 }
 
+/* Card komponent */
 .card {
     background: var(--bg-card);
     border-radius: 18px;
@@ -352,18 +366,19 @@ body {
     border: 1px solid rgba(15, 23, 42, 0.9);
 }
 
-/* Side-layout for formular + liste */
-
+/* Side-layout (formular + liste) */
 .page-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
     gap: 20px;
-    align-items: flex-start;
 }
 
+
+
+
 /* ======================================================
-   AFSNIT 07 – TIDSREGISTRERING / TIMER-KORT
-   ====================================================== */
+   AFSNIT 07 – TIMER VISNING (STABIL VERSION)
+====================================================== */
 
 .timer-card {
     max-width: 520px;
@@ -395,6 +410,51 @@ body {
     display: flex;
     gap: 12px;
     justify-content: center;
+}
+
+
+
+
+/* ======================================================
+   AFSNIT 05 – MOBIL-VERSION (grid → 1 kolonne)
+   OBS: Denne SKAL ligge nederst for at virke korrekt
+====================================================== */
+
+@media (max-width: 880px) {
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        inset: 56px 0 auto 0;
+        transform: translateX(-101%);
+        transition: transform 0.2s ease-out;
+        max-width: 260px;
+        z-index: 20;
+        height: calc(100vh - 56px);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+    }
+
+    .topbar-center {
+        display: none;
+    }
+
+    .content {
+        padding: 18px 16px 32px;
+    }
+
+    .page-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ======================================================
