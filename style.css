@@ -1,3 +1,59 @@
+/* ======================================================
+   AFSNIT 01 – FARVETEMA (LIGHT + DARK MODE)
+====================================================== */
+
+/* LIGHT MODE (DEFAULT) */
+:root {
+    --bg-body: #f5f7fa;
+    --bg-topbar: rgba(255, 255, 255, 0.65);
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+
+    --text-strong: #0f172a;
+    --text-normal: #1e293b;
+    --text-muted: #64748b;
+
+    --menu-active-bg: linear-gradient(90deg, #5b7fff, #7aa1ff);
+    --menu-hover-bg: rgba(99, 102, 241, 0.15);
+    --menu-text: #0f172a;
+
+    --btn-primary-bg: #4f46e5;
+    --btn-primary-text: #ffffff;
+
+    --calendar-empty: rgba(0,0,0,0.05);
+    --calendar-medium: #fde047;
+    --calendar-busy: #f87171;
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+    --bg-body: #0b1623;
+    --bg-topbar: rgba(15, 23, 42, 0.70);
+    --bg-sidebar: #0f172a;
+    --bg-card: #111c2f;
+
+    --text-strong: #e2e8f0;
+    --text-normal: #cbd5e1;
+    --text-muted: #94a3b8;
+
+    --menu-active-bg: linear-gradient(90deg, #4c6ef5, #7b8eff);
+    --menu-hover-bg: rgba(255, 255, 255, 0.08);
+    --menu-text: #e2e8f0;
+
+    --btn-primary-bg: #4c6ef5;
+    --btn-primary-text: #ffffff;
+
+    --calendar-empty: rgba(255,255,255,0.06);
+    --calendar-medium: #facc15;
+    --calendar-busy: #ef4444;
+}
+
+/* Fælles styling */
+body {
+    background: var(--bg-body);
+    color: var(--text-normal);
+    transition: background 0.25s ease, color 0.25s ease;
+}
 
 
 /* ======================================================
