@@ -1,5 +1,44 @@
 
 /* ======================================================
+   AFSNIT 01 – LAYOUT WRAPPER & TOP SPACING
+   Sikrer at sidebar + content ligger korrekt
+====================================================== */
+
+/* Wrapper for hele layoutet */
+.layout {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Content får afstand fra sidebar og topbar */
+.content {
+    flex: 1;
+    margin-left: 260px; /* matcher sidebar width */
+    padding: 80px 60px 60px; /* 80px så topbar ikke overlapper */
+    min-height: 100vh;
+    background: var(--bg);
+    transition: background 0.3s ease, margin-left 0.3s ease;
+}
+
+/* Sikrer topbaren ikke overlapper indholdet */
+.topbar {
+    height: 60px;
+}
+
+/* Gør siderne pæne i mørk/lys mode */
+.page {
+    margin-top: 10px;
+    display: none;
+}
+
+.page.visible {
+    display: block;
+}
+
+
+
+
+/* ======================================================
    AFSNIT 02 – SIDEBAR (KORREKT OG ENKELT)
 ====================================================== */
 
