@@ -1,3 +1,66 @@
+
+/* ======================================================
+   AFSNIT 02 – LAYOUT: SIDEBAR + CONTENT
+====================================================== */
+
+.sidebar {
+    width: 250px;
+    background: var(--bg-card);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 30px 25px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    z-index: 10;
+}
+
+/* Menu-punkter */
+.sidebar-menu {
+    margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.sidebar-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
+
+.sidebar-menu a:hover {
+    opacity: 0.7;
+}
+
+.sidebar-menu a.active {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* CONTENT AREA */
+.content {
+    margin-left: 250px; /* samme som sidebar width */
+    padding: 40px 50px;
+    min-height: 100vh;
+    background: var(--bg);
+    transition: margin-left 0.3s ease, background 0.3s ease;
+}
+
+/* Sikrer at .page virker korrekt */
+.page {
+    display: none;
+}
+
+.page.visible {
+    display: block;
+}
+
+
+
 /* ======================================================
    AFSNIT 04 – SIDEBAR
    ====================================================== */
