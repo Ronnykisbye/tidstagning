@@ -403,7 +403,7 @@
 
 
 /* ======================================================
-   AFSNIT 07 – TIMER VISNING (STABIL VERSION)
+   AFSNIT 07 – TIMER VISNING (LYS/MØRK MODE KORREKT)
 ====================================================== */
 
 .timer-card {
@@ -425,11 +425,15 @@
     font-size: 2rem;
     letter-spacing: 0.1em;
     text-align: center;
-    background: #020617;
-    color: #e5e7eb;
+
+    /* 🔥 BRUG VARIABLER I STEDET FOR HARD-CODED FARVER */
+    background: var(--bg-card);
+    color: var(--text-strong);
+
+    /* Shadow tilpasses mode */
     box-shadow:
-        0 22px 45px rgba(15, 23, 42, 0.95),
-        0 0 0 1px rgba(15, 23, 42, 0.9);
+        0 18px 38px rgba(0, 0, 0, 0.22),
+        0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 .timer-buttons {
