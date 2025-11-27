@@ -52,34 +52,60 @@
 }
 
 /* ======================================================
-   AFSNIT 02 – GENERELT LAYOUT
-   ====================================================== */
+   AFSNIT 02 – CSS VARIABLER (LYS / MØRK MODE)
+   Disse farver giver et rent, moderne og tydeligt UI
+====================================================== */
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+/* ---------- Dark Mode (default) ---------- */
+:root {
+    /* Baggrund */
+    --bg-body: #0b1220;
+    --bg-card: #0f172a;
+    --bg-sidebar: #0a0f1a;
+
+    /* Tekst */
+    --text-strong: #f1f5f9;
+    --text-muted: #94a3b8;
+
+    /* Neon accenter */
+    --neon-blue: #3b82f6;
+    --neon-purple: #8b5cf6;
+    --neon-green: #22c55e;
+
+    /* Skygger */
+    --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.45);
+    --shadow-card: 0 18px 45px rgba(0, 0, 0, 0.65);
+
+    /* Knapper */
+    --btn-bg: #1e293b;
+    --btn-text: #e2e8f0;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
-    color: var(--text);
+/* ---------- Light Mode ---------- */
+[data-theme="light"] {
+    /* Baggrund */
+    --bg-body: #f4f7fb;
+    --bg-card: #ffffff;
+    --bg-sidebar: #e6ecf5;
+
+    /* Tekst */
+    --text-strong: #0f172a;
+    --text-muted: #475569;
+
+    /* Neon accenter */
+    --neon-blue: #2563eb;      /* lidt mørkere, så det fungerer på lys baggrund */
+    --neon-purple: #7c3aed;
+    --neon-green: #059669;
+
+    /* Skygger */
+    --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.15);
+    --shadow-card: 0 14px 28px rgba(0, 0, 0, 0.18);
+
+    /* Knapper */
+    --btn-bg: #e2e8f0;
+    --btn-text: #1e293b;
 }
 
-body {
-    background-color: var(--bg-body);
-}
-
-.app-shell {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
 
 /* ======================================================
    AFSNIT 03 – TOPBAR
