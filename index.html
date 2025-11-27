@@ -1,50 +1,28 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="da" data-theme="dark">
 <head>
-    <!-- ======================================================
-         AFSNIT 01 – META & TEMA-INITIALISERING (ANTI-BLINK)
-    ======================================================= -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenTime Pro</title>
-
-    <!-- Sætter data-theme FØR CSS loader → ingen blink -->
-    <script>
-        (function () {
-            var stored = null;
-            try {
-                stored = JSON.parse(localStorage.getItem("gtp_theme"));
-            } catch (e) {}
-
-            var theme = (stored === "light" || stored === "dark") ? stored : "dark";
-            document.documentElement.setAttribute("data-theme", theme);
-        })();
-    </script>
-
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- ======================================================
-     AFSNIT 02 – APP WRAPPER
-======================================================= -->
-<div class="app-shell">
-
-       <!-- ==================================================
-         AFSNIT 03 – TOPBAR
-    =================================================== -->
-    <header class="topbar">
+<!-- ==============================================
+     TOPBAR
+================================================ -->
+<header class="topbar">
     <div class="topbar-left">
-        <button class="menu-toggle" id="menuToggle">☰</button>
-
+        <button id="menuToggle" class="menu-toggle">☰</button>
         <div class="logo-text">
-            <span class="logo-main" data-i18n="app_title">GREENTIME PRO</span>
-            <span class="logo-sub" data-i18n="app_subtitle">Smart tidsregistrering</span>
+            <span class="logo-main">GREENTIME PRO</span>
+            <span class="logo-sub">Smart tidsregistrering</span>
         </div>
     </div>
 
     <div class="topbar-center">
-        <h1 id="pageTitle">TIDSREGISTRERING</h1>
+        <h1 id="pageTitle">Tidsregistrering</h1>
     </div>
 
     <div class="topbar-right">
@@ -61,11 +39,9 @@
     </div>
 </header>
 
-
-
-   <!-- ======================================================
-     AFSNIT 03 – SIDEBAR (GENSKABT)
-====================================================== -->
+<!-- ==============================================
+     SIDEBAR (GENSKABT)
+================================================ -->
 <div class="sidebar">
     <div class="sidebar-logo">
         <div class="logo-main">GREENTIME PRO</div>
@@ -73,342 +49,136 @@
     </div>
 
     <nav class="sidebar-menu">
-        <button class="menu-btn" data-page="dashboard">
-            <span data-i18n="nav_dashboard">Tidsregistrering</span>
-        </button>
-
-        <button class="menu-btn" data-page="customers">
-            <span data-i18n="nav_customers">Kunder</span>
-        </button>
-
-        <button class="menu-btn" data-page="employees">
-            <span data-i18n="nav_employees">Medarbejdere</span>
-        </button>
-
-        <button class="menu-btn" data-page="planning">
-            <span data-i18n="nav_planning">Planlægning</span>
-        </button>
-
-        <button class="menu-btn" data-page="logs">
-            <span data-i18n="nav_logs">Logs</span>
-        </button>
-
-        <button class="menu-btn" data-page="reports">
-            <span data-i18n="nav_reports">Rapporter</span>
-        </button>
-
-        <button class="menu-btn" data-page="settings">
-            <span data-i18n="nav_settings">Indstillinger</span>
-        </button>
+        <button class="menu-btn" data-page="dashboard">Tidsregistrering</button>
+        <button class="menu-btn" data-page="customers">Kunder</button>
+        <button class="menu-btn" data-page="employees">Medarbejdere</button>
+        <button class="menu-btn" data-page="planning">Planlægning</button>
+        <button class="menu-btn" data-page="logs">Logs</button>
+        <button class="menu-btn" data-page="reports">Rapporter</button>
+        <button class="menu-btn" data-page="settings">Indstillinger</button>
     </nav>
 </div>
 
-
-            <!-- ==============================================
-                 SIDE 01 – TIDSREGISTRERING (DASHBOARD)
-            =============================================== -->
-            <section id="dashboardPage" class="page visible">
-                <div class="page-header">
-                    <h2 data-i18n="page_dashboard_title">Tidsregistrering</h2>
-                    <p class="page-sub" data-i18n="page_dashboard_sub">
-                        Start og stop tid for opgaver – hurtigt overblik.
-                    </p>
-                </div>
-
-                <div class="card timer-card">
-                    <div class="timer-display-wrapper">
-                        <div class="timer-display" id="timerDisplay">00:00:00</div>
-                    </div>
-                    <div class="timer-buttons">
-                        <button id="timerStartBtn" class="btn btn-success">
-                            <span data-i18n="btn_start">Start</span>
-                        </button>
-                        <button id="timerStopBtn" class="btn btn-danger">
-                            <span data-i18n="btn_stop">Stop</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ======================================================
-     AFSNIT – side 2 KUNDER (HELE AFSNIT udskiftes)
-====================================================== -->
-
-<div id="customersPage" class="page">
-
-    <div class="page-header">
-        <h2 data-i18n="customers_title">Kunder</h2>
-        <p data-i18n="customers_sub">Opret og vedligehold din kundeliste.</p>
-    </div>
-
-    <div class="page-grid">
-
-        <!-- Venstre box – Ny kunde -->
-        <div class="card">
-            <h3 data-i18n="customers_new">Ny kunde</h3>
-
-            <form id="customerForm">
-
-                <label data-i18n="col_name">Navn</label>
-                <input id="customerName" name="customerName" type="text" required>
-
-                <label data-i18n="col_phone">Telefon</label>
-                <input id="customerPhone" name="customerPhone" type="text">
-
-                <label data-i18n="col_email">Email</label>
-                <input id="customerEmail" name="customerEmail" type="email">
-
-                <label data-i18n="col_address">Adresse</label>
-                <input id="customerAddress" name="customerAddress" type="text">
-
-                <button type="submit" class="btn-primary" data-i18n="customers_save">Gem kunde</button>
-            </form>
-        </div>
-
-        <!-- Højre box – Liste over kunder -->
-        <div class="card">
-            <h3 data-i18n="customers_list">Oversigt over kunder</h3>
-
-            <table class="customer-table">
-                <thead>
-                    <tr>
-                        <th data-i18n="col_name">Navn</th>
-                        <th data-i18n="col_phone">Telefon</th>
-                        <th data-i18n="col_email">Email</th>
-                        <th data-i18n="col_address">Adresse</th>
-                    </tr>
-                </thead>
-
-                <tbody id="customerTableBody">
-                    <!-- Data indsættes automatisk via JS -->
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-</div>
-
-            <!-- ======================================================
-     AFSNIT – side 3 MEDARBEJDERE (HELE AFSNIT udskiftes)
-====================================================== -->
-
-<div id="employeesPage" class="page">
-
-    <div class="page-header">
-        <h2 data-i18n="employees_title">Medarbejdere</h2>
-        <p data-i18n="employees_sub">Hold styr på medarbejdere og roller.</p>
-    </div>
-
-    <div class="page-grid">
-
-        <!-- Venstre box – Ny medarbejder -->
-        <div class="card">
-            <h3 data-i18n="employees_new">Ny medarbejder</h3>
-
-            <form id="employeeForm">
-
-                <label data-i18n="col_name">Navn</label>
-                <input id="employeeName" name="employeeName" type="text" required>
-
-                <label data-i18n="col_email">Email</label>
-                <input id="employeeEmail" name="employeeEmail" type="email">
-
-                <label data-i18n="col_role">Rolle</label>
-                <select id="employeeRole" name="employeeRole">
-                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
-                    <option value="admin" data-i18n="role_admin">Administrator</option>
-                </select>
-
-                <button type="submit" class="btn-primary" data-i18n="employees_save">Gem medarbejder</button>
-            </form>
-        </div>
-
-        <!-- Højre box – Liste over medarbejdere -->
-        <div class="card">
-            <h3 data-i18n="employees_list">Liste over medarbejdere</h3>
-
-            <table class="employee-table">
-                <thead>
-                    <tr>
-                        <th data-i18n="col_name">Navn</th>
-                        <th data-i18n="col_email">Email</th>
-                        <th data-i18n="col_role">Rolle</th>
-                    </tr>
-                </thead>
-
-                <tbody id="employeeTableBody">
-                    <!-- Data indsættes automatisk via JS -->
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-</div>
-
-            
-  
-     <!-- ==============================================
-     SIDE – PLANLÆGNING
+<!-- ==============================================
+     SIDE-INDHOLD WRAPPER
 ================================================ -->
-<section id="planningPage" class="page">
-
-    <!-- Overskrift -->
-    <div class="page-header">
-        <h2 data-i18n="page_planning_title">Planlægning</h2>
-        <p class="page-sub" data-i18n="page_planning_sub">
-            Planlæg kommende opgaver, aftaler og medarbejder-ressourcer.
-        </p>
-    </div>
-
-    <!-- Planlægningsformular -->
-    <div class="card planning-form">
-
-        <h3 class="card-title" data-i18n="planning_new_task">Ny planlagt opgave</h3>
-
-        <div class="form-group">
-            <label data-i18n="planning_customer">Kunde</label>
-            <select id="planningCustomer"></select>
-        </div>
-
-        <div class="form-group">
-            <label data-i18n="planning_date">Dato</label>
-            <input type="date" id="planningDate">
-        </div>
-
-        <div class="form-group">
-            <label data-i18n="planning_time">Tidspunkt</label>
-            <select id="planningTime">
-                <!-- 30-min intervaller -->
-                <option value="08:00">08:00</option>
-                <option value="08:30">08:30</option>
-                <option value="09:00">09:00</option>
-                <option value="09:30">09:30</option>
-                <option value="10:00">10:00</option>
-                <option value="10:30">10:30</option>
-                <option value="11:00">11:00</option>
-                <option value="11:30">11:30</option>
-                <option value="12:00">12:00</option>
-                <option value="12:30">12:30</option>
-                <option value="13:00">13:00</option>
-                <option value="13:30">13:30</option>
-                <option value="14:00">14:00</option>
-                <option value="14:30">14:30</option>
-                <option value="15:00">15:00</option>
-                <option value="15:30">15:30</option>
-                <option value="16:00">16:00</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label data-i18n="planning_employee">Medarbejder</label>
-            <select id="planningEmployee"></select>
-        </div>
-
-        <div class="form-group">
-            <label data-i18n="planning_description">Beskrivelse</label>
-            <textarea id="planningDescription" rows="3"></textarea>
-        </div>
-
-        <button id="addPlanningTask" class="btn-primary" data-i18n="planning_add_btn">
-            Tilføj opgave
-        </button>
-    </div>
-
-    <!-- Kalender og opgaver -->
-    <div class="card planning-calendar">
-
-        <!-- Kalender top med månedsskift -->
-        <div class="calendar-header">
-            <button id="prevMonth" class="calendar-nav">⟵</button>
-            <h3 id="calendarMonth"></h3>
-            <button id="nextMonth" class="calendar-nav">⟶</button>
-        </div>
-
-        <!-- Kalender gitter -->
-        <div id="calendarGrid" class="calendar-grid">
-            <!-- udfyldes via JS -->
-        </div>
-    </div>
-
-    <!-- Dagsoversigt -->
-    <div class="card planning-day-tasks">
-        <h3 data-i18n="planning_day_tasks">Opgaver denne dag</h3>
-        <ul id="dayTaskList"></ul>
-    </div>
-
-</section>
+<div class="content-wrapper">
 
     <!-- ==============================================
-                 SIDE 04 – LOGS
-            =============================================== -->
-            <section id="logsPage" class="page">
-                <div class="page-header">
-                    <h2 data-i18n="page_logs_title">Logs</h2>
-                    <p class="page-sub" data-i18n="page_logs_sub">
-                        Historik over registreret arbejdstid.
-                    </p>
-                </div>
+         SIDE – TIDSREGISTRERING (DASHBOARD)
+    ================================================ -->
+    <section id="dashboardPage" class="page active">
+        <h2>Tidsregistrering</h2>
+    </section>
 
-                <div class="card">
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th data-i18n="col_log_time">Tidspunkt</th>
-                                    <th data-i18n="col_log_duration">Varighed</th>
-                                </tr>
-                            </thead>
-                            <tbody id="logsTableBody">
-                                <!-- udfyldes via JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
+    <!-- ==============================================
+         SIDE – KUNDER
+    ================================================ -->
+    <section id="customersPage" class="page">
+        <h2>Kunder</h2>
+        <div id="customerList"></div>
+        <button id="addCustomerBtn">Tilføj kunde</button>
+    </section>
 
-            <!-- ==============================================
-                 SIDE 05 – RAPPORTER
-            =============================================== -->
-            <section id="reportsPage" class="page">
-                <div class="page-header">
-                    <h2 data-i18n="page_reports_title">Rapporter</h2>
-                    <p class="page-sub" data-i18n="page_reports_sub">
-                        Fremtidig placering til grafer og rapporter.
-                    </p>
-                </div>
+    <!-- ==============================================
+         SIDE – MEDARBEJDERE
+    ================================================ -->
+    <section id="employeesPage" class="page">
+        <h2>Medarbejdere</h2>
+        <div id="employeeList"></div>
+        <button id="addEmployeeBtn">Tilføj medarbejder</button>
+    </section>
 
-                <div class="card placeholder-card">
-                    <p data-i18n="reports_placeholder">
-                        Her kan du senere tilføje dashboards, grafer og eksport.
-                    </p>
-                </div>
-            </section>
+    <!-- ==============================================
+         SIDE – PLANLÆGNING (KORREKT VERSION)
+    ================================================ -->
+    <section id="planningPage" class="page">
 
-            <!-- ==============================================
-                 SIDE 06 – INDSTILLINGER
-            =============================================== -->
-            <section id="settingsPage" class="page">
-                <div class="page-header">
-                    <h2 data-i18n="page_settings_title">Indstillinger</h2>
-                    <p class="page-sub" data-i18n="page_settings_sub">
-                        Konfiguration af appen.
-                    </p>
-                </div>
+        <div class="page-header">
+            <h2>Planlægning</h2>
+            <p>Planlæg kommende opgaver, aftaler og medarbejder-ressourcer.</p>
+        </div>
 
-                <div class="card placeholder-card">
-                    <p data-i18n="settings_placeholder">
-                        Her kan du senere justere avancerede indstillinger.
-                    </p>
-                </div>
-            </section>
+        <div class="card planning-form">
+            <h3>Ny planlagt opgave</h3>
 
-        </main>
-    </div>
+            <div class="form-group">
+                <label>Kunde</label>
+                <select id="planningCustomer"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Dato</label>
+                <input type="date" id="planningDate">
+            </div>
+
+            <div class="form-group">
+                <label>Tidspunkt</label>
+                <select id="planningTime">
+                    <option>08:00</option><option>08:30</option>
+                    <option>09:00</option><option>09:30</option>
+                    <option>10:00</option><option>10:30</option>
+                    <option>11:00</option><option>11:30</option>
+                    <option>12:00</option><option>12:30</option>
+                    <option>13:00</option><option>13:30</option>
+                    <option>14:00</option><option>14:30</option>
+                    <option>15:00</option><option>15:30</option>
+                    <option>16:00</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Medarbejder</label>
+                <select id="planningEmployee"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Beskrivelse</label>
+                <textarea id="planningDescription"></textarea>
+            </div>
+
+            <button id="addPlanningTask" class="btn-primary">Tilføj opgave</button>
+        </div>
+
+        <div class="card planning-calendar">
+            <div class="calendar-header">
+                <button id="prevMonth">⟵</button>
+                <h3 id="calendarMonth"></h3>
+                <button id="nextMonth">⟶</button>
+            </div>
+            <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+
+        <div class="card planning-day-tasks">
+            <h3>Opgaver denne dag</h3>
+            <ul id="dayTaskList"></ul>
+        </div>
+
+    </section>
+
+    <!-- ==============================================
+         SIDE – LOGS
+    ================================================ -->
+    <section id="logsPage" class="page">
+        <h2>Logs</h2>
+    </section>
+
+    <!-- ==============================================
+         SIDE – RAPPORTER
+    ================================================ -->
+    <section id="reportsPage" class="page">
+        <h2>Rapporter</h2>
+    </section>
+
+    <!-- ==============================================
+         SIDE – INDSTILLINGER
+    ================================================ -->
+    <section id="settingsPage" class="page">
+        <h2>Indstillinger</h2>
+    </section>
+
 </div>
 
-<!-- ======================================================
-     AFSNIT 06 – SCRIPT
-======================================================= -->
 <script src="app.js"></script>
 </body>
 </html>
