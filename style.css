@@ -561,16 +561,18 @@ tbody tr:nth-child(odd) {
 }
 
 /* ======================================================
-   AFSNIT 11 – MOBIL-VERSION (grid → 1 kolonne)
-   OBS: Denne SKAL ligge nederst for at virke korrekt
+   AFSNIT 11 – RESPONSIVITET (KORREKT VERSION)
+   Denne version understøtter hele layoutet uden duplikater
 ====================================================== */
 
 @media (max-width: 880px) {
 
+    /* 1 kolonne layout */
     .layout {
         grid-template-columns: 1fr;
     }
 
+    /* Sidebar – mobil slide-in */
     .sidebar {
         position: fixed;
         inset: 56px 0 auto 0;
@@ -585,18 +587,22 @@ tbody tr:nth-child(odd) {
         transform: translateX(0);
     }
 
+    /* Burger-menu vises */
     .menu-toggle {
         display: inline-flex;
     }
 
+    /* Fjern center-titel på mobil for bedre plads */
     .topbar-center {
         display: none;
     }
 
+    /* Indhold får mindre padding */
     .content {
         padding: 18px 16px 32px;
     }
 
+    /* Formular + liste under hinanden */
     .page-grid {
         grid-template-columns: 1fr;
     }
