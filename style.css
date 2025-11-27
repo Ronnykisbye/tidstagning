@@ -1,43 +1,65 @@
 
 /* ======================================================
-   AFSNIT 01 – LAYOUT WRAPPER & TOP SPACING
+   AFSNIT 01 – TEMA SYSTEM (DARK & LIGHT MODE)
+   Dette er det ENESTE sted i hele CSS med farver.
 ====================================================== */
 
-/* Wrapper for hele layoutet */
-.layout {
-    display: flex;
-    flex-direction: row;
+/* ----- DARK MODE (default) ----- */
+:root {
+    --bg: #0d1321;
+    --bg-card: #11182a;
+    --sidebar-bg: #0b1120;
+    --text: #e6e6e6;
+    --text-strong: #ffffff;
+    --border: #1d2538;
+
+    --neon-purple: #8b4cff;
+    --neon-purple-light: #b793ff;
 }
 
-/* Content får afstand fra sidebar og topbar */
-.content {
-    flex: 1;
-    margin-left: 260px; /* matcher sidebar width */
-    padding: 80px 60px 60px;
-    min-height: 100vh;
+/* ----- LIGHT MODE ----- */
+[data-theme="light"] {
+    --bg: #f4f4f4;
+    --bg-card: #ffffff;
+    --sidebar-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-strong: #000000;
+    --border: #d4d4d4;
 
+    --neon-purple: #8b4cff;
+    --neon-purple-light: #b793ff;
+}
+
+/* ----- GLOBAL STYLING ----- */
+body {
     background: var(--bg);
     color: var(--text);
-
-    transition:
-        background 0.3s ease,
-        color 0.3s ease,
-        margin-left 0.3s ease;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
-/* Sikrer topbaren ikke overlapper indholdet */
-.topbar {
-    height: 60px;
+/* Sidebar */
+.sidebar {
+    background: var(--sidebar-bg);
+    color: var(--text);
 }
 
-/* Gør siderne pæne i mørk/lys mode */
-.page {
-    margin-top: 10px;
-    display: none;
+.sidebar a {
+    color: var(--text);
 }
 
-.page.visible {
-    display: block;
+/* Content area */
+.content-wrapper {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Cards */
+.card,
+.box,
+.container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
 }
 
 /* ======================================================
