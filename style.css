@@ -383,14 +383,19 @@
     color: var(--text-muted);
 }
 
-/* Card komponent */
+/* Card komponent – rettet til korrekt lys/mørk mode */
 .card {
     background: var(--bg-card);
     border-radius: 18px;
-    box-shadow: var(--shadow-soft);
     padding: 18px 20px;
-    border: 1px solid rgba(15, 23, 42, 0.9);
+
+    /* 🔥 Dynamisk border der virker i begge modes */
+    border: 1px solid var(--border-subtle);
+
+    /* 🔥 Dynamisk skygge */
+    box-shadow: var(--shadow-card);
 }
+
 
 /* Side-layout (formular + liste) */
 .page-grid {
