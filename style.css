@@ -16,8 +16,16 @@
     margin-left: 260px; /* matcher sidebar width */
     padding: 80px 60px 60px; /* 80px så topbar ikke overlapper */
     min-height: 100vh;
-    background: var(--bg);
-    transition: background 0.3s ease, margin-left 0.3s ease;
+
+    /* VIGTIGT: skrivebordets farve styres af temaet,
+       men har en sikker fallback til mørk mode */
+    background: var(--bg, #0b1220);
+    color: var(--text-strong);
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        margin-left 0.3s ease;
 }
 
 /* Sikrer topbaren ikke overlapper indholdet */
@@ -34,9 +42,6 @@
 .page.visible {
     display: block;
 }
-
-
-
 
 /* ======================================================
    AFSNIT 02 – SIDEBAR (KORREKT OG ENKELT)
