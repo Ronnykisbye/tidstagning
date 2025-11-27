@@ -673,3 +673,113 @@ tbody tr:nth-child(odd) {
         grid-template-columns: 1fr;
     }
 }
+
+/* ======================================================
+   AFSNIT – TIDSREGISTRERING (KOMPLET VERSION)
+====================================================== */
+
+/* Container for hele siden */
+#timereg {
+    padding: 20px;
+}
+
+/* ------------------------------------------------------
+   Labels
+------------------------------------------------------ */
+#timereg label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+/* ------------------------------------------------------
+   Dropdown
+------------------------------------------------------ */
+#timereg .dropdown {
+    width: 280px;
+    padding: 10px;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.2s ease;
+}
+
+#timereg .dropdown:focus {
+    outline: none;
+    border-color: var(--neon-purple);
+}
+
+/* ------------------------------------------------------
+   Tid i dag – display tekst
+------------------------------------------------------ */
+#timereg .timereg-display {
+    margin-top: 18px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+/* ------------------------------------------------------
+   Start/Stop knapper
+------------------------------------------------------ */
+#timereg .timereg-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#timereg .btn-green,
+#timereg .btn-red {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    color: #fff;
+}
+
+/* Grøn START-knap */
+#timereg .btn-green {
+    background: #1db954;
+}
+#timereg .btn-green:hover {
+    background: #19a34a;
+}
+
+/* Rød STOP-knap */
+#timereg .btn-red {
+    background: #d93636;
+}
+#timereg .btn-red:hover {
+    background: #c22f2f;
+}
+
+/* ------------------------------------------------------
+   LMM kompatibilitet (lys/mørk mode)
+------------------------------------------------------ */
+
+/* Dark mode */
+body.dark #timereg .dropdown {
+    background: var(--bg-card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+body.dark #timereg label,
+body.dark #timereg .timereg-display {
+    color: var(--text-strong);
+}
+
+/* Light mode */
+body.light #timereg .dropdown {
+    background: var(--bg-card);
+    color: var(--text);
+    border-color: var(--border);
+}
+
