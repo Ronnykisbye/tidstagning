@@ -63,261 +63,127 @@ body {
 }
 
 /* ======================================================
-   AFSNIT 02 – SIDEBAR (KORREKT VERSION)
+   AFSNIT 02 – LAYOUT (SIDEBAR, TOPBAR, CONTENT)
 ====================================================== */
 
-.sidebar {
-    width: 260px;
+/* ----- GRID STRUKTUR ----- */
+.app-wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 70px 1fr;
     height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    padding: 35px 28px;
-    display: flex;
-    flex-direction: column;
-
-    /* VIGTIG: sidebar MÅ IKKE bruge bg-card */
-    background: var(--bg-sidebar);
-    color: var(--text);
-
-    border-right: 1px solid var(--border);
-    box-shadow: 0 0 25px rgba(0,0,0,0.25);
-    backdrop-filter: blur(10px);
-    z-index: 20;
 }
 
-/* Sidebar indhold */
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    margin-top: 40px;
-}
-
-/* VIGTIG: bruger var(--text) 100% korrekt nu */
-.sidebar-menu a {
-    color: var(--text);
-    font-size: 17px;
-    font-weight: 400;
-    text-decoration: none;
-    padding: 6px 4px;
-    border-radius: 6px;
-    transition: 0.2s ease;
-}
-
-/* Hover i begge temaer */
-.sidebar-menu a:hover {
-    background: var(--menu-hover);
-    color: var(--text-strong);
-}
-
-/* Aktiv menu i begge temaer */
-.sidebar-menu a.active {
-    background: var(--menu-active);
-    color: var(--text-strong);
-    font-weight: 700;
-    padding-left: 12px;
-    box-shadow: inset 0 0 10px rgba(160,107,255,0.4);
-}
-
-
-/* ======================================================
-   AFSNIT 02A – THEME: DARK MODE (DEFAULT)
-====================================================== */
-
-:root {
-    /* Baggrunde */
-    --bg-body: #0a0f1a;      /* hele siden */
-    --bg: #0b1220;           /* skrivebord / content */
-    --bg-card: #101828;      /* bokse */
-    --bg-sidebar: #0b1220;   /* sidebar baggrund */
-    --bg-topbar: #0d1525;    /* topbar */
-
-    /* Tekstfarver */
-    --text: #cbd5e1;         /* normal tekst */
-    --text-strong: #ffffff;  /* overskrifter / vigtig tekst */
-    --text-muted: #94a3b8;   /* sekundær tekst */
-
-    /* Menu farver */
-    --menu-normal: #cbd5e1;
-    --menu-hover: rgba(139, 92, 246, 0.25);
-    --menu-active: rgba(139, 92, 246, 0.45);
-
-    /* Borders */
-    --border: rgba(255,255,255,0.08);
-    --border-subtle: rgba(255,255,255,0.05);
-
-    /* Neon highlights */
-    --neon-purple: #8b5cf6;
-    --neon-blue: #3b82f6;
-    --neon-green: #22c55e;
-}
-
-/* ======================================================
-   FIX – BODY & SIDEBAR TEKSTFARVER – DARK/LIGHT MODE
-====================================================== */
-
-/* Body følger altid temaets farver */
-body {
-    background: var(--bg-body);
-    color: var(--text);
-    margin: 0;
-    padding: 0;
-}
-
-/* Sidebar – INGEN hardcoded farver! */
+/* ----- SIDEBAR (venstre menu) ----- */
 .sidebar {
-    background: var(--bg-sidebar);
-    color: var(--text);
+    grid-row: 1 / span 2;
+    grid-column: 1;
+    padding: 25px 20px;
+    border-right: 1px solid var(--border);
 }
 
-/* Sidebar menu links */
-.sidebar-menu a {
-    color: var(--text);
-}
-
-.sidebar-menu a:hover {
-    background: var(--menu-hover);
-    color: var(--text-strong);
-}
-
-.sidebar-menu a.active {
-    background: var(--menu-active);
-    color: var(--text-strong);
-}
-
-
-/* ======================================================
-   AFSNIT 02B – THEME: LIGHT MODE
-====================================================== */
-
-[data-theme="light"] {
-    /* Baggrunde */
-    --bg-body: #f1f5f9;
-    --bg: #ffffff;
-    --bg-card: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-topbar: #ffffff;
-
-    /* Tekstfarver */
-    --text: #475569;
-    --text-strong: #0f172a;
-    --text-muted: #64748b;
-
-    /* Menu farver */
-    --menu-normal: #475569;
-    --menu-hover: rgba(139, 92, 246, 0.15);
-    --menu-active: rgba(139, 92, 246, 0.25);
-
-    /* Borders */
-    --border: rgba(0,0,0,0.08);
-    --border-subtle: rgba(0,0,0,0.05);
-
-    /* Neon highlights */
-    --neon-purple: #7c3aed;
-    --neon-blue: #2563eb;
-    --neon-green: #059669;
-}
-
-
-/* ======================================================
-   AFSNIT 03 – TOPBAR (RETTAF VERSION)
-====================================================== */
-
-.topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 24px;
-
-    /* Mørk version uden lys overlay */
-    background: var(--bg-topbar);
-
-    box-shadow:
-        0 1px 0 rgba(15, 23, 42, 0.6),
-        0 20px 40px rgba(15, 23, 42, 0.6);
-
-    backdrop-filter: blur(14px);
-}
-
-/* ⭐ LIGHT MODE – topbar med let lys glow */
-[data-theme="light"] .topbar {
-    background: radial-gradient(
-        circle at top left,
-        rgba(0,0,0,0.03),
-        transparent
-    ), var(--bg-topbar);
-    box-shadow:
-        0 1px 0 rgba(0, 0, 0, 0.06),
-        0 20px 40px rgba(0, 0, 0, 0.08);
-}
-
-/* Wrapper-sektioner */
-.topbar-left,
-.topbar-center,
-.topbar-right {
-    display: flex;
-    align-items: center;
-}
-
-.topbar-left {
-    gap: 10px;
-}
-
-.topbar-center {
-    flex: 1;
-    justify-content: center;
-    text-align: center;
-}
-
-.topbar-right {
-    gap: 14px;
-}
-
-/* Logo */
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-}
-
-.logo-main {
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    color: var(--text-strong);
-}
-
-.logo-sub {
-    font-size: 0.7rem;
-    color: var(--text-muted);
-}
-
-/* Topbar – Titel */
-#pageTitle {
-    font-size: 1.1rem;
+.sidebar h1 {
+    font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+    margin-bottom: 25px;
+    color: var(--text-strong);
 }
 
-/* Burger-menu (mobil) */
-.menu-toggle {
-    display: none;
-    border: none;
-    border-radius: 999px;
-    width: 32px;
-    height: 32px;
-    background: rgba(15, 23, 42, 0.9);
+.sidebar .menu-item {
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 8px;
+    font-size: 15px;
+    color: var(--text);
+    transition: background 0.2s ease;
+}
+
+.sidebar .menu-item:hover {
+    background: var(--bg-card);
+}
+
+.sidebar .menu-item.active {
+    background: var(--neon-purple);
+    color: white;
+}
+
+/* ----- TOP BAR (øverst) ----- */
+.topbar {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card);
+}
+
+/* ----- CONTENT OMRÅDE (midter-omdåde) ----- */
+.content-wrapper {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 25px;
+    overflow-y: auto;
+    background: var(--bg);
+}
+
+
+/
+
+
+/* ======================================================
+   AFSNIT 03 – TYPOGRAFI (TEKSTER, OVERSKRIFTER)
+====================================================== */
+
+/* ----- BASIS TEKST ----- */
+body, p, span, a, li, label, input, select, button {
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text);
+}
+
+/* ----- OVERSKRIFTER ----- */
+h1, h2, h3, h4 {
+    font-weight: 600;
+    margin: 0 0 15px 0;
     color: var(--text-strong);
-    font-size: 1.1rem;
-    cursor: pointer;
+}
+
+/* ----- SIDEBAR TITLER ----- */
+.sidebar h1 {
+    font-size: 22px;
+    color: var(--text-strong);
+}
+
+/* ----- MENUPUNKTER ----- */
+.sidebar .menu-item {
+    font-size: 15px;
+    color: var(--text);
+}
+
+.sidebar .menu-item.active {
+    color: #ffffff;
+}
+
+/* ----- KNAPPER ----- */
+button {
+    font-size: 15px;
+    color: var(--text-strong);
+}
+
+/* ----- FORMULARTEKSTER ----- */
+input, select {
+    color: var(--text-strong);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+}
+
+input::placeholder,
+select::placeholder {
+    color: var(--text);
+    opacity: 0.6;
 }
 
 
