@@ -283,57 +283,7 @@ body {
     box-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
 }
 
-/* ======================================================
-   AFSNIT 04 – SPROGKNAPPER (NEON + LIGHT/DARK MODE FIX)
-====================================================== */
 
-.lang-switch {
-    display: flex;
-    gap: 6px;
-}
-
-.lang-btn {
-    padding: 6px 10px;
-    height: 32px;
-    line-height: 18px;
-
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-
-    background: var(--bg-card);
-    color: var(--text-muted);
-
-    cursor: pointer;
-    transition: 0.18s ease-in-out;
-}
-
-/* Hover */
-.lang-btn:hover {
-    background: rgba(99,102,241,0.20);
-    color: var(--text-strong);
-}
-
-/* Aktiv knap */
-.lang-btn.active {
-    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    color: #ffffff;
-    border-color: transparent;
-    box-shadow: 0 0 10px rgba(99,102,241,0.40);
-}
-
-/* Light mode – tydeligere farver */
-[data-theme="light"] .lang-btn {
-    background: #ffffff;
-    color: #475569;
-}
-
-[data-theme="light"] .lang-btn.active {
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    color: #ffffff;
 }
 
 
