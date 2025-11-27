@@ -247,142 +247,97 @@
 
             
   
-            <!-- ==============================================
-                 SIDE – PLANLÆGNING
-            =============================================== -->
-            <section id="planningPage" class="page">
-                <div class="page-header">
-                    <h2>Planlægning</h2>
-                    <p class="page-sub">
-                        Planlæg kommende opgaver pr. kunde, dato, tidspunkt og medarbejder.
-                    </p>
-                </div>
+     <!-- ==============================================
+     SIDE – PLANLÆGNING
+================================================ -->
+<section id="planningPage" class="page">
 
-                <div class="page-grid">
+    <!-- Overskrift -->
+    <div class="page-header">
+        <h2 data-i18n="page_planning_title">Planlægning</h2>
+        <p class="page-sub" data-i18n="page_planning_sub">
+            Planlæg kommende opgaver, aftaler og medarbejder-ressourcer.
+        </p>
+    </div>
 
-                    <!-- VENSTRE SIDE – OPGAVE-FORMULAR -->
-                    <div class="card">
-                        <h3>Ny planlagt opgave</h3>
+    <!-- Planlægningsformular -->
+    <div class="card planning-form">
 
-                        <form id="planningForm">
-                            <!-- Kunde -->
-                            <div class="form-group">
-                                <label for="planningCustomerSelect">Kunde</label>
-                                <select id="planningCustomerSelect" required>
-                                    <!-- Udfyldes senere automatisk med kunder via JS -->
-                                </select>
-                            </div>
+        <h3 class="card-title" data-i18n="planning_new_task">Ny planlagt opgave</h3>
 
-                            <!-- Dato -->
-                            <div class="form-group">
-                                <label for="planningDateInput">Dato</label>
-                                <input id="planningDateInput" type="date" required />
-                            </div>
+        <div class="form-group">
+            <label data-i18n="planning_customer">Kunde</label>
+            <select id="planningCustomer"></select>
+        </div>
 
-                            <!-- Tidspunkt (½-times intervaller – tilføjes senere via JS) -->
-                            <div class="form-group">
-                                <label for="planningTimeSelect">Tidspunkt</label>
-                                <select id="planningTimeSelect" required>
-                                    <!-- Vi genererer alle tider (fx 06:00–20:30) via JS i et senere trin -->
-                                </select>
-                            </div>
+        <div class="form-group">
+            <label data-i18n="planning_date">Dato</label>
+            <input type="date" id="planningDate">
+        </div>
 
-                            <!-- Medarbejder -->
-                            <div class="form-group">
-                                <label for="planningEmployeeSelect">Medarbejder</label>
-                                <select id="planningEmployeeSelect" required>
-                                    <!-- Udfyldes senere automatisk med medarbejdere via JS -->
-                                </select>
-                            </div>
+        <div class="form-group">
+            <label data-i18n="planning_time">Tidspunkt</label>
+            <select id="planningTime">
+                <!-- 30-min intervaller -->
+                <option value="08:00">08:00</option>
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="09:30">09:30</option>
+                <option value="10:00">10:00</option>
+                <option value="10:30">10:30</option>
+                <option value="11:00">11:00</option>
+                <option value="11:30">11:30</option>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+            </select>
+        </div>
 
-                            <!-- Beskrivelse af opgaven -->
-                            <div class="form-group">
-                                <label for="planningNoteInput">Hvad skal laves?</label>
-                                <textarea id="planningNoteInput" rows="3"
-                                          placeholder="Kort beskrivelse af opgaven..."
-                                          required></textarea>
-                            </div>
+        <div class="form-group">
+            <label data-i18n="planning_employee">Medarbejder</label>
+            <select id="planningEmployee"></select>
+        </div>
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-success">
-                                    Gem opgave
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+        <div class="form-group">
+            <label data-i18n="planning_description">Beskrivelse</label>
+            <textarea id="planningDescription" rows="3"></textarea>
+        </div>
 
-                    <!-- HØJRE SIDE – KALENDER + DAGES OPGAVER -->
-                    <div class="page-column">
+        <button id="addPlanningTask" class="btn-primary" data-i18n="planning_add_btn">
+            Tilføj opgave
+        </button>
+    </div>
 
-                        <!-- Kalender-boks -->
-                        <div class="card calendar-card">
-                            <div class="calendar-header">
-                                <button type="button" id="planningPrevMonthBtn" class="calendar-nav-btn">
-                                    ‹
-                                </button>
-                                <div class="calendar-month-label" id="planningMonthLabel">
-                                    <!-- Månedsnavn + år skrives via JS -->
-                                    Måned år
-                                </div>
-                                <button type="button" id="planningNextMonthBtn" class="calendar-nav-btn">
-                                    ›
-                                </button>
-                            </div>
+    <!-- Kalender og opgaver -->
+    <div class="card planning-calendar">
 
-                            <!-- Ugedage -->
-                            <div class="calendar-weekdays">
-                                <span>Ma</span>
-                                <span>Ti</span>
-                                <span>On</span>
-                                <span>To</span>
-                                <span>Fr</span>
-                                <span>Lø</span>
-                                <span>Sø</span>
-                            </div>
+        <!-- Kalender top med månedsskift -->
+        <div class="calendar-header">
+            <button id="prevMonth" class="calendar-nav">⟵</button>
+            <h3 id="calendarMonth"></h3>
+            <button id="nextMonth" class="calendar-nav">⟶</button>
+        </div>
 
-                            <!-- Dage i måneden – udfyldes via JS -->
-                            <div class="calendar-grid" id="planningCalendarGrid">
-                                <!-- Her indsætter vi dag-felter med farver (normal/gul/rød) i senere trin -->
-                            </div>
+        <!-- Kalender gitter -->
+        <div id="calendarGrid" class="calendar-grid">
+            <!-- udfyldes via JS -->
+        </div>
+    </div>
 
-                            <p class="calendar-legend">
-                                <span class="legend-box legend-empty"></span> Ingen opgaver
-                                <span class="legend-box legend-medium"></span> 1–3 opgaver
-                                <span class="legend-box legend-busy"></span> 4+ opgaver
-                            </p>
-                        </div>
+    <!-- Dagsoversigt -->
+    <div class="card planning-day-tasks">
+        <h3 data-i18n="planning_day_tasks">Opgaver denne dag</h3>
+        <ul id="dayTaskList"></ul>
+    </div>
 
-                        <!-- Dagens opgaver -->
-                        <div class="card">
-                            <h3>Dagens opgaver</h3>
-                            <p class="page-sub small" id="planningSelectedDateLabel">
-                                Vælg en dato i kalenderen for at se planlagte opgaver.
-                            </p>
+</section>
 
-                            <div class="table-wrapper">
-                                <table class="planning-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Kunde</th>
-                                            <th>Tid</th>
-                                            <th>Medarbejder</th>
-                                            <th>Opgave</th>
-                                            <th>Handling</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="planningTasksTableBody">
-                                        <!-- Rækker indsættes senere via JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-    
-    
     <!-- ==============================================
                  SIDE 04 – LOGS
             =============================================== -->
