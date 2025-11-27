@@ -160,6 +160,38 @@ body {
     margin: 0;
     padding: 0;
 }
+/* ======================================================
+   FIX – BODY & SIDEBAR TEKSTFARVER – DARK/LIGHT MODE
+====================================================== */
+
+/* Body følger altid temaets farver */
+body {
+    background: var(--bg-body);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar – INGEN hardcoded farver! */
+.sidebar {
+    background: var(--bg-sidebar);
+    color: var(--text);
+}
+
+/* Sidebar menu links */
+.sidebar-menu a {
+    color: var(--text);
+}
+
+.sidebar-menu a:hover {
+    background: var(--menu-hover);
+    color: var(--text-strong);
+}
+
+.sidebar-menu a.active {
+    background: var(--menu-active);
+    color: var(--text-strong);
+}
 
 /* ======================================================
    AFSNIT 03 – TOPBAR (RETTAF VERSION)
