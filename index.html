@@ -139,129 +139,120 @@
                 </div>
             </section>
 
-            <!-- ==============================================
-                 SIDE 02 – KUNDER
-            =============================================== -->
-            <section id="customersPage" class="page">
-                <div class="page-header">
-                    <h2 data-i18n="page_customers_title">Kunder</h2>
-                    <p class="page-sub" data-i18n="page_customers_sub">
-                        Opret og vedligehold din kundeliste.
-                    </p>
-                </div>
+            <!-- ======================================================
+     AFSNIT – side 2 KUNDER (HELE AFSNIT udskiftes)
+====================================================== -->
 
-                <div class="page-grid">
-                    <!-- Formular -->
-                    <div class="card">
-                        <h3 data-i18n="customers_form_title">Ny kunde</h3>
-                        <form id="customerForm" class="form-grid">
-                            <label>
-                                <span data-i18n="label_name">Navn</span>
-                                <input type="text" id="customerName" required />
-                            </label>
-                            <label>
-                                <span data-i18n="label_phone">Telefon</span>
-                                <input type="text" id="customerPhone" />
-                            </label>
-                            <label>
-                                <span data-i18n="label_email">Email</span>
-                                <input type="email" id="customerEmail" />
-                            </label>
-                            <label class="full-width">
-                                <span data-i18n="label_address">Adresse</span>
-                                <input type="text" id="customerAddress" />
-                            </label>
+<div id="customersPage" class="page">
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <span data-i18n="btn_save_customer">Gem kunde</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+    <div class="page-header">
+        <h2 data-i18n="customers_title">Kunder</h2>
+        <p data-i18n="customers_sub">Opret og vedligehold din kundeliste.</p>
+    </div>
 
-                    <!-- Oversigt -->
-                    <div class="card">
-                        <h3 data-i18n="customers_list_title">Oversigt over kunder</h3>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="col_name">Navn</th>
-                                        <th data-i18n="col_phone">Telefon</th>
-                                        <th data-i18n="col_email">Email</th>
-                                        <th data-i18n="col_address">Adresse</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="customersTableBody">
-                                    <!-- udfyldes via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <div class="page-grid">
 
-            <!-- ==============================================
-                 SIDE 03 – MEDARBEJDERE
-            =============================================== -->
-            <section id="employeesPage" class="page">
-                <div class="page-header">
-                    <h2 data-i18n="page_employees_title">Medarbejdere</h2>
-                    <p class="page-sub" data-i18n="page_employees_sub">
-                        Hold styr på medarbejdere og roller.
-                    </p>
-                </div>
+        <!-- Venstre box – Ny kunde -->
+        <div class="card">
+            <h3 data-i18n="customers_new">Ny kunde</h3>
 
-                <div class="page-grid">
-                    <!-- Formular -->
-                    <div class="card">
-                        <h3 data-i18n="employees_form_title">Ny medarbejder</h3>
-                        <form id="employeeForm" class="form-grid">
-                            <label>
-                                <span data-i18n="label_name">Navn</span>
-                                <input type="text" id="employeeName" required />
-                            </label>
-                            <label>
-                                <span data-i18n="label_email">Email</span>
-                                <input type="email" id="employeeEmail" />
-                            </label>
-                            <label>
-                                <span data-i18n="label_role">Rolle</span>
-                                <select id="employeeRole">
-                                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
-                                    <option value="admin" data-i18n="role_admin">Admin</option>
-                                </select>
-                            </label>
+            <form id="customerForm">
 
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <span data-i18n="btn_save_employee">Gem medarbejder</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                <label data-i18n="col_name">Navn</label>
+                <input id="customerName" name="customerName" type="text" required>
 
-                    <!-- Oversigt -->
-                    <div class="card">
-                        <h3 data-i18n="employees_list_title">Liste over medarbejdere</h3>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th data-i18n="col_name">Navn</th>
-                                        <th data-i18n="col_email">Email</th>
-                                        <th data-i18n="col_role">Rolle</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="employeesTableBody">
-                                    <!-- udfyldes via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <label data-i18n="col_phone">Telefon</label>
+                <input id="customerPhone" name="customerPhone" type="text">
+
+                <label data-i18n="col_email">Email</label>
+                <input id="customerEmail" name="customerEmail" type="email">
+
+                <label data-i18n="col_address">Adresse</label>
+                <input id="customerAddress" name="customerAddress" type="text">
+
+                <button type="submit" class="btn-primary" data-i18n="customers_save">Gem kunde</button>
+            </form>
+        </div>
+
+        <!-- Højre box – Liste over kunder -->
+        <div class="card">
+            <h3 data-i18n="customers_list">Oversigt over kunder</h3>
+
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="col_name">Navn</th>
+                        <th data-i18n="col_phone">Telefon</th>
+                        <th data-i18n="col_email">Email</th>
+                        <th data-i18n="col_address">Adresse</th>
+                    </tr>
+                </thead>
+
+                <tbody id="customerTableBody">
+                    <!-- Data indsættes automatisk via JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+            <!-- ======================================================
+     AFSNIT – side 3 MEDARBEJDERE (HELE AFSNIT udskiftes)
+====================================================== -->
+
+<div id="employeesPage" class="page">
+
+    <div class="page-header">
+        <h2 data-i18n="employees_title">Medarbejdere</h2>
+        <p data-i18n="employees_sub">Hold styr på medarbejdere og roller.</p>
+    </div>
+
+    <div class="page-grid">
+
+        <!-- Venstre box – Ny medarbejder -->
+        <div class="card">
+            <h3 data-i18n="employees_new">Ny medarbejder</h3>
+
+            <form id="employeeForm">
+
+                <label data-i18n="col_name">Navn</label>
+                <input id="employeeName" name="employeeName" type="text" required>
+
+                <label data-i18n="col_email">Email</label>
+                <input id="employeeEmail" name="employeeEmail" type="email">
+
+                <label data-i18n="col_role">Rolle</label>
+                <select id="employeeRole" name="employeeRole">
+                    <option value="employee" data-i18n="role_employee">Medarbejder</option>
+                    <option value="admin" data-i18n="role_admin">Administrator</option>
+                </select>
+
+                <button type="submit" class="btn-primary" data-i18n="employees_save">Gem medarbejder</button>
+            </form>
+        </div>
+
+        <!-- Højre box – Liste over medarbejdere -->
+        <div class="card">
+            <h3 data-i18n="employees_list">Liste over medarbejdere</h3>
+
+            <table class="employee-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="col_name">Navn</th>
+                        <th data-i18n="col_email">Email</th>
+                        <th data-i18n="col_role">Rolle</th>
+                    </tr>
+                </thead>
+
+                <tbody id="employeeTableBody">
+                    <!-- Data indsættes automatisk via JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
 
             <!-- ==============================================
                  SIDE 04 – LOGS
