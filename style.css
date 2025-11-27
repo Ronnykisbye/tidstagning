@@ -1,10 +1,8 @@
-
 /* ======================================================
    AFSNIT 01 – TEMA SYSTEM (DARK & LIGHT MODE)
-   Dette er det ENESTE sted i hele CSS med farver.
 ====================================================== */
 
-/* ----- DARK MODE (default) ----- */
+/* DARK MODE (default) */
 :root {
     --bg: #0d1321;
     --bg-card: #11182a;
@@ -17,7 +15,7 @@
     --neon-purple-light: #b793ff;
 }
 
-/* ----- LIGHT MODE ----- */
+/* LIGHT MODE */
 [data-theme="light"] {
     --bg: #f4f4f4;
     --bg-card: #ffffff;
@@ -30,43 +28,20 @@
     --neon-purple-light: #b793ff;
 }
 
-/* ----- GLOBAL STYLING ----- */
+/* BODY BASE STYLING */
 body {
+    margin: 0;
     background: var(--bg);
     color: var(--text);
-    transition: background 0.25s ease, color 0.25s ease;
+    transition: background 0.3s ease, color 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* Sidebar */
-.sidebar {
-    background: var(--sidebar-bg);
-    color: var(--text);
-}
-
-.sidebar a {
-    color: var(--text);
-}
-
-/* Content area */
-.content-wrapper {
-    background: var(--bg);
-    color: var(--text);
-}
-
-/* Cards */
-.card,
-.box,
-.container {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text);
-}
 
 /* ======================================================
-   AFSNIT 02 – LAYOUT (SIDEBAR, TOPBAR, CONTENT)
+   AFSNIT 02 – GRID LAYOUT (SIDEBAR, TOPBAR, CONTENT)
 ====================================================== */
 
-/* ----- GRID STRUKTUR ----- */
 .app-wrapper {
     display: grid;
     grid-template-columns: 260px 1fr;
@@ -74,17 +49,22 @@ body {
     height: 100vh;
 }
 
-/* ----- SIDEBAR (venstre menu) ----- */
+
+/* ======================================================
+   AFSNIT 03 – SIDEBAR
+====================================================== */
+
 .sidebar {
     grid-row: 1 / span 2;
     grid-column: 1;
     padding: 25px 20px;
+    background: var(--sidebar-bg);
+    color: var(--text);
     border-right: 1px solid var(--border);
 }
 
 .sidebar h1 {
     font-size: 20px;
-    font-weight: 700;
     margin-bottom: 25px;
     color: var(--text-strong);
 }
@@ -97,7 +77,7 @@ body {
     margin-bottom: 8px;
     font-size: 15px;
     color: var(--text);
-    transition: background 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .sidebar .menu-item:hover {
@@ -109,7 +89,11 @@ body {
     color: white;
 }
 
-/* ----- TOP BAR (øverst) ----- */
+
+/* ======================================================
+   AFSNIT 04 – TOPBAR
+====================================================== */
+
 .topbar {
     grid-column: 2;
     grid-row: 1;
@@ -117,65 +101,91 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 25px;
-    border-bottom: 1px solid var(--border);
     background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
 }
 
-/* ----- CONTENT OMRÅDE (midter-omdåde) ----- */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* ======================================================
+   AFSNIT 05 – SPROGKNAPPER
+====================================================== */
+
+.lang-btn {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text);
+}
+
+.lang-btn.active {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple-light);
+}
+
+
+/* ======================================================
+   AFSNIT 06 – LIGHT/MØRK MODE KNAP (LMM)
+====================================================== */
+
+.theme-toggle {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
+/* ======================================================
+   AFSNIT 07 – CONTENT AREA (SKRIVEBORD)
+====================================================== */
+
 .content-wrapper {
     grid-column: 2;
     grid-row: 2;
     padding: 25px;
     overflow-y: auto;
     background: var(--bg);
-}
-/* ======================================================
-   AFSNIT 02 – SLUT
-====================================================== */
-
-/* ======================================================
-   AFSNIT 03 – TYPOGRAFI (TEKSTER, OVERSKRIFTER)
-====================================================== */
-
-body, p, span, a, li, label, input, select, button {
-    font-family: 'Segoe UI', sans-serif;
     color: var(--text);
 }
 
-/* Overskrifter */
+
+/* ======================================================
+   AFSNIT 08 – TYPOGRAFI & TEKSTER
+====================================================== */
+
 h1, h2, h3, h4 {
+    color: var(--text-strong);
+    margin-bottom: 15px;
+}
+
+label {
+    color: var(--text-strong);
     font-weight: 600;
-    margin: 0 0 15px 0;
-    color: var(--text-strong);
 }
 
-/* Sidebar titler */
-.sidebar h1 {
-    font-size: 22px;
-    color: var(--text-strong);
-}
 
-/* Menupunkter */
-.sidebar .menu-item {
-    font-size: 15px;
-    color: var(--text);
-}
+/* ======================================================
+   AFSNIT 09 – FORM ELEMENTER
+====================================================== */
 
-.sidebar .menu-item.active {
-    color: #ffffff;
-}
-
-/* Knapper */
-button {
-    font-size: 15px;
-    color: var(--text-strong);
-}
-
-/* Formular-tekst */
 input, select {
-    color: var(--text-strong);
+    padding: 10px;
+    width: 280px;
     background: var(--bg-card);
     border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
 }
 
 input::placeholder,
@@ -186,422 +196,59 @@ select::placeholder {
 
 
 /* ======================================================
-   AFSNIT 04 – SPROGKNAPPER & TEMA-KNAP
+   AFSNIT 10 – KNAPPER
 ====================================================== */
 
-/* Sprogknapper */
-.lang-btn {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-card);
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 0.75rem;
-    transition: all 0.2s ease;
-}
-
-.lang-btn.active {
-    background: var(--accent-soft);
-    color: var(--accent);
-    border-color: var(--accent);
-}
-
-/* Tema-knap – standard (DARK MODE) */
-.theme-toggle {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: linear-gradient(135deg, #1e3a8a, #6366f1);
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
-
-    transition: all 0.25s ease;
-}
-
-/* Tema ikon */
-#themeIcon {
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    filter: drop-shadow(0 0 3px rgba(0,0,0,0.45));
-}
-
-/* ⭐ LIGHT MODE – tema-knap (sol-knap) */
-[data-theme="light"] .theme-toggle {
-    background: linear-gradient(135deg, #fff7c2, #ffe27a);
-    box-shadow: 0 0 12px rgba(255, 215, 90, 0.45);
-}
-
-[data-theme="light"] #themeIcon {
-    filter: drop-shadow(0 0 3px rgba(255,255,255,0.7));
-}
-
-/* ⭐ DARK MODE – tema-knap (måne-knap) */
-[data-theme="dark"] .theme-toggle {
-    background: linear-gradient(135deg, #1e3a8a, #6366f1);
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
-}
-
-
-
-/* ======================================================
-   AFSNIT 06 – PAGE SECTIONS & CARDS
-   Sikrer side-skift virker, kun én side vises
-====================================================== */
-
-.page {
-    display: none;
-}
-
-.page.visible {
-    display: block;
-}
-
-.page-header {
-    margin-bottom: 18px;
-}
-
-.page-header h2 {
-    margin: 0 0 4px;
-    font-size: 1.1rem;
-    color: var(--text-strong);
-}
-
-.page-sub {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-/* Card komponent */
-.card {
-    background: var(--bg-card);
-    border-radius: 18px;
-    padding: 18px 20px;
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-soft);
-}
-
-/* Side-layout (formular + liste) */
-.page-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
-    gap: 20px;
-}
-
-
-/* ======================================================
-   AFSNIT 07 – TIMER VISNING (LYS/MØRK MODE KORREKT)
-====================================================== */
-
-.timer-card {
-    max-width: 520px;
-    margin-top: 10px;
-    background: var(--bg-card);
-    border-radius: 20px;
-    padding: 20px 24px 32px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid var(--border-subtle);
-}
-
-.timer-display-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 22px;
-}
-
-.timer-display {
-    width: 100%;
-    max-width: 480px;
-    padding: 30px 20px;
-    border-radius: 999px;
-    font-size: 2.2rem;
-    letter-spacing: 0.1em;
-    text-align: center;
-
-    /* Følger temaet – lys i light, mørk i dark */
-    background: var(--bg-card);
-    color: var(--text-strong);
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.timer-buttons {
-    display: flex;
-    gap: 18px;
-    justify-content: center;
-}
-
-.timer-buttons button {
-    padding: 10px 22px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-}
-
-#timerStartBtn {
-    background: #16a34a;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.45);
-}
-
-#timerStopBtn {
-    background: #dc2626;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.45);
-}
-
-
-
-
-
-
-/* ======================================================
-   AFSNIT 08 – FORMS & KNAPPER
-   ====================================================== */
-
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px 16px;
-}
-
-.form-grid label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.form-grid .full-width {
-    grid-column: 1 / -1;
-}
-
-input,
-select {
-    border-radius: 10px;
-    border: 1px solid var(--border-subtle);
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    background: rgba(15, 23, 42, 0.9);
-    color: var(--text-strong);
-}
-
-[data-theme="light"] input,
-[data-theme="light"] select {
-    background: #ffffff;
-}
-
-.form-actions {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 4px;
-}
-
-.btn {
-    border-radius: 999px;
-    border: none;
-    padding: 8px 14px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease,
-        filter 0.15s ease;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-    color: #020617;
-    box-shadow: 0 0 14px rgba(79, 70, 229, 0.85);
-}
-
-.btn-success {
-    background: radial-gradient(circle at top, #22c55e, #16a34a);
-    color: #f9fafb;
-    box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
-}
-
-.btn-danger {
-    background: radial-gradient(circle at top, #ef4444, #b91c1c);
-    color: #fee2e2;
-    box-shadow: 0 0 14px rgba(239, 68, 68, 0.9);
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.05);
-}
-
-/* ======================================================
-   AFSNIT 09 – TABELLER (KUNDER / MEDARBEJDERE / LOGS)
-   ====================================================== */
-
-.table-wrapper {
-    margin-top: 8px;
-    border-radius: 14px;
-    border: 1px solid var(--border-subtle);
-    overflow: hidden;
-    background: rgba(15, 23, 42, 0.95);
-}
-
-[data-theme="light"] .table-wrapper {
-    background: #ffffff;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-}
-
-thead {
-    background: rgba(15, 23, 42, 0.95);
-}
-
-[data-theme="light"] thead {
-    background: #e5e7eb;
-}
-
-th,
-td {
-    padding: 6px 10px;
-    text-align: left;
-}
-
-th {
-    font-weight: 600;
-    color: var(--text-muted);
-    border-bottom: 1px solid rgba(15, 23, 42, 0.8);
-}
-
-td {
-    color: var(--text-strong);
-    border-bottom: 1px solid rgba(15, 23, 42, 0.7);
-}
-
-tbody tr:nth-child(odd) {
-    background: rgba(15, 23, 42, 0.8);
-}
-
-[data-theme="light"] tbody tr:nth-child(odd) {
-    background: #f9fafb;
-}
-
-/* ======================================================
-   AFSNIT 10 – PLACEHOLDERS
-   ====================================================== */
-
-.placeholder-card {
-    max-width: 520px;
-}
-
-/* ======================================================
-   AFSNIT 11 – RESPONSIVITET (KORREKT VERSION)
-   Denne version understøtter hele layoutet uden duplikater
-====================================================== */
-
-@media (max-width: 880px) {
-
-    /* 1 kolonne layout */
-    .layout {
-        grid-template-columns: 1fr;
-    }
-
-    /* Sidebar – mobil slide-in */
-    .sidebar {
-        position: fixed;
-        inset: 56px 0 auto 0;
-        transform: translateX(-101%);
-        transition: transform 0.2s ease-out;
-        max-width: 260px;
-        z-index: 20;
-        height: calc(100vh - 56px);
-    }
-
-    .sidebar.open {
-        transform: translateX(0);
-    }
-
-    /* Burger-menu vises */
-    .menu-toggle {
-        display: inline-flex;
-    }
-
-    /* Fjern center-titel på mobil for bedre plads */
-    .topbar-center {
-        display: none;
-    }
-
-    /* Indhold får mindre padding */
-    .content {
-        padding: 18px 16px 32px;
-    }
-
-    /* Formular + liste under hinanden */
-    .page-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ======================================================
-   AFSNIT – TIDSREGISTRERING (KOMPLET VERSION)
-====================================================== */
-
-/* Container for hele siden */
-#timereg {
-    padding: 20px;
-}
-
-/* ------------------------------------------------------
-   Labels
------------------------------------------------------- */
-#timereg label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-strong);
-}
-
-/* ------------------------------------------------------
-   Dropdown
------------------------------------------------------- */
-#timereg .dropdown {
-    width: 280px;
-    padding: 10px;
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--border);
+button {
+    padding: 10px 20px;
     border-radius: 6px;
+    border: none;
+    cursor: pointer;
     font-size: 15px;
+    font-weight: 600;
     transition: 0.2s ease;
 }
 
-#timereg .dropdown:focus {
-    outline: none;
-    border-color: var(--neon-purple);
+/* Grøn START-knap */
+.btn-green {
+    background: #1db954;
+    color: white;
+}
+.btn-green:hover { background: #18a34a; }
+
+/* Rød STOP-knap */
+.btn-red {
+    background: #d93636;
+    color: white;
+}
+.btn-red:hover { background: #c22f2f; }
+
+
+/* ======================================================
+   AFSNIT 11 – CARDS & BOXES
+====================================================== */
+
+.card, .box, .container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-/* ------------------------------------------------------
-   Tid i dag – display tekst
------------------------------------------------------- */
+
+/* ======================================================
+   AFSNIT 12 – TIDSREGISTRERING (TIMEREG)
+====================================================== */
+
+#timereg label {
+    margin-bottom: 6px;
+}
+
+#timereg select {
+    width: 280px;
+}
+
 #timereg .timereg-display {
     margin-top: 18px;
     font-size: 20px;
@@ -609,63 +256,8 @@ tbody tr:nth-child(odd) {
     color: var(--text-strong);
 }
 
-/* ------------------------------------------------------
-   Start/Stop knapper
------------------------------------------------------- */
 #timereg .timereg-buttons {
+    margin-top: 20px;
     display: flex;
     gap: 15px;
-    margin-top: 20px;
 }
-
-#timereg .btn-green,
-#timereg .btn-red {
-    padding: 12px 22px;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
-    color: #fff;
-}
-
-/* Grøn START-knap */
-#timereg .btn-green {
-    background: #1db954;
-}
-#timereg .btn-green:hover {
-    background: #19a34a;
-}
-
-/* Rød STOP-knap */
-#timereg .btn-red {
-    background: #d93636;
-}
-#timereg .btn-red:hover {
-    background: #c22f2f;
-}
-
-/* ------------------------------------------------------
-   LMM kompatibilitet (lys/mørk mode)
------------------------------------------------------- */
-
-/* Dark mode */
-body.dark #timereg .dropdown {
-    background: var(--bg-card);
-    color: var(--text);
-    border-color: var(--border);
-}
-
-body.dark #timereg label,
-body.dark #timereg .timereg-display {
-    color: var(--text-strong);
-}
-
-/* Light mode */
-body.light #timereg .dropdown {
-    background: var(--bg-card);
-    color: var(--text);
-    border-color: var(--border);
-}
-
