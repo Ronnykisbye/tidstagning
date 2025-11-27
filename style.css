@@ -415,47 +415,7 @@ body {
 
 
 
-/* ======================================================
-   AFSNIT 05 – MOBIL-VERSION (grid → 1 kolonne)
-   OBS: Denne SKAL ligge nederst for at virke korrekt
-====================================================== */
 
-@media (max-width: 880px) {
-
-    .layout {
-        grid-template-columns: 1fr;
-    }
-
-    .sidebar {
-        position: fixed;
-        inset: 56px 0 auto 0;
-        transform: translateX(-101%);
-        transition: transform 0.2s ease-out;
-        max-width: 260px;
-        z-index: 20;
-        height: calc(100vh - 56px);
-    }
-
-    .sidebar.open {
-        transform: translateX(0);
-    }
-
-    .menu-toggle {
-        display: inline-flex;
-    }
-
-    .topbar-center {
-        display: none;
-    }
-
-    .content {
-        padding: 18px 16px 32px;
-    }
-
-    .page-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
 /* ======================================================
    AFSNIT 08 – FORMS & KNAPPER
@@ -601,10 +561,12 @@ tbody tr:nth-child(odd) {
 }
 
 /* ======================================================
-   AFSNIT 11 – RESPONSIVITET
-   ====================================================== */
+   AFSNIT 11 – MOBIL-VERSION (grid → 1 kolonne)
+   OBS: Denne SKAL ligge nederst for at virke korrekt
+====================================================== */
 
 @media (max-width: 880px) {
+
     .layout {
         grid-template-columns: 1fr;
     }
@@ -615,7 +577,8 @@ tbody tr:nth-child(odd) {
         transform: translateX(-101%);
         transition: transform 0.2s ease-out;
         max-width: 260px;
-        z-index: 15;
+        z-index: 20;
+        height: calc(100vh - 56px);
     }
 
     .sidebar.open {
