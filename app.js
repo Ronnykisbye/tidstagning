@@ -135,33 +135,60 @@ function initThemeToggle() {
 
 
 /* ======================================================
-   AFSNIT – KUNDEVALG TIL TIDSREGISTRERING
+   AFSNIT 06 – TIMER (NY VERSION TIL TIDSREGISTRERING)
 ====================================================== */
 
-function renderTimereg() {
-    console.log("Render timereg...");
+let timerInterval = null;
+let timerSeconds = 0;
 
-    const select = document.getElementById("timeregCustomerSelect");
-    if (!select) return;
+function initTimer() {
+    const startBtn = document.getElementById("timeregStartBtn");
+    const stopBtn = document.getElementById("timeregStopBtn");
+    const display = document.getElementById("timeregDisplayText");
 
-    // ryd dropdown
-    select.innerHTML = `
-        <option value="" data-i18n="timereg_choose_customer">
-            ${i18n.timereg_choose_customer[currentLang]}
-        </option>
-    `;
+    // Hvis elementerne ikke findes, gør vi ingenting
+    if (!startBtn || !stopBtn || !display) return;
 
-    // hent kunder
-    const customers = JSON.parse(localStorage.getItem("customers") || "[]");
+    // Start-visning (00:00:00)
+    updateTimerDisplay(display);
 
-    customers.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.name;
-        select.appendChild(opt);
-    });
+    // Klik-håndtering
+    startBtn.addEventListener("click", () => startTimer(display));
+    stopBtn.addEventListener("click", () => stopTimer(display));
+}
 
-    updateI18nTexts();
+function startTimer(display) {
+    // Hvis timer allerede kører, gør ingenting
+    if (timerInterval) return;
+
+    timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay(display);
+    }, 1000);
+}
+
+function stopTimer(display) {
+    if (!timerInterval) return;
+
+    clearInterval(timerInterval);
+    timerInterval = null;
+    updateTimerDisplay(display);
+}
+
+function resetTimer(display) {
+    timerSeconds = 0;
+    updateTimerDisplay(display);
+}
+
+function updateTimerDisplay(display) {
+    if (!display) return;
+
+    const h = String(Math.floor(timerSeconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, "0");
+    const s = String(timerSeconds % 60).padStart(2, "0");
+
+    // Viser "Tid i dag: hh:mm:ss"
+    display.textContent = `Tid i dag: ${h}:${m}:${s}`;
 }
 
 
