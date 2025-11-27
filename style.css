@@ -138,26 +138,25 @@ body {
    AFSNIT 03 – TYPOGRAFI (TEKSTER, OVERSKRIFTER)
 ====================================================== */
 
-/* ----- BASIS TEKST ----- */
 body, p, span, a, li, label, input, select, button {
     font-family: 'Segoe UI', sans-serif;
     color: var(--text);
 }
 
-/* ----- OVERSKRIFTER ----- */
+/* Overskrifter */
 h1, h2, h3, h4 {
     font-weight: 600;
     margin: 0 0 15px 0;
     color: var(--text-strong);
 }
 
-/* ----- SIDEBAR TITLER ----- */
+/* Sidebar titler */
 .sidebar h1 {
     font-size: 22px;
     color: var(--text-strong);
 }
 
-/* ----- MENUPUNKTER ----- */
+/* Menupunkter */
 .sidebar .menu-item {
     font-size: 15px;
     color: var(--text);
@@ -167,13 +166,13 @@ h1, h2, h3, h4 {
     color: #ffffff;
 }
 
-/* ----- KNAPPER ----- */
+/* Knapper */
 button {
     font-size: 15px;
     color: var(--text-strong);
 }
 
-/* ----- FORMULARTEKSTER ----- */
+/* Formular-tekst */
 input, select {
     color: var(--text-strong);
     background: var(--bg-card);
