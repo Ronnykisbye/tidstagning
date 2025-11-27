@@ -105,61 +105,38 @@
     display: block;
 }
 
-//* ======================================================
-   AFSNIT 02a – CSS VARIABLER (LYS / MØRK MODE)
+/* ======================================================
+   AFSNIT 02A – THEME: DARK MODE (DEFAULT)
 ====================================================== */
 
-/* ---------- Dark Mode (default) ---------- */
 :root {
-    /* Baggrund */
-    --bg: #0b1220;        /* skrivebord */
-    --bg-body: #0a0f1a;   /* body baggrund */
-    --bg-card: #0f172a;
-    --bg-sidebar: #0a0f1a;
-    --bg-topbar: #0d1525;
+    /* Baggrunde */
+    --bg-body: #0a0f1a;      /* hele siden */
+    --bg: #0b1220;           /* skrivebord / content */
+    --bg-card: #101828;      /* bokse */
+    --bg-sidebar: #0b1220;   /* sidebar baggrund */
+    --bg-topbar: #0d1525;    /* topbar */
 
-    /* Tekst (⭐ MANGLEDE) */
-    --text: #cbd5e1;          /* normal tekst */
-    --text-strong: #f1f5f9;   /* overskrifter */
-    --text-muted: #94a3b8;    /* svag tekst */
+    /* Tekstfarver */
+    --text: #cbd5e1;         /* normal tekst */
+    --text-strong: #ffffff;  /* overskrifter / vigtig tekst */
+    --text-muted: #94a3b8;   /* sekundær tekst */
 
-    /* Neon */
-    --neon-blue: #3b82f6;
-    --neon-purple: #8b5cf6;
-    --neon-green: #22c55e;
+    /* Menu farver */
+    --menu-normal: #cbd5e1;
+    --menu-hover: rgba(139, 92, 246, 0.25);
+    --menu-active: rgba(139, 92, 246, 0.45);
 
-    /* Rammer */
+    /* Borders */
     --border: rgba(255,255,255,0.08);
     --border-subtle: rgba(255,255,255,0.05);
+
+    /* Neon highlights */
+    --neon-purple: #8b5cf6;
+    --neon-blue: #3b82f6;
+    --neon-green: #22c55e;
 }
 
-/* ---------- Light Mode ---------- */
-[data-theme="light"] {
-    --bg: #f4f7fb;
-    --bg-body: #ffffff;
-    --bg-card: #ffffff;
-    --bg-sidebar: #e6ecf5;
-    --bg-topbar: #ffffff;
-
-    --text: #475569;
-    --text-strong: #0f172a;
-    --text-muted: #64748b;
-
-    --neon-blue: #2563eb;
-    --neon-purple: #7c3aed;
-    --neon-green: #059669;
-
-    --border: rgba(0,0,0,0.08);
-    --border-subtle: rgba(0,0,0,0.05);
-}
-
-/* ⭐ Global body styling – FIXER det hvide skrivebord */
-body {
-    background: var(--bg-body);
-    color: var(--text);
-    margin: 0;
-    padding: 0;
-}
 /* ======================================================
    FIX – BODY & SIDEBAR TEKSTFARVER – DARK/LIGHT MODE
 ====================================================== */
@@ -192,6 +169,40 @@ body {
     background: var(--menu-active);
     color: var(--text-strong);
 }
+
+
+/* ======================================================
+   AFSNIT 02B – THEME: LIGHT MODE
+====================================================== */
+
+[data-theme="light"] {
+    /* Baggrunde */
+    --bg-body: #f1f5f9;
+    --bg: #ffffff;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-topbar: #ffffff;
+
+    /* Tekstfarver */
+    --text: #475569;
+    --text-strong: #0f172a;
+    --text-muted: #64748b;
+
+    /* Menu farver */
+    --menu-normal: #475569;
+    --menu-hover: rgba(139, 92, 246, 0.15);
+    --menu-active: rgba(139, 92, 246, 0.25);
+
+    /* Borders */
+    --border: rgba(0,0,0,0.08);
+    --border-subtle: rgba(0,0,0,0.05);
+
+    /* Neon highlights */
+    --neon-purple: #7c3aed;
+    --neon-blue: #2563eb;
+    --neon-green: #059669;
+}
+
 
 /* ======================================================
    AFSNIT 03 – TOPBAR (RETTAF VERSION)
