@@ -34,41 +34,33 @@
          AFSNIT 03 – TOPBAR
     =================================================== -->
     <header class="topbar">
-        <!-- Venstre: logo + mobil-menu -->
-        <div class="topbar-left">
-            <button class="menu-toggle" id="menuToggle" aria-label="Åbn/luk menu">
-                ☰
-            </button>
+    <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
 
-            <div class="logo-text">
-                <span class="logo-main" data-i18n="app_title">GreenTime Pro</span>
-                <span class="logo-sub">Smart tidsregistrering</span>
-            </div>
+        <div class="logo-text">
+            <span class="logo-main" data-i18n="app_title">GREENTIME PRO</span>
+            <span class="logo-sub" data-i18n="app_subtitle">Smart tidsregistrering</span>
+        </div>
+    </div>
+
+    <div class="topbar-center">
+        <h1 id="pageTitle">TIDSREGISTRERING</h1>
+    </div>
+
+    <div class="topbar-right">
+        <div class="lang-switch">
+            <button class="lang-btn" data-lang="da">DK</button>
+            <button class="lang-btn" data-lang="en">GB</button>
+            <button class="lang-btn" data-lang="de">DE</button>
+            <button class="lang-btn" data-lang="lt">LT</button>
         </div>
 
-        <!-- Center: side-titel -->
-        <div class="topbar-center">
-            <h1 id="pageTitle" data-i18n="menu_dashboard">Tidsregistrering</h1>
-        </div>
+        <button id="themeToggle" class="theme-toggle">
+            <span id="themeIcon">🌙</span>
+        </button>
+    </div>
+</header>
 
-        <!-- Højre: sprog + tema -->
-        <div class="topbar-right">
-            <!-- Sprogknapper -->
-            <div class="lang-switch">
-                <button class="lang-btn" data-lang="da">DK</button>
-                <button class="lang-btn" data-lang="en">GB</button>
-                <button class="lang-btn" data-lang="de">DE</button>
-                <button class="lang-btn" data-lang="lt">LT</button>
-            </div>
-
-            <!-- Tema-knap -->
-            <button id="themeToggle"
-                    class="theme-toggle"
-                    aria-label="Skift mellem lyst og mørkt tema">
-                <span id="themeIcon">🌙</span>
-            </button>
-        </div>
-    </header>
 
 
     <!-- ==============================================
