@@ -348,41 +348,6 @@ function updateThemeButtonIcon() {
     btn.textContent = current === "light" ? "🌙" : "🌞";
 }
 
-/* ======================================================
-   AFSNIT 04B – PRE-INSTALL DEMO DATA (KUNDER + MEDARBEJDERE)
-   Lægges kun ind hvis der IKKE findes eksisterende data.
-====================================================== */
-
-function installDefaultCustomers() {
-    const existing = JSON.parse(localStorage.getItem("gtp_customers"));
-    if (existing && existing.length > 0) return;
-
-    const demoCustomers = [
-        { name: "Søren Olsen", phone: "21345678", email: "soren@demo.dk", address: "Sølvgade 14, København" },
-        { name: "Peter Jensen", phone: "21453377", email: "peter@firma.dk", address: "Hygge Allé 3, Aarhus" },
-        { name: "Lise Holm", phone: "64732467", email: "lise@holm.dk", address: "Vibevej 22, Hornbæk" },
-        { name: "Camilla Sørensen", phone: "42356789", email: "camilla@camilco.dk", address: "Parkvej 5, Hillerød" },
-        { name: "Anders Lund", phone: "29887766", email: "anders@lund.dk", address: "Nørregade 80, Aalborg" },
-        { name: "Jenny Madsen", phone: "20228855", email: "jenny@mad.dk", address: "Havnevej 7, Esbjerg" }
-    ];
-
-    localStorage.setItem("gtp_customers", JSON.stringify(demoCustomers));
-}
-
-function installDefaultEmployees() {
-    const existing = JSON.parse(localStorage.getItem("gtp_employees"));
-    if (existing && existing.length > 0) return;
-
-    const demoEmployees = [
-        { name: "Lars Kristensen", email: "lars@firma.dk", role: "employee" },
-        { name: "Ronny Kisbye", email: "ronny@kisbye.eu", role: "admin" },
-        { name: "Emma Larsen", email: "emma@firma.dk", role: "employee" },
-        { name: "Lasse Mikkelsen", email: "lasse@firma.dk", role: "employee" },
-        { name: "Mia Knudsen", email: "mia@firma.dk", role: "admin" }
-    ];
-
-    localStorage.setItem("gtp_employees", JSON.stringify(demoEmployees));
-}
 
 
 /* ======================================================
@@ -529,6 +494,27 @@ function updateTimerDisplay(forceMs) {
 }
 
 /* ======================================================
+   AFSNIT 06B – DEMO DATA: KUNDER
+====================================================== */
+
+function installDefaultCustomers() {
+    const existing = JSON.parse(localStorage.getItem("gtp_customers"));
+    if (existing && existing.length > 0) return;
+
+    const demoCustomers = [
+        { name: "Søren Olsen", phone: "21345678", email: "soren@demo.dk", address: "Sølvgade 14, København" },
+        { name: "Peter Jensen", phone: "21453377", email: "peter@firma.dk", address: "Hygge Allé 3, Aarhus" },
+        { name: "Lise Holm", phone: "64732467", email: "lise@holm.dk", address: "Vibevej 22, Hornbæk" },
+        { name: "Camilla Sørensen", phone: "42356789", email: "camilla@camilco.dk", address: "Parkvej 5, Hillerød" },
+        { name: "Anders Lund", phone: "29887766", email: "anders@lund.dk", address: "Nørregade 80, Aalborg" },
+        { name: "Jenny Madsen", phone: "20228855", email: "jenny@mad.dk", address: "Havnevej 7, Esbjerg" }
+    ];
+
+    localStorage.setItem("gtp_customers", JSON.stringify(demoCustomers));
+}
+
+
+/* ======================================================
    AFSNIT 07 – LOGS
    ====================================================== */
 
@@ -573,6 +559,27 @@ function renderLogs() {
         body.appendChild(tr);
     });
 }
+
+/* ======================================================
+   AFSNIT 07B – DEMO DATA: MEDARBEJDERE
+====================================================== */
+
+function installDefaultEmployees() {
+    const existing = JSON.parse(localStorage.getItem("gtp_employees"));
+    if (existing && existing.length > 0) return;
+
+    const demoEmployees = [
+        { name: "Lars Kristensen", email: "lars@firma.dk", role: "employee" },
+        { name: "Ronny Kisbye", email: "ronny@kisbye.eu", role: "admin" },
+        { name: "Emma Larsen", email: "emma@firma.dk", role: "employee" },
+        { name: "Lasse Mikkelsen", email: "lasse@firma.dk", role: "employee" },
+        { name: "Mia Knudsen", email: "mia@firma.dk", role: "admin" }
+    ];
+
+    localStorage.setItem("gtp_employees", JSON.stringify(demoEmployees));
+}
+
+
 
 /* ======================================================
    AFSNIT 08 – KUNDER
