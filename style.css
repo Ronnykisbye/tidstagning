@@ -1,139 +1,87 @@
 /* ======================================================
-   AFSNIT 01 – SIDEBAR (NY & MODERN RESPONSIV VERSION)
+   AFSNIT 04 – SIDEBAR
    ====================================================== */
 
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
     width: 240px;
+    height: 100vh;
     background: var(--bg-sidebar);
-    border-right: 1px solid var(--sidebar-border);
-    padding: 24px 20px;
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    transition: width 0.3s ease, transform 0.3s ease;
-    z-index: 30;
+    padding: 20px;
+    gap: 20px;
+    z-index: 50;
+    transition: transform 0.3s ease;
 }
 
-/* Logo sektion */
-.sidebar-logo {
-    margin-bottom: 32px;
-}
-
-.sidebar-logo .logo-main {
-    font-size: 1.1rem;
+/* Sidebar header */
+.sidebar-header {
+    font-size: 1.4rem;
     font-weight: 800;
-    letter-spacing: 0.06em;
     color: var(--text-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.sidebar-logo .logo-sub {
-    font-size: 0.75rem;
-    opacity: 0.8;
+.sidebar-sub {
+    font-size: 0.8rem;
     color: var(--text-muted);
+    margin-top: -10px;
 }
 
-/* Menu links */
-.sidebar-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sidebar-menu a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* Menu knapper */
+.sidebar nav a {
+    display: block;
     padding: 10px 14px;
     border-radius: 8px;
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--text-normal);
+    color: var(--text-muted);
+    font-size: 1rem;
     text-decoration: none;
-    transition: 0.2s ease;
+    font-weight: 500;
+    transition: 0.20s ease;
 }
 
-.sidebar-menu a:hover {
-    background: var(--sidebar-hover);
+.sidebar nav a:hover {
+    background: var(--hover);
     color: var(--text-strong);
 }
 
-.sidebar-menu a.active {
-    background: var(--sidebar-active);
-    color: var(--sidebar-active-text);
+.sidebar nav a.active {
+    background: var(--accent-glow);
+    color: white;
+    font-weight: 600;
 }
 
-/* ========= IKONER I SIDEBAR (auto) ========= */
-
-.sidebar-menu a i {
-    font-size: 1.2rem;
-    width: 22px;
-    text-align: center;
-}
-
-/* ========= MOBIL-TILSTAND (auto collapse) ========= */
-
-.menu-toggle-mobile {
-    display: none;
-}
-
+/* Mobil version */
 @media (max-width: 900px) {
-
     .sidebar {
-        transform: translateX(-260px);
+        transform: translateX(-100%);
     }
 
     .sidebar.open {
         transform: translateX(0);
     }
 
-    .menu-toggle-mobile {
-        display: flex;
-        position: fixed;
-        top: 16px;
-        left: 16px;
-        width: 42px;
-        height: 42px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        font-size: 1.3rem;
-        background: var(--sidebar-toggle-bg);
-        color: var(--sidebar-toggle-text);
-        cursor: pointer;
-        z-index: 40;
-    }
-
-    /* Når sidebar er åben gør vi baggrunden mørk */
-    .sidebar-overlay {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.45);
-        backdrop-filter: blur(3px);
-        z-index: 25;
-        display: none;
-    }
-
-    .sidebar.open + .sidebar-overlay {
-        display: block;
+    /* Topbar får plads når sidebar er skjult */
+    body.sidebar-closed .sidebar {
+        transform: translateX(-100%);
     }
 }
 
-/* ========= SMALL-SIDEBAR MODE (auto når vinduet er smalt) ========= */
+/* Content flyttes til højre */
+.page {
+    margin-left: 240px;
+    padding: 30px;
+}
 
-@media (min-width: 901px) and (max-width: 1250px) {
-    .sidebar {
-        width: 200px;
-    }
-    .sidebar-menu a {
-        padding: 8px 12px;
-        font-size: 0.86rem;
+@media (max-width: 900px) {
+    .page {
+        margin-left: 0 !important;
+        padding: 20px;
     }
 }
 
