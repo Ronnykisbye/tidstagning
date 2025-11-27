@@ -243,7 +243,7 @@ function installDefaultCustomers() {
 
 
 /* ======================================================
-   AFSNIT 07 – KUNDER (FORM + LISTE)
+   AFSNIT 07 – KUNDER (FORM + LISTE) – TABELVERSION
 ====================================================== */
 
 function initCustomerForm() {
@@ -273,15 +273,22 @@ function saveCustomer(customer) {
 }
 
 function renderCustomers() {
-    const container = document.getElementById("customerList");
-    if (!container) return;
+    const tbody = document.getElementById("customerTableBody");
+    if (!tbody) return;
 
     const customers = JSON.parse(localStorage.getItem("gtp_customers")) || [];
-    container.innerHTML = customers
-        .map(c => `<li>${c.name} – ${c.phone}</li>`)
+
+    tbody.innerHTML = customers
+        .map(c => `
+            <tr>
+                <td>${c.name}</td>
+                <td>${c.phone}</td>
+                <td>${c.email}</td>
+                <td>${c.address}</td>
+            </tr>
+        `)
         .join("");
 }
-
 
 /* ======================================================
    AFSNIT 07B – DEMO DATA: MEDARBEJDERE
@@ -304,7 +311,7 @@ function installDefaultEmployees() {
 
 
 /* ======================================================
-   AFSNIT 08 – MEDARBEJDERE (FORM + LISTE)
+   AFSNIT 08 – MEDARBEJDERE (FORM + LISTE) – TABELVERSION
 ====================================================== */
 
 function initEmployeeForm() {
@@ -333,11 +340,18 @@ function saveEmployee(employee) {
 }
 
 function renderEmployees() {
-    const container = document.getElementById("employeeList");
-    if (!container) return;
+    const tbody = document.getElementById("employeeTableBody");
+    if (!tbody) return;
 
     const employees = JSON.parse(localStorage.getItem("gtp_employees")) || [];
-    container.innerHTML = employees
-        .map(e => `<li>${e.name} – ${e.email}</li>`)
+
+    tbody.innerHTML = employees
+        .map(e => `
+            <tr>
+                <td>${e.name}</td>
+                <td>${e.email}</td>
+                <td>${e.role}</td>
+            </tr>
+        `)
         .join("");
 }
