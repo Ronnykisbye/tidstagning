@@ -1,25 +1,22 @@
 
 /* ======================================================
-   AFSNIT 02 – LAYOUT (SIDEBAR + CONTENT) – ELEGANT DARK MODE
+   AFSNIT 02 – SIDEBAR (KORREKT OG ENKELT)
 ====================================================== */
 
-/* SIDEBAR */
 .sidebar {
     width: 260px;
     height: 100vh;
     position: fixed;
-    left: 0;
     top: 0;
+    left: 0;
     padding: 35px 28px;
     display: flex;
     flex-direction: column;
     background: var(--bg-card);
     border-right: 1px solid var(--border);
     box-shadow: 0 0 25px rgba(0,0,0,0.25);
-    z-index: 20;
-
-    /* Blødt elegant look */
     backdrop-filter: blur(10px);
+    z-index: 20;
 }
 
 /* Sidebar indhold */
@@ -46,7 +43,7 @@
 }
 
 .sidebar-menu a.active {
-    background: rgba(138, 43, 226, 0.25); /* Elegant neon violet */
+    background: rgba(138, 43, 226, 0.25); /* Neon accent */
     color: #a06bff;
     font-weight: 700;
     padding-left: 12px;
@@ -55,156 +52,20 @@
 
 /* CONTENT OMRÅDE */
 .content {
-    margin-left: 260px; /* matcher sidebar width */
+    margin-left: 260px;
     padding: 50px 60px;
     min-height: 100vh;
     background: var(--bg);
     transition: background 0.3s ease, margin-left 0.3s ease;
 }
 
-/* Side-sektioner */
+/* Page visibility */
 .page {
     display: none;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .page.visible {
     display: block;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Overskrifter på siderne */
-.page h2, .page h3 {
-    color: var(--text);
-    margin-bottom: 10px;
-}
-
-/* Formularer i Planning (dark mode fix) */
-.content input,
-.content select,
-.content textarea {
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 8px 10px;
-    border-radius: 6px;
-}
-
-.content input:focus,
-.content select:focus,
-.content textarea:focus {
-    outline: 2px solid #a06bff;
-    border-color: #a06bff;
-    box-shadow: 0 0 8px rgba(160,107,255,0.5);
-}
-
-/* Knapper */
-.content button {
-    background: #a06bff;
-    color: white;
-    padding: 8px 18px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.content button:hover {
-    background: #bb89ff;
-    box-shadow: 0 0 12px rgba(160,107,255,0.55);
-}
-
-
-
-
-/* ======================================================
-   AFSNIT 04 – SIDEBAR
-   ====================================================== */
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 240px;
-    height: 100vh;
-    background: var(--bg-sidebar);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-    z-index: 50;
-    transition: transform 0.3s ease;
-}
-
-/* Sidebar header */
-.sidebar-header {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--text-strong);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.sidebar-sub {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: -10px;
-}
-
-/* Menu knapper */
-.sidebar nav a {
-    display: block;
-    padding: 10px 14px;
-    border-radius: 8px;
-    color: var(--text-muted);
-    font-size: 1rem;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.20s ease;
-}
-
-.sidebar nav a:hover {
-    background: var(--hover);
-    color: var(--text-strong);
-}
-
-.sidebar nav a.active {
-    background: var(--accent-glow);
-    color: white;
-    font-weight: 600;
-}
-
-/* Mobil version */
-@media (max-width: 900px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-
-    .sidebar.open {
-        transform: translateX(0);
-    }
-
-    /* Topbar får plads når sidebar er skjult */
-    body.sidebar-closed .sidebar {
-        transform: translateX(-100%);
-    }
-}
-
-/* Content flyttes til højre */
-.page {
-    margin-left: 240px;
-    padding: 30px;
-}
-
-@media (max-width: 900px) {
-    .page {
-        margin-left: 0 !important;
-        padding: 20px;
-    }
 }
 
 /* ======================================================
