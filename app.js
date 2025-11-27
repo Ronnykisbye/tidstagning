@@ -291,20 +291,33 @@ function initLanguageButtons() {
 
 
 /* ======================================================
-   AFSNIT 05 – TEMA (DARK / LIGHT)
+   AFSNIT 05 – TEMA (DARK / LIGHT) – FIX MED IKON
 ====================================================== */
 
 function initThemeToggle() {
     const btn = document.getElementById("themeToggle");
-    if (!btn) return;
+    const icon = document.getElementById("themeIcon"); // <-- IKON!!!
+
+    if (!btn || !icon) return;
+
+    // Indlæs gemt tema
+    const saved = localStorage.getItem("gtp_theme") || "light";
+    document.documentElement.setAttribute("data-theme", saved);
+    icon.textContent = saved === "dark" ? "🌙" : "☀️";
 
     btn.addEventListener("click", () => {
         const current = document.documentElement.getAttribute("data-theme");
         const next = current === "light" ? "dark" : "light";
+
+        // Skift tema
         document.documentElement.setAttribute("data-theme", next);
         localStorage.setItem("gtp_theme", next);
+
+        // Skift ikon
+        icon.textContent = next === "dark" ? "🌙" : "☀️";
     });
 }
+
 
 
 /* ======================================================
