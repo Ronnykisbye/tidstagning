@@ -213,40 +213,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ======================================================
-   AFSNIT 03 – SIDEBAR + NAVIGATION
+   AFSNIT 03 – SIDEBAR + NAVIGATION (FAST & KORREKT)
 ====================================================== */
 
 function initSidebarNavigation() {
-    const buttons = document.querySelectorAll(".menu-item");
+    // Find alle menupunkter i venstre sidebar
+    const buttons = document.querySelectorAll(".sidebar-menu a[data-page]");
+    if (!buttons.length) return;
 
+    // Gør første menupunkt aktivt og vis den tilhørende side
+    const first = buttons[0];
+    first.classList.add("active");
+    showPage(first.dataset.page);
+    updatePageTitleFromActiveMenu();
+
+    // Klik-håndtering på alle menupunkter
     buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
+        // Sørg for at de også har menu-item class, hvis vi vil style på den
+        btn.classList.add("menu-item");
+
+        btn.addEventListener("click", (evt) => {
+            evt.preventDefault();
+
             const pageId = btn.dataset.page;
             if (!pageId) return;
 
-            showPage(pageId);
-
+            // Skift aktivt menupunkt
             buttons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
 
+            // Vis korrekt side
+            showPage(pageId);
+
+            // Opdatér topbar-titel
             updatePageTitleFromActiveMenu();
         });
     });
 }
 
 function showPage(pageId) {
+    // Viser kun den side, der matcher pageId
     document.querySelectorAll(".page").forEach(page => {
-        page.classList.toggle("visible", page.id === pageId);
+        const isActive = page.id === pageId;
+        page.classList.toggle("visible", isActive);
     });
 }
 
 function updatePageTitleFromActiveMenu() {
-    const activeBtn = document.querySelector(".menu-item.active");
+    const activeBtn = document.querySelector(".sidebar-menu a.active");
     const pageTitle = document.getElementById("pageTitle");
+    if (!activeBtn || !pageTitle) return;
 
-    if (activeBtn && pageTitle) {
-        const i18nKey = activeBtn.dataset.i18n;
-        pageTitle.textContent = t(i18nKey);
+    // Find det indre element med data-i18n (span med selve menuteksten)
+    const labelEl = activeBtn.querySelector("[data-i18n]");
+    const key = labelEl?.dataset.i18n;
+
+    // Hvis der findes en i18n-nøgle, brug oversættelser – ellers brug ren tekst
+    if (key) {
+        pageTitle.textContent = t(key);
+    } else if (labelEl) {
+        pageTitle.textContent = labelEl.textContent.trim();
     }
 }
 
