@@ -1,60 +1,141 @@
 /* ======================================================
-   AFSNIT 01 – FARVETEMA (LIGHT + DARK MODE)
-====================================================== */
+   AFSNIT 01 – SIDEBAR (NY & MODERN RESPONSIV VERSION)
+   ====================================================== */
 
-/* =============================
-   LIGHT MODE
- ============================= */
-
-:root[data-theme="light"] {
-    --bg-body: #f4f6f9;
-    --bg-topbar: #ffffff;
-    --bg-sidebar: #ffffff;
-    --bg-card: #ffffff;
-    --bg-input: #ffffff;
-
-    --text-strong: #0f172a;
-    --text-normal: #1e293b;
-    --text-muted: #64748b;
-
-    --accent: #3b82f6;
-    --accent-hover: #2563eb;
-
-    --border-color: rgba(0,0,0,0.1);
-    --shadow-color: rgba(0,0,0,0.1);
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 240px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--sidebar-border);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease, transform 0.3s ease;
+    z-index: 30;
 }
 
-
-/* DARK MODE */
-[data-theme="dark"] {
-    --bg-body: #0b1623;
-    --bg-topbar: rgba(15, 23, 42, 0.70);
-    --bg-sidebar: #0f172a;
-    --bg-card: #111c2f;
-
-    --text-strong: #e2e8f0;
-    --text-normal: #cbd5e1;
-    --text-muted: #94a3b8;
-
-    --menu-active-bg: linear-gradient(90deg, #4c6ef5, #7b8eff);
-    --menu-hover-bg: rgba(255, 255, 255, 0.08);
-    --menu-text: #e2e8f0;
-
-    --btn-primary-bg: #4c6ef5;
-    --btn-primary-text: #ffffff;
-
-    --calendar-empty: rgba(255,255,255,0.06);
-    --calendar-medium: #facc15;
-    --calendar-busy: #ef4444;
+/* Logo sektion */
+.sidebar-logo {
+    margin-bottom: 32px;
 }
 
-/* Fælles styling */
-body {
-    background: var(--bg-body);
+.sidebar-logo .logo-main {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--text-strong);
+}
+
+.sidebar-logo .logo-sub {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    color: var(--text-muted);
+}
+
+/* Menu links */
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
     color: var(--text-normal);
-    transition: background 0.25s ease, color 0.25s ease;
+    text-decoration: none;
+    transition: 0.2s ease;
 }
 
+.sidebar-menu a:hover {
+    background: var(--sidebar-hover);
+    color: var(--text-strong);
+}
+
+.sidebar-menu a.active {
+    background: var(--sidebar-active);
+    color: var(--sidebar-active-text);
+}
+
+/* ========= IKONER I SIDEBAR (auto) ========= */
+
+.sidebar-menu a i {
+    font-size: 1.2rem;
+    width: 22px;
+    text-align: center;
+}
+
+/* ========= MOBIL-TILSTAND (auto collapse) ========= */
+
+.menu-toggle-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        transform: translateX(-260px);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .menu-toggle-mobile {
+        display: flex;
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        width: 42px;
+        height: 42px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.3rem;
+        background: var(--sidebar-toggle-bg);
+        color: var(--sidebar-toggle-text);
+        cursor: pointer;
+        z-index: 40;
+    }
+
+    /* Når sidebar er åben gør vi baggrunden mørk */
+    .sidebar-overlay {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.45);
+        backdrop-filter: blur(3px);
+        z-index: 25;
+        display: none;
+    }
+
+    .sidebar.open + .sidebar-overlay {
+        display: block;
+    }
+}
+
+/* ========= SMALL-SIDEBAR MODE (auto når vinduet er smalt) ========= */
+
+@media (min-width: 901px) and (max-width: 1250px) {
+    .sidebar {
+        width: 200px;
+    }
+    .sidebar-menu a {
+        padding: 8px 12px;
+        font-size: 0.86rem;
+    }
+}
 
 /* ======================================================
    AFSNIT 02 – CSS VARIABLER (LYS / MØRK MODE)
