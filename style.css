@@ -105,22 +105,23 @@
     display: block;
 }
 
-/* ======================================================
+//* ======================================================
    AFSNIT 02a – CSS VARIABLER (LYS / MØRK MODE)
 ====================================================== */
 
 /* ---------- Dark Mode (default) ---------- */
 :root {
     /* Baggrund */
-    --bg: #0b1220;       /* VIGTIG – dette styrer skrivebordet */
-    --bg-body: #0b1220;
+    --bg: #0b1220;        /* skrivebord */
+    --bg-body: #0a0f1a;   /* body baggrund */
     --bg-card: #0f172a;
     --bg-sidebar: #0a0f1a;
     --bg-topbar: #0d1525;
 
-    /* Tekst */
-    --text-strong: #f1f5f9;
-    --text-muted: #94a3b8;
+    /* Tekst (⭐ MANGLEDE) */
+    --text: #cbd5e1;          /* normal tekst */
+    --text-strong: #f1f5f9;   /* overskrifter */
+    --text-muted: #94a3b8;    /* svag tekst */
 
     /* Neon */
     --neon-blue: #3b82f6;
@@ -134,27 +135,31 @@
 
 /* ---------- Light Mode ---------- */
 [data-theme="light"] {
-    /* Baggrund */
-    --bg: #f4f7fb;       /* VIGTIG – dette styrer skrivebordet */
-    --bg-body: #f4f7fb;
+    --bg: #f4f7fb;
+    --bg-body: #ffffff;
     --bg-card: #ffffff;
     --bg-sidebar: #e6ecf5;
     --bg-topbar: #ffffff;
 
-    /* Tekst */
+    --text: #475569;
     --text-strong: #0f172a;
-    --text-muted: #475569;
+    --text-muted: #64748b;
 
-    /* Neon */
     --neon-blue: #2563eb;
     --neon-purple: #7c3aed;
     --neon-green: #059669;
 
-    /* Rammer */
     --border: rgba(0,0,0,0.08);
     --border-subtle: rgba(0,0,0,0.05);
 }
 
+/* ⭐ Global body styling – FIXER det hvide skrivebord */
+body {
+    background: var(--bg-body);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
 
 /* ======================================================
    AFSNIT 03 – TOPBAR (RETTAF VERSION)
