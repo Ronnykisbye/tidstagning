@@ -89,14 +89,7 @@
     box-shadow: inset 0 0 10px rgba(160,107,255,0.4);
 }
 
-/* CONTENT OMRÅDE */
-.content {
-    margin-left: 260px;
-    padding: 50px 60px;
-    min-height: 100vh;
-    background: var(--bg);
-    transition: background 0.3s ease, margin-left 0.3s ease;
-}
+
 
 /* Page visibility */
 .page {
