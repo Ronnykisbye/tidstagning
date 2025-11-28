@@ -69,166 +69,103 @@
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- ======================================================
-     AFSNIT 03 – CONTENT WRAPPER (HØJRE SIDE)
+     SIDE-INDHOLD WRAPPER
 ====================================================== -->
 <div class="content-wrapper">
 
-    <!-- ======================================================
-         SIDE: TIDSREGISTRERING (TIMEREG)
-    ====================================================== -->
-    <section id="timereg" class="page active">
+    <!-- ================================================
+         SIDE: TIDSREGISTRERING
+    ================================================= -->
+    <section id="dashboardPage" class="page active">
+        <h2 data-i18n="timereg">Tidsregistrering</h2>
+        <p data-i18n="timereg_desc">Registrer tid på kunder du arbejder hos.</p>
 
-        <!-- Overskrift -->
-        <h2 data-i18n="timereg_title">Tidsregistrering</h2>
-
-        <!-- KUNDEVALG (dropdown) -->
-        <div class="timereg-section">
-            <label data-i18n="timereg_customer_label">Kunde vi arbejder hos</label>
-
-            <select id="timeregCustomerSelect" class="dropdown">
-                <option value="" data-i18n="timereg_choose_customer">
-                    Vælg en kunde
-                </option>
+        <div id="timereg" class="timereg-wrapper">
+            <label for="timeregCustomer" data-i18n="customer_working">Kunde vi arbejder hos</label>
+            <select id="timeregCustomer">
+                <option value="" data-i18n="choose_customer">Vælg en kunde</option>
             </select>
+
+            <div class="timereg-display">
+                <span data-i18n="time_today">Tid i dag:</span>
+                <span id="timerDisplay">0:00</span>
+            </div>
+
+            <div class="timereg-buttons">
+                <button id="timerStartBtn" class="btn-green" data-i18n="start">Start</button>
+                <button id="timerStopBtn" class="btn-red" data-i18n="stop">Stop</button>
+            </div>
         </div>
-
-        <!-- TID I DAG / DISPLAY -->
-        <div class="timereg-display">
-            <span id="timeregDisplayText" data-i18n="timereg_today_time">
-                Tid i dag: 0:00
-            </span>
-        </div>
-
-        <!-- START / STOP KNAPPER -->
-        <div class="timereg-buttons">
-            <button id="timeregStartBtn" class="btn-green" data-i18n="timereg_btn_start">
-                Start
-            </button>
-
-            <button id="timeregStopBtn" class="btn-red" data-i18n="timereg_btn_stop">
-                Stop
-            </button>
-        </div>
-
     </section>
 
-    <!-- ======================================================
+    <!-- ================================================
          SIDE: KUNDER
-    ====================================================== -->
+    ================================================= -->
     <section id="customersPage" class="page">
-        <h2 data-i18n="customers_title">Kunder</h2>
-        <p data-i18n="customers_sub">Opret og se dine kunder.</p>
+        <h2 data-i18n="customers">Kunder</h2>
+        <p data-i18n="customers_desc">Opret og se dine kunder.</p>
 
-        <button id="addCustomerBtn" class="btn-green" data-i18n="customers_add_btn">
-            Tilføj kunde
-        </button>
+        <button id="addCustomerBtn" class="btn-neutral" data-i18n="add_customer">Tilføj kunde</button>
 
-        <div id="customerList" class="customer-list"></div>
+        <div class="list-wrapper" id="customerList"></div>
     </section>
 
-    <!-- ======================================================
+    <!-- ================================================
          SIDE: MEDARBEJDERE
-    ====================================================== -->
+    ================================================= -->
     <section id="employeesPage" class="page">
-        <h2 data-i18n="employees_title">Medarbejdere</h2>
-        <p data-i18n="employees_sub">Opret og se medarbejdere.</p>
+        <h2 data-i18n="employees">Medarbejdere</h2>
+        <p data-i18n="employees_desc">Opret og se medarbejdere.</p>
 
-        <button id="addEmployeeBtn" class="btn-green" data-i18n="employees_add_btn">
-            Tilføj medarbejder
-        </button>
+        <button id="addEmployeeBtn" class="btn-neutral" data-i18n="add_employee">Tilføj medarbejder</button>
 
-        <div id="employeeList" class="employee-list"></div>
+        <div class="list-wrapper" id="employeeList"></div>
     </section>
 
-    <!-- ======================================================
-         SIDE: PLANLÆGNING (BASIS STRUKTUR)
-    ====================================================== -->
+    <!-- ================================================
+         SIDE: PLANLÆGNING
+    ================================================= -->
     <section id="planningPage" class="page">
-        <h2 data-i18n="planning_title">Planlægning</h2>
-        <p data-i18n="planning_sub">Planlæg kommende opgaver, aftaler og ressourcer.</p>
+        <h2 data-i18n="planning">Planlægning</h2>
+        <p data-i18n="planning_desc">Planlæg kommende opgaver og opret aftaler.</p>
 
-        <div class="card planning-form">
-            <h3>Ny planlagt opgave</h3>
-
-            <div class="form-group">
-                <label>Kunde</label>
-                <select id="planningCustomer"></select>
-            </div>
-
-            <div class="form-group">
-                <label>Dato</label>
-                <input type="date" id="planningDate">
-            </div>
-
-            <div class="form-group">
-                <label>Tidspunkt</label>
-                <select id="planningTime">
-                    <option>08:00</option><option>08:30</option>
-                    <option>09:00</option><option>09:30</option>
-                    <option>10:00</option><option>10:30</option>
-                    <option>11:00</option><option>11:30</option>
-                    <option>12:00</option><option>12:30</option>
-                    <option>13:00</option><option>13:30</option>
-                    <option>14:00</option><option>14:30</option>
-                    <option>15:00</option><option>15:30</option>
-                    <option>16:00</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Medarbejder</label>
-                <select id="planningEmployee"></select>
-            </div>
-
-            <div class="form-group">
-                <label>Beskrivelse</label>
-                <textarea id="planningDescription"></textarea>
-            </div>
-
-            <button id="addPlanningTask" class="btn-primary">Tilføj opgave</button>
-        </div>
-
-        <div class="card planning-calendar">
-            <div class="calendar-header">
-                <button id="prevMonth">⟵</button>
-                <h3 id="calendarMonth"></h3>
-                <button id="nextMonth">⟶</button>
-            </div>
-            <div id="calendarGrid" class="calendar-grid"></div>
-        </div>
-
-        <div class="card planning-day-tasks">
-            <h3>Opgaver denne dag</h3>
-            <ul id="dayTaskList"></ul>
+        <div class="planning-layout">
+            <div class="card" id="planningLeft"></div>
+            <div class="card" id="planningRight"></div>
         </div>
     </section>
 
-    <!-- ======================================================
+    <!-- ================================================
          SIDE: LOGS
-    ====================================================== -->
+    ================================================= -->
     <section id="logsPage" class="page">
-        <h2 data-i18n="logs_title">Logs</h2>
-        <p data-i18n="logs_sub">Her vil dine logs komme senere.</p>
+        <h2 data-i18n="logs">Logs</h2>
+        <p data-i18n="logs_desc">Se registreret arbejdstid.</p>
+
+        <div id="logsContainer"></div>
     </section>
 
-    <!-- ======================================================
+    <!-- ================================================
          SIDE: RAPPORTER
-    ====================================================== -->
+    ================================================= -->
     <section id="reportsPage" class="page">
-        <h2 data-i18n="reports_title">Rapporter</h2>
-        <p data-i18n="reports_sub">Rapportmodul bliver tilføjet senere.</p>
+        <h2 data-i18n="reports">Rapporter</h2>
+        <p data-i18n="reports_desc">Se rapporter og statistik.</p>
+
+        <div id="reportsContainer"></div>
     </section>
 
-    <!-- ======================================================
+    <!-- ================================================
          SIDE: INDSTILLINGER
-    ====================================================== -->
+    ================================================= -->
     <section id="settingsPage" class="page">
-        <h2 data-i18n="settings_title">Indstillinger</h2>
-        <p data-i18n="settings_sub">Basisindstillinger for appen.</p>
+        <h2 data-i18n="settings">Indstillinger</h2>
+        <p data-i18n="settings_desc">Tilpas dine præferencer og sprog.</p>
+
+        <div id="settingsContainer"></div>
     </section>
 
 </div>
-
-<script src="app.js"></script>
-</body>
-</html>
+<!-- ======================================================
+     SLUT PÅ SIDE-INDHOLD WRAPPER
+====================================================== -->
