@@ -93,7 +93,7 @@
 
 <div class="content-wrapper">
 
-            <!-- ======================================================
+                    <!-- ======================================================
              AFSNIT – TIDSREGISTRERING (DASHBOARD PAGE)
         ====================================================== -->
 
@@ -101,36 +101,56 @@
 
             <!-- Titel -->
             <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
+            <p data-i18n="timereg_sub">Registrer tid på kunder du arbejder hos.</p>
 
-            <!-- Wrapper -->
             <div class="timereg-wrapper">
 
                 <!-- ============================
                      Kundevælger
                 ============================ -->
-                <label data-i18n="timereg_customer_label">Vælg kunde</label>
+                <label data-i18n="timereg_customer_label">Kunde vi arbejder hos</label>
 
-                <select id="timeregCustomerSelect">
-                    <!-- Kundenavne indsættes via JS -->
-                </select>
+                <select id="timeregCustomerSelect"></select>
 
                 <!-- ============================
-                     Medarbejder knapper
+                     Medarbejder knapper (chips)
                 ============================ -->
                 <label data-i18n="timereg_employee_label">Medarbejdere</label>
 
-                <div class="timereg-employee-container" id="timeregEmployeeBtns">
-                    <!-- Medarbejderknapper indsættes via JS -->
+                <div id="timeregEmployeeContainer"
+                     class="timereg-employee-container">
+                    <!-- Medarbejder-knapper kommer fra JS -->
                 </div>
 
                 <!-- ============================
-                     Tid i dag – display
+                     Tid i dag
                 ============================ -->
                 <div id="timeregDisplayText"
                      class="timereg-display"
-                     data-i18n="timereg_today">
+                     data-i18n="timereg_today_time">
                      Tid i dag: 00:00
                 </div>
+
+                <!-- ============================
+                     START / STOP – LED VERSION
+                ============================ -->
+                <div class="timereg-buttons">
+
+                    <button id="timeregStartBtn"
+                            data-i18n="timereg_btn_start">
+                        Start
+                    </button>
+
+                    <button id="timeregStopBtn"
+                            data-i18n="timereg_btn_stop">
+                        Stop
+                    </button>
+
+                </div>
+
+            </div> <!-- /timereg-wrapper -->
+
+        </section>
 
         <!-- ==================================================
      TIMEREG – START/STOP (LED VERSION – RETTET)
