@@ -488,14 +488,27 @@ function initTimer() {
 
     if (!startBtn || !stopBtn || !display) return;
 
+    // Starttilstand: ingen LED tændt
+    startBtn.classList.remove("active");
+    stopBtn.classList.remove("active");
+
     updateTimerDisplay(display);
 
-    startBtn.addEventListener("click", () => startTimer(display));
-    stopBtn.addEventListener("click", () => stopTimer(display));
+    // Når man klikker START → tænd grøn LED, sluk rød
+    startBtn.addEventListener("click", () => startTimer(display, startBtn, stopBtn));
+
+    // Når man klikker STOP → tænd rød LED, sluk grøn
+    stopBtn.addEventListener("click", () => stopTimer(display, startBtn, stopBtn));
 }
 
-function startTimer(display) {
+function startTimer(display, startBtn, stopBtn) {
     if (timerInterval) return;
+
+    // LED-tilstand
+    if (startBtn && stopBtn) {
+        startBtn.classList.add("active");
+        stopBtn.classList.remove("active");
+    }
 
     timerInterval = setInterval(() => {
         timerSeconds += 60; // ét minut ad gangen
@@ -503,11 +516,25 @@ function startTimer(display) {
     }, 1000);
 }
 
-function stopTimer(display) {
-    if (!timerInterval) return;
+function stopTimer(display, startBtn, stopBtn) {
+    if (!timerInterval) {
+        // Hvis man trykker STOP uden aktiv timer, skal LED stadig skifte
+        if (startBtn && stopBtn) {
+            startBtn.classList.remove("active");
+            stopBtn.classList.add("active");
+        }
+        return;
+    }
 
     clearInterval(timerInterval);
     timerInterval = null;
+
+    // LED-tilstand
+    if (startBtn && stopBtn) {
+        startBtn.classList.remove("active");
+        stopBtn.classList.add("active");
+    }
+
     updateTimerDisplay(display);
 }
 
@@ -519,6 +546,7 @@ function updateTimerDisplay(display) {
     const label = t("timereg_today_time");
     display.textContent = `${label}: ${h}:${m}`;
 }
+
 
 /* ======================================================
    AFSNIT 10 – TIDSREGISTRERING: KUNDE-DROPDOWN
