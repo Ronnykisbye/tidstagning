@@ -110,6 +110,14 @@
                 <option value="" data-i18n="timereg_choose_customer">Vælg en kunde</option>
             </select>
 
+            <!-- ==================================================
+                 TIMEREG – MEDARBEJDER-KNAPPER
+                 (LIGE UNDER KUNDE-FELTET – DER HVOR DIN STREG VAR)
+            ================================================== -->
+            <div id="timeregEmployeeContainer" class="timereg-employee-container">
+                <!-- Knapper fyldes automatisk af JS (renderTimeregEmployees) -->
+            </div>
+
             <div id="timeregDisplayText"
                  class="timereg-display"
                  data-i18n="timereg_today_time">
@@ -157,15 +165,6 @@
         <div class="list-wrapper" id="employeeList"></div>
     </section>
 
-<!-- ======================================================
-     TIMEREG – MEDARBEJDER-KNAPPER
-     (Viser én knap pr. medarbejder – samme stil som sprogknapper)
-====================================================== -->
-<div id="timeregEmployeeContainer" class="timereg-employee-container">
-    <!-- Knapper fyldes automatisk af JS (renderTimeregEmployees) -->
-</div>
-
-    
     <!-- ================================================
          SIDE: PLANLÆGNING
     ================================================= -->
@@ -210,6 +209,7 @@
     </section>
 
 </div>
+
 
 
 <!-- ======================================================
