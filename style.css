@@ -928,3 +928,108 @@ html[data-theme="light"] .timereg-employee-btn.active::after {
 html[data-theme="dark"] .timereg-employee-btn.active::after {
     background: rgba(0, 110, 255, 0.55);
 }
+
+/* ======================================================
+   AFSNIT 24 – START/STOP 3D-GLOW KNAPPER
+   (Samme 3D-look, glow og interaktivitet som sprogknapper)
+====================================================== */
+
+.timereg-buttons button {
+    padding: 10px 24px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+    text-transform: none;
+    position: relative;
+}
+
+/* -------------------------------------------
+   Light mode – inaktiv
+------------------------------------------- */
+
+html[data-theme="light"] #timeregStartBtn {
+    background: #22c55e;
+    color: white;
+    box-shadow:
+        inset 0 0 4px rgba(255,255,255,0.4),
+        0 4px 12px rgba(34, 197, 94, 0.45);
+}
+
+html[data-theme="light"] #timeregStopBtn {
+    background: #ef4444;
+    color: white;
+    box-shadow:
+        inset 0 0 4px rgba(255,255,255,0.4),
+        0 4px 12px rgba(239, 68, 68, 0.45);
+}
+
+/* -------------------------------------------
+   Dark mode – inaktiv
+------------------------------------------- */
+
+html[data-theme="dark"] #timeregStartBtn {
+    background: #15803d;
+    color: white;
+    box-shadow:
+        inset 0 0 4px rgba(255,255,255,0.15),
+        0 4px 16px rgba(34, 197, 94, 0.55);
+}
+
+html[data-theme="dark"] #timeregStopBtn {
+    background: #b91c1c;
+    color: white;
+    box-shadow:
+        inset 0 0 4px rgba(255,255,255,0.15),
+        0 4px 16px rgba(239, 68, 68, 0.55);
+}
+
+/* -------------------------------------------
+   Hover-effekt – samme som sprogknapper
+------------------------------------------- */
+
+.timereg-buttons button:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+/* -------------------------------------------
+   “Tryk ned”-effekt
+------------------------------------------- */
+
+.timereg-buttons button:active {
+    transform: scale(0.97);
+}
+
+/* -------------------------------------------
+   Inner glow – Start
+------------------------------------------- */
+
+#timeregStartBtn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    filter: blur(16px);
+    opacity: 0.45;
+    background: rgba(34, 197, 94, 0.65);
+    z-index: -1;
+}
+
+/* -------------------------------------------
+   Inner glow – Stop
+------------------------------------------- */
+
+#timeregStopBtn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    filter: blur(16px);
+    opacity: 0.45;
+    background: rgba(239, 68, 68, 0.65);
+    z-index: -1;
+}
+
