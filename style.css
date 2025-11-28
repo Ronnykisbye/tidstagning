@@ -234,6 +234,75 @@ button {
     box-shadow: 0 10px 32px rgba(88, 122, 255, 0.75);
 }
 
+/* ======================================================
+   AFSNIT 4a – LMM KNAP (LYS + MØRK MODE + 3D EFFEKT)
+   (Erstatter alle tidligere styles for #themeToggle)
+====================================================== */
+
+.theme-toggle {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s ease;
+    position: relative;
+    font-size: 22px;
+}
+
+/* -------- LYS MODE (SOL) -------- */
+html[data-theme="light"] .theme-toggle {
+    background: radial-gradient(circle, #FFD45A, #F5A623);
+    box-shadow:
+        0 4px 10px rgba(255, 193, 7, 0.45),
+        0 0 18px rgba(255, 193, 7, 0.35);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+    transform: scale(1.07);
+    box-shadow:
+        0 6px 16px rgba(255, 193, 7, 0.55),
+        0 0 26px rgba(255, 193, 7, 0.45);
+}
+
+/* -------- MØRK MODE (MÅNE – BLÅ GLOW) -------- */
+html[data-theme="dark"] .theme-toggle {
+    background: radial-gradient(circle, #163A73, #0A1A33);
+    box-shadow:
+        0 4px 14px rgba(0, 110, 255, 0.45),
+        0 0 22px rgba(0, 110, 255, 0.35);
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+    transform: scale(1.07);
+    box-shadow:
+        0 6px 18px rgba(0, 110, 255, 0.55),
+        0 0 30px rgba(0, 110, 255, 0.45);
+}
+
+/* -------- 3D / GLOW UNDER KNAP -------- */
+.theme-toggle::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(18px);
+    opacity: 0.45;
+    transition: all 0.25s ease;
+}
+
+html[data-theme="light"] .theme-toggle::after {
+    background: rgba(255, 193, 7, 0.6);
+}
+
+html[data-theme="dark"] .theme-toggle::after {
+    background: rgba(0, 110, 255, 0.55);
+}
 
 /* ======================================================
    AFSNIT 05 – SIDEBAR (VENSTRE MENU)
