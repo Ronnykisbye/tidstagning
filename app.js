@@ -185,27 +185,30 @@ document.addEventListener("DOMContentLoaded", () => {
 ====================================================== */
 
 function initSidebarNavigation() {
-    const buttons = document.querySelectorAll(".sidebar-menu a[data-page]");
-    if (!buttons.length) return;
 
-    // gør første menupunkt aktiv
-    const first = buttons[0];
-    first.classList.add("active");
-    showPage(first.dataset.page);
+    const buttons = document.querySelectorAll(".sidebar-menu .menu-item");
+    const pages = document.querySelectorAll(".page");
+
+    if (!buttons.length || !pages.length) return;
+
+    // Startside = dashboardPage
+    showPage("dashboardPage");
+
+    // Marker første menu som aktiv
+    buttons[0].classList.add("active");
     updatePageTitleFromActiveMenu();
 
     buttons.forEach(btn => {
-        btn.classList.add("menu-item");
+        btn.addEventListener("click", () => {
 
-        btn.addEventListener("click", (evt) => {
-            evt.preventDefault();
-
-            const pageId = btn.dataset.page;
-            if (!pageId) return;
-
+            // Fjern active fra alle
             buttons.forEach(b => b.classList.remove("active"));
+
+            // Sæt active på valgt
             btn.classList.add("active");
 
+            // Find side
+            const pageId = btn.getAttribute("data-page");
             showPage(pageId);
             updatePageTitleFromActiveMenu();
         });
@@ -213,92 +216,461 @@ function initSidebarNavigation() {
 }
 
 function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(page => {
-        const isActive = page.id === pageId;
-        page.classList.toggle("active", isActive);
+
+    const pages = document.querySelectorAll(".page");
+
+    pages.forEach(page => {
+        if (page.id === pageId) {
+            page.classList.add("active");
+        } else {
+            page.classList.remove("active");
+        }
     });
 }
 
 function updatePageTitleFromActiveMenu() {
-    const activeBtn = document.querySelector(".sidebar-menu a.active");
+    const activeBtn = document.querySelector(".sidebar-menu .menu-item.active");
     const pageTitle = document.getElementById("pageTitle");
+
     if (!activeBtn || !pageTitle) return;
 
-    const labelEl = activeBtn.querySelector("[data-i18n]");
-    const key = labelEl?.dataset.i18n;
+    const span = activeBtn.querySelector("span[data-i18n]");
+    if (!span) return;
 
-    if (key) {
-        pageTitle.textContent = t(key);
-    } else if (labelEl) {
-        pageTitle.textContent = labelEl.textContent.trim();
+    const key = span.getAttribute("data-i18n");
+    pageTitle.textContent = t(key);
+}
+
+
+/* ======================================================
+   AFSNIT 04 – LYS/MØRK MODE (LMM) + SPROG (I18N)
+====================================================== */
+
+// ------------------------------------------------------
+// 1. LMM – GEM / HENT MODE
+// ------------------------------------------------------
+function applyTheme(mode) {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", mode);
+    localStorage.setItem("theme", mode);
+}
+
+function initTheme() {
+    const saved = localStorage.getItem("theme") || "light";
+    applyTheme(saved);
+
+    const toggleBtn = document.getElementById("themeToggle");
+    if (toggleBtn) {
+        toggleBtn.onclick = () => {
+            const current = localStorage.getItem("theme") === "light" ? "dark" : "light";
+            applyTheme(current);
+        };
     }
 }
 
+// ------------------------------------------------------
+// 2. SPROGDATA (I18N)
+// ------------------------------------------------------
+const i18n = {
+    dk: {
+        dashboard: "Tidsregistrering",
+        customers: "Kunder",
+        employees: "Medarbejdere",
+        planning: "Planlægning",
+        logs: "Logs",
+        reports: "Rapporter",
+        settings: "Indstillinger",
+        selectCustomer: "Vælg en kunde",
+        customerWorking: "Kunde vi arbejder hos",
+        timeToday: "Tid i dag",
+        start: "Start",
+        stop: "Stop",
+    },
+    gb: {
+        dashboard: "Time Registration",
+        customers: "Customers",
+        employees: "Employees",
+        planning: "Planning",
+        logs: "Logs",
+        reports: "Reports",
+        settings: "Settings",
+        selectCustomer: "Select a customer",
+        customerWorking: "Customer we work for",
+        timeToday: "Time today",
+        start: "Start",
+        stop: "Stop",
+    },
+    de: {
+        dashboard: "Zeiterfassung",
+        customers: "Kunden",
+        employees: "Mitarbeiter",
+        planning: "Planung",
+        logs: "Logs",
+        reports: "Berichte",
+        settings: "Einstellungen",
+        selectCustomer: "Wähle einen Kunden",
+        customerWorking: "Kunde, für den wir arbeiten",
+        timeToday: "Zeit heute",
+        start: "Start",
+        stop: "Stopp",
+    },
+    lt: {
+        dashboard: "Laiko registravimas",
+        customers: "Klientai",
+        employees: "Darbuotojai",
+        planning: "Planavimas",
+        logs: "Žurnalai",
+        reports: "Ataskaitos",
+        settings: "Nustatymai",
+        selectCustomer: "Pasirinkite klientą",
+        customerWorking: "Klientas, pas kurį dirbame",
+        timeToday: "Laikas šiandien",
+        start: "Pradėti",
+        stop: "Sustabdyti",
+    }
+};
 
-/* ======================================================
-   AFSNIT 04 – SPROG (I18N-SYSTEM)
-====================================================== */
+// ------------------------------------------------------
+// 3. FUNKTION: OPDATER TEKSTER
+// ------------------------------------------------------
+function translatePage(lang) {
+    localStorage.setItem("lang", lang);
 
-function initLanguage() {
-    const stored = localStorage.getItem("gtp_lang");
-    if (stored && translations[stored]) currentLang = stored;
-    applyTranslations();
-}
-
-function updateLangButtonActiveState() {
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.lang === currentLang);
-    });
-}
-
-function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.dataset.i18n;
-        el.textContent = t(key);
-    });
-
-    updateLangButtonActiveState();
-}
-
-function initLanguageButtons() {
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const lang = btn.dataset.lang;
-            if (!translations[lang]) return;
-
-            currentLang = lang;
-            localStorage.setItem("gtp_lang", lang);
-            applyTranslations();
-            updatePageTitleFromActiveMenu();
-        });
+        if (i18n[lang] && i18n[lang][key]) {
+            el.innerText = i18n[lang][key];
+        }
     });
 }
-
 
 /* ======================================================
-   AFSNIT 05 – TEMA (DARK / LIGHT) – LMM
+   AFSNIT 04 – LYS/MØRK MODE (LMM) + SPROG (I18N)
 ====================================================== */
 
-function initThemeToggle() {
-    const btn = document.getElementById("themeToggle");
-    const icon = document.getElementById("themeIcon");
-    if (!btn || !icon) return;
+// ------------------------------------------------------
+// 1. LMM – GEM / HENT MODE
+// ------------------------------------------------------
+function applyTheme(mode) {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", mode);
+    localStorage.setItem("theme", mode);
+}
 
-    const saved = localStorage.getItem("gtp_theme") || "light";
-    document.documentElement.setAttribute("data-theme", saved);
-    icon.textContent = saved === "dark" ? "🌙" : "☀️";
+function initTheme() {
+    const saved = localStorage.getItem("theme") || "light";
+    applyTheme(saved);
 
-    btn.addEventListener("click", () => {
-        const current = document.documentElement.getAttribute("data-theme");
-        const next = current === "light" ? "dark" : "light";
+    const toggleBtn = document.getElementById("themeToggle");
+    if (toggleBtn) {
+        toggleBtn.onclick = () => {
+            const current = localStorage.getItem("theme") === "light" ? "dark" : "light";
+            applyTheme(current);
+        };
+    }
+}
 
-        document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("gtp_theme", next);
-        icon.textContent = next === "dark" ? "🌙" : "☀️";
+// ------------------------------------------------------
+// 2. SPROGDATA (I18N)
+// ------------------------------------------------------
+const i18n = {
+    dk: {
+        dashboard: "Tidsregistrering",
+        customers: "Kunder",
+        employees: "Medarbejdere",
+        planning: "Planlægning",
+        logs: "Logs",
+        reports: "Rapporter",
+        settings: "Indstillinger",
+        selectCustomer: "Vælg en kunde",
+        customerWorking: "Kunde vi arbejder hos",
+        timeToday: "Tid i dag",
+        start: "Start",
+        stop: "Stop",
+    },
+    gb: {
+        dashboard: "Time Registration",
+        customers: "Customers",
+        employees: "Employees",
+        planning: "Planning",
+        logs: "Logs",
+        reports: "Reports",
+        settings: "Settings",
+        selectCustomer: "Select a customer",
+        customerWorking: "Customer we work for",
+        timeToday: "Time today",
+        start: "Start",
+        stop: "Stop",
+    },
+    de: {
+        dashboard: "Zeiterfassung",
+        customers: "Kunden",
+        employees: "Mitarbeiter",
+        planning: "Planung",
+        logs: "Logs",
+        reports: "Berichte",
+        settings: "Einstellungen",
+        selectCustomer: "Wähle einen Kunden",
+        customerWorking: "Kunde, für den wir arbeiten",
+        timeToday: "Zeit heute",
+        start: "Start",
+        stop: "Stopp",
+    },
+    lt: {
+        dashboard: "Laiko registravimas",
+        customers: "Klientai",
+        employees: "Darbuotojai",
+        planning: "Planavimas",
+        logs: "Žurnalai",
+        reports: "Ataskaitos",
+        settings: "Nustatymai",
+        selectCustomer: "Pasirinkite klientą",
+        customerWorking: "Klientas, pas kurį dirbame",
+        timeToday: "Laikas šiandien",
+        start: "Pradėti",
+        stop: "Sustabdyti",
+    }
+};
+
+// ------------------------------------------------------
+// 3. FUNKTION: OPDATER TEKSTER
+// ------------------------------------------------------
+function translatePage(lang) {
+    localStorage.setItem("lang", lang);
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[lang] && i18n[lang][key]) {
+            el.innerText = i18n[lang][key];
+        }
     });
 }
 
+/* ======================================================
+   AFSNIT 04 – LYS/MØRK MODE (LMM) + SPROG (I18N)
+====================================================== */
 
+// ------------------------------------------------------
+// 1. LMM – GEM / HENT MODE
+// ------------------------------------------------------
+function applyTheme(mode) {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", mode);
+    localStorage.setItem("theme", mode);
+}
+
+function initTheme() {
+    const saved = localStorage.getItem("theme") || "light";
+    applyTheme(saved);
+
+    const toggleBtn = document.getElementById("themeToggle");
+    if (toggleBtn) {
+        toggleBtn.onclick = () => {
+            const current = localStorage.getItem("theme") === "light" ? "dark" : "light";
+            applyTheme(current);
+        };
+    }
+}
+
+// ------------------------------------------------------
+// 2. SPROGDATA (I18N)
+// ------------------------------------------------------
+const i18n = {
+    dk: {
+        dashboard: "Tidsregistrering",
+        customers: "Kunder",
+        employees: "Medarbejdere",
+        planning: "Planlægning",
+        logs: "Logs",
+        reports: "Rapporter",
+        settings: "Indstillinger",
+        selectCustomer: "Vælg en kunde",
+        customerWorking: "Kunde vi arbejder hos",
+        timeToday: "Tid i dag",
+        start: "Start",
+        stop: "Stop",
+    },
+    gb: {
+        dashboard: "Time Registration",
+        customers: "Customers",
+        employees: "Employees",
+        planning: "Planning",
+        logs: "Logs",
+        reports: "Reports",
+        settings: "Settings",
+        selectCustomer: "Select a customer",
+        customerWorking: "Customer we work for",
+        timeToday: "Time today",
+        start: "Start",
+        stop: "Stop",
+    },
+    de: {
+        dashboard: "Zeiterfassung",
+        customers: "Kunden",
+        employees: "Mitarbeiter",
+        planning: "Planung",
+        logs: "Logs",
+        reports: "Berichte",
+        settings: "Einstellungen",
+        selectCustomer: "Wähle einen Kunden",
+        customerWorking: "Kunde, für den wir arbeiten",
+        timeToday: "Zeit heute",
+        start: "Start",
+        stop: "Stopp",
+    },
+    lt: {
+        dashboard: "Laiko registravimas",
+        customers: "Klientai",
+        employees: "Darbuotojai",
+        planning: "Planavimas",
+        logs: "Žurnalai",
+        reports: "Ataskaitos",
+        settings: "Nustatymai",
+        selectCustomer: "Pasirinkite klientą",
+        customerWorking: "Klientas, pas kurį dirbame",
+        timeToday: "Laikas šiandien",
+        start: "Pradėti",
+        stop: "Sustabdyti",
+    }
+};
+
+// ------------------------------------------------------
+// 3. FUNKTION: OPDATER TEKSTER
+// ------------------------------------------------------
+function translatePage(lang) {
+    localStorage.setItem("lang", lang);
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[lang] && i18n[lang][key]) {
+            el.innerText = i18n[lang][key];
+        }
+    });
+}
+
+/* ======================================================
+   AFSNIT 04 – LYS/MØRK MODE (LMM) + SPROG (I18N)
+====================================================== */
+
+// ------------------------------------------------------
+// 1. LMM – GEM / HENT MODE
+// ------------------------------------------------------
+function applyTheme(mode) {
+    const root = document.documentElement;
+    root.setAttribute("data-theme", mode);
+    localStorage.setItem("theme", mode);
+}
+
+function initTheme() {
+    const saved = localStorage.getItem("theme") || "light";
+    applyTheme(saved);
+
+    const toggleBtn = document.getElementById("themeToggle");
+    if (toggleBtn) {
+        toggleBtn.onclick = () => {
+            const current = localStorage.getItem("theme") === "light" ? "dark" : "light";
+            applyTheme(current);
+        };
+    }
+}
+
+// ------------------------------------------------------
+// 2. SPROGDATA (I18N)
+// ------------------------------------------------------
+const i18n = {
+    dk: {
+        dashboard: "Tidsregistrering",
+        customers: "Kunder",
+        employees: "Medarbejdere",
+        planning: "Planlægning",
+        logs: "Logs",
+        reports: "Rapporter",
+        settings: "Indstillinger",
+        selectCustomer: "Vælg en kunde",
+        customerWorking: "Kunde vi arbejder hos",
+        timeToday: "Tid i dag",
+        start: "Start",
+        stop: "Stop",
+    },
+    gb: {
+        dashboard: "Time Registration",
+        customers: "Customers",
+        employees: "Employees",
+        planning: "Planning",
+        logs: "Logs",
+        reports: "Reports",
+        settings: "Settings",
+        selectCustomer: "Select a customer",
+        customerWorking: "Customer we work for",
+        timeToday: "Time today",
+        start: "Start",
+        stop: "Stop",
+    },
+    de: {
+        dashboard: "Zeiterfassung",
+        customers: "Kunden",
+        employees: "Mitarbeiter",
+        planning: "Planung",
+        logs: "Logs",
+        reports: "Berichte",
+        settings: "Einstellungen",
+        selectCustomer: "Wähle einen Kunden",
+        customerWorking: "Kunde, für den wir arbeiten",
+        timeToday: "Zeit heute",
+        start: "Start",
+        stop: "Stopp",
+    },
+    lt: {
+        dashboard: "Laiko registravimas",
+        customers: "Klientai",
+        employees: "Darbuotojai",
+        planning: "Planavimas",
+        logs: "Žurnalai",
+        reports: "Ataskaitos",
+        settings: "Nustatymai",
+        selectCustomer: "Pasirinkite klientą",
+        customerWorking: "Klientas, pas kurį dirbame",
+        timeToday: "Laikas šiandien",
+        start: "Pradėti",
+        stop: "Sustabdyti",
+    }
+};
+
+// ------------------------------------------------------
+// 3. FUNKTION: OPDATER TEKSTER
+// ------------------------------------------------------
+function translatePage(lang) {
+    localStorage.setItem("lang", lang);
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (i18n[lang] && i18n[lang][key]) {
+            el.innerText = i18n[lang][key];
+        }
+    });
+}
+
+// ------------------------------------------------------
+// 4. INITIALISER SPROG
+// ------------------------------------------------------
+function initLanguage() {
+    const savedLang = localStorage.getItem("lang") || "dk";
+    translatePage(savedLang);
+
+    document.querySelectorAll(".langBtn").forEach(btn => {
+        btn.onclick = () => {
+            translatePage(btn.dataset.lang);
+        };
+    });
+}
+
+// ------------------------------------------------------
+// 5. KALD DET AUTOMATISK VED START
+// ------------------------------------------------------
+function initLMMandLanguage() {
+    initTheme();
+    initLanguage();
+}
 /* ======================================================
    AFSNIT 06 – TIMER (TIDSREGISTRERING)
 ====================================================== */
