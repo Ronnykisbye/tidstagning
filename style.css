@@ -1035,4 +1035,54 @@ html[data-theme="dark"] #timeregStopBtn:not(.active) {
     transform: scale(0.97);
 }
 
+/* ======================================================
+   OVERRIDE: Start-knap LED (tvinger glow igennem)
+====================================================== */
+button#timeregStartBtn.active {
+    background: #22ff66 !important;
+    color: #00310f !important;
+    box-shadow:
+        0 0 25px rgba(34,255,102,0.9) !important,
+        0 0 50px rgba(34,255,102,0.7) !important,
+        inset 0 0 15px rgba(255,255,255,0.6) !important;
+}
+
+button#timeregStartBtn.active::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: -8px !important;
+    border-radius: inherit !important;
+    filter: blur(28px) !important;
+    background: rgba(34,255,102,0.7) !important;
+    z-index: -1 !important;
+}
+/* ======================================================
+   OVERRIDE: Stop-knap LED (tvinger glow igennem)
+====================================================== */
+button#timeregStopBtn.active {
+    background: #ff3050 !important;
+    color: #310000 !important;
+    box-shadow:
+        0 0 25px rgba(255,48,80,0.9) !important,
+        0 0 50px rgba(255,48,80,0.7) !important,
+        inset 0 0 15px rgba(255,255,255,0.6) !important;
+}
+
+button#timeregStopBtn.active::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: -8px !important;
+    border-radius: inherit !important;
+    filter: blur(28px) !important;
+    background: rgba(255,48,80,0.7) !important;
+    z-index: -1 !important;
+}
+/* Slukket knap – mørkere og mat */
+button#timeregStartBtn:not(.active),
+button#timeregStopBtn:not(.active) {
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 0.85 !important;
+}
+
 
