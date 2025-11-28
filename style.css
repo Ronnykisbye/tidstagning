@@ -670,14 +670,16 @@ textarea {
 }
 
 /* ======================================================
-   AFSNIT 08 – TIDSREGISTRERINGSSIDE (timereg)
+   AFSNIT 08 – TIDSREGISTRERINGSSIDE (dashboardPage)
+   (layout og typografi for tidsregistrering forsiden)
 ====================================================== */
 
-#timereg .timereg-wrapper {
+#dashboardPage .timereg-wrapper {
     max-width: 520px;
 }
 
-#timereg label {
+/* Labelen over kunde-vælgeren */
+#dashboardPage label[for="timeregCustomerSelect"] {
     display: block;
     margin-bottom: 4px;
     font-size: 0.85rem;
@@ -685,11 +687,13 @@ textarea {
     color: var(--text-strong);
 }
 
-#timereg select {
+/* Selve kunde-dropdown */
+#dashboardPage #timeregCustomerSelect {
     min-width: 260px;
 }
 
-.timereg-display {
+/* Visning af “Tid i dag: 00:00” */
+#dashboardPage #timeregDisplayText.timereg-display {
     margin-top: 14px;
     margin-bottom: 12px;
     font-weight: 600;
@@ -697,9 +701,11 @@ textarea {
     color: var(--text-strong);
 }
 
-.timereg-buttons {
+/* Start/Stop-knapperne i række */
+#dashboardPage .timereg-buttons {
     display: flex;
     gap: 10px;
+    margin-top: 6px;
 }
 
 /* ======================================================
