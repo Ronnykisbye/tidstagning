@@ -375,13 +375,15 @@ html[data-theme="dark"] .select-item.active {
 }
 
 .sidebar-logo .logo-main {
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--text-strong);
 }
 
 .sidebar-logo .logo-sub {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
@@ -392,23 +394,74 @@ html[data-theme="dark"] .select-item.active {
     gap: 6px;
 }
 
+/* Basis-stil til punkterne i menuen */
 .sidebar-menu a.menu-item {
+    position: relative;
     display: block;
-    padding: 9px 12px;
-    border-radius: 9px;
+    padding: 9px 14px;
+    border-radius: 999px;
     font-size: 0.9rem;
     color: var(--text);
-    transition: background 0.18s ease, color 0.18s ease, transform 0.1s ease;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.12s ease,
+        box-shadow 0.18s ease;
 }
 
+/* Hover-effekt (let forskydning) */
 .sidebar-menu a.menu-item:hover {
     background: rgba(148, 163, 184, 0.12);
     transform: translateX(2px);
 }
 
+/* Fælles for aktiv – tekstfarve + markeret */
 .sidebar-menu a.menu-item.active {
-    background: var(--accent);
     color: #ffffff;
+}
+
+/* Aktiv knap – lys mode: lilla glow (samme stil som sprog-knapper) */
+html[data-theme="light"] .sidebar-menu a.menu-item.active {
+    background: radial-gradient(circle, #9b5cff, #7c3aed);
+    box-shadow:
+        0 4px 12px rgba(139, 92, 246, 0.45),
+        0 0 18px rgba(139, 92, 246, 0.35);
+}
+
+/* Aktiv knap – mørk mode: blå glow (samme stil som LMM / DK-knap) */
+html[data-theme="dark"] .sidebar-menu a.menu-item.active {
+    background: radial-gradient(circle, #2258FF, #0A1633);
+    box-shadow:
+        0 4px 16px rgba(0, 110, 255, 0.55),
+        0 0 26px rgba(0, 110, 255, 0.45);
+}
+
+/* Glow “under” den aktive sidebar-knap */
+.sidebar-menu a.menu-item.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 72%;
+    height: 16px;
+    border-radius: 999px;
+    filter: blur(12px);
+    transform: translateX(-50%);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+/* Glow-farve – lys mode */
+html[data-theme="light"] .sidebar-menu a.menu-item.active::after {
+    background: rgba(139, 92, 246, 0.55);
+}
+
+/* Glow-farve – mørk mode */
+html[data-theme="dark"] .sidebar-menu a.menu-item.active::after {
+    background: rgba(0, 110, 255, 0.55);
 }
 
 /* Mobil overlay – (kan udbygges senere, men holdes klar) */
@@ -416,6 +469,7 @@ html[data-theme="dark"] .select-item.active {
 .sidebar-overlay {
     display: none;
 }
+
 
 /* ======================================================
    AFSNIT 06 – CONTENT WRAPPER & SIDESKIFT (.page)
