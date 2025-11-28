@@ -845,7 +845,7 @@ textarea {
 
 /* ======================================================
    AFSNIT 23 – TIMEREG MEDARBEJDER-KNAPPER
-   (Samme stil som sprogknapper – responsivt grid)
+   (Samme stil og glow som sprogknapperne)
 ====================================================== */
 
 .timereg-employee-container {
@@ -856,61 +856,73 @@ textarea {
     gap: 10px;
 }
 
-/* Medarbejder-knapper – base-style matcher .lang-btn */
+/* Basis-stil – matcher .lang-btn */
 .timereg-employee-btn {
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 0.9rem;
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
     cursor: pointer;
-    border: none;
-    outline: none;
-    transition: 0.2s ease;
+    font-size: 0.85rem;
     font-weight: 500;
-
-    /* Farver hentes fra LMM-variabler – samme system som sprogknapper */
-    background: var(--color-surface-light);
-    color: var(--color-text-primary);
-    box-shadow:
-        inset 0 0 4px rgba(255,255,255,0.3),
-        0 0 6px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+    position: relative;
 }
 
-/* Hover-effekt – samme som sprogknapper */
+/* Hover – samme lille løft som sprogknapperne */
 .timereg-employee-btn:hover {
     transform: translateY(-2px);
-    box-shadow:
-        inset 0 0 5px rgba(255,255,255,0.3),
-        0 0 10px var(--glow-color-primary);
+    opacity: 0.9;
 }
 
-/* Aktiv knap – samme aktive look som aktiv sprogknap */
-.timereg-employee-btn.active {
-    background: var(--glow-color-primary);
-    color: #fff;
+/* ------------------------------------------------------
+   AKTIV KNAP – LIGHT MODE
+   Lilla farve + blød lilla glød (samme som .lang-btn)
+------------------------------------------------------ */
+html[data-theme="light"] .timereg-employee-btn.active {
+    background: radial-gradient(circle, #9b5cff, #7c3aed);
+    color: #ffffff;
+    border-color: transparent;
     box-shadow:
-        0 0 14px var(--glow-color-primary),
-        inset 0 0 6px rgba(255,255,255,0.4);
+        0 4px 12px rgba(139, 92, 246, 0.45),
+        0 0 18px rgba(139, 92, 246, 0.35);
 }
 
-/* Dark mode justeringer */
-html[data-theme="dark"] .timereg-employee-btn {
-    background: var(--color-surface-dark);
-    color: var(--color-text-primary-dark);
-    box-shadow:
-        inset 0 0 4px rgba(255,255,255,0.1),
-        0 0 6px rgba(0,0,0,0.4);
-}
-
-html[data-theme="dark"] .timereg-employee-btn:hover {
-    box-shadow:
-        inset 0 0 4px rgba(255,255,255,0.2),
-        0 0 10px var(--glow-color-secondary);
-}
-
+/* ------------------------------------------------------
+   AKTIV KNAP – DARK MODE
+   Blå farve + nat-blå glød (samme som .lang-btn)
+------------------------------------------------------ */
 html[data-theme="dark"] .timereg-employee-btn.active {
-    background: var(--glow-color-secondary);
-    color: #fff;
+    background: radial-gradient(circle, #2258FF, #0A1633);
+    color: #ffffff;
+    border-color: transparent;
     box-shadow:
-        0 0 16px var(--glow-color-secondary),
-        inset 0 0 6px rgba(255,255,255,0.2);
+        0 4px 16px rgba(0, 110, 255, 0.55),
+        0 0 26px rgba(0, 110, 255, 0.45);
 }
+
+/* Indre “glow”-lag – samme princip som sprogknapperne */
+.timereg-employee-btn.active::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    left: 15%;
+    top: 15%;
+    filter: blur(16px);
+    z-index: -1;
+    transition: all 0.25s ease;
+}
+
+/* Glow-farve – light mode */
+html[data-theme="light"] .timereg-employee-btn.active::after {
+    background: rgba(139, 92, 246, 0.55);
+}
+
+/* Glow-farve – dark mode */
+html[data-theme="dark"] .timereg-employee-btn.active::after {
+    background: rgba(0, 110, 255, 0.55);
+}
+
