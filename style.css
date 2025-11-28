@@ -315,6 +315,38 @@ html[data-theme="dark"] .lang-btn.active::after {
     background: rgba(0, 110, 255, 0.55);
 }
 
+/* ======================================================
+   AFSNIT 04C – GLOBAL .active FOR ALLE KNAPPER
+   – Bruges til knapper, menu-punkter og valg
+   – MÅ IKKE ramme sprogknapper eller lmm-knappen
+====================================================== */
+
+button.active,
+.menu-item.active,
+.sidebar-item.active,
+.select-item.active {
+    background: var(--accent);
+    color: #fff !important;
+    border-color: var(--accent);
+    box-shadow:
+        0 4px 12px rgba(139, 92, 246, 0.45),
+        0 0 18px rgba(139, 92, 246, 0.35);
+    transform: translateY(-2px);
+}
+
+/* Dark mode variant */
+html[data-theme="dark"] button.active,
+html[data-theme="dark"] .menu-item.active,
+html[data-theme="dark"] .sidebar-item.active,
+html[data-theme="dark"] .select-item.active {
+    background: var(--accentDark);
+    border-color: var(--accentDark);
+    box-shadow:
+        0 4px 14px rgba(0, 110, 255, 0.55),
+        0 0 22px rgba(0, 110, 255, 0.45);
+}
+
+
 
 /* ======================================================
    AFSNIT 05 – SIDEBAR (VENSTRE MENU)
