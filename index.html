@@ -91,11 +91,135 @@ div>
      SIDE-INDHOLD WRAPPER
 ====================================================== -->
 <div class="content-wrapper">
-    ...
+
+    <!-- ================================================
+         SIDE: TIDSREGISTRERING
+    ================================================= -->
+    <section id="dashboardPage" class="page active">
+        <h2 data-i18n="timereg_title">Tidsregistrering</h2>
+        <p data-i18n="timereg_sub">Registrer tid på kunder du arbejder hos.</p>
+
+        <div class="timereg-wrapper">
+            <label for="timeregCustomerSelect" data-i18n="timereg_customer_label">
+                Kunde vi arbejder hos
+            </label>
+
+            <select id="timeregCustomerSelect">
+                <option value="" data-i18n="timereg_choose_customer">
+                    Vælg en kunde
+                </option>
+            </select>
+
+            <div id="timeregDisplayText"
+                 class="timereg-display"
+                 data-i18n="timereg_today_time">
+                Tid i dag: 0:00
+            </div>
+
+            <div class="timereg-buttons">
+                <button id="timeregStartBtn"
+                        class="btn-green"
+                        data-i18n="timereg_btn_start">
+                    Start
+                </button>
+                <button id="timeregStopBtn"
+                        class="btn-red"
+                        data-i18n="timereg_btn_stop">
+                    Stop
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SIDE: KUNDER
+    ================================================= -->
+    <section id="customersPage" class="page">
+        <h2 data-i18n="customers_title">Kunder</h2>
+        <p data-i18n="customers_sub">Opret og se dine kunder.</p>
+
+        <button id="addCustomerBtn"
+                class="btn-neutral"
+                data-i18n="customers_add_btn">
+            Tilføj kunde
+        </button>
+
+        <div class="list-wrapper" id="customerList"></div>
+    </section>
+
+    <!-- ================================================
+         SIDE: MEDARBEJDERE
+    ================================================= -->
+    <section id="employeesPage" class="page">
+        <h2 data-i18n="employees_title">Medarbejdere</h2>
+        <p data-i18n="employees_sub">Opret og se medarbejdere.</p>
+
+        <button id="addEmployeeBtn"
+                class="btn-neutral"
+                data-i18n="employees_add_btn">
+            Tilføj medarbejder
+        </button>
+
+        <div class="list-wrapper" id="employeeList"></div>
+    </section>
+
+    <!-- ================================================
+         SIDE: PLANLÆGNING
+    ================================================= -->
+    <section id="planningPage" class="page">
+        <h2 data-i18n="planning_title">Planlægning</h2>
+        <p data-i18n="planning_sub">
+            Planlæg kommende opgaver, aftaler og ressourcer.
+        </p>
+
+        <div class="planning-layout">
+            <div class="card" id="planningLeft"></div>
+            <div class="card" id="planningRight"></div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SIDE: LOGS
+    ================================================= -->
+    <section id="logsPage" class="page">
+        <h2 data-i18n="logs_title">Logs</h2>
+        <p data-i18n="logs_sub">Her vil dine logs komme senere.</p>
+
+        <div id="logsContainer"></div>
+    </section>
+
+    <!-- ================================================
+         SIDE: RAPPORTER
+    ================================================= -->
+    <section id="reportsPage" class="page">
+        <h2 data-i18n="reports_title">Rapporter</h2>
+        <p data-i18n="reports_sub">Rapportmodul bliver tilføjet senere.</p>
+
+        <div id="reportsContainer"></div>
+    </section>
+
+    <!-- ================================================
+         SIDE: INDSTILLINGER
+    ================================================= -->
+    <section id="settingsPage" class="page">
+        <h2 data-i18n="settings_title">Indstillinger</h2>
+        <p data-i18n="settings_sub">
+            Basisindstillinger for appen.
+        </p>
+
+        <div id="settingsContainer"></div>
+    </section>
+
 </div>
+
+
 <!-- ======================================================
-     SLUT PÅ SIDE-INDHOLD WRAPPER
+     AFSNIT 03 – SCRIPTS
+     (kobler HTML sammen med app.js)
 ====================================================== -->
+<script src="app.js"></script>
+</body>
+</html>
 
     <!-- ================================================
          SIDE: TIDSREGISTRERING
