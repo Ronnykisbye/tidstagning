@@ -159,8 +159,8 @@ button {
 }
 
 /* ======================================================
-   AFSNIT 4a – LMM KNAP (LYS + MØRK MODE + 3D EFFEKT)
-   (KORRIGERET: stærk nat-blå farve i dark mode)
+   AFSNIT 04 – TEMA-KNAP (RENSET + NYT + 3D GLOW)
+   Dette afsnit erstatter ALLE tidligere #themeToggle styles
 ====================================================== */
 
 .theme-toggle {
@@ -175,40 +175,47 @@ button {
     transition: all 0.25s ease;
     position: relative;
     font-size: 22px;
+    z-index: 10;
 }
 
-/* -------- LYS MODE (SOL) -------- */
+/* ---------------------------------------------
+   LYS MODE – SOL (klar gul + varm glow)
+--------------------------------------------- */
 html[data-theme="light"] .theme-toggle {
     background: radial-gradient(circle, #FFD45A, #F5A623);
     box-shadow:
-        0 4px 10px rgba(255, 193, 7, 0.45),
+        0 4px 12px rgba(255, 193, 7, 0.45),
         0 0 18px rgba(255, 193, 7, 0.35);
 }
 
 html[data-theme="light"] .theme-toggle:hover {
     transform: scale(1.07);
     box-shadow:
-        0 6px 16px rgba(255, 193, 7, 0.55),
-        0 0 26px rgba(255, 193, 7, 0.45);
+        0 6px 20px rgba(255, 193, 7, 0.65),
+        0 0 28px rgba(255, 193, 7, 0.55);
 }
 
-/* -------- MØRK MODE (NAT-BLÅ / MOON) -------- */
-/* NY FARVE – matcher dit referencebillede */
+/* ---------------------------------------------
+   DARK MODE – NAT BLÅ (kraftig blå + kold glow)
+   Matcher præcis farven i dit referencebillede
+--------------------------------------------- */
 html[data-theme="dark"] .theme-toggle {
     background: radial-gradient(circle, #2258FF, #0A1633);
     box-shadow:
-        0 4px 18px rgba(0, 110, 255, 0.55),
-        0 0 30px rgba(0, 110, 255, 0.45);
+        0 4px 16px rgba(0, 110, 255, 0.55),
+        0 0 26px rgba(0, 110, 255, 0.45);
 }
 
 html[data-theme="dark"] .theme-toggle:hover {
     transform: scale(1.07);
     box-shadow:
         0 6px 24px rgba(0, 110, 255, 0.75),
-        0 0 38px rgba(0, 110, 255, 0.55);
+        0 0 38px rgba(0, 110, 255, 0.65);
 }
 
-/* -------- 3D / GLOW UNDER KNAP -------- */
+/* ---------------------------------------------
+   3D GLOW UNDER KNAPPEN (begge modes)
+--------------------------------------------- */
 .theme-toggle::after {
     content: "";
     position: absolute;
@@ -216,7 +223,7 @@ html[data-theme="dark"] .theme-toggle:hover {
     height: 70%;
     border-radius: 50%;
     z-index: -1;
-    filter: blur(18px);
+    filter: blur(16px);
     opacity: 0.45;
     transition: all 0.25s ease;
 }
@@ -231,78 +238,6 @@ html[data-theme="dark"] .theme-toggle::after {
     background: rgba(0, 110, 255, 0.65);
 }
 
-/* ======================================================
-   AFSNIT 4a – LMM KNAP (LYS + MØRK MODE + 3D EFFEKT)
-   (KORRIGERET: stærk nat-blå farve i dark mode)
-====================================================== */
-
-.theme-toggle {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.25s ease;
-    position: relative;
-    font-size: 22px;
-}
-
-/* -------- LYS MODE (SOL) -------- */
-html[data-theme="light"] .theme-toggle {
-    background: radial-gradient(circle, #FFD45A, #F5A623);
-    box-shadow:
-        0 4px 10px rgba(255, 193, 7, 0.45),
-        0 0 18px rgba(255, 193, 7, 0.35);
-}
-
-html[data-theme="light"] .theme-toggle:hover {
-    transform: scale(1.07);
-    box-shadow:
-        0 6px 16px rgba(255, 193, 7, 0.55),
-        0 0 26px rgba(255, 193, 7, 0.45);
-}
-
-/* -------- MØRK MODE (NAT-BLÅ / MOON) -------- */
-/* NY FARVE – matcher dit referencebillede */
-html[data-theme="dark"] .theme-toggle {
-    background: radial-gradient(circle, #2258FF, #0A1633);
-    box-shadow:
-        0 4px 18px rgba(0, 110, 255, 0.55),
-        0 0 30px rgba(0, 110, 255, 0.45);
-}
-
-html[data-theme="dark"] .theme-toggle:hover {
-    transform: scale(1.07);
-    box-shadow:
-        0 6px 24px rgba(0, 110, 255, 0.75),
-        0 0 38px rgba(0, 110, 255, 0.55);
-}
-
-/* -------- 3D / GLOW UNDER KNAP -------- */
-.theme-toggle::after {
-    content: "";
-    position: absolute;
-    width: 70%;
-    height: 70%;
-    border-radius: 50%;
-    z-index: -1;
-    filter: blur(18px);
-    opacity: 0.45;
-    transition: all 0.25s ease;
-}
-
-/* glow – light mode */
-html[data-theme="light"] .theme-toggle::after {
-    background: rgba(255, 193, 7, 0.6);
-}
-
-/* glow – dark mode */
-html[data-theme="dark"] .theme-toggle::after {
-    background: rgba(0, 110, 255, 0.65);
-}
 
 
 /* ======================================================
