@@ -557,3 +557,30 @@ function toggleSidebar() {
     sidebar.classList.toggle("open");
     overlay.classList.toggle("visible");
 }
+
+
+/* ======================================================
+   AFSNIT 12 – TIMEREG MEDARBEJDER-KNAPPER
+   (Viser én knap pr. medarbejder under kunde-vælgeren)
+====================================================== */
+
+function renderTimeregEmployees() {
+    const container = document.getElementById("timeregEmployeeContainer");
+    if (!container) return;
+
+    const employees = getEmployees(); // henter alle medarbejdere
+    container.innerHTML = ""; // ryd containeren før vi fylder på
+
+    employees.forEach((emp, index) => {
+        const btn = document.createElement("button");
+        btn.className = "timereg-employee-btn";
+        btn.textContent = emp.name;
+
+        // Klik → toggle active (kun visuel funktion)
+        btn.addEventListener("click", () => {
+            btn.classList.toggle("active");
+        });
+
+        container.appendChild(btn);
+    });
+}
