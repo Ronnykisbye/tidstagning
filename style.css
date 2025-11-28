@@ -868,6 +868,19 @@ textarea {
     font-weight: 500;
     transition: all 0.25s ease;
     position: relative;
+    text-transform: lowercase;
+}
+
+/* Light mode – perfekt match til sprogknapperne */
+html[data-theme="light"] .timereg-employee-btn {
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+}
+
+html[data-theme="light"] .timereg-employee-btn:hover {
+    background: #fafafa;
+    border-color: #d1d5db;
 }
 
 /* Hover – samme lille løft som sprogknapperne */
@@ -876,33 +889,25 @@ textarea {
     opacity: 0.9;
 }
 
-/* ------------------------------------------------------
-   AKTIV KNAP – LIGHT MODE
-   Lilla farve + blød lilla glød (samme som .lang-btn)
------------------------------------------------------- */
+/* Aktive knapper — samme farve som sprogknapper */
 html[data-theme="light"] .timereg-employee-btn.active {
     background: radial-gradient(circle, #9b5cff, #7c3aed);
-    color: #ffffff;
+    color: white;
     border-color: transparent;
     box-shadow:
         0 4px 12px rgba(139, 92, 246, 0.45),
         0 0 18px rgba(139, 92, 246, 0.35);
 }
 
-/* ------------------------------------------------------
-   AKTIV KNAP – DARK MODE
-   Blå farve + nat-blå glød (samme som .lang-btn)
------------------------------------------------------- */
 html[data-theme="dark"] .timereg-employee-btn.active {
     background: radial-gradient(circle, #2258FF, #0A1633);
-    color: #ffffff;
+    color: white;
     border-color: transparent;
     box-shadow:
         0 4px 16px rgba(0, 110, 255, 0.55),
         0 0 26px rgba(0, 110, 255, 0.45);
 }
 
-/* Indre “glow”-lag – samme princip som sprogknapperne */
 .timereg-employee-btn.active::after {
     content: "";
     position: absolute;
@@ -916,13 +921,10 @@ html[data-theme="dark"] .timereg-employee-btn.active {
     transition: all 0.25s ease;
 }
 
-/* Glow-farve – light mode */
 html[data-theme="light"] .timereg-employee-btn.active::after {
     background: rgba(139, 92, 246, 0.55);
 }
 
-/* Glow-farve – dark mode */
 html[data-theme="dark"] .timereg-employee-btn.active::after {
     background: rgba(0, 110, 255, 0.55);
 }
-
