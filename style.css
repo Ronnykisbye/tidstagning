@@ -936,159 +936,62 @@ html[data-theme="dark"] .timereg-employee-btn.active::after {
 }
 
 /* ======================================================
-   AFSNIT 24 – START/STOP LED-KNAPPER (NY REALISTISK VERSION)
+   AFSNIT 24 – START/STOP LED KNAPPER (NY & RETTET)
+   LED-effekt tændes KUN når knappen har .active
+   Ingen konflikter med btn-green / btn-red
 ====================================================== */
 
-.timereg-buttons button {
-    padding: 12px 28px;
-    border-radius: 26px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.25s ease;
-    text-transform: none;
+/* Slukket knap – mat og afdæmpet */
+#timeregStartBtn,
+#timeregStopBtn {
     position: relative;
-    z-index: 1;
+    opacity: 0.80;
+    transition: all 0.25s ease;
 }
 
 /* ============================================
-   1) SLUKKET (INAKTIV) KNAP – Light Mode
+   START – LED ON (ACTIVE)
 ============================================ */
-html[data-theme="light"] #timeregStartBtn:not(.active) {
-    background: #166534;     /* mørk grøn */
-    color: #d1fae5;          /* mat grøn-hvid */
-    box-shadow: none;
-}
-
-html[data-theme="light"] #timeregStopBtn:not(.active) {
-    background: #7f1d1d;     /* mørk rød */
-    color: #fee2e2;
-    box-shadow: none;
-}
-
-/* ============================================
-   2) SLUKKET (INAKTIV) KNAP – Dark Mode
-============================================ */
-html[data-theme="dark"] #timeregStartBtn:not(.active) {
-    background: #0f3a1e;
-    color: #a7f3d0;
-    box-shadow: none;
-}
-
-html[data-theme="dark"] #timeregStopBtn:not(.active) {
-    background: #5a0f0f;
-    color: #fecaca;
-    box-shadow: none;
-}
-
-/* ============================================
-   3) TÆNDT / AKTIV KNAP (LED-LYS)
-============================================ */
-
-/* ---- START = LED GRØN ---- */
 #timeregStartBtn.active {
-    background: #22ff66; /* klar LED-grøn */
+    opacity: 1;
+    background: #22ff66;
     color: #00310f;
     box-shadow:
-        0 0 22px rgba(34,255,102,0.75),
-        0 0 45px rgba(34,255,102,0.60),
-        inset 0 0 12px rgba(255,255,255,0.55);
+        0 0 25px rgba(34, 255, 102, 0.9),
+        0 0 50px rgba(34, 255, 102, 0.7),
+        inset 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
-/* ekstra glow */
+/* Extra LED glorie */
 #timeregStartBtn.active::after {
     content: "";
     position: absolute;
-    inset: -6px;
+    inset: -8px;
     border-radius: inherit;
-    filter: blur(22px);
-    background: rgba(34,255,102,0.55);
-    z-index: -1;
-}
-
-/* ---- STOP = LED RØD ---- */
-#timeregStopBtn.active {
-    background: #ff3050; /* klar LED-rød */
-    color: #310000;
-    box-shadow:
-        0 0 22px rgba(255,48,80,0.75),
-        0 0 45px rgba(255,48,80,0.60),
-        inset 0 0 12px rgba(255,255,255,0.55);
-}
-
-/* ekstra glow */
-#timeregStopBtn.active::after {
-    content: "";
-    position: absolute;
-    inset: -6px;
-    border-radius: inherit;
-    filter: blur(22px);
-    background: rgba(255,48,80,0.55);
+    background: rgba(34, 255, 102, 0.7);
+    filter: blur(30px);
     z-index: -1;
 }
 
 /* ============================================
-   4) HOVER (må ikke overtage LED-effekten)
+   STOP – LED ON (ACTIVE)
 ============================================ */
-.timereg-buttons button:hover:not(.active) {
-    transform: translateY(-2px);
-    opacity: 0.85;
-}
-
-/* Tryk-ned */
-.timereg-buttons button:active {
-    transform: scale(0.97);
-}
-
-/* ======================================================
-   OVERRIDE: Start-knap LED (tvinger glow igennem)
-====================================================== */
-button#timeregStartBtn.active {
-    background: #22ff66 !important;
-    color: #00310f !important;
+#timeregStopBtn.active {
+    opacity: 1;
+    background: #ff3050;
+    color: #310000;
     box-shadow:
-        0 0 25px rgba(34,255,102,0.9) !important,
-        0 0 50px rgba(34,255,102,0.7) !important,
-        inset 0 0 15px rgba(255,255,255,0.6) !important;
+        0 0 25px rgba(255, 48, 80, 0.9),
+        0 0 55px rgba(255, 48, 80, 0.7),
+        inset 0 0 15px rgba(255,255,255,0.55);
 }
 
-button#timeregStartBtn.active::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: -8px !important;
-    border-radius: inherit !important;
-    filter: blur(28px) !important;
-    background: rgba(34,255,102,0.7) !important;
-    z-index: -1 !important;
+#timeregStopBtn.active::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+    background: rgba(255, 48, 80, 0.7);
+    filter: blur(30px);
+    z-index: -1;
 }
-/* ======================================================
-   OVERRIDE: Stop-knap LED (tvinger glow igennem)
-====================================================== */
-button#timeregStopBtn.active {
-    background: #ff3050 !important;
-    color: #310000 !important;
-    box-shadow:
-        0 0 25px rgba(255,48,80,0.9) !important,
-        0 0 50px rgba(255,48,80,0.7) !important,
-        inset 0 0 15px rgba(255,255,255,0.6) !important;
-}
-
-button#timeregStopBtn.active::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: -8px !important;
-    border-radius: inherit !important;
-    filter: blur(28px) !important;
-    background: rgba(255,48,80,0.7) !important;
-    z-index: -1 !important;
-}
-/* Slukket knap – mørkere og mat */
-button#timeregStartBtn:not(.active),
-button#timeregStopBtn:not(.active) {
-    box-shadow: none !important;
-    filter: none !important;
-    opacity: 0.85 !important;
-}
-
-
