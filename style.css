@@ -236,7 +236,7 @@ button {
 
 /* ======================================================
    AFSNIT 4a – LMM KNAP (LYS + MØRK MODE + 3D EFFEKT)
-   (Erstatter alle tidligere styles for #themeToggle)
+   (KORRIGERET: stærk nat-blå farve i dark mode)
 ====================================================== */
 
 .theme-toggle {
@@ -268,19 +268,20 @@ html[data-theme="light"] .theme-toggle:hover {
         0 0 26px rgba(255, 193, 7, 0.45);
 }
 
-/* -------- MØRK MODE (MÅNE – BLÅ GLOW) -------- */
+/* -------- MØRK MODE (NAT-BLÅ / MOON) -------- */
+/* NY FARVE – matcher dit referencebillede */
 html[data-theme="dark"] .theme-toggle {
-    background: radial-gradient(circle, #163A73, #0A1A33);
+    background: radial-gradient(circle, #2258FF, #0A1633);
     box-shadow:
-        0 4px 14px rgba(0, 110, 255, 0.45),
-        0 0 22px rgba(0, 110, 255, 0.35);
+        0 4px 18px rgba(0, 110, 255, 0.55),
+        0 0 30px rgba(0, 110, 255, 0.45);
 }
 
 html[data-theme="dark"] .theme-toggle:hover {
     transform: scale(1.07);
     box-shadow:
-        0 6px 18px rgba(0, 110, 255, 0.55),
-        0 0 30px rgba(0, 110, 255, 0.45);
+        0 6px 24px rgba(0, 110, 255, 0.75),
+        0 0 38px rgba(0, 110, 255, 0.55);
 }
 
 /* -------- 3D / GLOW UNDER KNAP -------- */
@@ -296,13 +297,16 @@ html[data-theme="dark"] .theme-toggle:hover {
     transition: all 0.25s ease;
 }
 
+/* glow – light mode */
 html[data-theme="light"] .theme-toggle::after {
     background: rgba(255, 193, 7, 0.6);
 }
 
+/* glow – dark mode */
 html[data-theme="dark"] .theme-toggle::after {
-    background: rgba(0, 110, 255, 0.55);
+    background: rgba(0, 110, 255, 0.65);
 }
+
 
 /* ======================================================
    AFSNIT 05 – SIDEBAR (VENSTRE MENU)
