@@ -522,6 +522,87 @@ html[data-theme="dark"] .sidebar-menu a.menu-item.active::after {
 }
 
 /* ======================================================
+   AFSNIT 07 – GLOW & 3D BUTTON STYLE (GLOBAL)
+   Bruges til Start/Stop + fremtidige knapper
+   ====================================================== */
+
+/* Grundstil for glow-knapper */
+.btn-glow {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* Glow bag knapperne (pseudo-element) */
+.btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    transition: 0.3s ease;
+    opacity: 0;
+}
+
+/* ------------------------------------------------------
+   07A – LIGHT MODE GLOW
+   ------------------------------------------------------ */
+
+body.light-mode .btn-glow.active,
+body.light-mode .btn-glow:active {
+    background: #9b5cff; /* samme farve som aktiv DK-knap */
+    color: white;
+    box-shadow: 0 0 18px #c29aff;
+}
+
+body.light-mode .btn-glow.active::before,
+body.light-mode .btn-glow:active::before {
+    opacity: 1;
+    box-shadow: 0 0 25px #c29aff;
+}
+
+/* ------------------------------------------------------
+   07B – DARK MODE GLOW
+   ------------------------------------------------------ */
+
+body.dark-mode .btn-glow.active,
+body.dark-mode .btn-glow:active {
+    background: #1e40ff; /* mørk-blå som LMM-knappen */
+    color: white;
+    box-shadow: 0 0 23px #1b3cffd0;
+}
+
+body.dark-mode .btn-glow.active::before,
+body.dark-mode .btn-glow:active::before {
+    opacity: 1;
+    box-shadow: 0 0 30px #1b3cffd0;
+}
+
+/* ------------------------------------------------------
+   07C – KNAPTYOER (START / STOP)
+   ------------------------------------------------------ */
+
+.btn-start { background: #2ecc71; }   /* grøn, før tryk */
+.btn-stop  { background: #e74c3c; }   /* rød, før tryk */
+
+/* Når de trykkes ned → får de glow-farven */
+body.light-mode .btn-start.active,
+body.light-mode .btn-stop.active {
+    background: #9b5cff;
+}
+
+body.dark-mode .btn-start.active,
+body.dark-mode .btn-stop.active {
+    background: #1e40ff;
+}
+
+
+/* ======================================================
    AFSNIT 07 – GENERELLE KNAPPER & FORMER
 ====================================================== */
 
@@ -679,4 +760,84 @@ textarea {
     .content-wrapper {
         padding: 18px 16px 32px;
     }
+}
+
+
+/* ======================================================
+   AFSNIT 13 – GLOW & 3D BUTTON STYLE (GLOBAL)
+   Bruges til Start/Stop og andre interaktionsknapper
+====================================================== */
+
+/* Fælles glow-knap base */
+.btn-glow {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s ease;
+    position: relative;
+    z-index: 1;
+    background: var(--bg-card);
+    color: var(--text-strong);
+}
+
+/* Glow bag knappen */
+.btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    transition: 0.3s ease;
+    opacity: 0;
+}
+
+/* ------------------------------------------------------
+   LIGHT MODE – lilla glow (samme style som aktiv DK-knap)
+------------------------------------------------------ */
+[data-theme="light"] .btn-glow.active,
+[data-theme="light"] .btn-glow:active {
+    background: radial-gradient(circle, #9b5cff, #7c3aed);
+    color: white;
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.55);
+}
+
+[data-theme="light"] .btn-glow.active::before,
+[data-theme="light"] .btn-glow:active::before {
+    opacity: 1;
+    box-shadow: 0 0 26px rgba(139, 92, 246, 0.55);
+}
+
+/* ------------------------------------------------------
+   DARK MODE – blå glow (samme farve som LMM)
+------------------------------------------------------ */
+[data-theme="dark"] .btn-glow.active,
+[data-theme="dark"] .btn-glow:active {
+    background: radial-gradient(circle, #2258FF, #0A1633);
+    color: white;
+    box-shadow: 0 0 24px rgba(0, 110, 255, 0.55);
+}
+
+[data-theme="dark"] .btn-glow.active::before,
+[data-theme="dark"] .btn-glow:active::before {
+    opacity: 1;
+    box-shadow: 0 0 32px rgba(0, 110, 255, 0.55);
+}
+
+/* ------------------------------------------------------
+   Start / Stop farver før tryk
+------------------------------------------------------ */
+.btn-start { background: var(--success); color: #fff; }
+.btn-stop  { background: var(--danger);  color: #fff; }
+
+/* Når de trykkes ned → får de glow-farven */
+[data-theme="light"] .btn-start.active,
+[data-theme="light"] .btn-stop.active {
+    background: radial-gradient(circle, #9b5cff, #7c3aed);
+}
+
+[data-theme="dark"] .btn-start.active,
+[data-theme="dark"] .btn-stop.active {
+    background: radial-gradient(circle, #2258FF, #0A1633);
 }
