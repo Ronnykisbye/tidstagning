@@ -1,9 +1,13 @@
 /* ======================================================
    AFSNIT 01 – SPROG-DATA (I18N)
+   (Alle tekster til menu, sider og knapper)
 ====================================================== */
 
 const translations = {
     da: {
+        app_title: "GreenTime Pro",
+
+        /* Menu */
         menu_dashboard: "Tidsregistrering",
         menu_customers: "Kunder",
         menu_employees: "Medarbejdere",
@@ -12,34 +16,44 @@ const translations = {
         menu_reports: "Rapporter",
         menu_settings: "Indstillinger",
 
+        /* Tidsregistrering */
         timereg_title: "Tidsregistrering",
+        timereg_sub: "Registrer tid på kunder du arbejder hos.",
         timereg_customer_label: "Kunde vi arbejder hos",
         timereg_choose_customer: "Vælg en kunde",
-        timereg_today_time: "Tid i dag: 0:00",
+        timereg_today_time: "Tid i dag",
         timereg_btn_start: "Start",
         timereg_btn_stop: "Stop",
 
+        /* Kunder */
         customers_title: "Kunder",
         customers_sub: "Opret og se dine kunder.",
         customers_add_btn: "Tilføj kunde",
 
+        /* Medarbejdere */
         employees_title: "Medarbejdere",
         employees_sub: "Opret og se medarbejdere.",
         employees_add_btn: "Tilføj medarbejder",
 
+        /* Planlægning */
         planning_title: "Planlægning",
         planning_sub: "Planlæg kommende opgaver, aftaler og ressourcer.",
 
+        /* Logs */
         logs_title: "Logs",
         logs_sub: "Her vil dine logs komme senere.",
 
+        /* Rapporter */
         reports_title: "Rapporter",
         reports_sub: "Rapportmodul bliver tilføjet senere.",
 
+        /* Indstillinger */
         settings_title: "Indstillinger",
         settings_sub: "Basisindstillinger for appen."
     },
     en: {
+        app_title: "GreenTime Pro",
+
         menu_dashboard: "Time tracking",
         menu_customers: "Customers",
         menu_employees: "Employees",
@@ -49,9 +63,10 @@ const translations = {
         menu_settings: "Settings",
 
         timereg_title: "Time tracking",
+        timereg_sub: "Track time on the customers you work for.",
         timereg_customer_label: "Customer we work for",
         timereg_choose_customer: "Choose a customer",
-        timereg_today_time: "Time today: 0:00",
+        timereg_today_time: "Time today",
         timereg_btn_start: "Start",
         timereg_btn_stop: "Stop",
 
@@ -76,6 +91,8 @@ const translations = {
         settings_sub: "Basic settings for the app."
     },
     de: {
+        app_title: "GreenTime Pro",
+
         menu_dashboard: "Zeiterfassung",
         menu_customers: "Kunden",
         menu_employees: "Mitarbeiter",
@@ -85,9 +102,10 @@ const translations = {
         menu_settings: "Einstellungen",
 
         timereg_title: "Zeiterfassung",
+        timereg_sub: "Erfasse Arbeitszeit für deine Kunden.",
         timereg_customer_label: "Kunde, für den wir arbeiten",
         timereg_choose_customer: "Wähle einen Kunden",
-        timereg_today_time: "Zeit heute: 0:00",
+        timereg_today_time: "Zeit heute",
         timereg_btn_start: "Start",
         timereg_btn_stop: "Stopp",
 
@@ -112,6 +130,8 @@ const translations = {
         settings_sub: "Grundeinstellungen der Anwendung."
     },
     lt: {
+        app_title: "GreenTime Pro",
+
         menu_dashboard: "Laiko sekimas",
         menu_customers: "Klientai",
         menu_employees: "Darbuotojai",
@@ -121,9 +141,10 @@ const translations = {
         menu_settings: "Nustatymai",
 
         timereg_title: "Laiko sekimas",
+        timereg_sub: "Sekite laiką pas klientus, pas kuriuos dirbate.",
         timereg_customer_label: "Klientas, pas kurį dirbame",
         timereg_choose_customer: "Pasirinkite klientą",
-        timereg_today_time: "Laikas šiandien: 0:00",
+        timereg_today_time: "Laikas šiandien",
         timereg_btn_start: "Pradėti",
         timereg_btn_stop: "Stabdyti",
 
@@ -136,7 +157,7 @@ const translations = {
         employees_add_btn: "Pridėti darbuotoją",
 
         planning_title: "Planavimas",
-        planning_sub: "Planuokite užduotis ir susitikimus.",
+        planning_sub: "Planuokite užduotis, susitikimus ir išteklius.",
 
         logs_title: "Žurnalai",
         logs_sub: "Žurnalai bus rodomi čia vėliau.",
@@ -149,22 +170,21 @@ const translations = {
     }
 };
 
-let currentLang = "da";
+let currentLang = localStorage.getItem("gtp_lang") || "da";
 
 function t(key) {
-    return translations[currentLang]?.[key] || translations.da[key] || key;
+    const dict = translations[currentLang] || translations["da"];
+    return dict[key] || key;
 }
-
 
 /* ======================================================
    AFSNIT 02 – INITIALISERING (DOMContentLoaded)
 ====================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-    initSidebarNavigation();
     initLanguage();
-    initLanguageButtons();
     initThemeToggle();
+    initSidebarNavigation();
 
     installDefaultCustomers();
     installDefaultEmployees();
@@ -179,36 +199,26 @@ document.addEventListener("DOMContentLoaded", () => {
     initTimer();
 });
 
-
 /* ======================================================
    AFSNIT 03 – SIDEBAR + NAVIGATION
 ====================================================== */
 
 function initSidebarNavigation() {
-
     const buttons = document.querySelectorAll(".sidebar-menu .menu-item");
     const pages = document.querySelectorAll(".page");
-
     if (!buttons.length || !pages.length) return;
 
-    // Startside = dashboardPage
-    showPage("dashboardPage");
-
-    // Marker første menu som aktiv
-    buttons[0].classList.add("active");
+    // gør første menupunkt aktiv
+    const first = buttons[0];
+    first.classList.add("active");
+    showPage(first.dataset.page);
     updatePageTitleFromActiveMenu();
 
     buttons.forEach(btn => {
         btn.addEventListener("click", () => {
-
-            // Fjern active fra alle
             buttons.forEach(b => b.classList.remove("active"));
-
-            // Sæt active på valgt
             btn.classList.add("active");
-
-            // Find side
-            const pageId = btn.getAttribute("data-page");
+            const pageId = btn.dataset.page;
             showPage(pageId);
             updatePageTitleFromActiveMenu();
         });
@@ -216,206 +226,256 @@ function initSidebarNavigation() {
 }
 
 function showPage(pageId) {
-
     const pages = document.querySelectorAll(".page");
-
     pages.forEach(page => {
-        if (page.id === pageId) {
-            page.classList.add("active");
-        } else {
-            page.classList.remove("active");
-        }
+        const isActive = page.id === pageId;
+        page.classList.toggle("active", isActive);
     });
 }
 
 function updatePageTitleFromActiveMenu() {
     const activeBtn = document.querySelector(".sidebar-menu .menu-item.active");
     const pageTitle = document.getElementById("pageTitle");
-
     if (!activeBtn || !pageTitle) return;
 
-    const span = activeBtn.querySelector("span[data-i18n]");
-    if (!span) return;
-
-    const key = span.getAttribute("data-i18n");
-    pageTitle.textContent = t(key);
-}
-
-
-/* ============================================================
-   AFSNIT 04 – LYS/MØRK MODE + SPROGSYSTEM (REN OG OPTIMERET)
-   ============================================================ */
-
-/* -------------------------
-   SPROGDATA (ENKELT SYSTEM)
---------------------------- */
-
-const translations = {
-    dk: {
-        timeTracking: "Tidsregistrering",
-        customerWorkingFor: "Kunde vi arbejder hos",
-        selectCustomer: "Vælg en kunde",
-        timeToday: "Tid i dag",
-        start: "Start",
-        stop: "Stop",
-        customers: "Kunder",
-        employees: "Medarbejdere",
-        planning: "Planlægning",
-        logs: "Logs",
-        reports: "Rapporter",
-        settings: "Indstillinger",
-        addCustomer: "Tilføj kunde",
-        addEmployee: "Tilføj medarbejder"
-    },
-    gb: {
-        timeTracking: "Time Tracking",
-        customerWorkingFor: "Customer we work for",
-        selectCustomer: "Select a customer",
-        timeToday: "Time today",
-        start: "Start",
-        stop: "Stop",
-        customers: "Customers",
-        employees: "Employees",
-        planning: "Planning",
-        logs: "Logs",
-        reports: "Reports",
-        settings: "Settings",
-        addCustomer: "Add customer",
-        addEmployee: "Add employee"
-    },
-    de: {
-        timeTracking: "Zeiterfassung",
-        customerWorkingFor: "Kunde, für den wir arbeiten",
-        selectCustomer: "Kunden wählen",
-        timeToday: "Zeit heute",
-        start: "Start",
-        stop: "Stop",
-        customers: "Kunden",
-        employees: "Mitarbeiter",
-        planning: "Planung",
-        logs: "Protokolle",
-        reports: "Berichte",
-        settings: "Einstellungen",
-        addCustomer: "Kunden hinzufügen",
-        addEmployee: "Mitarbeiter hinzufügen"
-    },
-    lt: {
-        timeTracking: "Laiko registravimas",
-        customerWorkingFor: "Klientas, pas kurį dirbame",
-        selectCustomer: "Pasirinkite klientą",
-        timeToday: "Laikas šiandien",
-        start: "Pradėti",
-        stop: "Sustabdyti",
-        customers: "Klientai",
-        employees: "Darbuotojai",
-        planning: "Planavimas",
-        logs: "Žurnalai",
-        reports: "Ataskaitos",
-        settings: "Nustatymai",
-        addCustomer: "Pridėti klientą",
-        addEmployee: "Pridėti darbuotoją"
+    const labelEl = activeBtn.querySelector("[data-i18n]");
+    const key = labelEl && labelEl.dataset.i18n;
+    if (key) {
+        pageTitle.textContent = t(key);
+    } else if (labelEl) {
+        pageTitle.textContent = labelEl.textContent.trim();
     }
-};
-
-/* -------------------------
-   HENT TEKSTNØGLE
---------------------------- */
-function t(key) {
-    const lang = localStorage.getItem("language") || "dk";
-    return translations[lang]?.[key] || key;
 }
 
-/* -------------------------
-   ANVEND SPROG PÅ SIDEN
---------------------------- */
-function applyLanguage() {
-    const elements = document.querySelectorAll("[data-i18n]");
-    elements.forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        const text = t(key);
-        if (el.tagName === "INPUT" || el.tagName === "SELECT") {
-            el.placeholder = text;
-        } else {
-            el.textContent = text;
-        }
+/* ======================================================
+   AFSNIT 04 – SPROG (I18N-SYSTEM)
+====================================================== */
+
+function applyTranslations() {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (!key) return;
+
+        // Timer-display styres af timer-koden, ikke her
+        if (el.id === "timeregDisplayText") return;
+
+        el.textContent = t(key);
     });
 
-    const placeholderEl = document.querySelector("#customerSelect");
-    if (placeholderEl) placeholderEl.options[0].textContent = t("selectCustomer");
+    updateLangButtonActiveState();
+    updatePageTitleFromActiveMenu();
 }
 
-/* -------------------------
-   SKIFT SPROG
---------------------------- */
-function changeLanguage(lang) {
-    localStorage.setItem("language", lang);
-    applyLanguage();
+function updateLangButtonActiveState() {
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
 }
 
-/* -------------------------
-   TEMA (LMM)
---------------------------- */
+function initLanguage() {
+    const stored = localStorage.getItem("gtp_lang");
+    if (stored && translations[stored]) {
+        currentLang = stored;
+    }
+    applyTranslations();
 
-function applyTheme() {
-    const theme = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", theme);
-}
-
-function toggleTheme() {
-    const current = localStorage.getItem("theme") || "light";
-    const next = current === "light" ? "dark" : "light";
-    localStorage.setItem("theme", next);
-    applyTheme();
-}
-
-/* -------------------------
-   INITIALISERING
---------------------------- */
-function initLanguageAndTheme() {
-    applyLanguage();
-    applyTheme();
-
-    // Sprogknapper
     document.querySelectorAll(".lang-btn").forEach(btn => {
         btn.addEventListener("click", () => {
-            const lang = btn.getAttribute("data-lang");
-            changeLanguage(lang);
+            const lang = btn.dataset.lang;
+            if (!translations[lang]) return;
+
+            currentLang = lang;
+            localStorage.setItem("gtp_lang", lang);
+            applyTranslations();
         });
     });
-
-    // LMM-knap
-    const lmmBtn = document.getElementById("themeToggleBtn");
-    if (lmmBtn) {
-        lmmBtn.addEventListener("click", toggleTheme);
-    }
 }
 
-// Kør når siden loader
-document.addEventListener("DOMContentLoaded", initLanguageAndTheme);
+/* ======================================================
+   AFSNIT 05 – TEMA (DARK / LIGHT) – LMM
+====================================================== */
 
-// ------------------------------------------------------
-// 4. INITIALISER SPROG
-// ------------------------------------------------------
-function initLanguage() {
-    const savedLang = localStorage.getItem("lang") || "dk";
-    translatePage(savedLang);
+function initThemeToggle() {
+    const btn = document.getElementById("themeToggle");
+    const icon = document.getElementById("themeIcon");
+    if (!btn || !icon) return;
 
-    document.querySelectorAll(".langBtn").forEach(btn => {
-        btn.onclick = () => {
-            translatePage(btn.dataset.lang);
-        };
+    const saved = localStorage.getItem("gtp_theme") || "light";
+    document.documentElement.setAttribute("data-theme", saved);
+    icon.textContent = saved === "dark" ? "🌙" : "☀️";
+
+    btn.addEventListener("click", () => {
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "light" ? "dark" : "light";
+
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("gtp_theme", next);
+        icon.textContent = next === "dark" ? "🌙" : "☀️";
     });
 }
 
-// ------------------------------------------------------
-// 5. KALD DET AUTOMATISK VED START
-// ------------------------------------------------------
-function initLMMandLanguage() {
-    initTheme();
-    initLanguage();
-}
 /* ======================================================
-   AFSNIT 06 – TIMER (TIDSREGISTRERING)
+   AFSNIT 06 – DEMODATA (KUNDER & MEDARBEJDERE)
+====================================================== */
+
+function installDefaultCustomers() {
+    const existing = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
+    if (existing && existing.length > 0) return;
+
+    const demoCustomers = [
+        {
+            name: "Helsingør Have & Service",
+            email: "info@have-service.dk",
+            phone: "+45 30 11 22 33",
+            address: "Strandvejen 12, 3000 Helsingør"
+        },
+        {
+            name: "Nordic Green Parks",
+            email: "kontakt@nordicparks.dk",
+            phone: "+45 40 22 33 44",
+            address: "Park Allé 7, 2100 København Ø"
+        },
+        {
+            name: "Byens Ejendomme A/S",
+            email: "drift@byensejendomme.dk",
+            phone: "+45 50 33 44 55",
+            address: "Hovedgaden 99, 4000 Roskilde"
+        }
+    ];
+
+    localStorage.setItem("gtp_customers", JSON.stringify(demoCustomers));
+}
+
+function installDefaultEmployees() {
+    const existing = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
+    if (existing && existing.length > 0) return;
+
+    const demoEmployees = [
+        { name: "Lars Kristensen", email: "lars@firma.dk", role: "Medarbejder" },
+        { name: "Ronny Kisbye", email: "ronny@kisbye.eu", role: "Admin" },
+        { name: "Emma Larsen", email: "emma@firma.dk", role: "Medarbejder" }
+    ];
+
+    localStorage.setItem("gtp_employees", JSON.stringify(demoEmployees));
+}
+
+/* ======================================================
+   AFSNIT 07 – KUNDER UI
+====================================================== */
+
+function getCustomers() {
+    return JSON.parse(localStorage.getItem("gtp_customers") || "[]");
+}
+
+function saveCustomers(customers) {
+    localStorage.setItem("gtp_customers", JSON.stringify(customers));
+}
+
+function renderCustomers() {
+    const container = document.getElementById("customerList");
+    if (!container) return;
+
+    const customers = getCustomers();
+    container.innerHTML = "";
+
+    if (!customers.length) {
+        const p = document.createElement("p");
+        p.textContent = "Ingen kunder endnu.";
+        container.appendChild(p);
+        return;
+    }
+
+    customers.forEach(customer => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <strong>${customer.name}</strong>
+            <div>${customer.address || ""}</div>
+            <div>${customer.phone || ""}</div>
+            <div>${customer.email || ""}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function initCustomerUI() {
+    const btn = document.getElementById("addCustomerBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const name = prompt("Navn på kunde:");
+        if (!name) return;
+
+        const address = prompt("Adresse (valgfri):") || "";
+        const phone = prompt("Telefon (valgfri):") || "";
+        const email = prompt("E-mail (valgfri):") || "";
+
+        const customers = getCustomers();
+        customers.push({ name, address, phone, email });
+        saveCustomers(customers);
+        renderCustomers();
+        renderTimereg();
+    });
+}
+
+/* ======================================================
+   AFSNIT 08 – MEDARBEJDERE UI
+====================================================== */
+
+function getEmployees() {
+    return JSON.parse(localStorage.getItem("gtp_employees") || "[]");
+}
+
+function saveEmployees(employees) {
+    localStorage.setItem("gtp_employees", JSON.stringify(employees));
+}
+
+function renderEmployees() {
+    const container = document.getElementById("employeeList");
+    if (!container) return;
+
+    const employees = getEmployees();
+    container.innerHTML = "";
+
+    if (!employees.length) {
+        const p = document.createElement("p");
+        p.textContent = "Ingen medarbejdere endnu.";
+        container.appendChild(p);
+        return;
+    }
+
+    employees.forEach(emp => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <strong>${emp.name}</strong>
+            <div>${emp.email || ""}</div>
+            <div>${emp.role || ""}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function initEmployeeUI() {
+    const btn = document.getElementById("addEmployeeBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const name = prompt("Navn på medarbejder:");
+        if (!name) return;
+
+        const email = prompt("E-mail (valgfri):") || "";
+        const role = prompt("Rolle (valgfri):") || "";
+
+        const employees = getEmployees();
+        employees.push({ name, email, role });
+        saveEmployees(employees);
+        renderEmployees();
+    });
+}
+
+/* ======================================================
+   AFSNIT 09 – TIDSREGISTRERING (TIMER)
 ====================================================== */
 
 let timerInterval = null;
@@ -438,7 +498,7 @@ function startTimer(display) {
     if (timerInterval) return;
 
     timerInterval = setInterval(() => {
-        timerSeconds++;
+        timerSeconds += 60; // ét minut ad gangen
         updateTimerDisplay(display);
     }, 1000);
 }
@@ -451,159 +511,24 @@ function stopTimer(display) {
     updateTimerDisplay(display);
 }
 
-function resetTimer(display) {
-    timerSeconds = 0;
-    updateTimerDisplay(display);
-}
-
 function updateTimerDisplay(display) {
     if (!display) return;
     const h = String(Math.floor(timerSeconds / 3600)).padStart(2, "0");
     const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, "0");
-    const s = String(timerSeconds % 60).padStart(2, "0");
-    display.textContent = `${t("timereg_today_time").split(":")[0]}: ${h}:${m}:${s}`;
-}
 
+    const label = t("timereg_today_time");
+    display.textContent = `${label}: ${h}:${m}`;
+}
 
 /* ======================================================
-   AFSNIT 07 – DEMO DATA: KUNDER & MEDARBEJDERE
-====================================================== */
-
-function installDefaultCustomers() {
-    const existing = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-    if (existing && existing.length > 0) return;
-
-    const demoCustomers = [
-        { name: "Søren Olsen", phone: "21 34 56 78", email: "soren@demo.dk", address: "Sølvgade 14, København" },
-        { name: "Peter Jensen", phone: "21 45 33 77", email: "peter@firma.dk", address: "Hygge Allé 3, Aarhus" },
-        { name: "Lise Holm", phone: "64 73 24 67", email: "lise@holm.dk", address: "Vibevej 22, Hornbæk" }
-    ];
-
-    localStorage.setItem("gtp_customers", JSON.stringify(demoCustomers));
-}
-
-function installDefaultEmployees() {
-    const existing = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
-    if (existing && existing.length > 0) return;
-
-    const demoEmployees = [
-        { name: "Lars Kristensen", email: "lars@firma.dk", role: "Medarbejder" },
-        { name: "Ronny Kisbye", email: "ronny@kisbye.eu", role: "Admin" },
-        { name: "Emma Larsen", email: "emma@firma.dk", role: "Medarbejder" }
-    ];
-
-    localStorage.setItem("gtp_employees", JSON.stringify(demoEmployees));
-}
-
-
-/* ======================================================
-   AFSNIT 08 – KUNDER (UI)
-====================================================== */
-
-function initCustomerUI() {
-    const btn = document.getElementById("addCustomerBtn");
-    if (!btn) return;
-
-    btn.addEventListener("click", () => {
-        const name = prompt("Kundenavn:");
-        if (!name) return;
-
-        const customer = {
-            name,
-            phone: "",
-            email: "",
-            address: ""
-        };
-
-        const customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-        customers.push(customer);
-        localStorage.setItem("gtp_customers", JSON.stringify(customers));
-
-        renderCustomers();
-        renderTimereg();
-    });
-}
-
-function renderCustomers() {
-    const container = document.getElementById("customerList");
-    if (!container) return;
-
-    const customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-
-    if (!customers.length) {
-        container.innerHTML = "<p>Ingen kunder endnu.</p>";
-        return;
-    }
-
-    container.innerHTML = customers.map(c => `
-        <div class="card customer-card">
-            <div><strong>${c.name}</strong></div>
-            <div>${c.phone || ""}</div>
-            <div>${c.email || ""}</div>
-            <div>${c.address || ""}</div>
-        </div>
-    `).join("");
-}
-
-
-/* ======================================================
-   AFSNIT 09 – MEDARBEJDERE (UI)
-====================================================== */
-
-function initEmployeeUI() {
-    const btn = document.getElementById("addEmployeeBtn");
-    if (!btn) return;
-
-    btn.addEventListener("click", () => {
-        const name = prompt("Medarbejdernavn:");
-        if (!name) return;
-
-        const employee = {
-            name,
-            email: "",
-            role: "Medarbejder"
-        };
-
-        const employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
-        employees.push(employee);
-        localStorage.setItem("gtp_employees", JSON.stringify(employees));
-
-        renderEmployees();
-    });
-}
-
-function renderEmployees() {
-    const container = document.getElementById("employeeList");
-    if (!container) return;
-
-    const employees = JSON.parse(localStorage.getItem("gtp_employees") || "[]");
-
-    if (!employees.length) {
-        container.innerHTML = "<p>Ingen medarbejdere endnu.</p>";
-        return;
-    }
-
-    container.innerHTML = employees.map(e => `
-        <div class="card employee-card">
-            <div><strong>${e.name}</strong></div>
-            <div>${e.email || ""}</div>
-            <div>${e.role || ""}</div>
-        </div>
-    `).join("");
-}
-
-
-/* ======================================================
-   AFSNIT 10 – TIDSREGISTRERING (KUNDE-DROPDOWN)
+   AFSNIT 10 – TIDSREGISTRERING: KUNDE-DROPDOWN
 ====================================================== */
 
 function renderTimereg() {
     const select = document.getElementById("timeregCustomerSelect");
     if (!select) return;
 
-    const customers = JSON.parse(localStorage.getItem("gtp_customers") || "[]");
-
-    // default-option
+    const customers = getCustomers();
     select.innerHTML = `
         <option value="" data-i18n="timereg_choose_customer">
             ${t("timereg_choose_customer")}
@@ -619,7 +544,6 @@ function renderTimereg() {
 
     applyTranslations();
 }
-
 
 /* ======================================================
    AFSNIT 11 – MOBIL SIDEBAR TOGGLE (OPTION)
