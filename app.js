@@ -541,6 +541,7 @@ function renderTimereg() {
         opt.textContent = c.name;
         select.appendChild(opt);
     });
+   renderTimeregEmployees();
 
     applyTranslations();
 }
