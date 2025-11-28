@@ -542,7 +542,7 @@ function renderTimereg() {
         select.appendChild(opt);
     });
    renderTimeregEmployees();
-
+  
     applyTranslations();
 }
 
