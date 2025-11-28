@@ -93,49 +93,65 @@
 
 <div class="content-wrapper">
 
-    <!-- ================================================
-         SIDE: TIDSREGISTRERING
-    ================================================= -->
-    <section id="dashboardPage" class="page active">
-        <h2 data-i18n="timereg_title">Tidsregistrering</h2>
-        <p data-i18n="timereg_sub">Registrer tid på kunder du arbejder hos.</p>
+            <!-- ======================================================
+             AFSNIT – TIDSREGISTRERING (DASHBOARD PAGE)
+        ====================================================== -->
 
-        <div class="timereg-wrapper">
+        <section id="dashboardPage" class="page active">
 
-            <label for="timeregCustomerSelect" data-i18n="timereg_customer_label">
-                Kunde vi arbejder hos
-            </label>
+            <!-- Titel -->
+            <h1 data-i18n="menu_dashboard">Tidsregistrering</h1>
 
-            <select id="timeregCustomerSelect">
-                <option value="" data-i18n="timereg_choose_customer">Vælg en kunde</option>
-            </select>
+            <!-- Wrapper -->
+            <div class="timereg-wrapper">
 
-            <!-- ==================================================
-                 TIMEREG – MEDARBEJDER-KNAPPER
-                 (LIGE UNDER KUNDE-FELTET – DER HVOR DIN STREG VAR)
-            ================================================== -->
-            <div id="timeregEmployeeContainer" class="timereg-employee-container">
-                <!-- Knapper fyldes automatisk af JS (renderTimeregEmployees) -->
-            </div>
+                <!-- ============================
+                     Kundevælger
+                ============================ -->
+                <label data-i18n="timereg_customer_label">Vælg kunde</label>
 
-            <div id="timeregDisplayText"
-                 class="timereg-display"
-                 data-i18n="timereg_today_time">
-                Tid i dag: 0:00
-            </div>
+                <select id="timeregCustomerSelect">
+                    <!-- Kundenavne indsættes via JS -->
+                </select>
 
-            <div class="timereg-buttons">
-                <button id="timeregStartBtn"
-                        class="btn-green"
-                        data-i18n="timereg_btn_start">Start</button>
+                <!-- ============================
+                     Medarbejder knapper
+                ============================ -->
+                <label data-i18n="timereg_employee_label">Medarbejdere</label>
 
-                <button id="timeregStopBtn"
-                        class="btn-red"
-                        data-i18n="timereg_btn_stop">Stop</button>
-            </div>
+                <div class="timereg-employee-container" id="timeregEmployeeBtns">
+                    <!-- Medarbejderknapper indsættes via JS -->
+                </div>
 
-        </div>
-    </section>
+                <!-- ============================
+                     Tid i dag – display
+                ============================ -->
+                <div id="timeregDisplayText"
+                     class="timereg-display"
+                     data-i18n="timereg_today">
+                     Tid i dag: 00:00
+                </div>
+
+                <!-- ============================
+                     START / STOP – LED VERSION
+                ============================ -->
+                <div class="timereg-buttons">
+
+                    <button id="timeregStartBtn"
+                            data-i18n="timereg_btn_start">
+                        Start
+                    </button>
+
+                    <button id="timeregStopBtn"
+                            data-i18n="timereg_btn_stop">
+                        Stop
+                    </button>
+
+                </div>
+
+            </div> <!-- /timereg-wrapper -->
+
+        </section>
 
     <!-- ================================================
          SIDE: KUNDER
