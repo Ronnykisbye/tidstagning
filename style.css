@@ -238,6 +238,82 @@ html[data-theme="dark"] .theme-toggle::after {
     background: rgba(0, 110, 255, 0.65);
 }
 
+/* ======================================================
+   AFSNIT 04B – SPROGKNAPPER (NYE STYLES)
+   – Aktiv knap har samme 3D / glow som LMM-knappen
+   – Dark mode: blå glød
+   – Light mode: lilla glød (samme som accent)
+====================================================== */
+
+/* Grundstil for alle sprogknapper */
+.lang-btn {
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* Hover – lille løft */
+.lang-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* ------------------------------------------------------
+   AKTIV KNAP – LIGHT MODE
+   Lilla farve + blød lilla glød
+------------------------------------------------------ */
+html[data-theme="light"] .lang-btn.active {
+    background: radial-gradient(circle, #9b5cff, #7c3aed);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow:
+        0 4px 12px rgba(139, 92, 246, 0.45),
+        0 0 18px rgba(139, 92, 246, 0.35);
+}
+
+/* ------------------------------------------------------
+   AKTIV KNAP – DARK MODE
+   Blå farve + nat-blå glød (samme som LMM-knappen)
+------------------------------------------------------ */
+html[data-theme="dark"] .lang-btn.active {
+    background: radial-gradient(circle, #2258FF, #0A1633);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow:
+        0 4px 16px rgba(0, 110, 255, 0.55),
+        0 0 26px rgba(0, 110, 255, 0.45);
+}
+
+/* Glow under aktiv knap */
+.lang-btn.active::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    left: 15%;
+    top: 15%;
+    filter: blur(16px);
+    z-index: -1;
+    transition: all 0.25s ease;
+}
+
+/* Glow farver – light mode */
+html[data-theme="light"] .lang-btn.active::after {
+    background: rgba(139, 92, 246, 0.55);
+}
+
+/* Glow farver – dark mode */
+html[data-theme="dark"] .lang-btn.active::after {
+    background: rgba(0, 110, 255, 0.55);
+}
 
 
 /* ======================================================
