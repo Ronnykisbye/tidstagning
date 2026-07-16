@@ -1,0 +1,21 @@
+(function(app){
+  const ACTIVE='gtp_active_v2';let ticker;
+  const active=()=>{try{return JSON.parse(localStorage.getItem(ACTIVE));}catch{return null;}};
+  function elapsed(a){return Math.max(0,Math.floor((Date.now()-new Date(a.start).getTime())/1000));}
+  function draw(){const a=active(),d=document.getElementById('timerDisplay'),s=document.getElementById('timerState');if(!a){d.textContent='00:00:00';s.textContent='Ingen aktiv tidsregistrering';return;}const sec=elapsed(a);d.textContent=[sec/3600,(sec%3600)/60,sec%60].map(n=>String(Math.floor(n)).padStart(2,'0')).join(':');s.textContent=`${app.customer(a.customerId)?.name||''} · ${a.employeeIds.map(id=>app.employee(id)?.name).filter(Boolean).join(', ')}`;}
+  function selectedEmployees(){return [...document.querySelectorAll('#timerEmployees input:checked')].map(x=>x.value);}
+  function renderEntries(){const body=document.querySelector('#entryTable tbody');body.innerHTML='';[...app.db.entries].sort((a,b)=>b.start.localeCompare(a.start)).slice(0,100).forEach(e=>{const tr=document.createElement('tr');const names=(e.employeeIds||[e.employeeId]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ');tr.innerHTML=`<td>${new Date(e.start).toLocaleString('da-DK')}</td><td>${Math.round(e.seconds/60)} min.</td><td>${app.escape(app.customer(e.customerId)?.name||'')}</td><td>${app.escape(names)}</td><td>${app.escape(e.note||'')}</td><td><button class="icon-btn danger" data-entry-del="${e.id}">🗑️</button></td>`;body.append(tr);});document.querySelectorAll('[data-entry-del]').forEach(b=>b.onclick=()=>{if(confirm('Slet tidsregistreringen?')){app.db.entries=app.db.entries.filter(x=>x.id!==b.dataset.entryDel);app.save('Tidsregistrering slettet');renderEntries();}});}
+  app.renderEmployeeChecks=function(containerId,selected=[]){const box=document.getElementById(containerId);if(!box)return;box.innerHTML=app.db.employees.filter(x=>x.active!==false).map(e=>`<label class="chip"><input type="checkbox" value="${e.id}" ${selected.includes(e.id)?'checked':''}><span>${app.escape(e.name)}</span></label>`).join('');};
+  app.fillSelects=function(){
+    document.querySelectorAll('[data-customer-select]').forEach(s=>{const old=s.value;s.innerHTML='<option value="">Vælg kunde</option>'+app.db.customers.filter(x=>x.active!==false).map(c=>`<option value="${c.id}">${app.escape(c.name)}</option>`).join('');s.value=old;});
+    document.querySelectorAll('#manualEmployee,#reportEmployee').forEach(s=>{const old=s.value;s.innerHTML=`<option value="">${s.id==='reportEmployee'?'Alle medarbejdere':'Vælg medarbejder'}</option>`+app.db.employees.filter(x=>x.active!==false).map(e=>`<option value="${e.id}">${app.escape(e.name)}</option>`).join('');s.value=old;});
+    app.renderEmployeeChecks('timerEmployees');app.renderEmployeeChecks('bookingEmployees');
+  };
+  app.initTimer=function(){
+    app.fillSelects();draw();ticker=setInterval(draw,1000);
+    document.getElementById('timerStart').onclick=()=>{const customerId=document.getElementById('timerCustomer').value,employeeIds=selectedEmployees();if(!customerId||!employeeIds.length)return alert('Vælg kunde og mindst én medarbejder.');if(active())return alert('Der kører allerede en tidsregistrering.');localStorage.setItem(ACTIVE,JSON.stringify({customerId,employeeIds,start:new Date().toISOString(),note:document.getElementById('timerNote').value.trim()}));app.save('Timer startet');draw();};
+    document.getElementById('timerStop').onclick=()=>{const a=active();if(!a)return alert('Der er ingen aktiv timer.');const seconds=elapsed(a);app.db.entries.push({...a,id:app.uid(),end:new Date().toISOString(),seconds});localStorage.removeItem(ACTIVE);app.save(`Timer stoppet: ${Math.round(seconds/60)} minutter`);draw();renderEntries();};
+    document.getElementById('manualEntryForm').onsubmit=e=>{e.preventDefault();const x=Object.fromEntries(new FormData(e.target)),start=new Date(`${x.date}T${x.start}`),end=new Date(`${x.date}T${x.end}`);if(end<=start)return alert('Sluttid skal være efter starttid.');app.db.entries.push({id:app.uid(),customerId:x.customerId,employeeIds:[x.employeeId],start:start.toISOString(),end:end.toISOString(),seconds:(end-start)/1000,note:x.note});app.save('Manuel tidsregistrering gemt');e.target.reset();renderEntries();};
+    document.addEventListener('gtp:data',renderEntries);renderEntries();
+  };
+})(window.GTP);
