@@ -11,9 +11,9 @@ window.GTP = window.GTP || {};
   }
 
   function seedDemoData(data) {
-    if (data.customers.length || data.employees.length || data.bookings.length) return data;
+    if (data.demoSeedVersion === 1) return data;
 
-    data.customers = [
+    const demoCustomers = [
       {id:'demo-customer-1',name:'Kronborg Kontorservice ApS',phone:'70 00 30 01',email:'kontakt@kronborg-kontor.example',address:'Stengade 52, 3000 Helsingør',notes:'DEMOKUNDE – fiktiv. Ugentlig rengøring af kontorer, køkken og mødelokaler.',active:true},
       {id:'demo-customer-2',name:'Hornbæk Strandhotel Drift',phone:'70 00 31 02',email:'drift@hornbaek-strandhotel.example',address:'Kystvej 18, 3100 Hornbæk',notes:'DEMOKUNDE – fiktiv. Klargøring af fællesarealer og mindre vedligeholdelsesopgaver.',active:true},
       {id:'demo-customer-3',name:'Fredensborg Grønne Anlæg',phone:'70 00 34 03',email:'service@fredensborg-groent.example',address:'Jernbanegade 24, 3480 Fredensborg',notes:'DEMOKUNDE – fiktiv. Hækklipning, græsslåning og oprydning på udearealer.',active:true},
@@ -21,14 +21,14 @@ window.GTP = window.GTP || {};
       {id:'demo-customer-5',name:'Espergærde Sundhedshus',phone:'70 00 30 05',email:'info@espergaerde-sundhed.example',address:'Mørdrupvej 15, 3060 Espergærde',notes:'DEMOKUNDE – fiktiv. Rengøring uden for åbningstid og opfyldning af forbrugsvarer.',active:true}
     ];
 
-    data.employees = [
+    const demoEmployees = [
       {id:'demo-employee-1',name:'Lars W',email:'lars.w@demo-firma.example',role:'Chef',active:true},
       {id:'demo-employee-2',name:'Sofie Larsen',email:'sofie@demo-firma.example',role:'Medarbejder',active:true},
       {id:'demo-employee-3',name:'Jonas Holm',email:'jonas@demo-firma.example',role:'Medarbejder',active:true},
       {id:'demo-employee-4',name:'Amalie Nielsen',email:'amalie@demo-firma.example',role:'Medarbejder',active:true}
     ];
 
-    data.bookings = [
+    const demoBookings = [
       {id:'demo-booking-1',date:localDate(1),start:'08:00',duration:'3',customerId:'demo-customer-1',employeeIds:['demo-employee-1','demo-employee-2'],note:'Kontorrengøring og klargøring af mødelokaler.'},
       {id:'demo-booking-2',date:localDate(2),start:'09:30',duration:'4',customerId:'demo-customer-3',employeeIds:['demo-employee-1','demo-employee-3'],note:'Hækklipning og oprydning ved parkeringsområdet.'},
       {id:'demo-booking-3',date:localDate(3),start:'07:30',duration:'2',customerId:'demo-customer-5',employeeIds:['demo-employee-2'],note:'Morgenrengøring og opfyldning af papirvarer.'},
@@ -44,7 +44,7 @@ window.GTP = window.GTP || {};
       return {id,customerId,employeeIds,start:start.toISOString(),end:end.toISOString(),seconds:minutes*60,note};
     }
 
-    data.entries = [
+    const demoEntries = [
       demoEntry('demo-entry-1',1,8,180,'demo-customer-1',['demo-employee-1','demo-employee-2'],'Kontorrengøring og klargøring af mødelokaler.'),
       demoEntry('demo-entry-2',2,9,240,'demo-customer-3',['demo-employee-3','demo-employee-4'],'Pleje af udearealer og bortkørsel af grønt affald.'),
       demoEntry('demo-entry-3',3,7,150,'demo-customer-5',['demo-employee-2'],'Rengøring og opfyldning af forbrugsvarer.'),
@@ -52,12 +52,28 @@ window.GTP = window.GTP || {};
       demoEntry('demo-entry-5',5,12,240,'demo-customer-2',['demo-employee-2','demo-employee-4'],'Klargøring efter arrangement og kontrol af fællesarealer.')
     ];
 
-    data.audit = [
+    const demoAudit = [
       {id:'demo-audit-1',at:new Date().toISOString(),action:'Fiktive demonstrationsdata indlæst'},
       {id:'demo-audit-2',at:new Date(Date.now()-3600000).toISOString(),action:'Booking oprettet: Hillerød Erhvervscenter'},
       {id:'demo-audit-3',at:new Date(Date.now()-7200000).toISOString(),action:'Tidsregistrering gemt: Kronborg Kontorservice ApS'},
       {id:'demo-audit-4',at:new Date(Date.now()-10800000).toISOString(),action:'Kunde oprettet: Espergærde Sundhedshus'}
     ];
+    demoCustomers.forEach(item => {
+      if (!data.customers.some(existing => existing.id === item.id)) data.customers.push(item);
+    });
+    demoEmployees.forEach(item => {
+      if (!data.employees.some(existing => existing.id === item.id)) data.employees.push(item);
+    });
+    demoBookings.forEach(item => {
+      if (!data.bookings.some(existing => existing.id === item.id)) data.bookings.push(item);
+    });
+    demoEntries.forEach(item => {
+      if (!data.entries.some(existing => existing.id === item.id)) data.entries.push(item);
+    });
+    demoAudit.forEach(item => {
+      if (!data.audit.some(existing => existing.id === item.id)) data.audit.push(item);
+    });
+    data.demoSeedVersion = 1;
     localStorage.setItem(KEY, JSON.stringify(data));
     return data;
   }
