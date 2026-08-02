@@ -1,0 +1,15 @@
+/* Fast hovednavigation øverst */
+.sidebar.top-navigation{position:fixed;z-index:25;top:72px;right:0;bottom:auto;left:0;width:auto;height:58px;padding:8px 18px;background:color-mix(in srgb,var(--surface) 96%,transparent);border:0;border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
+.sidebar.top-navigation nav{display:flex;align-items:center;justify-content:center;gap:6px;height:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.sidebar.top-navigation .menu-item{flex:0 0 auto;min-height:40px;padding:8px 13px;white-space:nowrap;border-radius:9px}
+main{margin:130px 0 0;padding:28px}
+.scroll-rail{top:140px}
+@media(max-width:900px){
+  body{padding-bottom:0}
+  .sidebar.top-navigation{top:64px;right:0;bottom:auto;left:0;width:auto;height:62px;padding:7px 8px;transform:none!important;box-shadow:0 8px 24px #0002;overflow:hidden}
+  .sidebar.top-navigation nav{display:flex;justify-content:flex-start;gap:5px;height:100%;overflow-x:auto}
+  .sidebar.top-navigation .menu-item,.sidebar.top-navigation .menu-item:nth-child(n+5){display:flex;flex:0 0 auto;min-width:96px;min-height:46px;flex-direction:column;justify-content:center;gap:1px;padding:4px 8px;font-size:.68rem}
+  main{margin:126px 0 0;padding:16px}
+  .scroll-rail{top:136px;bottom:16px}
+  .scroll-more{bottom:12px}
+}
