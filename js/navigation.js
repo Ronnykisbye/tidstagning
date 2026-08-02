@@ -20,6 +20,7 @@
     currentPage=id;
     document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
     document.querySelectorAll('.menu-item').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    document.querySelectorAll('.top-menu-item').forEach(b=>b.classList.toggle('active',b.dataset.topPage===id));
     app.refreshPageTitle();
     document.getElementById('sidebar').classList.remove('open');
     window.scrollTo({top:0,behavior:'smooth'});
@@ -38,6 +39,7 @@
 
   app.initNavigation=function(){
     document.querySelectorAll('.menu-item').forEach(b=>b.onclick=()=>app.showPage(b.dataset.page));
+    document.querySelectorAll('.top-menu-item').forEach(b=>b.onclick=()=>app.showPage(b.dataset.topPage));
     document.getElementById('menuToggle').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('navBack').onclick=app.goBack;
     document.getElementById('navOverview').onclick=app.goOverview;
