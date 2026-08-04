@@ -5,5 +5,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   const initializers=['initDashboard','initCustomers','initEmployees','initTimer','initCalendar','initReports','initSettings','initAbout'];
   initializers.forEach(name=>{try{A[name]?.();}catch(error){console.error(name+' kunne ikke starte',error);}});
   try{A.applyLanguage?.();}catch(error){console.error('Sprog kunne ikke indlæses',error);}
-  document.querySelectorAll('[data-lang]').forEach(button=>button.onclick=()=>A.setLanguage?.(button.dataset.lang));
+  document.querySelectorAll('[data-lang]').forEach(button=>button.onclick=()=>{A.setLanguage?.(button.dataset.lang);if(button.closest('.mobile-languages'))document.getElementById('sidebar')?.classList.remove('open');});
 });
