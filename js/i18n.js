@@ -27,7 +27,7 @@
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     let node;
     while((node=walker.nextNode())){
-      if(node.parentElement?.closest('script,style,[data-no-i18n]'))continue;
+      if(node.parentElement?.closest('script,style,[data-no-i18n],[data-i18n]'))continue;
       if(!originals.has(node))originals.set(node,node.nodeValue);
       const original=originals.get(node);
       const trimmed=original.trim();
