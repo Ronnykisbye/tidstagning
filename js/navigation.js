@@ -15,6 +15,10 @@
 
   app.showPage=function(id,options={}){
     if(!document.getElementById(id))return;
+    if(document.getElementById(id).dataset.rolePage==='manager'&&!app.isManager?.()){
+      id='dashboardPage';
+      app.toast?.('Denne funktion er kun tilgængelig i chefversionen');
+    }
     const push=options.push!==false;
     if(push&&currentPage&&currentPage!==id)history.push(currentPage);
     currentPage=id;
@@ -23,7 +27,7 @@
     document.querySelectorAll('.top-menu-item').forEach(b=>b.classList.toggle('active',b.dataset.topPage===id));
     app.refreshPageTitle();
     document.getElementById('sidebar').classList.remove('open');
-    window.scrollTo({top:0,behavior:'smooth'});
+    window.scrollTo({top:0,behavior:options.instant?'auto':'smooth'});
     updateControls();
   };
 

@@ -1,5 +1,28 @@
 (function(app){
-  function render(){const body=document.querySelector('#employeeTable tbody');body.innerHTML='';app.db.employees.filter(x=>x.active!==false).forEach(e=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${app.escape(e.name)}</strong></td><td>${app.escape(e.email)}</td><td>${app.escape(e.role)}</td><td><button class="icon-btn" data-emp-edit="${e.id}">✏️</button><button class="icon-btn danger" data-emp-del="${e.id}">🗑️</button></td>`;body.append(tr);});document.querySelectorAll('[data-emp-edit]').forEach(b=>b.onclick=()=>open(app.employee(b.dataset.empEdit)));document.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=()=>{const e=app.employee(b.dataset.empDel);if(confirm(`Arkivér ${e.name}?`)){e.active=false;app.save(`Medarbejder arkiveret: ${e.name}`);render();}});app.fillSelects();}
-  function open(e={}){const f=document.getElementById('employeeForm');f.reset();f.elements.id.value=e.id||'';['name','email','role'].forEach(k=>f.elements[k].value=e[k]||'');document.getElementById('employeeDialog').showModal();}
-  app.initEmployees=function(){document.getElementById('addEmployeeBtn').onclick=()=>open();document.getElementById('employeeCancel').onclick=()=>document.getElementById('employeeDialog').close();document.getElementById('employeeForm').onsubmit=ev=>{ev.preventDefault();const x=Object.fromEntries(new FormData(ev.target));let e=app.employee(x.id);if(e)Object.assign(e,x);else app.db.employees.push({...x,id:app.uid(),active:true});app.save(`Medarbejder gemt: ${x.name}`);document.getElementById('employeeDialog').close();render();};document.addEventListener('gtp:data',render);render();};
+  function render(){
+    const body=document.querySelector('#employeeTable tbody');if(!body)return;body.innerHTML='';
+    app.activeEmployees().forEach(employee=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td><strong>${app.escape(employee.name)}</strong></td><td>${app.escape(employee.email)}</td><td>${app.escape(employee.phone)}</td><td><span class="status-pill">${app.escape(employee.role)}</span></td><td><button class="icon-btn" data-emp-edit="${employee.id}" aria-label="Rediger">✏️</button><button class="icon-btn danger" data-emp-del="${employee.id}" aria-label="Arkivér">🗑️</button></td>`;body.append(tr);
+    });
+    body.querySelectorAll('[data-emp-edit]').forEach(b=>b.onclick=()=>open(app.employee(b.dataset.empEdit)));
+    body.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=()=>{const employee=app.employee(b.dataset.empDel);if(employee.id===app.session?.employeeId)return alert('Du kan ikke arkivere den profil, der bruges lige nu.');if(confirm(`Arkivér ${employee.name}?`)){employee.active=false;app.save(`Medarbejder arkiveret: ${employee.name}`);render();}});
+    app.fillSelects?.();
+  }
+  function open(employee={}){
+    if(!app.isManager())return app.toast('Kun chefen kan redigere medarbejdere');
+    const form=document.getElementById('employeeForm');form.reset();form.elements.id.value=employee.id||'';
+    ['name','email','phone','role'].forEach(key=>form.elements[key].value=employee[key]||'');
+    document.getElementById('employeeDialog').showModal();
+  }
+  app.initEmployees=function(){
+    document.getElementById('addEmployeeBtn').onclick=()=>open();
+    document.getElementById('employeeCancel').onclick=()=>document.getElementById('employeeDialog').close();
+    document.getElementById('employeeForm').onsubmit=event=>{
+      event.preventDefault();const values=Object.fromEntries(new FormData(event.target));let employee=app.employee(values.id);
+      if(employee)Object.assign(employee,values);else app.db.employees.push({...values,id:app.uid(),active:true});
+      app.save(`Medarbejder gemt: ${values.name}`);document.getElementById('employeeDialog').close();render();app.applyAccess?.();app.toast('Medarbejderen er gemt');
+    };
+    document.addEventListener('gtp:data',render);render();
+  };
 })(window.GTP);

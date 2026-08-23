@@ -1,7 +1,40 @@
-(function(app){let shown=new Date();shown.setDate(1);let selected=new Date().toISOString().slice(0,10);
-  const localDate=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,10);};
-  function conflict(candidate){const start=new Date(`${candidate.date}T${candidate.start}`),end=new Date(start.getTime()+Number(candidate.duration)*3600000);return app.db.bookings.find(b=>b.id!==candidate.id&&(b.employeeIds||[]).some(id=>candidate.employeeIds.includes(id))&&(()=>{const bs=new Date(`${b.date}T${b.start}`),be=new Date(bs.getTime()+Number(b.duration)*3600000);return start<be&&end>bs;})());}
-  function calendar(){const grid=document.getElementById('calendarGrid');document.getElementById('monthLabel').textContent=shown.toLocaleDateString('da-DK',{month:'long',year:'numeric'});grid.innerHTML=['Man','Tir','Ons','Tor','Fre','Lør','Søn'].map(x=>`<div class="weekday">${x}</div>`).join('');const first=(shown.getDay()+6)%7,last=new Date(shown.getFullYear(),shown.getMonth()+1,0).getDate();for(let i=0;i<first;i++)grid.insertAdjacentHTML('beforeend','<div></div>');for(let day=1;day<=last;day++){const d=new Date(shown.getFullYear(),shown.getMonth(),day),key=localDate(d),count=app.db.bookings.filter(x=>x.date===key).length,btn=document.createElement('button'),level=count>=4?'appointment-high':count?'appointment-low':'';btn.className=`day ${key===selected?'selected':''} ${count?'has-appointments':''} ${level}`;btn.innerHTML=`<span class="day-number">${day}</span>${count?`<span class="appointment-count">${count}</span>`:''}`;btn.setAttribute('aria-label',`${day}. ${shown.toLocaleDateString('da-DK',{month:'long'})}: ${count} ${count===1?'aftale':'aftaler'}`);btn.title=count?`${count} ${count===1?'aftale':'aftaler'} – tryk for at se dem`:'Ingen aftaler – tryk for at vælge dagen';btn.onclick=()=>{selected=key;document.getElementById('bookingDate').value=key;calendar();dayList();};grid.append(btn);} }
-  function dayList(){const box=document.getElementById('dayBookings'),items=app.db.bookings.filter(x=>x.date===selected).sort((a,b)=>a.start.localeCompare(b.start));document.getElementById('selectedDate').textContent=new Date(`${selected}T12:00`).toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long'});box.innerHTML=items.length?items.map(b=>`<article class="booking"><div><strong>${b.start} · ${app.escape(app.customer(b.customerId)?.name||'')}</strong><p>${app.escape(b.note||'')}</p><small>${b.employeeIds.map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${b.duration} timer</small></div><button class="icon-btn danger" data-book-del="${b.id}">🗑️</button></article>`).join(''):'<p>Ingen bookinger denne dag.</p>';document.querySelectorAll('[data-book-del]').forEach(x=>x.onclick=()=>{if(confirm('Slet bookingen?')){app.db.bookings=app.db.bookings.filter(b=>b.id!==x.dataset.bookDel);app.save('Booking slettet');calendar();dayList();}});}
-  app.initCalendar=function(){document.getElementById('prevMonth').onclick=()=>{shown.setMonth(shown.getMonth()-1);calendar();};document.getElementById('nextMonth').onclick=()=>{shown.setMonth(shown.getMonth()+1);calendar();};document.getElementById('bookingDate').value=selected;document.getElementById('bookingForm').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),b={...f,id:app.uid(),employeeIds};if(!employeeIds.length)return alert('Vælg mindst én medarbejder.');const hit=conflict(b);if(hit&&!confirm(`En medarbejder er allerede booket kl. ${hit.start}. Gem alligevel?`))return;app.db.bookings.push(b);app.save('Booking oprettet');selected=b.date;calendar();dayList();e.target.reset();document.getElementById('bookingDate').value=selected;app.fillSelects();};document.addEventListener('gtp:data',()=>{calendar();dayList();});calendar();dayList();};
+(function(app){
+  let shown=new Date();shown.setDate(1);let selected=new Date().toISOString().slice(0,10);
+  const localDate=date=>new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  const visible=()=>app.db.bookings.filter(app.canSeeBooking);
+  function conflict(candidate){
+    const start=new Date(`${candidate.date}T${candidate.start}`),end=new Date(start.getTime()+Number(candidate.duration)*3600000);
+    return app.db.bookings.find(booking=>booking.id!==candidate.id&&(booking.employeeIds||[]).some(id=>candidate.employeeIds.includes(id))&&(()=>{const bs=new Date(`${booking.date}T${booking.start}`),be=new Date(bs.getTime()+Number(booking.duration)*3600000);return start<be&&end>bs;})());
+  }
+  function calendar(){
+    const grid=document.getElementById('calendarGrid'),bookings=visible();
+    document.getElementById('monthLabel').textContent=shown.toLocaleDateString('da-DK',{month:'long',year:'numeric'});
+    grid.innerHTML=['Man','Tir','Ons','Tor','Fre','Lør','Søn'].map(x=>`<div class="weekday">${x}</div>`).join('');
+    const first=(shown.getDay()+6)%7,last=new Date(shown.getFullYear(),shown.getMonth()+1,0).getDate();
+    for(let i=0;i<first;i++)grid.insertAdjacentHTML('beforeend','<div></div>');
+    for(let day=1;day<=last;day++){
+      const key=localDate(new Date(shown.getFullYear(),shown.getMonth(),day)),count=bookings.filter(x=>x.date===key).length,button=document.createElement('button'),level=count>=4?'appointment-high':count?'appointment-low':'';
+      button.className=`day ${key===selected?'selected':''} ${count?'has-appointments':''} ${level}`;
+      button.innerHTML=`<span class="day-number">${day}</span>${count?`<span class="appointment-count">${count}</span>`:''}`;
+      button.setAttribute('aria-label',`${day}.: ${count} aftaler`);button.onclick=()=>{selected=key;document.getElementById('bookingDate').value=key;calendar();dayList();};grid.append(button);
+    }
+  }
+  function dayList(){
+    const box=document.getElementById('dayBookings'),items=visible().filter(x=>x.date===selected).sort((a,b)=>a.start.localeCompare(b.start));
+    document.getElementById('selectedDate').textContent=new Date(`${selected}T12:00`).toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long'});
+    box.innerHTML=items.length?items.map(booking=>`<article class="booking"><div><strong>${booking.start} · ${app.escape(app.customer(booking.customerId)?.name||'')}</strong><p>${app.escape(booking.note||'')}</p><small>${(booking.employeeIds||[]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${booking.duration} timer</small></div>${app.isManager()?`<button class="icon-btn danger" data-book-del="${booking.id}">🗑️</button>`:''}</article>`).join(''):'<p>Ingen bookinger denne dag.</p>';
+    box.querySelectorAll('[data-book-del]').forEach(button=>button.onclick=()=>{if(confirm('Slet bookingen?')){app.db.bookings=app.db.bookings.filter(x=>x.id!==button.dataset.bookDel);app.save('Booking slettet');}});
+  }
+  app.initCalendar=function(){
+    document.getElementById('prevMonth').onclick=()=>{shown.setMonth(shown.getMonth()-1);calendar();};document.getElementById('nextMonth').onclick=()=>{shown.setMonth(shown.getMonth()+1);calendar();};
+    document.getElementById('bookingDate').value=selected;
+    document.getElementById('bookingForm').onsubmit=event=>{
+      event.preventDefault();if(!app.isManager())return;
+      const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds};
+      if(!employeeIds.length)return alert('Vælg mindst én medarbejder.');
+      const hit=conflict(booking);if(hit&&!confirm(`En medarbejder er allerede booket kl. ${hit.start}. Gem alligevel?`))return;
+      app.db.bookings.push(booking);app.save('Booking oprettet');selected=booking.date;event.target.reset();document.getElementById('bookingDate').value=selected;app.fillSelects();app.toast('Opgaven er planlagt');
+    };
+    const update=()=>{calendar();dayList();};document.addEventListener('gtp:data',update);document.addEventListener('gtp:session',update);update();
+  };
 })(window.GTP);

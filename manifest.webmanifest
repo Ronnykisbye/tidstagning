@@ -1,7 +1,7 @@
 {
   "name": "GreenTime Pro – Smart tidsregistrering",
   "short_name": "GreenTime Pro",
-  "description": "Tidsregistrering, kunder, medarbejdere og planlægning.",
+  "description": "Rollebaseret tidsregistrering, kunder, medarbejdere og planlægning.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#090f20",

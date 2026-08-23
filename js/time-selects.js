@@ -13,7 +13,17 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', buildTimeOptions);
+  function buildWorkTypes() {
+    const options=['Service','Rengøring','Vedligeholdelse','Reparation','Tilsyn','Levering','Andet'];
+    document.querySelectorAll('[data-work-type]').forEach(select => {
+      const selected=select.value;
+      select.innerHTML=options.map(value=>`<option value="${value}">${value}</option>`).join('');
+      if(options.includes(selected))select.value=selected;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{buildTimeOptions();buildWorkTypes();});
   window.GTP = window.GTP || {};
   window.GTP.buildTimeOptions = buildTimeOptions;
+  window.GTP.buildWorkTypes = buildWorkTypes;
 })();

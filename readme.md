@@ -1,159 +1,82 @@
-📘 README-FIL (klar til GitHub)
+# GreenTime Pro 4.0
 
-(Du kan også lægge den i dit repo som README.md)
+GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
-GreenTime Pro – Projektbeskrivelse
+Live app: https://ronnykisbye.github.io/tidstagning/
 
-GreenTime Pro er en moderne web-app designet til et mindre servicefirma, hvor medarbejdere besøger kunder og registrerer den tid, de bruger på opgaver. Systemet skal være hurtigt, intuitivt og kunne bruges både på PC og smartphone.
+## Ny rollebaseret app
 
-🎯 Formål
+Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkelte telefon.
 
-Appen skal gøre det nemt at:
+### Medarbejderversion
 
-Registrere tid på kunder
+- vælger sin profil fra medarbejderlisten
+- ser egne planlagte opgaver og tidsregistreringer
+- ser kundens navn, adresse, telefon og arbejdsnote
+- vælger kunde efter navn eller adresse; det andet felt udfyldes automatisk
+- bruger start/stop-timer eller manuel registrering
+- registrerer arbejdstype, pause, status, færdig procent og opfølgning
 
-Vælge flere medarbejdere til samme kunde
+### Chefversion
 
-Se samlet antal arbejdstimer
+- har alle medarbejderfunktioner og kan selv registrere arbejde
+- ser hele firmaets kalender, timer og registreringer
+- opretter, redigerer og arkiverer kunder og medarbejdere
+- planlægger kundeopgaver og kontrollerer dobbeltbookinger
+- filtrerer rapporter og eksporterer CSV til Excel
+- ser log, sikkerhedskopi og synkroniseringsindstillinger
 
-Planlægge opgaver i en kalender
+Rollevalget er en brugerfladebegrænsning i demoversionen, ikke egentlig login-sikkerhed. En produktionsversion bør bruge en serverbaseret identitetsløsning.
 
-Generere rapporter
+## Kunde og adresse
 
-Se logfiler
+Hver kunde har ét stabilt id. Begge dropdowns bruger dette id:
 
-Administrere kunder og medarbejdere
+1. Vælges kundenavnet, vælges adressen automatisk.
+2. Vælges adressen, vælges kundenavnet automatisk.
+3. Kontaktdata, noter og standardarbejdstype vises straks.
 
-Alt skal fungere på både mobil og desktop – med sidebar på PC og burger-menu på mobil.
+## Data og Google Regneark
 
-🧩 Systemets hovedmoduler
-1. Dashboard (Tidsregistrering)
+Appen virker nu med lokal lagring og fiktive demodata. Datakoden er forberedt til Google Regneark gennem en publiceret Google Apps Script-webapp.
 
-Dropdown med kunder
+Fanerne oprettes automatisk: Kunder, Medarbejdere, Tidsregistreringer og Bookinger. Demoposter med id, der begynder med demo-, sendes ikke til regnearket.
 
-Chips-knapper til medarbejdere
+### Tilkobling senere
 
-Timer (Start/Stop)
+1. Opret eller åbn firmaets Google-regneark.
+2. Vælg Udvidelser → Apps Script.
+3. Kopiér indholdet fra google-apps-script/Code.gs ind i Apps Script.
+4. Vælg Implementer → Ny implementering → Webapp.
+5. Angiv den nødvendige adgang for firmaets brugere.
+6. Kopiér webappens /exec-adresse.
+7. Åbn Indstillinger → Google Regneark i chefversionen.
+8. Indsæt adressen, gem og vælg Test forbindelse.
 
-Valg mellem “I dag” og “Samlet tid”
+Regnearkslinket alene er ikke nok til sikker synkronisering. Appen bruger Apps Script-webadressen, så læse- og skriveadgangen kan kontrolleres.
 
-Alt i alle sprog + lys/mørk mode
+## Registreringsfelter
 
-2. Kunder
+Dato, start, slut, pause, kunde-id, medarbejder-id, arbejdstype, beskrivelse, tidsforbrug, færdiggørelsesgrad, status, opfølgning, opfølgningsnote, datakilde og stabilt registrerings-id.
 
-Opret kunde
+Når Google Forms-formularen igen kan aflæses, sammenholdes dens præcise felter med datamodellen. Nye felter kan tilføjes uden at ændre rolle- eller synkroniseringsarkitekturen.
 
-Liste over kunder
+## Installation og kvalitet
 
-Rediger og administrer
+Appen kan installeres på mobil, tablet og computer og har manifest, service worker og offlinecache. Den har responsivt layout, lys/mørk tilstand, store trykflader, lokal sikkerhedskopi og CSV-eksport.
 
-3. Medarbejdere
+## Vigtige filer
 
-Liste og styring
+- index.html – sider, formularer og dialoger
+- css/roles.css – roller og nye komponenter
+- js/access.js – profil og adgang
+- js/data-provider.js – lokal/Google Sheets-adapter
+- js/storage.js – datamodel og migrering
+- js/timer.js – kunde/adressekobling og tidsregistrering
+- google-apps-script/Code.gs – serverdel til Google Regneark
+- MASTERPROMPT.md – samlet udviklingsgrundlag
 
-Chips til valg i dashboard
+## Versionshistorik
 
-4. Detaljeret tid
-
-Vis alle tidsregistreringer
-
-Filtrer per kunde/medarbejder
-
-5. Kalender
-
-Viser antal besøg per dag
-
-Farvekoder:
-
-0 kunder = grå
-
-1–3 kunder = gul
-
-4+ kunder = rød
-
-Klik for at se detaljer
-
-6. Logs
-
-Liste over alle handlinger
-
-7. Rapporter
-
-Timer summeret per kunde
-
-8. Indstillinger
-
-Sprogvalg
-
-Tema (lys/mørk)
-
-🛠 Sådan arbejder vi
-
-Vi arbejder struktureret i trin:
-
-Jeg uploader mine tre filer (index.html, style.css, app.js).
-
-Du analyserer dem og rører kun det jeg beder om.
-
-Du laver kun hele afsnit – aldrig små klip.
-
-Du fortæller præcis, hvor i filen jeg skal indsætte afsnittet.
-
-Vi holder styr på:
-
-farver i lys/mørk mode
-
-sidebar-placering
-
-responsive layout
-
-sprog i hele appen
-
-Vi bygger altid trin for trin, så appen ikke går i stykker.
-
-🎨 Designregler
-
-Moderne og lækkert
-
-Medium-neon glow
-
-Store knapper (2× normal størrelse)
-
-Alt skal matche:
-
-PC
-
-Mobil
-
-Lys mode
-
-Mørk mode
-
-🌍 Sprogsystem
-
-Appen understøtter:
-
-Dansk
-
-Engelsk
-
-Tysk
-
-Litauisk
-
-Alle tekster skal have data-i18n="".
-
-🔥 Vores vigtigste regel
-
-👉 Vi må aldrig ødelægge noget som allerede virker.
-Når vi retter noget, er det altid hele afsnit, ikke små patches.
-
-📂 Filer du skal uploade i ny session
-
-Upload disse tre filer:
-
-index.html
-
-style.css
-
-app.js
+- 4.0: Chef/medarbejder-roller, koblet kunde/adresse, udvidet arbejdsregistrering og Google Sheets-forberedelse.
+- 3.5: Om-side, navigation og mobilforbedringer.
