@@ -29,19 +29,40 @@
     const audit=app.db.audit.filter(real).map(item=>({id:item.id,at:item.at,employeeId:item.employeeId||'',action:item.action}));
     return {version:4,customers,addresses,employees,roles,employeeRoles,orders,orderAssignments,timeEntries,workTypes,audit};
   }
+  function groupTimeEntries(rows=[]){
+    const grouped=new Map();
+    rows.forEach(row=>{
+      const key=String(row.registrationId||row.id||'');
+      if(!key)return;
+      let item=grouped.get(key);
+      if(!item){
+        item={id:key,registrationId:key,orderId:row.orderId||'',customerId:row.customerId||'',employeeIds:[],start:row.start||'',end:row.end||'',breakMinutes:Number(row.breakMinutes||0),seconds:Number(row.seconds||0),workType:row.workType||'',note:row.note||'',completion:Number(row.completion||0),status:row.status||'',followUp:Boolean(row.followUp),followUpNote:row.followUpNote||'',source:row.source||'google-sheet'};
+        grouped.set(key,item);
+      }
+      if(row.employeeId&&!item.employeeIds.includes(row.employeeId))item.employeeIds.push(row.employeeId);
+    });
+    return [...grouped.values()];
+  }
   function applyRemote(result){
-    if(result?.addresses?.length)app.db.addresses=result.addresses;
-    if(result?.roles?.length)app.db.roles=result.roles;
-    if(result?.employeeRoles?.length)app.db.employeeRoles=result.employeeRoles;
-    if(result?.customers?.length){
+    if(Array.isArray(result?.addresses))app.db.addresses=result.addresses;
+    if(Array.isArray(result?.roles))app.db.roles=result.roles;
+    if(Array.isArray(result?.employeeRoles))app.db.employeeRoles=result.employeeRoles;
+    if(Array.isArray(result?.customers)){
       app.db.customers=result.customers.map(customer=>({...customer,address:app.db.addresses.find(x=>x.customerId===customer.id&&x.active!==false)?.address||''}));
     }
-    if(result?.employees?.length){
+    if(Array.isArray(result?.employees)){
       app.db.employees=result.employees.map(employee=>{
-        const link=app.db.employeeRoles.find(x=>x.employeeId===employee.id&&x.active!==false),role=app.db.roles.find(x=>x.id===link?.roleId)?.name||'Medarbejder';
-        return {...employee,role};
+        const chefRole=app.db.roles.find(x=>x.name==='Chef')?.id;
+        const isChef=app.db.employeeRoles.some(x=>x.employeeId===employee.id&&x.roleId===chefRole&&x.active!==false);
+        return {...employee,role:isChef?'Chef':'Medarbejder'};
       });
     }
+    if(Array.isArray(result?.orders)){
+      const assignments=Array.isArray(result.orderAssignments)?result.orderAssignments:[];
+      app.db.bookings=result.orders.map(order=>({...order,employeeIds:assignments.filter(x=>x.orderId===order.id&&x.active!==false).map(x=>x.employeeId)}));
+    }
+    if(Array.isArray(result?.timeEntries))app.db.entries=groupTimeEntries(result.timeEntries);
+    if(Array.isArray(result?.audit))app.db.audit=result.audit;
   }
   async function sync(){
     if(!endpoint()){setState('Gemt på enheden','local');return;}
