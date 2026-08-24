@@ -1,7 +1,7 @@
 (function(app){
-  let shown=new Date();shown.setDate(1);let selected=new Date().toISOString().slice(0,10);
+  let shown=new Date();shown.setDate(1);let selected=new Date().toISOString().slice(0,10),draftS=false;
   const localDate=date=>new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,10);
-  const visible=()=>app.db.bookings.filter(app.canSeeBooking);
+  const visible=()=>app.db.bookings.filter(x=>x.active!==false).filter(app.canSeeBooking);
   function conflict(candidate){
     const start=new Date(`${candidate.date}T${candidate.start}`),end=new Date(start.getTime()+Number(candidate.duration)*3600000);
     return app.db.bookings.find(booking=>booking.id!==candidate.id&&(booking.employeeIds||[]).some(id=>candidate.employeeIds.includes(id))&&(()=>{const bs=new Date(`${booking.date}T${booking.start}`),be=new Date(bs.getTime()+Number(booking.duration)*3600000);return start<be&&end>bs;})());
@@ -22,18 +22,22 @@
   function dayList(){
     const box=document.getElementById('dayBookings'),items=visible().filter(x=>x.date===selected).sort((a,b)=>a.start.localeCompare(b.start));
     document.getElementById('selectedDate').textContent=new Date(`${selected}T12:00`).toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long'});
-    box.innerHTML=items.length?items.map(booking=>`<article class="booking"><div><strong>${booking.start} · ${app.escape(app.customer(booking.customerId)?.name||'')}</strong><p>${app.escape(booking.note||'')}</p><small>${(booking.employeeIds||[]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${booking.duration} timer</small></div>${app.isManager()?`<button class="icon-btn danger" data-book-del="${booking.id}">🗑️</button>`:''}</article>`).join(''):'<p>Ingen bookinger denne dag.</p>';
-    box.querySelectorAll('[data-book-del]').forEach(button=>button.onclick=()=>{if(confirm('Slet bookingen?')){app.db.bookings=app.db.bookings.filter(x=>x.id!==button.dataset.bookDel);app.save('Booking slettet');}});
+    box.innerHTML=items.length?items.map(booking=>`<article class="booking"><div><strong>${booking.start} · ${app.escape(app.customer(booking.customerId)?.name||'')}</strong><p>${app.escape(booking.note||'')}</p><small>${(booking.employeeIds||[]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${booking.duration} timer</small></div>${app.isManager()?`<div class="booking-controls"><button class="s-toggle compact ${booking.S?'active':''}" aria-pressed="${Boolean(booking.S)}" data-book-s="${booking.id}">S</button><button class="icon-btn danger" data-book-del="${booking.id}">🗑️</button></div>`:''}</article>`).join(''):'<p>Ingen bookinger denne dag.</p>';
+    box.querySelectorAll('[data-book-s]').forEach(button=>button.onclick=()=>{const booking=app.db.bookings.find(x=>x.id===button.dataset.bookS);booking.S=!booking.S;app.save('S ændret');});
+    box.querySelectorAll('[data-book-del]').forEach(button=>button.onclick=()=>{if(confirm('Arkivér bookingen?')){const booking=app.db.bookings.find(x=>x.id===button.dataset.bookDel);booking.active=false;app.save('Booking arkiveret');}});
   }
   app.initCalendar=function(){
     document.getElementById('prevMonth').onclick=()=>{shown.setMonth(shown.getMonth()-1);calendar();};document.getElementById('nextMonth').onclick=()=>{shown.setMonth(shown.getMonth()+1);calendar();};
     document.getElementById('bookingDate').value=selected;
+    const specialButton=document.getElementById('bookingSpecial');
+    const drawSpecial=()=>{specialButton.classList.toggle('active',draftS);specialButton.setAttribute('aria-pressed',String(draftS));};
+    specialButton.onclick=()=>{draftS=!draftS;drawSpecial();};
     document.getElementById('bookingForm').onsubmit=event=>{
       event.preventDefault();if(!app.isManager())return;
-      const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds};
+      const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds,S:draftS,status:'Planlagt',active:true,addressId:app.customerAddress(values.customerId)?.id||''};
       if(!employeeIds.length)return alert('Vælg mindst én medarbejder.');
       const hit=conflict(booking);if(hit&&!confirm(`En medarbejder er allerede booket kl. ${hit.start}. Gem alligevel?`))return;
-      app.db.bookings.push(booking);app.save('Booking oprettet');selected=booking.date;event.target.reset();document.getElementById('bookingDate').value=selected;app.fillSelects();app.toast('Opgaven er planlagt');
+      app.db.bookings.push(booking);app.save('Booking oprettet');selected=booking.date;event.target.reset();draftS=false;drawSpecial();document.getElementById('bookingDate').value=selected;app.fillSelects();app.toast('Opgaven er planlagt');
     };
     const update=()=>{calendar();dayList();};document.addEventListener('gtp:data',update);document.addEventListener('gtp:session',update);update();
   };

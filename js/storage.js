@@ -1,8 +1,8 @@
 window.GTP=window.GTP||{};
 (function(app){
-  const KEY='gtp_data_v3';
-  const OLD_KEY='gtp_data_v2';
-  const empty=()=>({version:3,customers:[],employees:[],entries:[],bookings:[],audit:[],settings:{sheetEndpoint:''}});
+  const KEY='gtp_data_v4';
+  const OLD_KEYS=['gtp_data_v3','gtp_data_v2'];
+  const empty=()=>({version:4,customers:[],addresses:[],employees:[],roles:[],employeeRoles:[],entries:[],bookings:[],audit:[],settings:{sheetEndpoint:''}});
   const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2);
   const localDate=(days=0)=>{const d=new Date();d.setDate(d.getDate()+days);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10);};
 
@@ -44,17 +44,31 @@ window.GTP=window.GTP||{};
     return data;
   }
   function normalize(data){
-    const base={...empty(),...data,version:3,settings:{...empty().settings,...(data.settings||{})}};
+    const base={...empty(),...data,version:4,settings:{...empty().settings,...(data.settings||{})}};
     base.customers=base.customers.map(x=>({customerNumber:'',defaultWorkType:'Service',active:true,...x}));
     base.employees=base.employees.map(x=>({phone:'',role:'Medarbejder',active:true,...x}));
     base.entries=base.entries.map(x=>({employeeIds:x.employeeIds||[x.employeeId].filter(Boolean),breakMinutes:0,workType:'Service',completion:100,status:'Færdig',followUp:false,followUpNote:'',source:'local',...x}));
-    return seed(base);
+    const seeded=seed(base);
+    seeded.addresses=seeded.addresses||[];
+    seeded.customers.forEach(customer=>{
+      let address=seeded.addresses.find(x=>x.customerId===customer.id&&x.active!==false);
+      if(!address&&customer.address){
+        address={id:`${customer.id}-address-1`,customerId:customer.id,label:'Primær',address:customer.address,postalCode:'',city:'',active:true};
+        seeded.addresses.push(address);
+      }
+      if(address&&!customer.address)customer.address=address.address;
+    });
+    seeded.roles=[{id:'role-manager',name:'Chef',active:true},{id:'role-employee',name:'Medarbejder',active:true}];
+    seeded.employeeRoles=seeded.employees.map(employee=>({id:`${employee.id}-role`,employeeId:employee.id,roleId:employee.role==='Chef'?'role-manager':'role-employee',active:employee.active!==false}));
+    seeded.bookings=seeded.bookings.map(booking=>({S:false,status:'Planlagt',active:true,addressId:seeded.addresses.find(x=>x.customerId===booking.customerId&&x.active!==false)?.id||'',...booking}));
+    return seeded;
   }
   function load(){
     try{
-      const saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(OLD_KEY)||'null');
+      const savedText=localStorage.getItem(KEY)||OLD_KEYS.map(key=>localStorage.getItem(key)).find(Boolean)||'null';
+      const saved=JSON.parse(savedText);
       const data=normalize(saved||empty());localStorage.setItem(KEY,JSON.stringify(data));return data;
-    }catch{return seed(empty());}
+    }catch{return normalize(empty());}
   }
   app.db=load();
   app.uid=uid;
@@ -72,6 +86,8 @@ window.GTP=window.GTP||{};
   app.escape=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   app.customer=id=>app.db.customers.find(x=>x.id===id);
   app.employee=id=>app.db.employees.find(x=>x.id===id);
+  app.address=id=>app.db.addresses.find(x=>x.id===id);
+  app.customerAddress=customerId=>app.db.addresses.find(x=>x.customerId===customerId&&x.active!==false);
   app.activeCustomers=()=>app.db.customers.filter(x=>x.active!==false).sort((a,b)=>a.name.localeCompare(b.name,'da'));
   app.activeEmployees=()=>app.db.employees.filter(x=>x.active!==false).sort((a,b)=>a.name.localeCompare(b.name,'da'));
 })(window.GTP);

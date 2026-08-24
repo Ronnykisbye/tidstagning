@@ -1,4 +1,4 @@
-# GreenTime Pro 4.0
+# GreenTime Pro 4.1
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -25,8 +25,10 @@ Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkel
 - planlægger kundeopgaver og kontrollerer dobbeltbookinger
 - filtrerer rapporter og eksporterer CSV til Excel
 - ser log, sikkerhedskopi og synkroniseringsindstillinger
+- kan markere den enkelte opgave med den diskrete S-knap
+- kan beskytte chefudgaven med telefonens lokale godkendelse
 
-Rollevalget er en brugerfladebegrænsning i demoversionen, ikke egentlig login-sikkerhed. En produktionsversion bør bruge en serverbaseret identitetsløsning.
+Bioadgangen bruger WebAuthn og telefonens platformsgodkendelse. Telefonen bestemmer selv, om der bruges fingeraftryk, ansigt eller enheds-PIN. Den nuværende løsning er en lokal enhedslås; fuld central autentifikation kræver senere serverbaseret kontrol.
 
 ## Kunde og adresse
 
@@ -40,7 +42,9 @@ Hver kunde har ét stabilt id. Begge dropdowns bruger dette id:
 
 Appen virker nu med lokal lagring og fiktive demodata. Datakoden er forberedt til Google Regneark gennem en publiceret Google Apps Script-webapp.
 
-Fanerne oprettes automatisk: Kunder, Medarbejdere, Tidsregistreringer og Bookinger. Demoposter med id, der begynder med demo-, sendes ikke til regnearket.
+Fanerne oprettes automatisk: Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Demoposter med id, der begynder med demo-, sendes ikke til regnearket.
+
+Kolonnen S findes kun på fanen Opgaver og vises som et afkrydsningsfelt. Der bruges ingen yderligere afregningstekst i appen eller regnearket.
 
 ### Tilkobling senere
 
@@ -70,13 +74,16 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 - index.html – sider, formularer og dialoger
 - css/roles.css – roller og nye komponenter
 - js/access.js – profil og adgang
+- js/biometric.js – lokal chef-lås med WebAuthn
 - js/data-provider.js – lokal/Google Sheets-adapter
 - js/storage.js – datamodel og migrering
 - js/timer.js – kunde/adressekobling og tidsregistrering
 - google-apps-script/Code.gs – serverdel til Google Regneark
+- NORMALISERET-REGNEARK.md – faner, nøgler og relationer
 - MASTERPROMPT.md – samlet udviklingsgrundlag
 
 ## Versionshistorik
 
+- 4.1: Normaliseret regnearksmodel, S-felt og bioadgang til chefudgaven.
 - 4.0: Chef/medarbejder-roller, koblet kunde/adresse, udvidet arbejdsregistrering og Google Sheets-forberedelse.
 - 3.5: Om-side, navigation og mobilforbedringer.

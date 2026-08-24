@@ -25,8 +25,10 @@ Appen har én kodebase og to brugeroplevelser.
 - administrerer kunder og medarbejdere
 - planlægger opgaver og ser rapporter, opfølgninger og log
 - styrer dataforbindelse, eksport, sikkerhedskopi og gendannelse
+- kan markere en opgave med en knap, der kun hedder S
+- kan aktivere bioadgang på chefens enhed
 
-Rollevisning alene er ikke autentifikation. Til produktion skal serverbaseret login og adgangskontrol tilføjes.
+Bioadgang bruger WebAuthn med platformsgodkendelse. Skriv aldrig, at appen læser et fingeraftryk; enheden bekræfter kun brugeren. Den lokale lås skal senere suppleres med serverbaseret login og validering.
 
 ## Interaktiv kundesøgning
 
@@ -61,7 +63,9 @@ Arkivér i stedet for fysisk sletning. Historiske registreringer skal bevare der
 
 Appen fungerer lokalt uden et regneark. Ekstern adgang går gennem en Apps Script-webapp, aldrig direkte gennem regnearkets redigeringslink.
 
-Adapteren skal kunne teste forbindelsen, upserte efter stabilt id, hente kunder/medarbejdere, bevare lokale data ved netværksfejl, vise synkroniseringsstatus og aldrig sende demo-poster. Faner: Kunder, Medarbejdere, Tidsregistreringer og Bookinger.
+Adapteren skal kunne teste forbindelsen, upserte efter stabilt id, hente kunder/medarbejdere, bevare lokale data ved netværksfejl, vise synkroniseringsstatus og aldrig sende demo-poster.
+
+Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Relationer bruger id-felter. Kolonnen på Opgaver hedder kun S og er et afkrydsningsfelt. Brug aldrig ordene normal eller specialafregning i brugerfladen eller regnearket.
 
 ## Design
 
@@ -85,8 +89,9 @@ Opdatér service worker-cacheversionen ved filændringer. Alle nødvendige lokal
 4. Test start/stop, manuel tid, pause og opfølgning.
 5. Test kunde-, medarbejder- og kalenderadministration.
 6. Test rapporteksport, mobil, tema og offlinecache.
-7. Opdatér README, masterprompt og versionsnummer.
-8. Commit kun en samlet, fungerende version.
+7. Test S-knappen, regnearkspayload og chefens lås uden at gemme biometriske data.
+8. Opdatér README, masterprompt og versionsnummer.
+9. Commit kun en samlet, fungerende version.
 
 ## Vigtig regel
 

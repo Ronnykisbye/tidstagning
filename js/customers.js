@@ -7,7 +7,7 @@
       body.append(tr);
     });
     body.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>open(app.customer(b.dataset.edit)));
-    body.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const c=app.customer(b.dataset.del);if(confirm(`Arkivér ${c.name}?`)){c.active=false;app.save(`Kunde arkiveret: ${c.name}`);render();}});
+    body.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const c=app.customer(b.dataset.del);if(confirm(`Arkivér ${c.name}?`)){c.active=false;app.db.addresses.filter(x=>x.customerId===c.id).forEach(x=>x.active=false);app.save(`Kunde arkiveret: ${c.name}`);render();}});
     app.fillSelects?.();
   }
   function open(customer={}){
@@ -22,7 +22,10 @@
     document.getElementById('customerCancel').onclick=()=>document.getElementById('customerDialog').close();
     document.getElementById('customerForm').onsubmit=event=>{
       event.preventDefault();const values=Object.fromEntries(new FormData(event.target));let customer=app.customer(values.id);
-      if(customer)Object.assign(customer,values);else app.db.customers.push({...values,id:app.uid(),active:true});
+      if(customer)Object.assign(customer,values);else {customer={...values,id:app.uid(),active:true};app.db.customers.push(customer);}
+      let address=app.customerAddress(customer.id);
+      if(address)address.address=values.address;
+      else app.db.addresses.push({id:`${customer.id}-address-1`,customerId:customer.id,label:'Primær',address:values.address,postalCode:'',city:'',active:true});
       app.save(`Kunde gemt: ${values.name}`);document.getElementById('customerDialog').close();render();app.toast('Kunden er gemt');
     };
     document.addEventListener('gtp:data',render);render();

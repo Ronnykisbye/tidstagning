@@ -1,22 +1,32 @@
 const TABLES = {
-  customers: {sheet:'Kunder', headers:['id','customerNumber','name','address','phone','email','defaultWorkType','notes','active']},
-  employees: {sheet:'Medarbejdere', headers:['id','name','email','phone','role','active']},
-  entries: {sheet:'Tidsregistreringer', headers:['id','customerId','employeeIds','start','end','breakMinutes','seconds','workType','note','completion','status','followUp','followUpNote','source']},
-  bookings: {sheet:'Bookinger', headers:['id','date','start','duration','customerId','employeeIds','note']}
+  customers: {sheet:'Kunder', headers:['id','customerNumber','name','phone','email','defaultWorkType','notes','active']},
+  addresses: {sheet:'Adresser', headers:['id','customerId','label','address','postalCode','city','active']},
+  employees: {sheet:'Medarbejdere', headers:['id','name','email','phone','active']},
+  roles: {sheet:'Roller', headers:['id','name','active']},
+  employeeRoles: {sheet:'MedarbejderRoller', headers:['id','employeeId','roleId','active']},
+  orders: {sheet:'Opgaver', headers:['id','customerId','addressId','date','start','duration','note','status','S','active']},
+  orderAssignments: {sheet:'OpgaveMedarbejdere', headers:['id','orderId','employeeId','active']},
+  timeEntries: {sheet:'Tidsregistreringer', headers:['id','registrationId','orderId','customerId','employeeId','start','end','breakMinutes','seconds','workType','note','completion','status','followUp','followUpNote','source']},
+  workTypes: {sheet:'Arbejdstyper', headers:['id','name','active']},
+  audit: {sheet:'Ændringslog', headers:['id','at','employeeId','action']}
 };
 
 function doGet() {
-  return json_({ok:true, service:'GreenTime Pro', version:'4.0'});
+  return json_({ok:true,service:'GreenTime Pro',version:'4.1',schemaVersion:2});
 }
 
 function doPost(event) {
   try {
     const request=JSON.parse(event.postData.contents||'{}');
-    if(request.action==='ping')return json_({ok:true, action:'pong', at:new Date().toISOString()});
-    if(request.action!=='sync')return json_({ok:false, error:'Ukendt handling'});
+    if(request.action==='ping')return json_({ok:true,action:'pong',schemaVersion:2,at:new Date().toISOString()});
+    if(request.action!=='sync')return json_({ok:false,error:'Ukendt handling'});
     const payload=request.payload||{};
     Object.keys(TABLES).forEach(key=>upsert_(key,payload[key]||[]));
-    return json_({ok:true,customers:read_('customers'),employees:read_('employees'),syncedAt:new Date().toISOString()});
+    return json_({
+      ok:true,schemaVersion:2,syncedAt:new Date().toISOString(),
+      customers:read_('customers'),addresses:read_('addresses'),employees:read_('employees'),
+      roles:read_('roles'),employeeRoles:read_('employeeRoles')
+    });
   } catch(error) {
     return json_({ok:false,error:String(error.message||error)});
   }
@@ -26,13 +36,24 @@ function sheet_(key) {
   const config=TABLES[key],book=SpreadsheetApp.getActiveSpreadsheet();
   let sheet=book.getSheetByName(config.sheet);
   if(!sheet)sheet=book.insertSheet(config.sheet);
-  if(sheet.getLastRow()===0)sheet.getRange(1,1,1,config.headers.length).setValues([config.headers]).setFontWeight('bold');
+  sheet.getRange(1,1,1,config.headers.length).setValues([config.headers]).setFontWeight('bold');
+  sheet.setFrozenRows(1);
+  applyCheckboxes_(sheet,config.headers);
   return sheet;
 }
 
-function upsert_(key, items) {
+function applyCheckboxes_(sheet,headers) {
+  const rule=SpreadsheetApp.newDataValidation().requireCheckbox().build();
+  ['S','active','followUp'].forEach(header=>{
+    const column=headers.indexOf(header)+1;
+    if(column>0)sheet.getRange(2,column,Math.max(1,sheet.getMaxRows()-1),1).setDataValidation(rule);
+  });
+}
+
+function upsert_(key,items) {
+  const config=TABLES[key],sheet=sheet_(key);
   if(!items.length)return;
-  const config=TABLES[key],sheet=sheet_(key),lastRow=sheet.getLastRow();
+  const lastRow=sheet.getLastRow();
   const ids=lastRow>1?sheet.getRange(2,1,lastRow-1,1).getValues().flat().map(String):[];
   const rowById=new Map(ids.map((id,index)=>[id,index+2]));
   items.forEach(item=>{
@@ -56,8 +77,7 @@ function read_(key) {
     const item={};
     config.headers.forEach((header,index)=>{
       let value=row[index];
-      if(header==='employeeIds'){try{value=JSON.parse(value||'[]');}catch(e){value=[];}}
-      if(['active','followUp'].includes(header))value=value===true||String(value).toLowerCase()==='true';
+      if(['S','active','followUp'].includes(header))value=value===true||String(value).toLowerCase()==='true';
       item[header]=value;
     });
     return item;
