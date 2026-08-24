@@ -13,7 +13,7 @@
     const mode=document.getElementById('profileMode').value;
     let people=app.activeEmployees();
     if(mode==='manager'){
-      const managers=people.filter(x=>x.role==='Chef');
+      const managers=people.filter(x=>app.hasRole?.(x.id,'role-chef'));
       if(managers.length)people=managers;
     }
     select.innerHTML='<option value="">Vælg navn</option>'+people.map(x=>`<option value="${x.id}">${app.escape(x.name)}</option>`).join('');
@@ -70,7 +70,7 @@
     document.getElementById('profileForm').onsubmit=async e=>{
       e.preventDefault();const values=Object.fromEntries(new FormData(e.target));
       const employee=app.employee(values.employeeId);if(!employee)return;
-      if(values.mode==='manager'&&employee.role!=='Chef')return alert('Vælg en medarbejder med rollen Chef.');
+      if(values.mode==='manager'&&!app.hasRole?.(employee.id,'role-chef'))return alert('Vælg en medarbejder med rollen Chef.');
       if(values.mode==='manager'&&app.bio?.enrolled()){
         try{await app.bio.verify();app.managerLocked=false;}catch(error){return alert(error.name==='NotAllowedError'?'Godkendelsen blev afbrudt.':error.message);}
       }else app.managerLocked=false;
