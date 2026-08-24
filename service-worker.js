@@ -1,4 +1,4 @@
-const CACHE='greentime-pro-v16';
+const CACHE='greentime-pro-v17';
 const FILES=['./','./index.html','./manifest.webmanifest','./assets/icon.svg','./install/','./install/index.html','./install/install.js','./css/theme.css','./css/layout.css','./css/components.css','./css/home.css','./css/calendar-enhancements.css','./css/scroll-indicator.css','./css/responsive.css','./css/navigation-controls.css','./css/stitch-ux.css','./css/top-navigation.css','./css/roles.css','./js/storage.js','./js/data-provider.js','./js/biometric.js','./js/access.js','./js/dashboard.js','./js/i18n.js','./js/navigation.js','./js/customers.js','./js/employees.js','./js/time-selects.js','./js/timer.js','./js/calendar.js','./js/reports.js','./js/settings.js','./js/scroll-indicator.js','./js/app.js'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

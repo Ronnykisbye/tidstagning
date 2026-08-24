@@ -28,6 +28,8 @@ Appen har én kodebase og to brugeroplevelser.
 - kan markere en opgave med en knap, der kun hedder S
 - kan aktivere bioadgang på chefens enhed
 
+Demoudgaven skal altid indeholde chefprofilen Ronny Kisbye samt et varieret sæt kommende kalenderopgaver. Nye demodata skal migreres ind på eksisterende installationer uden at overskrive brugerens egne data.
+
 Bioadgang bruger WebAuthn med platformsgodkendelse. Skriv aldrig, at appen læser et fingeraftryk; enheden bekræfter kun brugeren. Den lokale lås skal senere suppleres med serverbaseret login og validering.
 
 ## Interaktiv kundesøgning
