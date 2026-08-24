@@ -1,12 +1,17 @@
-# GreenTime Pro 5.3
+# GreenTime Pro 5.4
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
 Live app: https://ronnykisbye.github.io/tidstagning/
 
-## Ny rollebaseret app
+## Roller og adgang
 
-Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkelte telefon.
+En person er én medarbejderpost. Rettigheder ligger separat i `MedarbejderRoller`, så samme person kan have flere roller.
+
+- `Medarbejder` giver almindelig adgang til egne opgaver og tidsregistreringer.
+- `Chef` er en ekstra adgangsrolle med administration, rapporter, planlægning, log og indstillinger.
+- Lars Wiberg kan derfor være både Medarbejder og Chef.
+- Ronny Kisbye er kun Medarbejder og giver ikke adgang til Chef-siden.
 
 ### Medarbejderversion
 
@@ -22,12 +27,12 @@ Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkel
 - har alle medarbejderfunktioner og kan selv registrere arbejde
 - ser hele firmaets kalender, timer og registreringer
 - opretter, redigerer og arkiverer kunder og medarbejdere
+- tildeler og fjerner Chef-rettighed uden at fjerne personens medarbejderidentitet
 - planlægger kundeopgaver og kontrollerer dobbeltbookinger
-- filtrerer rapporter og eksporterer CSV til Excel
+- bruger rapportgeneratoren og eksporterer CSV til Excel
 - ser log, sikkerhedskopi og synkroniseringsindstillinger
 - kan markere en kunde med den diskrete S-knap i kundevinduet; nye opgaver hos kunden arver markeringen
 - kan beskytte chefudgaven med telefonens lokale godkendelse
-- opretter en opgave fra startsiden og vælger en eksisterende kunde eller opretter en ny direkte i opgaveforløbet
 
 Bioadgangen bruger WebAuthn og telefonens platformsgodkendelse. Telefonen bestemmer selv, om der bruges fingeraftryk, ansigt eller enheds-PIN. Den nuværende løsning er en lokal enhedslås; fuld central autentifikation kræver senere serverbaseret kontrol.
 
@@ -39,52 +44,111 @@ Hver kunde har ét stabilt id. Begge dropdowns bruger dette id:
 2. Vælges adressen, vælges kundenavnet automatisk.
 3. Kontaktdata, noter og standardarbejdstype vises straks.
 
+## Rapportgenerator
+
+Chef-siden har en rapportgenerator med rullemenu for rapporttype samt filtre for periode, kunde og medarbejder.
+
+Rapporttyper:
+
+- Detaljeret tidsrapport
+- Timer for medarbejder
+- Timer hos kunde
+- Samlet timeforbrug pr. kunde
+- Samlet timeforbrug pr. medarbejder
+- Ikke færdige registreringer
+- Kræver opfølgning
+
+Rapporterne bruger både nye data og migrerede historiske data fra Sheetet.
+
+### Regel for gamle data
+
+Legacy-feltet `Tidsforbrug` er decimaltimer. Historiske opgaver med sikkert tidsforbrug kan indgå i kunderapporter og samlede detailrapporter.
+
+Gamle gruppetimer fordeles aldrig automatisk på medarbejdere. Derfor:
+
+- kunderapporter kan bruge historiske gruppetimer én gang pr. opgave
+- medarbejderrapporter bruger kun timer, der sikkert kan knyttes til en bestemt medarbejder
+- der opfindes aldrig medarbejdertimer ud fra `alle` eller flerpersonsfelter
+
 ## Data og Google Regneark
 
 Appen fungerer lokalt og kan synkronisere gennem en publiceret Google Apps Script-webapp. Kommunikation går aldrig direkte til regnearkets almindelige redigeringslink.
 
-Den normaliserede struktur bruger fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog.
+Den normaliserede struktur bruger fanerne:
 
-Version 5.3 styrker synkroniseringen:
+- Kunder
+- Adresser
+- Medarbejdere
+- Roller
+- MedarbejderRoller
+- Opgaver
+- OpgaveMedarbejdere
+- Tidsregistreringer
+- Arbejdstyper
+- Ændringslog
+
+Version 5.4 udvider synkroniseringen, så Apps Script returnerer alle normaliserede tabeller, herunder `Opgaver`, `OpgaveMedarbejdere`, `Tidsregistreringer`, `Arbejdstyper` og `Ændringslog`. Appen indlæser dermed også migrerede historiske Sheet-data til rapporter.
+
+Sikkerhedsregler:
 
 - demo-id'er afvises både i klienten og på Apps Script-serveren
 - manglende kolonner tilføjes uden at forskubbe eksisterende data
 - upserts bruger stabile id'er
 - serverændringer registreres i Ændringslog
-- service- og klientversion er synkroniseret til 5.3
+- gamle Forms-data bevares uændret i `Formularsvar 1`
+- migration er idempotent og må ikke gætte på uklare værdier
 
 Kolonnen S findes på fanerne Kunder og Opgaver som et afkrydsningsfelt. Kundens S-værdi er kun standard for nye opgaver; en allerede oprettet opgaves historiske S-værdi ændres ikke automatisk.
 
-### Legacy Google Forms-data
+## Legacy Google Forms-data
 
-Det eksisterende `Formularsvar 1` bevares som original historik. Normaliserede data oprettes ved siden af legacy-fanen i stedet for at omskrive formularsvarene. Migration skal kunne gentages uden dubletter og må ikke gætte på uklare enheder, medarbejderrelationer eller andre tvetydige værdier.
+`Formularsvar 1` er den originale historiske kilde og ændres ikke.
 
-### Tilkobling
+De sikre gamle data er migreret til de normaliserede faner med stabile `legacy-...`-id'er. Kunder, adresser, 12 historiske opgaver, sikre medarbejderrelationer og entydige tidsregistreringer er bevaret. Uklare gruppetimer bliver stående som historiske opgavetimer og fordeles ikke på personer.
+
+Se også `MIGRATION-LEGACY.md`.
+
+## Apps Script og deployment
+
+Repoets serverkode ligger i `google-apps-script/Code.gs` og er version 5.4.
+
+Når serverkoden ændres, skal den publicerede Google Apps Script-webapp opdateres:
 
 1. Åbn firmaets Google-regneark.
 2. Vælg Udvidelser → Apps Script.
-3. Kopiér indholdet fra `google-apps-script/Code.gs` ind i Apps Script.
-4. Vælg Implementer → Ny implementering → Webapp.
-5. Angiv den nødvendige adgang for firmaets brugere.
-6. Kopiér webappens `/exec`-adresse.
-7. Åbn Indstillinger → Google Regneark i chefversionen.
-8. Indsæt adressen, gem og vælg Test forbindelse.
+3. Erstat `Code.gs` med repoets aktuelle `google-apps-script/Code.gs`.
+4. Gem projektet.
+5. Vælg Implementer → Administrer implementeringer.
+6. Rediger den eksisterende webapp-implementering og vælg en ny version.
+7. Bevar den eksisterende `/exec`-adresse, hvis muligt.
+8. Åbn GreenTime Pro → Indstillinger → Google Regneark → Test forbindelse.
+9. Ping skal svare med version `5.4` og schemaVersion `4`.
+
+Hvis der ikke findes en eksisterende webapp, vælges Implementer → Ny implementering → Webapp, hvorefter `/exec`-adressen indsættes i appens indstillinger.
 
 ## Installation og kvalitet
 
 Appen kan installeres på mobil, tablet og computer og har manifest, service worker og offlinecache. Den har responsivt layout, lys/mørk tilstand, store trykflader, lokal sikkerhedskopi og CSV-eksport.
 
+PWA-cache for 5.4 er `greentime-pro-v31`.
+
 ## Vigtige filer
 
 - `index.html` – sider, formularer og dialoger
+- `js/storage.js` – lokal datamodel og demo-data
+- `js/access.js` – rollebaseret adgang
+- `js/employees.js` – medarbejdere og roller
+- `js/reports.js` – rapportgenerator og historiske rapportregler
 - `js/data-provider.js` – lokal/Google Sheets-adapter
 - `google-apps-script/Code.gs` – serverdel til Google Regneark
+- `MIGRATION-LEGACY.md` – regler for gamle Forms-data
 - `NORMALISERET-REGNEARK.md` – faner, nøgler og relationer
 - `MASTERPROMPT.md` – samlet udviklingsgrundlag
 - `service-worker.js` – offlinecache
 
 ## Versionshistorik
 
+- 5.4: Flerrollemodel, Ronny kun Medarbejder, Lars Medarbejder + Chef, migrerede historiske opgaver i Sheetet, rapportgenerator med flere rapporttyper samt læsning af Opgaver/Tidsregistreringer tilbage fra Google Sheets. Historiske gruppetimer tælles i kundetotaler, men fordeles aldrig kunstigt på medarbejdere.
 - 5.3: Sikker Google Sheets-migration, server-side demo-blokering, revisionslog, ikke-forskydende kolonneoprettelse og synkroniseret klient/server-version.
 - 5.2: Fast installationsvejledning til iPhone/iPad, Android og computer med automatisk markering af den aktuelle enhed.
 - 5.1: Gendanner manglende fiktive kunder i eksisterende demoer og henter nye sider før ældre offlinecache.
@@ -93,10 +157,5 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 - 4.8: Rullende demokalender fra i går til syv dage frem med 2–4 fiktive opgaver hver dag.
 - 4.7: Otte ekstra fiktive kalenderopgaver, heraf to i dag; demoopgaver sendes fortsat aldrig til regnearket.
 - 4.6: Samlet chef-flow til Opret opgave med eksisterende eller ny kunde og S-valg før gemning.
-- 4.5: Den lille S-knap vises kun, mens chefen opretter en opgave; efter gemning ses markeringen kun i regnearket.
-- 4.4: Fast rød S-genvej på chefens startside åbner opgaveformularen med S aktiveret.
-- 4.3: Chefens S-knap er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt.
-- 4.2: Fast demochef til Ronny Kisbye og otte ekstra kalenderopgaver, også for eksisterende installationer.
 - 4.1: Normaliseret regnearksmodel, S-felt og bioadgang til chefudgaven.
 - 4.0: Chef/medarbejder-roller, koblet kunde/adresse, udvidet arbejdsregistrering og Google Sheets-forberedelse.
-- 3.5: Om-side, navigation og mobilforbedringer.
