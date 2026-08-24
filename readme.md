@@ -1,4 +1,4 @@
-# GreenTime Pro 4.5
+# GreenTime Pro 4.6
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -27,6 +27,7 @@ Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkel
 - ser log, sikkerhedskopi og synkroniseringsindstillinger
 - kan markere den enkelte opgave med den diskrete S-knap
 - kan beskytte chefudgaven med telefonens lokale godkendelse
+- opretter en opgave fra startsiden og vælger en eksisterende kunde eller opretter en ny direkte i opgaveforløbet
 
 Bioadgangen bruger WebAuthn og telefonens platformsgodkendelse. Telefonen bestemmer selv, om der bruges fingeraftryk, ansigt eller enheds-PIN. Den nuværende løsning er en lokal enhedslås; fuld central autentifikation kræver senere serverbaseret kontrol.
 
@@ -84,6 +85,7 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 
 ## Versionshistorik
 
+- 4.6: Samlet chef-flow til Opret opgave med eksisterende eller ny kunde og S-valg før gemning.
 - 4.5: Den lille S-knap vises kun, mens chefen opretter en opgave; efter gemning ses markeringen kun i regnearket.
 - 4.4: Fast rød S-genvej på chefens startside åbner opgaveformularen med S aktiveret.
 - 4.3: Chefens S-knap er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt.

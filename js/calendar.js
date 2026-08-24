@@ -31,12 +31,16 @@
     const specialButton=document.getElementById('bookingSpecial');
     const drawSpecial=()=>{specialButton.classList.toggle('active',draftS);specialButton.setAttribute('aria-pressed',String(draftS));};
     specialButton.onclick=()=>{draftS=!draftS;drawSpecial();};
+    app.openBookingCreator=()=>{if(!app.isManager())return;app.showPage('calendarPage');setTimeout(()=>{document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('bookingCustomer')?.focus();},100);};
+    let waitingForCustomer=false;
+    document.getElementById('bookingNewCustomer').onclick=()=>{waitingForCustomer=true;app.openCustomer?.();};
+    document.addEventListener('gtp:customer-saved',event=>{if(!waitingForCustomer)return;waitingForCustomer=false;app.fillSelects?.();document.getElementById('bookingCustomer').value=event.detail.customerId;document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});});
     document.getElementById('bookingForm').onsubmit=event=>{
       event.preventDefault();if(!app.isManager())return;
       const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds,S:draftS,status:'Planlagt',active:true,addressId:app.customerAddress(values.customerId)?.id||''};
       if(!employeeIds.length)return alert('Vælg mindst én medarbejder.');
       const hit=conflict(booking);if(hit&&!confirm(`En medarbejder er allerede booket kl. ${hit.start}. Gem alligevel?`))return;
-      app.db.bookings.push(booking);app.save('Booking oprettet');selected=booking.date;event.target.reset();draftS=false;drawSpecial();document.getElementById('bookingDate').value=selected;app.fillSelects();app.toast('Opgaven er planlagt');
+      app.db.bookings.push(booking);app.save('Opgave oprettet');selected=booking.date;event.target.reset();draftS=false;drawSpecial();document.getElementById('bookingDate').value=selected;app.fillSelects();app.toast('Opgaven er planlagt');
     };
     const update=()=>{calendar();dayList();};document.addEventListener('gtp:data',update);document.addEventListener('gtp:session',update);update();
   };

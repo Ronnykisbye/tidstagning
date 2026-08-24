@@ -24,6 +24,7 @@ Appen har én kodebase og to brugeroplevelser.
 - ser alle opgaver og registreringer
 - administrerer kunder og medarbejdere
 - planlægger opgaver og ser rapporter, opfølgninger og log
+- kan starte Opret opgave fra chefens startside, vælge en eksisterende kunde eller oprette en ny kunde uden at forlade opgaveforløbet
 - styrer dataforbindelse, eksport, sikkerhedskopi og gendannelse
 - kan ved oprettelse af en opgave markere den med en lille knap, der kun hedder S; knappen er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt
 - viser aldrig S-knappen på startsiden eller på en allerede oprettet opgave; S-værdien gemmes stadig i regnearkets Opgaver-fane

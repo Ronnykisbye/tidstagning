@@ -17,16 +17,17 @@
     ['name','phone','email','address','customerNumber','defaultWorkType','notes'].forEach(key=>{if(form.elements[key])form.elements[key].value=customer[key]||'';});
     document.getElementById('customerDialog').showModal();
   }
+  app.openCustomer=open;
   app.initCustomers=function(){
     document.getElementById('addCustomerBtn').onclick=()=>open();
     document.getElementById('customerCancel').onclick=()=>document.getElementById('customerDialog').close();
     document.getElementById('customerForm').onsubmit=event=>{
-      event.preventDefault();const values=Object.fromEntries(new FormData(event.target));let customer=app.customer(values.id);
+      event.preventDefault();const values=Object.fromEntries(new FormData(event.target));let customer=app.customer(values.id),created=!customer;
       if(customer)Object.assign(customer,values);else {customer={...values,id:app.uid(),active:true};app.db.customers.push(customer);}
       let address=app.customerAddress(customer.id);
       if(address)address.address=values.address;
       else app.db.addresses.push({id:`${customer.id}-address-1`,customerId:customer.id,label:'Primær',address:values.address,postalCode:'',city:'',active:true});
-      app.save(`Kunde gemt: ${values.name}`);document.getElementById('customerDialog').close();render();app.toast('Kunden er gemt');
+      app.save(`Kunde gemt: ${values.name}`);document.getElementById('customerDialog').close();render();document.dispatchEvent(new CustomEvent('gtp:customer-saved',{detail:{customerId:customer.id,created}}));app.toast('Kunden er gemt');
     };
     document.addEventListener('gtp:data',render);render();
   };
