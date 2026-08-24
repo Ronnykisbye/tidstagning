@@ -26,7 +26,8 @@ Appen har én kodebase og to brugeroplevelser.
 - planlægger opgaver og ser rapporter, opfølgninger og log
 - kan starte Opret opgave fra chefens startside, vælge en eksisterende kunde eller oprette en ny kunde uden at forlade opgaveforløbet
 - styrer dataforbindelse, eksport, sikkerhedskopi og gendannelse
-- kan ved oprettelse af en opgave markere den med en lille knap, der kun hedder S; knappen er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt
+- kan markere en kunde med en lille knap, der kun hedder S, i kundevinduet ved siden af Gem; knappen er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt
+- nye opgaver arver kundens S-værdi, og værdien kan justeres, mens opgaven oprettes
 - viser aldrig S-knappen på startsiden eller på en allerede oprettet opgave; S-værdien gemmes stadig i regnearkets Opgaver-fane
 - kan aktivere bioadgang på chefens enhed
 
@@ -50,7 +51,7 @@ Valider kunde, medarbejder, kronologisk tid, positiv nettotid, færdiggørelse 0
 
 ## Kunder og medarbejdere
 
-Kunder: id, customerNumber, name, address, phone, email, defaultWorkType, notes, active.
+Kunder: id, customerNumber, name, address, phone, email, defaultWorkType, notes, S, active.
 
 Medarbejdere: id, name, email, phone, role, active.
 
@@ -70,7 +71,7 @@ Appen fungerer lokalt uden et regneark. Ekstern adgang går gennem en Apps Scrip
 
 Adapteren skal kunne teste forbindelsen, upserte efter stabilt id, hente kunder/medarbejdere, bevare lokale data ved netværksfejl, vise synkroniseringsstatus og aldrig sende demo-poster.
 
-Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Relationer bruger id-felter. Kolonnen på Opgaver hedder kun S og er et afkrydsningsfelt. Brug aldrig ordene normal eller specialafregning i brugerfladen eller regnearket.
+Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Relationer bruger id-felter. Kolonnen på både Kunder og Opgaver hedder kun S og er et afkrydsningsfelt. Brug aldrig ordene normal eller specialafregning i brugerfladen eller regnearket.
 
 ## Design
 

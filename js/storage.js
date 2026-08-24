@@ -64,10 +64,11 @@ window.GTP=window.GTP||{};
   }
   function normalize(data){
     const base={...empty(),...data,version:4,settings:{...empty().settings,...(data.settings||{})}};
-    base.customers=base.customers.map(x=>({customerNumber:'',defaultWorkType:'Service',active:true,...x}));
+    base.customers=base.customers.map(x=>({customerNumber:'',defaultWorkType:'Service',S:false,active:true,...x}));
     base.employees=base.employees.map(x=>({phone:'',role:'Medarbejder',active:true,...x}));
     base.entries=base.entries.map(x=>({employeeIds:x.employeeIds||[x.employeeId].filter(Boolean),breakMinutes:0,workType:'Service',completion:100,status:'Færdig',followUp:false,followUpNote:'',source:'local',...x}));
     const seeded=refreshDemoCalendar(seed(base));
+    seeded.customers=seeded.customers.map(customer=>({...customer,S:customer.S===true||String(customer.S).toLowerCase()==='true'}));
     seeded.addresses=seeded.addresses||[];
     seeded.customers.forEach(customer=>{
       let address=seeded.addresses.find(x=>x.customerId===customer.id&&x.active!==false);
@@ -79,7 +80,7 @@ window.GTP=window.GTP||{};
     });
     seeded.roles=[{id:'role-manager',name:'Chef',active:true},{id:'role-employee',name:'Medarbejder',active:true}];
     seeded.employeeRoles=seeded.employees.map(employee=>({id:`${employee.id}-role`,employeeId:employee.id,roleId:employee.role==='Chef'?'role-manager':'role-employee',active:employee.active!==false}));
-    seeded.bookings=seeded.bookings.map(booking=>({S:false,status:'Planlagt',active:true,addressId:seeded.addresses.find(x=>x.customerId===booking.customerId&&x.active!==false)?.id||'',...booking}));
+    seeded.bookings=seeded.bookings.map(booking=>({status:'Planlagt',active:true,addressId:seeded.addresses.find(x=>x.customerId===booking.customerId&&x.active!==false)?.id||'',...booking,S:booking.S===true||String(booking.S).toLowerCase()==='true'}));
     return seeded;
   }
   function load(){

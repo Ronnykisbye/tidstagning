@@ -1,4 +1,4 @@
-# GreenTime Pro 4.9
+# GreenTime Pro 5.0
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -25,7 +25,7 @@ Ved første start vælger brugeren app-type og navn. Valget gemmes på den enkel
 - planlægger kundeopgaver og kontrollerer dobbeltbookinger
 - filtrerer rapporter og eksporterer CSV til Excel
 - ser log, sikkerhedskopi og synkroniseringsindstillinger
-- kan markere den enkelte opgave med den diskrete S-knap
+- kan markere en kunde med den diskrete S-knap i kundevinduet; nye opgaver hos kunden arver markeringen
 - kan beskytte chefudgaven med telefonens lokale godkendelse
 - opretter en opgave fra startsiden og vælger en eksisterende kunde eller opretter en ny direkte i opgaveforløbet
 
@@ -45,7 +45,7 @@ Appen virker nu med lokal lagring og fiktive demodata. Datakoden er forberedt ti
 
 Fanerne oprettes automatisk: Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Demoposter med id, der begynder med demo-, sendes ikke til regnearket.
 
-Kolonnen S findes kun på fanen Opgaver og vises som et afkrydsningsfelt. Der bruges ingen yderligere afregningstekst i appen eller regnearket.
+Kolonnen S findes på fanerne Kunder og Opgaver og vises som et afkrydsningsfelt. Når S vælges i kundevinduet, gemmes markeringen på kunden, og nye opgaver hos kunden får automatisk samme markering. Den kan justeres, mens opgaven oprettes. Der bruges ingen yderligere afregningstekst i appen eller regnearket.
 
 ### Tilkobling senere
 
@@ -87,6 +87,7 @@ Installationsikonet er Tidstagning-motivet med stopur og kontrolliste. Det lever
 
 ## Versionshistorik
 
+- 5.0: Lille rød S-knap i kundevinduet; markeringen gemmes på kunden og følger automatisk nye opgaver til regnearket.
 - 4.9: Nyt officielt Tidstagning-installationsikon til Android, iPhone, Windows og browser.
 - 4.8: Rullende demokalender fra i går til syv dage frem med 2–4 fiktive opgaver hver dag.
 - 4.7: Otte ekstra fiktive kalenderopgaver, heraf to i dag; demoopgaver sendes fortsat aldrig til regnearket.

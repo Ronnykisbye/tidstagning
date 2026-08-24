@@ -1,5 +1,5 @@
 const TABLES = {
-  customers: {sheet:'Kunder', headers:['id','customerNumber','name','phone','email','defaultWorkType','notes','active']},
+  customers: {sheet:'Kunder', headers:['id','customerNumber','name','phone','email','defaultWorkType','notes','S','active']},
   addresses: {sheet:'Adresser', headers:['id','customerId','label','address','postalCode','city','active']},
   employees: {sheet:'Medarbejdere', headers:['id','name','email','phone','active']},
   roles: {sheet:'Roller', headers:['id','name','active']},
@@ -12,18 +12,18 @@ const TABLES = {
 };
 
 function doGet() {
-  return json_({ok:true,service:'GreenTime Pro',version:'4.1',schemaVersion:2});
+  return json_({ok:true,service:'GreenTime Pro',version:'5.0',schemaVersion:3});
 }
 
 function doPost(event) {
   try {
     const request=JSON.parse(event.postData.contents||'{}');
-    if(request.action==='ping')return json_({ok:true,action:'pong',schemaVersion:2,at:new Date().toISOString()});
+    if(request.action==='ping')return json_({ok:true,action:'pong',schemaVersion:3,at:new Date().toISOString()});
     if(request.action!=='sync')return json_({ok:false,error:'Ukendt handling'});
     const payload=request.payload||{};
     Object.keys(TABLES).forEach(key=>upsert_(key,payload[key]||[]));
     return json_({
-      ok:true,schemaVersion:2,syncedAt:new Date().toISOString(),
+      ok:true,schemaVersion:3,syncedAt:new Date().toISOString(),
       customers:read_('customers'),addresses:read_('addresses'),employees:read_('employees'),
       roles:read_('roles'),employeeRoles:read_('employeeRoles')
     });
@@ -36,6 +36,15 @@ function sheet_(key) {
   const config=TABLES[key],book=SpreadsheetApp.getActiveSpreadsheet();
   let sheet=book.getSheetByName(config.sheet);
   if(!sheet)sheet=book.insertSheet(config.sheet);
+  if(sheet.getLastRow()>0) {
+    const existing=sheet.getRange(1,1,1,Math.max(1,sheet.getLastColumn())).getValues()[0].map(String);
+    config.headers.forEach((header,index)=>{
+      if(existing.includes(header))return;
+      const column=index+1;
+      sheet.insertColumnBefore(column);
+      existing.splice(index,0,header);
+    });
+  }
   sheet.getRange(1,1,1,config.headers.length).setValues([config.headers]).setFontWeight('bold');
   sheet.setFrozenRows(1);
   applyCheckboxes_(sheet,config.headers);

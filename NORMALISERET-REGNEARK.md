@@ -31,12 +31,14 @@ Regnearket fungerer som et relationelt datalager med én post pr. række og stab
 
 ## S
 
-Fanen Opgaver har kolonnen S. Apps Script anvender et ægte afkrydsningsfelt:
+Fanerne Kunder og Opgaver har kolonnen S. Apps Script anvender et ægte afkrydsningsfelt:
 
 - markeret felt gemmes som TRUE
 - tomt felt gemmes som FALSE
 - kun chefudgaven kan ændre værdien
 - medarbejderudgaven viser ikke markeringen
+- kundens markering er standard for nye opgaver hos kunden
+- opgavens værdi gemmes selvstændigt, så historikken ikke ændres, hvis kunden senere ændres
 
 Der må ikke tilføjes forklarende afregningstekst til appen eller regnearket.
 

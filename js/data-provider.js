@@ -6,7 +6,7 @@
   function setState(text,state='local'){const node=document.getElementById('syncState');if(!node)return;node.textContent=text;node.dataset.state=state;}
   async function request(action,payload={}){
     if(!endpoint())throw new Error('Der er ikke angivet en Apps Script-webadresse.');
-    const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,clientVersion:'4.9'})});
+    const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,clientVersion:'5.0'})});
     if(!response.ok)throw new Error(`Forbindelsen svarede med fejl ${response.status}.`);
     const result=await response.json();if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');return result;
   }
@@ -57,7 +57,7 @@
     async test(){return request('ping',{sentAt:new Date().toISOString()});},
     normalizedPayload,
     columns:{
-      customers:['id','customerNumber','name','phone','email','defaultWorkType','notes','active'],
+      customers:['id','customerNumber','name','phone','email','defaultWorkType','notes','S','active'],
       addresses:['id','customerId','label','address','postalCode','city','active'],
       employees:['id','name','email','phone','active'],
       roles:['id','name','active'],

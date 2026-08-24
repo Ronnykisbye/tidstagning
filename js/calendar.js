@@ -30,11 +30,13 @@
     document.getElementById('bookingDate').value=selected;
     const specialButton=document.getElementById('bookingSpecial');
     const drawSpecial=()=>{specialButton.classList.toggle('active',draftS);specialButton.setAttribute('aria-pressed',String(draftS));};
+    const useCustomerSpecial=()=>{draftS=Boolean(app.customer(document.getElementById('bookingCustomer').value)?.S);drawSpecial();};
     specialButton.onclick=()=>{draftS=!draftS;drawSpecial();};
-    app.openBookingCreator=()=>{if(!app.isManager())return;app.showPage('calendarPage');setTimeout(()=>{document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('bookingCustomer')?.focus();},100);};
+    document.getElementById('bookingCustomer').onchange=useCustomerSpecial;
+    app.openBookingCreator=()=>{if(!app.isManager())return;app.showPage('calendarPage');setTimeout(()=>{useCustomerSpecial();document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});document.getElementById('bookingCustomer')?.focus();},100);};
     let waitingForCustomer=false;
     document.getElementById('bookingNewCustomer').onclick=()=>{waitingForCustomer=true;app.openCustomer?.();};
-    document.addEventListener('gtp:customer-saved',event=>{if(!waitingForCustomer)return;waitingForCustomer=false;app.fillSelects?.();document.getElementById('bookingCustomer').value=event.detail.customerId;document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});});
+    document.addEventListener('gtp:customer-saved',event=>{if(!waitingForCustomer)return;waitingForCustomer=false;app.fillSelects?.();document.getElementById('bookingCustomer').value=event.detail.customerId;draftS=Boolean(event.detail.S);drawSpecial();document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});});
     document.getElementById('bookingForm').onsubmit=event=>{
       event.preventDefault();if(!app.isManager())return;
       const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds,S:draftS,status:'Planlagt',active:true,addressId:app.customerAddress(values.customerId)?.id||''};
