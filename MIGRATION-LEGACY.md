@@ -17,10 +17,19 @@ Eksempler:
 
 Ved migration beregnes `seconds = tidsforbrug * 3600`.
 
+## Roller og rettigheder
+
+`Chef` er en ekstra adgangsrolle og ikke en anden type person. En person kan derfor godt have både `Medarbejder` og `Chef`.
+
+- Lars Wiberg har både rollen `Medarbejder` og rollen `Chef`. Chef-rollen giver de ekstra rettigheder i appen.
+- Ronny Kisbye har kun rollen `Medarbejder` og må ikke få adgang til chefsiden via sin egen profil.
+
+Rolleadgang skal afgøres via `MedarbejderRoller` og ikke via ét enkelt tekstfelt på medarbejderen.
+
 ## Bekræftede medarbejderinitialer
 
 - `LW` / `lw` = Lars Wiberg. Aktiv medarbejder.
-- `Ronny` / `ronny` = Ronny Kisbye. Aktiv medarbejder med rollen Chef. Mappingen understøttes af appens eksisterende chefprofil, men den normaliserede post bruger et ikke-demo-id.
+- `Ronny` / `ronny` = Ronny Kisbye. Aktiv medarbejder, kun rollen Medarbejder.
 - `Nanna` / `nanna` = Nanna. Aktiv medarbejder.
 - `MB` / `mb` = Morten B. er sandsynligt, men ikke endeligt bekræftet. Medarbejderen opbevares derfor som inaktiv, indtil navnet er bekræftet.
 - `LL` / `ll` = Lille Lars er sandsynligt, men ikke endeligt bekræftet. Medarbejderen opbevares som inaktiv, indtil navnet er bekræftet.
