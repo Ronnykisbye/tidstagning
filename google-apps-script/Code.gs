@@ -44,7 +44,12 @@ function doPost(event) {
       addresses:read_('addresses'),
       employees:read_('employees'),
       roles:read_('roles'),
-      employeeRoles:read_('employeeRoles')
+      employeeRoles:read_('employeeRoles'),
+      orders:read_('orders'),
+      orderAssignments:read_('orderAssignments'),
+      timeEntries:read_('timeEntries'),
+      workTypes:read_('workTypes'),
+      audit:read_('audit')
     });
   } catch (error) {
     return json_({ok:false,error:String(error && error.message ? error.message : error)});
