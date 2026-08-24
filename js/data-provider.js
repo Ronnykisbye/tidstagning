@@ -6,7 +6,7 @@
   function setState(text,state='local'){const node=document.getElementById('syncState');if(!node)return;node.textContent=text;node.dataset.state=state;}
   async function request(action,payload={}){
     if(!endpoint())throw new Error('Der er ikke angivet en Apps Script-webadresse.');
-    const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,clientVersion:'5.3'})});
+    const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,clientVersion:'5.4'})});
     if(!response.ok)throw new Error(`Forbindelsen svarede med fejl ${response.status}.`);
     const result=await response.json();if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');return result;
   }
@@ -22,7 +22,7 @@
     }));
     const orderAssignments=app.db.bookings.filter(real).flatMap(booking=>(booking.employeeIds||[]).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:`${booking.id}-${employeeId}`,orderId:booking.id,employeeId,active:true})));
     const timeEntries=app.db.entries.filter(real).flatMap(entry=>(entry.employeeIds||[entry.employeeId]).filter(Boolean).filter(id=>!id.startsWith('demo-')).map(employeeId=>({
-      id:`${entry.id}-${employeeId}`,registrationId:entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,
+      id:`${entry.id}-${employeeId}`,registrationId:entry.registrationId||entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,
       seconds:entry.seconds,workType:entry.workType||'',note:entry.note||'',completion:entry.completion||0,status:entry.status||'',followUp:Boolean(entry.followUp),followUpNote:entry.followUpNote||'',source:entry.source||'local'
     })));
     const workTypes=WORK_TYPES.map((name,index)=>({id:`work-${index+1}`,name,active:true}));
