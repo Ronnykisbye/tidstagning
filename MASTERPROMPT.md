@@ -73,6 +73,16 @@ Adapteren skal kunne teste forbindelsen, upserte efter stabilt id, hente kunder/
 
 Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Relationer bruger id-felter. Kolonnen på både Kunder og Opgaver hedder kun S og er et afkrydsningsfelt. Brug aldrig ordene normal eller specialafregning i brugerfladen eller regnearket.
 
+### Migrationssikkerhed
+
+- Tag altid en fuld kopi af produktionsarket før større strukturændringer.
+- Bevar legacy-fanen `Formularsvar 1` uændret som sporbar historik.
+- Tilføj manglende kolonner uden at forskubbe eksisterende værdier.
+- Apps Script skal selv afvise ethvert id eller relations-id, der begynder med `demo-`; klientfiltrering alene er ikke nok.
+- Serverens upserts skal bruge stabile id'er og skrive revisionsspor til `Ændringslog`.
+- Migration skal kunne gentages uden dubletter.
+- Gæt aldrig på tvetydige legacy-værdier som tidsenhed, medarbejderidentitet eller relationer. Migrér først entydige data og behold kildedata til senere afklaring.
+
 ## Design
 
 - dansk hovedsprog
