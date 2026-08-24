@@ -11,7 +11,7 @@ window.GTP=window.GTP||{};
     return {id,customerId,employeeIds:[employeeId],start:start.toISOString(),end:new Date(start.getTime()+minutes*60000).toISOString(),seconds:minutes*60,breakMinutes:0,workType:'Service',note,completion,status,followUp:false,followUpNote:'',source:'demo'};
   }
   function seed(data){
-    if((data.demoSeedVersion||0)>=6)return data;
+    if((data.demoSeedVersion||0)>=7)return data;
     const customers=[
       {id:'demo-customer-1',customerNumber:'1001',name:'Kronborg Kontorservice ApS',phone:'70 00 30 01',email:'kontakt@kronborg-kontor.example',address:'Stengade 52, 3000 Helsingør',defaultWorkType:'Rengøring',notes:'DEMOKUNDE – fiktiv. Ugentlig rengøring af kontorer, køkken og mødelokaler.',active:true},
       {id:'demo-customer-2',customerNumber:'1002',name:'Hornbæk Strandhotel Drift',phone:'70 00 31 02',email:'drift@hornbaek-strandhotel.example',address:'Kystvej 18, 3100 Hornbæk',defaultWorkType:'Service',notes:'DEMOKUNDE – fiktiv. Klargøring af fællesarealer.',active:true},
@@ -32,11 +32,15 @@ window.GTP=window.GTP||{};
       demoEntry('demo-entry-2',2,9,240,'demo-customer-3','demo-employee-3','Pleje af udearealer.',75,'I gang'),
       demoEntry('demo-entry-3',3,7,150,'demo-customer-5','demo-employee-2','Rengøring og opfyldning.')
     ];
-    customers.forEach(x=>{if(!data.customers.some(y=>y.id===x.id))data.customers.push(x);});
+    customers.forEach(x=>{
+      const existing=data.customers.find(y=>y.id===x.id);
+      if(!existing)data.customers.push(x);
+      else if(existing.active===false)Object.assign(existing,x);
+    });
     employees.forEach(x=>{if(!data.employees.some(y=>y.id===x.id))data.employees.push(x);});
     bookings.forEach(x=>{if(!data.bookings.some(y=>y.id===x.id))data.bookings.push(x);});
     entries.forEach(x=>{if(!data.entries.some(y=>y.id===x.id))data.entries.push(x);});
-    data.demoSeedVersion=6;
+    data.demoSeedVersion=7;
     return data;
   }
   function refreshDemoCalendar(data){
@@ -72,6 +76,10 @@ window.GTP=window.GTP||{};
     seeded.addresses=seeded.addresses||[];
     seeded.customers.forEach(customer=>{
       let address=seeded.addresses.find(x=>x.customerId===customer.id&&x.active!==false);
+      if(!address&&String(customer.id).startsWith('demo-')){
+        address=seeded.addresses.find(x=>x.customerId===customer.id);
+        if(address){address.active=true;address.address=customer.address||address.address;}
+      }
       if(!address&&customer.address){
         address={id:`${customer.id}-address-1`,customerId:customer.id,label:'Primær',address:customer.address,postalCode:'',city:'',active:true};
         seeded.addresses.push(address);
