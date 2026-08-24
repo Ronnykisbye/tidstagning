@@ -1,4 +1,4 @@
-# GreenTime Pro 4.7
+# GreenTime Pro 4.8
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -85,6 +85,7 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 
 ## Versionshistorik
 
+- 4.8: Rullende demokalender fra i går til syv dage frem med 2–4 fiktive opgaver hver dag.
 - 4.7: Otte ekstra fiktive kalenderopgaver, heraf to i dag; demoopgaver sendes fortsat aldrig til regnearket.
 - 4.6: Samlet chef-flow til Opret opgave med eksisterende eller ny kunde og S-valg før gemning.
 - 4.5: Den lille S-knap vises kun, mens chefen opretter en opgave; efter gemning ses markeringen kun i regnearket.
