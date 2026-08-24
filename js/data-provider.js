@@ -2,6 +2,7 @@
   let syncTimer;
   const WORK_TYPES=['Service','Rengøring','Vedligeholdelse','Reparation','Tilsyn','Levering','Andet'];
   const real=item=>!String(item.id||'').startsWith('demo-');
+  const demo=item=>String(item.id||'').startsWith('demo-');
   function endpoint(){return String(app.db.settings?.sheetEndpoint||'').trim();}
   function setState(text,state='local'){const node=document.getElementById('syncState');if(!node)return;node.textContent=text;node.dataset.state=state;}
   async function request(action,payload={}){
@@ -43,15 +44,22 @@
     });
     return [...grouped.values()];
   }
+  function mergeKeepingDemo(current=[],remote=[],mapper=x=>x){
+    const demos=current.filter(demo);
+    const mapped=remote.map(mapper);
+    const byId=new Map(demos.map(item=>[String(item.id),item]));
+    mapped.forEach(item=>byId.set(String(item.id),item));
+    return [...byId.values()];
+  }
   function applyRemote(result){
-    if(Array.isArray(result?.addresses))app.db.addresses=result.addresses;
+    if(Array.isArray(result?.addresses))app.db.addresses=mergeKeepingDemo(app.db.addresses,result.addresses);
     if(Array.isArray(result?.roles))app.db.roles=result.roles;
-    if(Array.isArray(result?.employeeRoles))app.db.employeeRoles=result.employeeRoles;
+    if(Array.isArray(result?.employeeRoles))app.db.employeeRoles=mergeKeepingDemo(app.db.employeeRoles,result.employeeRoles);
     if(Array.isArray(result?.customers)){
-      app.db.customers=result.customers.map(customer=>({...customer,address:app.db.addresses.find(x=>x.customerId===customer.id&&x.active!==false)?.address||''}));
+      app.db.customers=mergeKeepingDemo(app.db.customers,result.customers,customer=>({...customer,address:app.db.addresses.find(x=>x.customerId===customer.id&&x.active!==false)?.address||''}));
     }
     if(Array.isArray(result?.employees)){
-      app.db.employees=result.employees.map(employee=>{
+      app.db.employees=mergeKeepingDemo(app.db.employees,result.employees,employee=>{
         const chefRole=app.db.roles.find(x=>x.name==='Chef')?.id;
         const isChef=app.db.employeeRoles.some(x=>x.employeeId===employee.id&&x.roleId===chefRole&&x.active!==false);
         return {...employee,role:isChef?'Chef':'Medarbejder'};
@@ -59,9 +67,10 @@
     }
     if(Array.isArray(result?.orders)){
       const assignments=Array.isArray(result.orderAssignments)?result.orderAssignments:[];
-      app.db.bookings=result.orders.map(order=>({...order,employeeIds:assignments.filter(x=>x.orderId===order.id&&x.active!==false).map(x=>x.employeeId)}));
+      const remoteBookings=result.orders.map(order=>({...order,employeeIds:assignments.filter(x=>x.orderId===order.id&&x.active!==false).map(x=>x.employeeId)}));
+      app.db.bookings=mergeKeepingDemo(app.db.bookings,remoteBookings);
     }
-    if(Array.isArray(result?.timeEntries))app.db.entries=groupTimeEntries(result.timeEntries);
+    if(Array.isArray(result?.timeEntries))app.db.entries=mergeKeepingDemo(app.db.entries,groupTimeEntries(result.timeEntries));
     if(Array.isArray(result?.audit))app.db.audit=result.audit;
   }
   async function sync(){
