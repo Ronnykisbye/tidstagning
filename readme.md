@@ -1,4 +1,4 @@
-# GreenTime Pro 4.8
+# GreenTime Pro 4.9
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -70,6 +70,8 @@ Når Google Forms-formularen igen kan aflæses, sammenholdes dens præcise felte
 
 Appen kan installeres på mobil, tablet og computer og har manifest, service worker og offlinecache. Den har responsivt layout, lys/mørk tilstand, store trykflader, lokal sikkerhedskopi og CSV-eksport.
 
+Installationsikonet er Tidstagning-motivet med stopur og kontrolliste. Det leveres som 192 px, 512 px, maskable Android-ikon, Apple Touch Icon og favicon.
+
 ## Vigtige filer
 
 - index.html – sider, formularer og dialoger
@@ -85,6 +87,7 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 
 ## Versionshistorik
 
+- 4.9: Nyt officielt Tidstagning-installationsikon til Android, iPhone, Windows og browser.
 - 4.8: Rullende demokalender fra i går til syv dage frem med 2–4 fiktive opgaver hver dag.
 - 4.7: Otte ekstra fiktive kalenderopgaver, heraf to i dag; demoopgaver sendes fortsat aldrig til regnearket.
 - 4.6: Samlet chef-flow til Opret opgave med eksisterende eller ny kunde og S-valg før gemning.

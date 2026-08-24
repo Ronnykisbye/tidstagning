@@ -86,6 +86,8 @@ Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, Medarb
 
 Opdatér service worker-cacheversionen ved filændringer. Alle nødvendige lokale CSS- og JavaScript-filer skal stå i cachelisten.
 
+Brug Tidstagning-ikonet med stopur og kontrolliste som officielt installationsikon. Bevar PNG-størrelserne 192 og 512, en sikker maskable 512-udgave, Apple Touch Icon og favicon i manifest, HTML og offlinecache.
+
 ## Kvalitetssikring før GitHub
 
 1. Kør syntakskontrol på alle JavaScript-filer.
