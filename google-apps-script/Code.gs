@@ -1,4 +1,4 @@
-const APP_VERSION = '5.3';
+const APP_VERSION = '5.4';
 const SCHEMA_VERSION = 4;
 
 const TABLES = {
