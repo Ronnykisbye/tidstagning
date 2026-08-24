@@ -89,6 +89,8 @@ Opdatér service worker-cacheversionen ved filændringer. Alle nødvendige lokal
 
 Brug Tidstagning-ikonet med stopur og kontrolliste som officielt installationsikon. Bevar PNG-størrelserne 192 og 512, en sikker maskable 512-udgave, Apple Touch Icon og favicon i manifest, HTML og offlinecache.
 
+Installationssiden skal altid vise separate vejledninger til iPhone/iPad, Android og computer. Den aktuelle enhed markeres automatisk. iPhone-installation foregår i Safari via Del, Føj til hjemmeskærm, Åbn som webapp og Tilføj.
+
 ## Kvalitetssikring før GitHub
 
 1. Kør syntakskontrol på alle JavaScript-filer.

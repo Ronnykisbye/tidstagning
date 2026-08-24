@@ -1,1 +1,65 @@
-<!doctype html><html lang="da" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Installér GreenTime Pro</title><script>document.documentElement.dataset.theme=localStorage.getItem('gtp_theme')||'dark'</script><link rel="stylesheet" href="../css/theme.css"><link rel="stylesheet" href="../css/components.css"><style>main{max-width:760px;margin:40px auto;padding:18px}.install-step{padding:14px 0;border-bottom:1px solid var(--border)}#installBtn[hidden]{display:none}</style></head><body><main><a href="../">← Tilbage til appen</a><h1>Installér GreenTime Pro</h1><p>Appen installeres direkte fra browseren og åbner bagefter som et almindeligt program.</p><button id="installBtn" class="primary" hidden>Installér nu</button><article class="card"><h2 id="deviceTitle">Vejledning</h2><div id="instructions"></div></article><article class="card"><h2>Efter installationen</h2><p>Vælg medarbejder eller chef og derefter dit navn. På chefens telefon kan bioadgang aktiveres under Indstillinger. Telefonen vælger selv fingeraftryk, ansigt eller enheds-PIN.</p></article><p><strong>Bemærk:</strong> Installation og bioadgang kræver, at appen åbnes fra GitHub Pages eller en anden sikker HTTPS-adresse.</p></main><script src="install.js"></script></body></html>
+<!doctype html>
+<html lang="da" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Installér GreenTime Pro</title>
+  <script>document.documentElement.dataset.theme=localStorage.getItem('gtp_theme')||'dark'</script>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    main{max-width:760px;margin:40px auto;padding:18px}
+    .install-step{padding:14px 0;border-bottom:1px solid var(--border)}
+    .install-step:last-child{border-bottom:0}
+    .device-card{position:relative}
+    .device-card.current{outline:3px solid var(--accent);box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 18%,transparent)}
+    .device-badge{display:none;position:absolute;right:18px;top:18px;padding:5px 10px;border-radius:999px;background:var(--accent);color:#fff;font-size:.78rem;font-weight:800}
+    .device-card.current .device-badge{display:block}
+    .install-link{display:inline-block;margin:8px 0 20px;text-decoration:none}
+    #installBtn[hidden]{display:none}
+    @media(max-width:560px){main{margin:16px auto;padding:14px}.device-badge{position:static;float:right;margin:-3px 0 8px 8px}}
+  </style>
+</head>
+<body>
+  <main>
+    <a href="../">← Tilbage til appen</a>
+    <h1>Installér GreenTime Pro</h1>
+    <p>Vælg vejledningen til din enhed. Appen får sit eget ikon og åbner bagefter som en almindelig app.</p>
+    <a class="primary install-link" href="../">Åbn GreenTime Pro</a>
+    <button id="installBtn" class="primary" hidden>Installér nu</button>
+
+    <article id="iphoneGuide" class="card device-card">
+      <span class="device-badge">Din enhed</span>
+      <h2>iPhone eller iPad – Safari</h2>
+      <div class="install-step">1. Åbn GreenTime Pro i <strong>Safari</strong>.</div>
+      <div class="install-step">2. Tryk på <strong>Del</strong> – firkanten med pilen opad. Hvis knappen ikke vises direkte, tryk først på <strong>Mere</strong>.</div>
+      <div class="install-step">3. Rul ned, og vælg <strong>Føj til hjemmeskærm</strong>. Hvis valget mangler, vælg <strong>Rediger handlinger</strong> og tilføj det.</div>
+      <div class="install-step">4. Slå <strong>Åbn som webapp</strong> til, hvis valget vises, og tryk på <strong>Tilføj</strong>.</div>
+    </article>
+
+    <article id="androidGuide" class="card device-card">
+      <span class="device-badge">Din enhed</span>
+      <h2>Android – Chrome</h2>
+      <div class="install-step">1. Åbn GreenTime Pro i Chrome.</div>
+      <div class="install-step">2. Tryk på menuen med tre prikker.</div>
+      <div class="install-step">3. Vælg <strong>Installér app</strong> eller <strong>Føj til startskærm</strong>.</div>
+      <div class="install-step">4. Bekræft installationen.</div>
+    </article>
+
+    <article id="desktopGuide" class="card device-card">
+      <span class="device-badge">Din enhed</span>
+      <h2>Windows, Mac eller Chromebook</h2>
+      <div class="install-step">1. Åbn siden i Chrome eller Edge.</div>
+      <div class="install-step">2. Tryk på installationsikonet i adresselinjen.</div>
+      <div class="install-step">3. Vælg <strong>Installér</strong>.</div>
+    </article>
+
+    <article class="card">
+      <h2>Efter installationen</h2>
+      <p>Vælg medarbejder eller chef og derefter dit navn. På chefens telefon kan bioadgang aktiveres under Indstillinger. Telefonen vælger selv fingeraftryk, ansigt eller enheds-PIN.</p>
+    </article>
+    <p><strong>Bemærk:</strong> På iPhone skal installationen foretages i Safari. Symbolet vises kun på den enhed, hvor appen tilføjes.</p>
+  </main>
+  <script src="install.js?v=5.2"></script>
+</body>
+</html>

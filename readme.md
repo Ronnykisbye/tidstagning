@@ -1,4 +1,4 @@
-# GreenTime Pro 5.1
+# GreenTime Pro 5.2
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -87,6 +87,7 @@ Installationsikonet er Tidstagning-motivet med stopur og kontrolliste. Det lever
 
 ## Versionshistorik
 
+- 5.2: Fast installationsvejledning til iPhone/iPad, Android og computer med automatisk markering af den aktuelle enhed.
 - 5.1: Gendanner manglende fiktive kunder i eksisterende demoer og henter nye sider før ældre offlinecache.
 - 5.0: Lille rød S-knap i kundevinduet; markeringen gemmes på kunden og følger automatisk nye opgaver til regnearket.
 - 4.9: Nyt officielt Tidstagning-installationsikon til Android, iPhone, Windows og browser.
