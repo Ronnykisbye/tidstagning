@@ -7,4 +7,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   try{A.showPage?.('dashboardPage',{push:false,instant:true});}catch(error){console.error('Startsiden kunne ikke åbnes',error);}
   try{A.applyLanguage?.();}catch(error){console.error('Sprog kunne ikke indlæses',error);}
   document.querySelectorAll('[data-lang]').forEach(button=>button.onclick=()=>A.setLanguage?.(button.dataset.lang));
+  try{if(A.provider?.mode?.()==='google-sheets')A.provider.sync?.();}catch(error){console.warn('Automatisk Sheet-synkronisering kunne ikke starte',error);}
 });
