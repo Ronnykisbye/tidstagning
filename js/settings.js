@@ -14,7 +14,22 @@
     };
     document.getElementById('testEndpoint').onclick=async()=>{
       const button=document.getElementById('testEndpoint');button.disabled=true;button.textContent='Tester…';
-      try{app.db.settings.sheetEndpoint=endpoint.value.trim();await app.provider.test();app.toast('Forbindelsen virker');}
+      try{
+        const value=endpoint.value.trim();
+        if(!value)throw new Error('Der mangler en Apps Script-webadresse (/exec).');
+        app.db.settings.sheetEndpoint=value;
+        const ping=await app.provider.test();
+        await app.provider.sync();
+        const realCustomers=(app.db.customers||[]).filter(x=>!String(x.id||'').startsWith('demo-')&&x.active!==false).length;
+        const realEmployees=(app.db.employees||[]).filter(x=>!String(x.id||'').startsWith('demo-')&&x.active!==false).length;
+        localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));
+        refresh();
+        if(!realCustomers&&!realEmployees){
+          alert(`Forbindelsen svarer${ping?.version?' med version '+ping.version:''}, men der blev ikke hentet nogen rigtige kunder eller medarbejdere fra Sheetet. Apps Script-deploymenten er sandsynligvis ikke opdateret.`);
+        }else{
+          alert(`Forbindelsen virker${ping?.version?' · version '+ping.version:''}. Hentet ${realCustomers} rigtige kunder og ${realEmployees} rigtige medarbejdere fra Sheetet.`);
+        }
+      }
       catch(error){alert(`Forbindelsen kunne ikke godkendes: ${error.message}`);}
       finally{button.disabled=false;button.textContent='Test forbindelse';}
     };
