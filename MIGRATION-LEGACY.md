@@ -20,11 +20,12 @@ Ved migration beregnes `seconds = tidsforbrug * 3600`.
 ## Bekræftede medarbejderinitialer
 
 - `LW` / `lw` = Lars Wiberg. Aktiv medarbejder.
+- `Ronny` / `ronny` = Ronny Kisbye. Aktiv medarbejder med rollen Chef. Mappingen understøttes af appens eksisterende chefprofil, men den normaliserede post bruger et ikke-demo-id.
+- `Nanna` / `nanna` = Nanna. Aktiv medarbejder.
 - `MB` / `mb` = Morten B. er sandsynligt, men ikke endeligt bekræftet. Medarbejderen opbevares derfor som inaktiv, indtil navnet er bekræftet.
-- `LL` / `ll` = Lille Lars er sandsynligt, men ikke endeligt bekræftet. Må ikke oprettes som aktiv relation uden bekræftelse.
-- `Nanna` / `nanna` = Nanna.
+- `LL` / `ll` = Lille Lars er sandsynligt, men ikke endeligt bekræftet. Medarbejderen opbevares som inaktiv, indtil navnet er bekræftet.
 
-Andre navne eller initialer i legacy-feltet skal kontrolleres, før de får stabile medarbejder-id'er.
+`mike` / `michael` og `bjarke` er endnu ikke sikkert matchet til fulde medarbejdernavne og må ikke aktiveres automatisk.
 
 ## Allerede migrerede tidsregistreringer
 
