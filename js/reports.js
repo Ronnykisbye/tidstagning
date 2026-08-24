@@ -1,12 +1,12 @@
 (function(app){
   const hours=value=>(Number(value||0)/3600);
   const fmtHours=value=>Number(value||0).toFixed(2).replace('.',',');
+  const isDemo=id=>String(id||'').startsWith('demo-');
   const dateOfEntry=entry=>{
     if(entry.start)return String(entry.start).slice(0,10);
     if(entry.orderId)return app.db.bookings.find(x=>x.id===entry.orderId)?.date||'';
     return '';
   };
-  const assignedNames=entry=>(entry.employeeIds||[entry.employeeId]).map(id=>app.employee(id)?.name).filter(Boolean);
   const historicalOrders=()=>app.db.bookings.filter(x=>String(x.id||'').startsWith('legacy-order-')&&Number(x.duration||0)>0&&x.active!==false);
   const representedOrderIds=()=>new Set(app.db.entries.map(x=>x.orderId).filter(Boolean));
   const periodMatch=(date,from,to)=>(!from||date>=from)&&(!to||date<=to);
@@ -18,6 +18,29 @@
     label.innerHTML='Rapporttype<select id="reportType"><option value="details">Detaljeret tidsrapport</option><option value="employee">Timer for medarbejder</option><option value="customer">Timer hos kunde</option><option value="customer-summary">Samlet timeforbrug pr. kunde</option><option value="employee-summary">Samlet timeforbrug pr. medarbejder</option><option value="unfinished">Ikke færdige registreringer</option><option value="followup">Kræver opfølgning</option></select>';
     filters.insertBefore(label,first);
     const note=document.createElement('p');note.id='reportDataNote';note.className='wide';note.textContent='Gamle Sheet-data med sikkert tidsforbrug indgår. Gamle gruppetimer fordeles ikke på medarbejdere.';filters.appendChild(note);
+  }
+
+  function refreshReportSelectors(){
+    const customerSelect=document.getElementById('reportCustomer');
+    const employeeSelect=document.getElementById('reportEmployee');
+    if(customerSelect){
+      const selected=customerSelect.value;
+      const items=(app.db.customers||[]).filter(x=>x.active!==false).slice().sort((a,b)=>{
+        const demoDiff=Number(isDemo(a.id))-Number(isDemo(b.id));
+        return demoDiff||String(a.name||'').localeCompare(String(b.name||''),'da');
+      });
+      customerSelect.innerHTML='<option value="">Alle kunder</option>'+items.map(x=>`<option value="${app.escape(x.id)}">${app.escape(x.name||'Ukendt kunde')}${isDemo(x.id)?' (demo)':''}</option>`).join('');
+      if(items.some(x=>x.id===selected))customerSelect.value=selected;
+    }
+    if(employeeSelect){
+      const selected=employeeSelect.value;
+      const items=(app.db.employees||[]).filter(x=>x.active!==false).slice().sort((a,b)=>{
+        const demoDiff=Number(isDemo(a.id))-Number(isDemo(b.id));
+        return demoDiff||String(a.name||'').localeCompare(String(b.name||''),'da');
+      });
+      employeeSelect.innerHTML='<option value="">Alle medarbejdere</option>'+items.map(x=>`<option value="${app.escape(x.id)}">${app.escape(x.name||'Ukendt medarbejder')}${isDemo(x.id)?' (demo)':''}</option>`).join('');
+      if(items.some(x=>x.id===selected))employeeSelect.value=selected;
+    }
   }
 
   function baseEntryRows(){
@@ -81,6 +104,7 @@
   app.renderAudit=function(){const node=document.getElementById('auditList');if(!node)return;node.innerHTML=app.db.audit.slice(0,100).map(x=>`<li><time>${new Date(x.at).toLocaleString('da-DK')}</time>${app.escape(x.action)}</li>`).join('')||'<li>Ingen hændelser endnu.</li>';};
   app.initReports=function(){
     ensureReportControls();
+    refreshReportSelectors();
     document.getElementById('runReport').onclick=run;
     document.getElementById('reportType').onchange=run;
     document.getElementById('exportCsv').onclick=()=>{
@@ -88,6 +112,7 @@
       const csv=[header,...csvRows()].map(row=>row.map(value=>`"${String(value??'').replaceAll('"','""')}"`).join(';')).join('\n'),link=document.createElement('a');
       link.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));link.download='greentime-rapport.csv';link.click();URL.revokeObjectURL(link.href);
     };
-    document.addEventListener('gtp:data',()=>{app.renderAudit();run();});app.renderAudit();run();
+    document.addEventListener('gtp:data',()=>{refreshReportSelectors();app.renderAudit();run();});
+    app.renderAudit();run();
   };
 })(window.GTP);
