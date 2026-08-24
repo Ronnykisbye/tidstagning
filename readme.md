@@ -1,4 +1,4 @@
-# GreenTime Pro 5.2
+# GreenTime Pro 5.3
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -41,52 +41,51 @@ Hver kunde har ét stabilt id. Begge dropdowns bruger dette id:
 
 ## Data og Google Regneark
 
-Appen virker nu med lokal lagring og fiktive demodata. Datakoden er forberedt til Google Regneark gennem en publiceret Google Apps Script-webapp.
+Appen fungerer lokalt og kan synkronisere gennem en publiceret Google Apps Script-webapp. Kommunikation går aldrig direkte til regnearkets almindelige redigeringslink.
 
-Fanerne oprettes automatisk: Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog. Demoposter med id, der begynder med demo-, sendes ikke til regnearket.
+Den normaliserede struktur bruger fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog.
 
-Kolonnen S findes på fanerne Kunder og Opgaver og vises som et afkrydsningsfelt. Når S vælges i kundevinduet, gemmes markeringen på kunden, og nye opgaver hos kunden får automatisk samme markering. Den kan justeres, mens opgaven oprettes. Der bruges ingen yderligere afregningstekst i appen eller regnearket.
+Version 5.3 styrker synkroniseringen:
 
-### Tilkobling senere
+- demo-id'er afvises både i klienten og på Apps Script-serveren
+- manglende kolonner tilføjes uden at forskubbe eksisterende data
+- upserts bruger stabile id'er
+- serverændringer registreres i Ændringslog
+- service- og klientversion er synkroniseret til 5.3
 
-1. Opret eller åbn firmaets Google-regneark.
+Kolonnen S findes på fanerne Kunder og Opgaver som et afkrydsningsfelt. Kundens S-værdi er kun standard for nye opgaver; en allerede oprettet opgaves historiske S-værdi ændres ikke automatisk.
+
+### Legacy Google Forms-data
+
+Det eksisterende `Formularsvar 1` bevares som original historik. Normaliserede data oprettes ved siden af legacy-fanen i stedet for at omskrive formularsvarene. Migration skal kunne gentages uden dubletter og må ikke gætte på uklare enheder, medarbejderrelationer eller andre tvetydige værdier.
+
+### Tilkobling
+
+1. Åbn firmaets Google-regneark.
 2. Vælg Udvidelser → Apps Script.
-3. Kopiér indholdet fra google-apps-script/Code.gs ind i Apps Script.
+3. Kopiér indholdet fra `google-apps-script/Code.gs` ind i Apps Script.
 4. Vælg Implementer → Ny implementering → Webapp.
 5. Angiv den nødvendige adgang for firmaets brugere.
-6. Kopiér webappens /exec-adresse.
+6. Kopiér webappens `/exec`-adresse.
 7. Åbn Indstillinger → Google Regneark i chefversionen.
 8. Indsæt adressen, gem og vælg Test forbindelse.
-
-Regnearkslinket alene er ikke nok til sikker synkronisering. Appen bruger Apps Script-webadressen, så læse- og skriveadgangen kan kontrolleres.
-
-## Registreringsfelter
-
-Dato, start, slut, pause, kunde-id, medarbejder-id, arbejdstype, beskrivelse, tidsforbrug, færdiggørelsesgrad, status, opfølgning, opfølgningsnote, datakilde og stabilt registrerings-id.
-
-Når Google Forms-formularen igen kan aflæses, sammenholdes dens præcise felter med datamodellen. Nye felter kan tilføjes uden at ændre rolle- eller synkroniseringsarkitekturen.
 
 ## Installation og kvalitet
 
 Appen kan installeres på mobil, tablet og computer og har manifest, service worker og offlinecache. Den har responsivt layout, lys/mørk tilstand, store trykflader, lokal sikkerhedskopi og CSV-eksport.
 
-Installationsikonet er Tidstagning-motivet med stopur og kontrolliste. Det leveres som 192 px, 512 px, maskable Android-ikon, Apple Touch Icon og favicon.
-
 ## Vigtige filer
 
-- index.html – sider, formularer og dialoger
-- css/roles.css – roller og nye komponenter
-- js/access.js – profil og adgang
-- js/biometric.js – lokal chef-lås med WebAuthn
-- js/data-provider.js – lokal/Google Sheets-adapter
-- js/storage.js – datamodel og migrering
-- js/timer.js – kunde/adressekobling og tidsregistrering
-- google-apps-script/Code.gs – serverdel til Google Regneark
-- NORMALISERET-REGNEARK.md – faner, nøgler og relationer
-- MASTERPROMPT.md – samlet udviklingsgrundlag
+- `index.html` – sider, formularer og dialoger
+- `js/data-provider.js` – lokal/Google Sheets-adapter
+- `google-apps-script/Code.gs` – serverdel til Google Regneark
+- `NORMALISERET-REGNEARK.md` – faner, nøgler og relationer
+- `MASTERPROMPT.md` – samlet udviklingsgrundlag
+- `service-worker.js` – offlinecache
 
 ## Versionshistorik
 
+- 5.3: Sikker Google Sheets-migration, server-side demo-blokering, revisionslog, ikke-forskydende kolonneoprettelse og synkroniseret klient/server-version.
 - 5.2: Fast installationsvejledning til iPhone/iPad, Android og computer med automatisk markering af den aktuelle enhed.
 - 5.1: Gendanner manglende fiktive kunder i eksisterende demoer og henter nye sider før ældre offlinecache.
 - 5.0: Lille rød S-knap i kundevinduet; markeringen gemmes på kunden og følger automatisk nye opgaver til regnearket.
