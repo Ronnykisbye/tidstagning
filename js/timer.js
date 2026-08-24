@@ -21,13 +21,13 @@
   function selectCustomer(id){
     selectedCustomerId=id||'';document.getElementById('workCustomer').value=selectedCustomerId;document.getElementById('workAddress').value=selectedCustomerId;preview();
   }
-  function employeeOptions(){
+  function employeeOptions(forceCurrent=false){
     const people=app.activeEmployees(),current=app.session?.employeeId;
     ['timerEmployee','manualEmployee','reportEmployee'].forEach(id=>{
       const select=document.getElementById(id);if(!select)return;const old=select.value;
       const first=id==='reportEmployee'?'<option value="">Alle medarbejdere</option>':'<option value="">Vælg medarbejder</option>';
       select.innerHTML=first+people.map(e=>`<option value="${e.id}">${app.escape(e.name)}</option>`).join('');
-      select.value=(old&&people.some(e=>e.id===old)?old:current)||'';
+      select.value=(forceCurrent?current:(old&&people.some(e=>e.id===old)?old:current))||'';
       select.disabled=!app.isManager()&&id!=='reportEmployee';
     });
   }
@@ -81,7 +81,7 @@
       event.target.reset();event.target.elements.date.value=today();employeeOptions();app.buildTimeOptions?.();app.buildWorkTypes?.();
     };
     document.addEventListener('gtp:data',()=>{customerOptions();renderEntries();});
-    document.addEventListener('gtp:session',()=>{employeeOptions();renderEntries();});
+    document.addEventListener('gtp:session',()=>{employeeOptions(true);renderEntries();});
     renderEntries();
   };
 })(window.GTP);
