@@ -11,7 +11,7 @@ window.GTP=window.GTP||{};
     return {id,customerId,employeeIds:[employeeId],start:start.toISOString(),end:new Date(start.getTime()+minutes*60000).toISOString(),seconds:minutes*60,breakMinutes:0,workType:'Service',note,completion,status,followUp:false,followUpNote:'',source:'demo'};
   }
   function seed(data){
-    if((data.demoSeedVersion||0)>=4)return data;
+    if((data.demoSeedVersion||0)>=5)return data;
     const customers=[
       {id:'demo-customer-1',customerNumber:'1001',name:'Kronborg Kontorservice ApS',phone:'70 00 30 01',email:'kontakt@kronborg-kontor.example',address:'Stengade 52, 3000 Helsingør',defaultWorkType:'Rengøring',notes:'DEMOKUNDE – fiktiv. Ugentlig rengøring af kontorer, køkken og mødelokaler.',active:true},
       {id:'demo-customer-2',customerNumber:'1002',name:'Hornbæk Strandhotel Drift',phone:'70 00 31 02',email:'drift@hornbaek-strandhotel.example',address:'Kystvej 18, 3100 Hornbæk',defaultWorkType:'Service',notes:'DEMOKUNDE – fiktiv. Klargøring af fællesarealer.',active:true},
@@ -38,7 +38,15 @@ window.GTP=window.GTP||{};
       {id:'demo-booking-9',date:localDate(8),start:'08:00',duration:'4',customerId:'demo-customer-4',employeeIds:['demo-employee-ronny','demo-employee-1'],note:'Fejlsøgning og planlagt vedligeholdelse.',S:true},
       {id:'demo-booking-10',date:localDate(9),start:'10:30',duration:'2',customerId:'demo-customer-2',employeeIds:['demo-employee-3'],note:'Klargøring og mindre reparationer.'},
       {id:'demo-booking-11',date:localDate(11),start:'07:30',duration:'3',customerId:'demo-customer-5',employeeIds:['demo-employee-2'],note:'Grundig rengøring og opfyldning.'},
-      {id:'demo-booking-12',date:localDate(13),start:'09:00',duration:'5',customerId:'demo-customer-3',employeeIds:['demo-employee-ronny','demo-employee-4'],note:'Sæsonpleje af udearealer.'}
+      {id:'demo-booking-12',date:localDate(13),start:'09:00',duration:'5',customerId:'demo-customer-3',employeeIds:['demo-employee-ronny','demo-employee-4'],note:'Sæsonpleje af udearealer.'},
+      {id:'demo-booking-13',date:localDate(0),start:'08:00',duration:'3',customerId:'demo-customer-1',employeeIds:['demo-employee-2'],note:'Fiktiv opgave: rengøring af kontorer og møderum.'},
+      {id:'demo-booking-14',date:localDate(0),start:'13:30',duration:'2',customerId:'demo-customer-4',employeeIds:['demo-employee-ronny','demo-employee-1'],note:'Fiktiv opgave: teknisk gennemgang og kontrolmåling.',S:true},
+      {id:'demo-booking-15',date:localDate(1),start:'07:30',duration:'2',customerId:'demo-customer-5',employeeIds:['demo-employee-4'],note:'Fiktiv opgave: morgenrengøring og opfyldning.'},
+      {id:'demo-booking-16',date:localDate(2),start:'10:00',duration:'4',customerId:'demo-customer-3',employeeIds:['demo-employee-3','demo-employee-ronny'],note:'Fiktiv opgave: hækklipning og pleje af bede.'},
+      {id:'demo-booking-17',date:localDate(4),start:'09:00',duration:'3',customerId:'demo-customer-2',employeeIds:['demo-employee-1'],note:'Fiktiv opgave: klargøring af fællesarealer.'},
+      {id:'demo-booking-18',date:localDate(7),start:'08:30',duration:'2',customerId:'demo-customer-1',employeeIds:['demo-employee-2','demo-employee-4'],note:'Fiktiv opgave: vinduespudsning og gulvpleje.'},
+      {id:'demo-booking-19',date:localDate(9),start:'11:00',duration:'3',customerId:'demo-customer-4',employeeIds:['demo-employee-ronny'],note:'Fiktiv opgave: fejlsøgning på teknisk installation.',S:true},
+      {id:'demo-booking-20',date:localDate(12),start:'07:00',duration:'4',customerId:'demo-customer-5',employeeIds:['demo-employee-2','demo-employee-3'],note:'Fiktiv opgave: hovedrengøring før åbning.'}
     ];
     const entries=[
       demoEntry('demo-entry-1',1,8,180,'demo-customer-1','demo-employee-2','Kontorrengøring og klargøring.'),
@@ -49,7 +57,7 @@ window.GTP=window.GTP||{};
     employees.forEach(x=>{if(!data.employees.some(y=>y.id===x.id))data.employees.push(x);});
     bookings.forEach(x=>{if(!data.bookings.some(y=>y.id===x.id))data.bookings.push(x);});
     entries.forEach(x=>{if(!data.entries.some(y=>y.id===x.id))data.entries.push(x);});
-    data.demoSeedVersion=4;
+    data.demoSeedVersion=5;
     return data;
   }
   function normalize(data){

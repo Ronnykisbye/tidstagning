@@ -62,6 +62,7 @@ Arkivér i stedet for fysisk sletning. Historiske registreringer skal bevare der
 - medarbejder ser kun bookinger, hvor eget id findes i employeeIds
 - vis antal aftaler på hver kalenderdag
 - advar om overlappende bookinger for samme medarbejder
+- demoudgaven indeholder fiktive opgaver omkring dags dato, så startside og kalender kan afprøves; demo-id'er må aldrig sendes til regnearket
 
 ## Google Regneark
 
