@@ -16,7 +16,6 @@
   }
   app.initDashboard=function(){
     document.querySelectorAll('[data-go-page]').forEach(button=>button.onclick=()=>{app.showPage(button.dataset.goPage);if(button.hasAttribute('data-open-customer'))setTimeout(()=>document.getElementById('addCustomerBtn')?.click(),0);if(button.hasAttribute('data-open-employee'))setTimeout(()=>document.getElementById('addEmployeeBtn')?.click(),0);});
-    document.getElementById('specialQuickAction')?.addEventListener('click',()=>app.startSpecialBooking?.());
     document.getElementById('showCalendarBtn')?.addEventListener('click',()=>app.showPage('calendarPage'));
     document.addEventListener('gtp:data',render);document.addEventListener('gtp:session',render);render();
   };

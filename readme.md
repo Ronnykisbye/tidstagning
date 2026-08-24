@@ -1,4 +1,4 @@
-# GreenTime Pro 4.4
+# GreenTime Pro 4.5
 
 GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
 
@@ -84,6 +84,7 @@ Appen kan installeres på mobil, tablet og computer og har manifest, service wor
 
 ## Versionshistorik
 
+- 4.5: Den lille S-knap vises kun, mens chefen opretter en opgave; efter gemning ses markeringen kun i regnearket.
 - 4.4: Fast rød S-genvej på chefens startside åbner opgaveformularen med S aktiveret.
 - 4.3: Chefens S-knap er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt.
 - 4.2: Fast demochef til Ronny Kisbye og otte ekstra kalenderopgaver, også for eksisterende installationer.

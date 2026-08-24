@@ -25,8 +25,8 @@ Appen har én kodebase og to brugeroplevelser.
 - administrerer kunder og medarbejdere
 - planlægger opgaver og ser rapporter, opfølgninger og log
 - styrer dataforbindelse, eksport, sikkerhedskopi og gendannelse
-- kan markere en opgave med en tydelig knap, der kun hedder S; knappen er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt
-- har en fast kraftigt rød S-genvej på chefens startside; et tryk åbner opgaveformularen med S aktiveret
+- kan ved oprettelse af en opgave markere den med en lille knap, der kun hedder S; knappen er svagt rød i hvile og kraftigt rød samt fysisk nedtrykket, når den er valgt
+- viser aldrig S-knappen på startsiden eller på en allerede oprettet opgave; S-værdien gemmes stadig i regnearkets Opgaver-fane
 - kan aktivere bioadgang på chefens enhed
 
 Demoudgaven skal altid indeholde chefprofilen Ronny Kisbye samt et varieret sæt kommende kalenderopgaver. Nye demodata skal migreres ind på eksisterende installationer uden at overskrive brugerens egne data.

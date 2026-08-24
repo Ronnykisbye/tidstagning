@@ -12,7 +12,7 @@
         <h2>Om appen</h2>
         <p>En enkel løsning til planlægning og tidsregistrering i et mindre firma.</p>
       </div>
-      <span class="about-version">Version 4.4</span>
+      <span class="about-version">Version 4.5</span>
     </div>
 
     <article class="card about-intro">

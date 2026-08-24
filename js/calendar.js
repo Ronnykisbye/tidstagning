@@ -22,8 +22,7 @@
   function dayList(){
     const box=document.getElementById('dayBookings'),items=visible().filter(x=>x.date===selected).sort((a,b)=>a.start.localeCompare(b.start));
     document.getElementById('selectedDate').textContent=new Date(`${selected}T12:00`).toLocaleDateString('da-DK',{weekday:'long',day:'numeric',month:'long'});
-    box.innerHTML=items.length?items.map(booking=>`<article class="booking"><div><strong>${booking.start} · ${app.escape(app.customer(booking.customerId)?.name||'')}</strong><p>${app.escape(booking.note||'')}</p><small>${(booking.employeeIds||[]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${booking.duration} timer</small></div>${app.isManager()?`<div class="booking-controls"><button class="s-toggle compact ${booking.S?'active':''}" aria-pressed="${Boolean(booking.S)}" data-book-s="${booking.id}">S</button><button class="icon-btn danger" data-book-del="${booking.id}">🗑️</button></div>`:''}</article>`).join(''):'<p>Ingen bookinger denne dag.</p>';
-    box.querySelectorAll('[data-book-s]').forEach(button=>button.onclick=()=>{const booking=app.db.bookings.find(x=>x.id===button.dataset.bookS);booking.S=!booking.S;app.save('S ændret');});
+    box.innerHTML=items.length?items.map(booking=>`<article class="booking"><div><strong>${booking.start} · ${app.escape(app.customer(booking.customerId)?.name||'')}</strong><p>${app.escape(booking.note||'')}</p><small>${(booking.employeeIds||[]).map(id=>app.employee(id)?.name).filter(Boolean).join(', ')} · ${booking.duration} timer</small></div>${app.isManager()?`<div class="booking-controls"><button class="icon-btn danger" data-book-del="${booking.id}">🗑️</button></div>`:''}</article>`).join(''):'<p>Ingen bookinger denne dag.</p>';
     box.querySelectorAll('[data-book-del]').forEach(button=>button.onclick=()=>{if(confirm('Arkivér bookingen?')){const booking=app.db.bookings.find(x=>x.id===button.dataset.bookDel);booking.active=false;app.save('Booking arkiveret');}});
   }
   app.initCalendar=function(){
@@ -32,7 +31,6 @@
     const specialButton=document.getElementById('bookingSpecial');
     const drawSpecial=()=>{specialButton.classList.toggle('active',draftS);specialButton.setAttribute('aria-pressed',String(draftS));};
     specialButton.onclick=()=>{draftS=!draftS;drawSpecial();};
-    app.startSpecialBooking=()=>{if(!app.isManager())return;draftS=true;drawSpecial();app.showPage('calendarPage');setTimeout(()=>{document.getElementById('bookingEditor')?.scrollIntoView({behavior:'smooth',block:'start'});specialButton.focus();},120);};
     document.getElementById('bookingForm').onsubmit=event=>{
       event.preventDefault();if(!app.isManager())return;
       const values=Object.fromEntries(new FormData(event.target)),employeeIds=[...document.querySelectorAll('#bookingEmployees input:checked')].map(x=>x.value),booking={...values,id:app.uid(),employeeIds,S:draftS,status:'Planlagt',active:true,addressId:app.customerAddress(values.customerId)?.id||''};
