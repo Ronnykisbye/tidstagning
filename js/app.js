@@ -15,6 +15,24 @@ function gtpIdentityDialog(){
   return dialog;
 }
 
+function gtpDataLoadingDialog(){
+  let dialog=document.getElementById('gtpDataLoadingDialog');
+  if(!dialog){
+    dialog=document.createElement('dialog');
+    dialog.id='gtpDataLoadingDialog';
+    dialog.className='dialog-card';
+    dialog.innerHTML='<div style="min-width:min(420px,80vw)"><h2>Henter data fra Sheetet…</h2><p>Vent venligst. Dine sikre data bliver hentet og klargjort.</p><p class="muted">Det kan tage nogle sekunder.</p></div>';
+    document.body.append(dialog);
+    dialog.addEventListener('cancel',event=>event.preventDefault());
+  }
+  if(!dialog.open)dialog.showModal();
+  return dialog;
+}
+function gtpCloseDataLoading(){
+  const dialog=document.getElementById('gtpDataLoadingDialog');
+  if(dialog?.open)dialog.close();
+}
+
 async function gtpVerifyBeforeStart(A){
   if(!A.provider?.hasDeviceToken?.())return false;
   const identity=A.provider?.identity?.();
@@ -39,6 +57,12 @@ async function gtpVerifyBeforeStart(A){
   }
 }
 
+async function gtpSecurePull(A){
+  gtpDataLoadingDialog();
+  try{return await A.provider.pull();}
+  finally{gtpCloseDataLoading();}
+}
+
 async function gtpActivateInvite(A){
   const params=new URLSearchParams(location.search),invite=params.get('invite');
   if(!invite)return false;
@@ -59,7 +83,7 @@ async function gtpActivateInvite(A){
         await A.provider.activate(invite,name,label);statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
         dialog.close();dialog.remove();
         await gtpVerifyBeforeStart(A);
-        await A.provider.pull();history.replaceState({},'',location.pathname);resolve(true);
+        await gtpSecurePull(A);history.replaceState({},'',location.pathname);resolve(true);
       }catch(error){if(!dialog.isConnected){reject(error);return;}statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
     };
   });
@@ -72,9 +96,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
     activated=await gtpActivateInvite(A);
     if(!activated&&A.provider?.hasDeviceToken?.()){
       await gtpVerifyBeforeStart(A);
-      if(A.provider?.mode?.()==='google-sheets')await A.provider.pull();
+      if(A.provider?.mode?.()==='google-sheets')await gtpSecurePull(A);
     }
   }catch(error){
+    gtpCloseDataLoading();
     console.error('Sikker opstart kunne ikke gennemføres',error);
     alert(error.message||'Identiteten kunne ikke godkendes.');
     return;
