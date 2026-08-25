@@ -4,18 +4,22 @@
     const refresh=()=>{document.getElementById('providerDescription').textContent=app.provider.mode()==='google-sheets'?'Google Regneark-forbindelsen er konfigureret. Data hentes fra Sheetet ved opstart, og nye ændringer synkroniseres automatisk.':'Appen bruger lokale demodata, indtil regnearket tilkobles.';};refresh();
     const refreshBio=async()=>{const enrolled=app.bio.enrolled(),supported=await app.bio.supported();document.getElementById('bioStatus').textContent=enrolled?'Bioadgang er aktiveret på denne enhed.':supported?'Bioadgang kan aktiveres på denne enhed.':'Bioadgang understøttes ikke på denne enhed.';document.getElementById('bioSetup').disabled=!supported;document.getElementById('bioSetup').textContent=enrolled?'Opret igen':'Aktivér bioadgang';document.getElementById('bioTest').disabled=!enrolled;document.getElementById('bioRemove').disabled=!enrolled;};refreshBio();
     document.getElementById('saveEndpoint').onclick=()=>{const value=endpoint.value.trim();if(value&&!/^https:\/\/script\.google\.com\/macros\/s\//.test(value))return alert('Brug webadressen fra en publiceret Google Apps Script-webapp.');app.db.settings.sheetEndpoint=value;app.save('Regnearksforbindelse opdateret');refresh();app.toast(value?'Forbindelsen er gemt':'Lokal lagring er valgt');};
-    document.getElementById('testEndpoint').onclick=async()=>{
-      const button=document.getElementById('testEndpoint');button.disabled=true;button.textContent='Tester…';
+    const testButton=document.getElementById('testEndpoint');
+    let testStatus=document.getElementById('connectionTestStatus');
+    if(!testStatus){testStatus=document.createElement('p');testStatus.id='connectionTestStatus';testStatus.style.marginTop='8px';testStatus.setAttribute('aria-live','polite');testButton.insertAdjacentElement('afterend',testStatus);}
+    testButton.onclick=async()=>{
+      testButton.disabled=true;testButton.textContent='Tester…';testStatus.textContent='Tester forbindelsen…';
       try{
-        const value=endpoint.value.trim();if(!value)throw new Error('Der mangler en Apps Script-webadresse (/exec).');app.db.settings.sheetEndpoint=value;
-        const ping=await app.provider.test();
+        const value=endpoint.value.trim();if(!value)throw new Error('Der mangler en Apps Script-webadresse (/exec).');app.provider.configureEndpoint?.(value);
+        if(!app.provider.hasDeviceToken?.())throw new Error('Denne browser er endnu ikke aktiveret som en sikker 5.7-enhed. Brug et personligt installationslink fra Chefen.');
+        const ping=await app.provider.test();testStatus.textContent='Serveren svarer. Henter sikre Sheet-data…';
         const result=await app.provider.pull();
         const realCustomers=(app.db.customers||[]).filter(x=>!String(x.id||'').startsWith('demo-')&&x.active!==false).length;
         const realEmployees=(app.db.employees||[]).filter(x=>!String(x.id||'').startsWith('demo-')&&x.active!==false).length;
         const totalCustomers=(result?.customers||[]).length,totalEmployees=(result?.employees||[]).length;
-        localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));refresh();
+        localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));refresh();testStatus.textContent=`Forbindelsen virker · version ${ping?.version||'?'}`;
         alert(`Forbindelsen virker · version ${ping?.version||'?'}. Sheet: ${totalCustomers} kunder i alt / ${realCustomers} aktive, ${totalEmployees} medarbejdere i alt / ${realEmployees} aktive.`);
-      }catch(error){alert(`Forbindelsen kunne ikke godkendes: ${error.message}`);}finally{button.disabled=false;button.textContent='Test forbindelse';}
+      }catch(error){testStatus.textContent=`Fejl: ${error.message}`;alert(`Forbindelsen kunne ikke godkendes: ${error.message}`);}finally{testButton.disabled=false;testButton.textContent='Test forbindelse';}
     };
     document.getElementById('bioSetup').onclick=async()=>{const button=document.getElementById('bioSetup');button.disabled=true;try{await app.bio.setup(app.currentEmployee());app.toast('Bioadgang er aktiveret');await refreshBio();}catch(error){alert(error.name==='NotAllowedError'?'Oprettelsen blev afbrudt.':error.message);}finally{button.disabled=false;}};
     document.getElementById('bioTest').onclick=async()=>{try{await app.bio.verify();app.toast('Godkendelsen virker');}catch(error){alert(error.name==='NotAllowedError'?'Godkendelsen blev afbrudt.':error.message);}};
