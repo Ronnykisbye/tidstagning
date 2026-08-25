@@ -31,6 +31,7 @@ function doPost(event){
     const auth = authorize_(request.deviceToken);
     if(action === 'pull') return json_(scopedData_(auth));
     if(action === 'sync') return json_(sync_(auth, request.payload || {}));
+    if(action === 'saveEmployee') return json_(saveEmployee_(auth, request.employee || {}, request.roles || []));
     if(action === 'createInvite') return json_(createInvite_(auth, request.employeeId, request.ttlHours));
     if(action === 'employeeAccess') return json_(employeeAccess_(auth, request.employeeId));
     if(action === 'revokeDevice') return json_(revokeDevice_(auth, request.deviceId));
@@ -87,6 +88,20 @@ function sync_(auth,payload){
   return scopedData_(auth);
 }
 
+function saveEmployee_(auth,employee,roles){
+  assertChef_(auth);
+  if(!employee || !employee.id) throw new Error('Medarbejderen mangler id.');
+  if(String(employee.id).startsWith('demo-')) throw new Error('Demo-data må ikke gemmes.');
+  const clean={id:String(employee.id),name:String(employee.name||'').trim(),email:String(employee.email||'').trim(),phone:String(employee.phone||'').trim(),active:employee.active!==false};
+  if(!clean.name) throw new Error('Medarbejderen mangler navn.');
+  writeOne_('employees',clean);
+  const requested=new Set((Array.isArray(roles)?roles:[]).filter(x=>x==='role-chef'||x==='role-medarbejder'));
+  requested.add('role-medarbejder');
+  ['role-medarbejder','role-chef'].forEach(roleId=>writeOne_('employeeRoles',{id:clean.id+'-'+roleId,employeeId:clean.id,roleId,active:requested.has(roleId)}));
+  audit_('EMPLOYEE SAVE '+clean.id,auth.employee.id);
+  return {ok:true,employee:clean,roles:[...requested]};
+}
+
 function createInvite_(auth,employeeId,ttlHours){
   assertChef_(auth); const employee=activeEmployee_(String(employeeId||'')); if(!employee)throw new Error('Medarbejderen findes ikke eller er arkiveret.');
   read_('invitations').filter(x=>x.employeeId===employee.id&&x.active!==false&&!x.usedAt).forEach(x=>{x.active=false;upsert_('invitations',[x],false);});
@@ -128,6 +143,29 @@ function sheet_(key){
 }
 function headerMap_(sheet){ const width=Math.max(1,sheet.getLastColumn()),headers=sheet.getRange(1,1,1,width).getValues()[0],map={};headers.forEach((v,i)=>{const n=String(v).trim();if(n&&!map[n])map[n]=i+1;});return map; }
 function applyCheckboxes_(sheet,map){ const rule=SpreadsheetApp.newDataValidation().requireCheckbox().build();['S','active','followUp'].forEach(h=>{const c=map[h];if(c)sheet.getRange(2,c,Math.max(1,sheet.getMaxRows()-1),1).setDataValidation(rule);}); }
+function firstFreeRow_(sheet,idColumn){
+  const maxRows=Math.max(2,sheet.getMaxRows());
+  const values=sheet.getRange(2,idColumn,maxRows-1,1).getValues();
+  const index=values.findIndex(row=>String(row[0]||'').trim()==='');
+  if(index>=0)return index+2;
+  sheet.insertRowAfter(maxRows);
+  return maxRows+1;
+}
+function writeOne_(key,item){
+  const config=TABLES[key],sheet=sheet_(key),columns=headerMap_(sheet),idColumn=columns.id;
+  if(!idColumn)throw new Error('Mangler id-kolonne i '+config.sheet);
+  const lastRow=sheet.getLastRow();
+  let row=0;
+  if(lastRow>1){const ids=sheet.getRange(2,idColumn,lastRow-1,1).getValues().flat().map(String);const found=ids.indexOf(String(item.id));if(found>=0)row=found+2;}
+  if(!row)row=firstFreeRow_(sheet,idColumn);
+  const width=Math.max(1,sheet.getLastColumn()),values=Array(width).fill('');
+  if(row<=sheet.getLastRow()){
+    const existing=sheet.getRange(row,1,1,width).getValues()[0];
+    existing.forEach((value,index)=>values[index]=value);
+  }
+  config.headers.forEach(header=>{const col=columns[header];if(!col)return;let value=item[header];if(Array.isArray(value))value=JSON.stringify(value);if(value===undefined||value===null)value='';values[col-1]=value;});
+  sheet.getRange(row,1,1,width).setValues([values]);
+}
 function upsert_(key,items,writeAudit){
   if(!items.length)return;
   const config=TABLES[key],sheet=sheet_(key),columns=headerMap_(sheet),idColumn=columns.id;
