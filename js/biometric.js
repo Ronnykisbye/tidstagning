@@ -10,13 +10,13 @@
     return PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
   }
   async function setup(employee){
-    if(!employee)throw new Error('Vælg en chefprofil først.');
-    if(!await supported())throw new Error('Denne enhed understøtter ikke bioadgang i browseren.');
+    if(!employee)throw new Error('Der mangler en medarbejderprofil.');
+    if(!await supported())throw new Error('Denne enhed understøtter ikke sikker enhedsgodkendelse i browseren.');
     const userId=randomBytes(32);
     const credential=await navigator.credentials.create({publicKey:{
       challenge:randomBytes(32),
       rp:{name:'GreenTime Pro',id:location.hostname},
-      user:{id:userId,name:`manager-${employee.id}`,displayName:employee.name},
+      user:{id:userId,name:`greentime-${employee.id}`,displayName:employee.name},
       pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
       authenticatorSelection:{authenticatorAttachment:'platform',residentKey:'preferred',userVerification:'required'},
       timeout:60000,attestation:'none'
@@ -26,11 +26,12 @@
     const saved={credentialId:toBase64Url(credential.rawId),employeeId:employee.id,createdAt:new Date().toISOString(),publicKey:publicKey?toBase64Url(publicKey):'',algorithm:credential.response.getPublicKeyAlgorithm?.()||null};
     localStorage.setItem(KEY,JSON.stringify(saved));return saved;
   }
-  async function verify(){
-    const saved=record();if(!saved)throw new Error('Bioadgang er ikke aktiveret.');
+  async function verify(employeeId){
+    const saved=record();if(!saved)throw new Error('Sikker enhedsgodkendelse er ikke aktiveret.');
+    if(employeeId&&saved.employeeId!==employeeId)throw new Error('Denne sikkerhedsnøgle tilhører en anden medarbejder på enheden.');
     const assertion=await navigator.credentials.get({publicKey:{challenge:randomBytes(32),allowCredentials:[{type:'public-key',id:fromBase64Url(saved.credentialId)}],userVerification:'required',timeout:60000}});
     if(!assertion||toBase64Url(assertion.rawId)!==saved.credentialId)throw new Error('Godkendelsen kunne ikke bekræftes.');
     return true;
   }
-  app.bio={supported,enrolled:()=>Boolean(record()),record,setup,verify,remove(){localStorage.removeItem(KEY);}};
+  app.bio={supported,enrolled:()=>Boolean(record()),enrolledFor:employeeId=>Boolean(record()&&record().employeeId===employeeId),record,setup,verify,remove(){localStorage.removeItem(KEY);}};
 })(window.GTP);
