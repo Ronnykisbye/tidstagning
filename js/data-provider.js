@@ -34,5 +34,6 @@
   function persist(action){localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));document.dispatchEvent(new CustomEvent('gtp:data',{detail:{action}}));}
   async function pull(){if(!endpoint()){setState('Gemt på enheden','local');return null;}setState('Henter fra Sheet…','working');try{const result=await request('pull');applyRemote(result);persist('Hentet fra Sheet');setState('Sheet-data hentet','ok');return result;}catch(error){console.warn('Hentning fra Sheet mislykkedes',error);setState('Kun lokale data · hentning mislykkedes','error');throw error;}}
   async function sync(){if(!endpoint()){setState('Gemt på enheden','local');return null;}setState('Synkroniserer…','working');try{const result=await request('sync',normalizedPayload());applyRemote(result);persist('Synkroniseret');setState('Synkroniseret','ok');return result;}catch(error){console.warn('Synkronisering afventer',error);setState('Lokalt gemt · synkronisering afventer','error');throw error;}}
-  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,async test(){return request('ping',{sentAt:new Date().toISOString()});},normalizedPayload};
+  async function syncNow(){clearTimeout(syncTimer);return sync();}
+  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,syncNow,async test(){return request('ping',{sentAt:new Date().toISOString()});},normalizedPayload};
 })(window.GTP);
