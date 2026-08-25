@@ -87,6 +87,8 @@ Rapporter er kun til Chef-rollen. Understøt mindst:
 
 Filtre: Fra dato, Til dato, Kunde, Medarbejder.
 
+Demo-data skal være skjult som standard i rapporter. En lille knap `Vis demo` skal kunne slå fiktive kunder, medarbejdere og registreringer til. Når de vises, skifter knappen til `Skjul demo`. Kunde- og medarbejderrullemenuer, rapportresultater og CSV-eksport skal respektere samme demo-valg.
+
 Legacy-feltet `Tidsforbrug` i `Formularsvar 1` er decimaltimer. Gamle gruppetimer må aldrig fordeles automatisk på medarbejdere. Kundens historiske timeforbrug må tælles én gang for opgaven, mens medarbejderrapporter kun må bruge entydige medarbejdertimer.
 
 ## Google Regneark
@@ -171,13 +173,13 @@ En GitHub-commit alene opdaterer ikke automatisk Google Apps Script-projektet.
 
 ## PWA og offline
 
-Opdatér service worker-cacheversionen ved filændringer. Aktuel cache for version 5.6: `greentime-pro-v35`.
+Opdatér service worker-cacheversionen ved filændringer. Aktuel cache for version 5.6: `greentime-pro-v36`.
 
 ## Kvalitetssikring før GitHub
 
 1. Kør syntakskontrol på alle ændrede JavaScript-filer og Code.gs.
 2. Test både Medarbejder- og Chef-adgang via `MedarbejderRoller`.
-3. Test rapportgenerator og legacy-data.
+3. Test rapportgenerator og legacy-data, inklusive at demo er skjult som standard og kan slås til/fra med den lille knap.
 4. Test `ping`, read-only `pull` og skrivende `sync` separat.
 5. Test at `pull` henter 11 kunder og 5 medarbejderposter fra produktionsarket uden at skrive først.
 6. Test at demo-data aldrig sendes til Sheetet.
