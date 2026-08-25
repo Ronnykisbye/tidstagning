@@ -17,10 +17,14 @@
   function setState(text,state='local'){const node=document.getElementById('syncState');if(!node)return;node.textContent=text;node.dataset.state=state;}
   async function request(action,payload={},extra={}){
     if(!endpoint())throw new Error('Der er ikke angivet en Apps Script-webadresse.');
-    const body={action,payload,clientVersion:'5.7',deviceToken:deviceToken(),...extra};
-    const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
-    if(!response.ok)throw new Error(`Forbindelsen svarede med fejl ${response.status}.`);
-    const result=await response.json();if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');return result;
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+    try{
+      const body={action,payload,clientVersion:'5.7',deviceToken:deviceToken(),...extra};
+      const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),signal:controller.signal});
+      if(!response.ok)throw new Error(`Forbindelsen svarede med fejl ${response.status}.`);
+      const result=await response.json();if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');return result;
+    }catch(error){if(error?.name==='AbortError')throw new Error('Forbindelsen svarede ikke inden 8 sekunder.');throw error;}
+    finally{clearTimeout(timer);}
   }
   function normalizedPayload(){
     const timeEntries=app.db.entries.filter(real).flatMap(entry=>(entry.employeeIds||[entry.employeeId]).filter(Boolean).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:entry.sheetRowIds?.[employeeId]||((entry.employeeIds||[]).length<=1?entry.id:`${entry.id}-${employeeId}`),registrationId:entry.registrationId||entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,seconds:entry.seconds,workType:entry.workType||'',note:entry.note||'',completion:entry.completion||0,status:entry.status||'',followUp:Boolean(entry.followUp),followUpNote:entry.followUpNote||'',source:entry.source||'local'})).filter(safeReal);
