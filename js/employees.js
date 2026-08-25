@@ -1,65 +1,34 @@
 (function(app){
-  let showDemo=false;
+  let showDemo=false,accessEmployee=null;
   const isDemo=id=>String(id||'').startsWith('demo-');
-  function roleNames(employeeId){
-    const names=app.employeeRoleNames?.(employeeId)||[];
-    return names.length?names.join(' + '):'Ingen rolle';
+  function roleNames(employeeId){const names=app.employeeRoleNames?.(employeeId)||[];return names.length?names.join(' + '):'Ingen rolle';}
+  function setRole(employeeId,roleId,active){let link=app.db.employeeRoles.find(x=>x.employeeId===employeeId&&x.roleId===roleId);if(link)link.active=active;else app.db.employeeRoles.push({id:`${employeeId}-${roleId}`,employeeId,roleId,active});}
+  function ensureDemoToggle(){const head=document.querySelector('#employeesPage .page-head');if(!head||document.getElementById('toggleEmployeeDemo'))return;const actions=document.createElement('div');actions.className='actions';const demo=document.createElement('button');demo.id='toggleEmployeeDemo';demo.type='button';demo.textContent='Vis demo';demo.title='Vis eller skjul fiktive demo-medarbejdere';demo.setAttribute('aria-pressed','false');const add=document.getElementById('addEmployeeBtn');if(add){add.parentNode.insertBefore(actions,add);actions.append(demo,add);}else head.append(actions);demo.onclick=()=>{showDemo=!showDemo;demo.textContent=showDemo?'Skjul demo':'Vis demo';demo.setAttribute('aria-pressed',String(showDemo));render();};}
+  function ensureAccessDialog(){
+    if(document.getElementById('employeeAccessDialog'))return;
+    const dialog=document.createElement('dialog');dialog.id='employeeAccessDialog';dialog.className='dialog-card';dialog.innerHTML=`<div class="page-head"><div><h2 id="employeeAccessTitle">App-adgang</h2><p>Personligt installationslink og godkendte enheder.</p></div></div><div id="employeeAccessDevices"></div><div class="actions"><button id="createEmployeeInvite" class="primary">Lav nyt installationslink</button><button id="employeeAccessClose">Luk</button></div><div id="employeeInviteShare" hidden><label>Personligt link<input id="employeeInviteUrl" readonly></label><p id="employeeInviteExpiry"></p><div class="actions"><button id="employeeInviteSms">SMS</button><button id="employeeInviteMail">E-mail</button><button id="employeeInviteCopy">Kopiér link</button></div></div>`;document.body.append(dialog);
+    document.getElementById('employeeAccessClose').onclick=()=>dialog.close();
+    document.getElementById('createEmployeeInvite').onclick=createInvite;
+    document.getElementById('employeeInviteCopy').onclick=async()=>{const url=document.getElementById('employeeInviteUrl').value;try{await navigator.clipboard.writeText(url);app.toast('Installationslink kopieret');}catch{prompt('Kopiér linket:',url);}};
+    document.getElementById('employeeInviteSms').onclick=()=>{const url=document.getElementById('employeeInviteUrl').value;if(!accessEmployee?.phone)return alert('Medarbejderen har ikke et telefonnummer.');const text=`GreenTime Pro: Åbn dit personlige installationslink. Linket er kun til dig og udløber efter 48 timer. ${url}`;location.href=`sms:${encodeURIComponent(accessEmployee.phone)}?body=${encodeURIComponent(text)}`;};
+    document.getElementById('employeeInviteMail').onclick=()=>{const url=document.getElementById('employeeInviteUrl').value;if(!accessEmployee?.email)return alert('Medarbejderen har ikke en e-mailadresse.');const subject='Din GreenTime Pro app';const body=`Hej ${accessEmployee.name}\n\nÅbn dit personlige installationslink til GreenTime Pro:\n${url}\n\nLinket er kun til dig, kan kun bruges én gang og udløber efter 48 timer.`;location.href=`mailto:${encodeURIComponent(accessEmployee.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;};
   }
-  function setRole(employeeId,roleId,active){
-    let link=app.db.employeeRoles.find(x=>x.employeeId===employeeId&&x.roleId===roleId);
-    if(link)link.active=active;
-    else app.db.employeeRoles.push({id:`${employeeId}-${roleId}`,employeeId,roleId,active});
+  async function refreshAccess(){
+    if(!accessEmployee)return;const box=document.getElementById('employeeAccessDevices');box.innerHTML='<p>Henter enheder…</p>';
+    try{const result=await app.provider.employeeAccess(accessEmployee.id),active=(result.devices||[]).filter(x=>x.active&&!x.revokedAt);box.innerHTML=`<h3>Aktive enheder</h3>${active.length?active.map(x=>`<div class="customer-preview"><strong>${app.escape(x.deviceLabel||'Enhed')}</strong><br><small>Aktiveret ${new Date(x.createdAt).toLocaleString('da-DK')} · sidst set ${x.lastSeenAt?new Date(x.lastSeenAt).toLocaleString('da-DK'):'ukendt'}</small><div class="actions"><button class="danger" data-revoke-device="${x.id}">Fjern adgang</button></div></div>`).join(''):'<p>Ingen aktive enheder.</p>'}`;
+      box.querySelectorAll('[data-revoke-device]').forEach(button=>button.onclick=async()=>{if(!confirm('Fjern denne enheds adgang til GreenTime Pro?'))return;try{await app.provider.revokeDevice(button.dataset.revokeDevice);app.toast('Enhedens adgang er fjernet');await refreshAccess();}catch(error){alert(error.message);}});
+    }catch(error){box.innerHTML=`<p>${app.escape(error.message)}</p>`;}
   }
-  function ensureDemoToggle(){
-    const head=document.querySelector('#employeesPage .page-head');
-    if(!head||document.getElementById('toggleEmployeeDemo'))return;
-    const actions=document.createElement('div');actions.className='actions';
-    const demo=document.createElement('button');demo.id='toggleEmployeeDemo';demo.type='button';demo.textContent='Vis demo';demo.title='Vis eller skjul fiktive demo-medarbejdere';demo.setAttribute('aria-pressed','false');
-    const add=document.getElementById('addEmployeeBtn');
-    if(add){add.parentNode.insertBefore(actions,add);actions.append(demo,add);}else head.append(actions);
-    demo.onclick=()=>{showDemo=!showDemo;demo.textContent=showDemo?'Skjul demo':'Vis demo';demo.setAttribute('aria-pressed',String(showDemo));render();};
-  }
+  async function openAccess(employee){if(isDemo(employee.id))return app.toast('Demo-medarbejdere får ikke installationslinks');ensureAccessDialog();accessEmployee=employee;document.getElementById('employeeAccessTitle').textContent=`App-adgang · ${employee.name}`;document.getElementById('employeeInviteShare').hidden=true;const dialog=document.getElementById('employeeAccessDialog');dialog.showModal();await refreshAccess();}
+  async function createInvite(){if(!accessEmployee)return;const button=document.getElementById('createEmployeeInvite');button.disabled=true;button.textContent='Opretter…';try{const result=await app.provider.createInvite(accessEmployee.id);document.getElementById('employeeInviteUrl').value=result.inviteUrl;document.getElementById('employeeInviteExpiry').textContent=`Engangslink · udløber ${new Date(result.expiresAt).toLocaleString('da-DK')}`;document.getElementById('employeeInviteShare').hidden=false;document.getElementById('employeeInviteSms').disabled=!accessEmployee.phone;document.getElementById('employeeInviteMail').disabled=!accessEmployee.email;app.toast('Sikkert installationslink oprettet');}catch(error){alert(error.message);}finally{button.disabled=false;button.textContent='Lav nyt installationslink';}}
   function render(){
     const body=document.querySelector('#employeeTable tbody');if(!body)return;body.innerHTML='';
     const employees=app.activeEmployees().filter(employee=>showDemo||!isDemo(employee.id));
-    employees.forEach(employee=>{
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td><strong>${app.escape(employee.name)}</strong>${isDemo(employee.id)?' <small>(demo)</small>':''}</td><td>${app.escape(employee.email)}</td><td>${app.escape(employee.phone)}</td><td><span class="status-pill">${app.escape(roleNames(employee.id))}</span></td><td><button class="icon-btn" data-emp-edit="${employee.id}" aria-label="Rediger">✏️</button><button class="icon-btn danger" data-emp-del="${employee.id}" aria-label="Arkivér">🗑️</button></td>`;body.append(tr);
-    });
+    employees.forEach(employee=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${app.escape(employee.name)}</strong>${isDemo(employee.id)?' <small>(demo)</small>':''}</td><td>${app.escape(employee.email)}</td><td>${app.escape(employee.phone)}</td><td><span class="status-pill">${app.escape(roleNames(employee.id))}</span></td><td>${!isDemo(employee.id)?`<button class="icon-btn" data-emp-access="${employee.id}" aria-label="Send app og administrér enheder" title="Send app / enheder">📲</button>`:''}<button class="icon-btn" data-emp-edit="${employee.id}" aria-label="Rediger">✏️</button><button class="icon-btn danger" data-emp-del="${employee.id}" aria-label="Arkivér">🗑️</button></td>`;body.append(tr);});
+    body.querySelectorAll('[data-emp-access]').forEach(b=>b.onclick=()=>openAccess(app.employee(b.dataset.empAccess)));
     body.querySelectorAll('[data-emp-edit]').forEach(b=>b.onclick=()=>open(app.employee(b.dataset.empEdit)));
-    body.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=async()=>{const employee=app.employee(b.dataset.empDel);if(employee.id===app.session?.employeeId)return alert('Du kan ikke arkivere den profil, der bruges lige nu.');if(confirm(`Arkivér ${employee.name}?`)){employee.active=false;app.db.employeeRoles.filter(x=>x.employeeId===employee.id).forEach(x=>x.active=false);app.save(`Medarbejder arkiveret: ${employee.name}`);render();if(isDemo(employee.id))return app.toast('Demo-medarbejderen er skjult lokalt');try{await app.provider?.syncNow?.();app.toast('Medarbejderen er arkiveret i Sheetet');}catch{app.toast('Arkiveret lokalt · Sheet-synkronisering fejlede');}}});
-    app.fillSelects?.();
+    body.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=async()=>{const employee=app.employee(b.dataset.empDel);if(employee.id===app.session?.employeeId)return alert('Du kan ikke arkivere den profil, der bruges lige nu.');if(confirm(`Arkivér ${employee.name}?`)){employee.active=false;app.db.employeeRoles.filter(x=>x.employeeId===employee.id).forEach(x=>x.active=false);app.save(`Medarbejder arkiveret: ${employee.name}`);render();if(isDemo(employee.id))return app.toast('Demo-medarbejderen er skjult lokalt');try{await app.provider?.syncNow?.();app.toast('Medarbejderen er arkiveret i Sheetet');}catch{app.toast('Arkiveret lokalt · Sheet-synkronisering fejlede');}}});app.fillSelects?.();
   }
-  function open(employee={}){
-    if(!app.isManager())return app.toast('Kun chefen kan redigere medarbejdere');
-    const form=document.getElementById('employeeForm');form.reset();form.elements.id.value=employee.id||'';
-    ['name','email','phone'].forEach(key=>form.elements[key].value=employee[key]||'');
-    form.elements.role.value=employee.id&&app.hasRole?.(employee.id,'role-chef')?'Chef':'Medarbejder';
-    document.getElementById('employeeDialog').showModal();
-  }
-  app.initEmployees=function(){
-    ensureDemoToggle();
-    document.getElementById('addEmployeeBtn').onclick=()=>open();
-    document.getElementById('employeeCancel').onclick=()=>document.getElementById('employeeDialog').close();
-    document.getElementById('employeeForm').onsubmit=async event=>{
-      event.preventDefault();const form=event.target,values=Object.fromEntries(new FormData(form));let employee=app.employee(values.id);const isNew=!employee;
-      if(employee)Object.assign(employee,{name:values.name,email:values.email,phone:values.phone});
-      else {employee={id:app.uid(),name:values.name,email:values.email,phone:values.phone,active:true};app.db.employees.push(employee);}
-      if(values.role==='Chef'){
-        setRole(employee.id,'role-chef',true);
-        setRole(employee.id,'role-medarbejder',true);
-      }else{
-        setRole(employee.id,'role-medarbejder',true);
-        setRole(employee.id,'role-chef',false);
-      }
-      employee.role=values.role;
-      app.save(`Medarbejder gemt: ${values.name}`);document.getElementById('employeeDialog').close();render();app.applyAccess?.();
-      if(isDemo(employee.id))return app.toast('Demo-medarbejderen er gemt lokalt');
-      if(app.provider?.mode?.()==='google-sheets'){
-        try{await app.provider.syncNow();app.toast('Medarbejderen er gemt i Sheetet');}
-        catch(error){alert(`Medarbejderen er gemt lokalt, men kunne ikke gemmes i Sheetet: ${error.message}`);}
-      }else app.toast('Medarbejderen er gemt lokalt');
-    };
-    document.addEventListener('gtp:data',render);render();
-  };
+  function open(employee={}){if(!app.isManager())return app.toast('Kun chefen kan redigere medarbejdere');const form=document.getElementById('employeeForm');form.reset();form.elements.id.value=employee.id||'';['name','email','phone'].forEach(key=>form.elements[key].value=employee[key]||'');form.elements.role.value=employee.id&&app.hasRole?.(employee.id,'role-chef')?'Chef':'Medarbejder';document.getElementById('employeeDialog').showModal();}
+  app.initEmployees=function(){ensureDemoToggle();ensureAccessDialog();document.getElementById('addEmployeeBtn').onclick=()=>open();document.getElementById('employeeCancel').onclick=()=>document.getElementById('employeeDialog').close();document.getElementById('employeeForm').onsubmit=async event=>{event.preventDefault();const form=event.target,values=Object.fromEntries(new FormData(form));let employee=app.employee(values.id);if(employee)Object.assign(employee,{name:values.name,email:values.email,phone:values.phone});else{employee={id:app.uid(),name:values.name,email:values.email,phone:values.phone,active:true};app.db.employees.push(employee);}if(values.role==='Chef'){setRole(employee.id,'role-chef',true);setRole(employee.id,'role-medarbejder',true);}else{setRole(employee.id,'role-medarbejder',true);setRole(employee.id,'role-chef',false);}employee.role=values.role;app.save(`Medarbejder gemt: ${values.name}`);document.getElementById('employeeDialog').close();render();app.applyAccess?.();if(isDemo(employee.id))return app.toast('Demo-medarbejderen er gemt lokalt');if(app.provider?.mode?.()==='google-sheets'){try{await app.provider.syncNow();app.toast('Medarbejderen er gemt i Sheetet');}catch(error){alert(`Medarbejderen er gemt lokalt, men kunne ikke gemmes i Sheetet: ${error.message}`);}}else app.toast('Medarbejderen er gemt lokalt');};document.addEventListener('gtp:data',render);render();};
 })(window.GTP);
