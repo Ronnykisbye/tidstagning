@@ -1,191 +1,213 @@
 # Masterprompt – GreenTime Pro
 
-Du er senior webudvikler, UX-designer og kvalitetstester på GreenTime Pro. Appen er en installerbar, mobilvenlig PWA til et mindre firma med medarbejdere, der udfører arbejde hos kunder.
+Du er senior webudvikler, UX-designer og sikkerhedsansvarlig for GreenTime Pro, en installerbar PWA til et mindre servicefirma.
 
-## Hovedmål
+## Hovedregel
 
-Byg en enkel og meget interaktiv app, der erstatter en manuel Google Forms-arbejdsgang. Bevar altid fungerende funktioner. Løsningen skal fungere på mobil og desktop med en brugbar offlineoplevelse.
+Bevar altid fungerende funktioner, men sikkerhed går foran bekvemmelighed. Adgangskontrol må aldrig kun være visuel. Serveren skal filtrere og validere alle datahandlinger.
 
-Aktuel hovedversion er 5.6. PWA-cache skal opdateres ved kodeændringer.
+Aktuel hovedversion: **5.7**. Aktuel PWA-cache: `greentime-pro-v38`.
 
-## Personer, roller og rettigheder
+## Roller
 
-En person oprettes én gang i `Medarbejdere`. Roller er separate relationer i `MedarbejderRoller`. En person kan derfor have flere roller samtidig.
+Personer findes én gang i `Medarbejdere`. Roller ligger separat i `MedarbejderRoller`.
 
-Roller:
-- `Medarbejder` – almindelig arbejdsadgang.
-- `Chef` – ekstra adgangsrolle med flere rettigheder.
+- `Medarbejder`: almindelig arbejdsadgang.
+- `Chef`: ekstra rettighed oven på Medarbejder.
 
-Chef er ikke en anden type person. Tildeling af Chef må aldrig fjerne personens Medarbejder-rolle.
-
-Aktuel rollefordeling i de migrerede virkelige data:
-- Ronny Kisbye: kun Medarbejder.
+Aktuel virkelig rollefordeling:
 - Lars Wiberg: Medarbejder + Chef.
+- Ronny Kisbye: kun Medarbejder.
 
-### Medarbejder
-- vælger sit navn fra en dropdown ved første start
-- ser kun egne opgaver og registreringer
-- må læse aktive kunders navn, adresse, kontaktdata og arbejdsnote
-- må registrere eget udførte arbejde med timer eller manuel tid
-- må ikke administrere kunder, medarbejdere, rapporter, log eller indstillinger
+Chef er ikke en separat persontype.
 
-### Chef
-- har alle medarbejderfunktioner og kan selv registrere arbejde
-- ser alle opgaver og registreringer
-- administrerer kunder og medarbejdere
-- tildeler/fjerner Chef-rettighed som separat rolle
-- planlægger opgaver og ser rapporter, opfølgninger og log
-- styrer dataforbindelse, eksport, sikkerhedskopi og gendannelse
-- kan markere en kunde med en lille knap, der kun hedder S
-- nye opgaver arver kundens S-værdi som udgangspunkt
-- kan aktivere bioadgang på chefens enhed
+## Sikker medarbejderinstallation – obligatorisk fra 5.7
 
-Demo-data skal altid have id'er, der begynder `demo-`, og må aldrig sendes til produktionsarket. Ronny Kisbye må ikke automatisk gøres til Chef i den virkelige datamodel.
+En medarbejder må **aldrig vælge mellem firmaets medarbejdere på sin personlige installation**.
 
-## Tidsregistrering
+Flow:
 
-Understøt start/stop og manuel registrering.
+1. Chef opretter eller vælger medarbejderen.
+2. Chef trykker `📲` / App-adgang.
+3. Serveren laver et kryptografisk tilfældigt engangs-token.
+4. Sheetet gemmer kun SHA-256-hash af tokenet.
+5. Invitationen er bundet til `employeeId`, udløber efter 48 timer og kan bruges én gang.
+6. Chef kan sende linket via SMS/e-mail eller kopiere det.
+7. Linket indeholder invitationstoken og Apps Script-endpoint, så en ny enhed kan konfigureres automatisk.
+8. Medarbejderen åbner linket og skriver sit navn præcis som registreret.
+9. Navnet er kun en ekstra kontrol; navn alene må aldrig give adgang.
+10. Serveren udsteder et langt device-token og gemmer kun hash af dette i `Enheder`.
+11. Installationens lokale session låses til invitationens `employeeId`.
+12. Profilskift er deaktiveret på en personlig medarbejderenhed.
 
-Normaliseret tidsregistrering rummer:
-id, registrationId, orderId, customerId, employeeId, start, end, breakMinutes, seconds, workType, note, completion, status, followUp, followUpNote og source.
+Chef skal kunne se aktive enheder og tilbagekalde en enhed, fx ved mistet eller udskiftet telefon.
 
-Valider kunde, medarbejder, kronologisk tid, positiv nettotid, færdiggørelse 0–100 og beskrivelse.
+### Vigtig sikkerhedsbegrænsning
 
-## Kunder, adresser og medarbejdere
+Det nuværende device-token ligger i browser/PWA localStorage og er derfor en stærk bearer credential, men ikke kryptografisk hardwarebundet. Beskriv det ikke som umuligt at kopiere. En senere version kan supplere med WebAuthn/passkey-signering for egentlig hardware-/platformbinding.
 
-Kunder: id, customerNumber, name, phone, email, defaultWorkType, notes, S, active.
+## Server-side dataminimering
 
-Adresser: id, customerId, label, address, postalCode, city, active.
+En medarbejderenhed må aldrig modtage en fuld medarbejderliste.
 
-Medarbejdere: id, name, email, phone, active.
+Serverens medarbejder-`pull` må kun returnere:
 
-Roller: id, name, active.
+- egen medarbejderpost
+- egne aktive rollelinks
+- egne opgaver via `OpgaveMedarbejdere`
+- egne tidsregistreringer
+- kun de kunder/adresser der er nødvendige for egne opgaver/registreringer
+- arbejdstyper
 
-MedarbejderRoller: id, employeeId, roleId, active.
+Den må ikke returnere:
 
-Arkivér i stedet for fysisk sletning. Historiske registreringer skal bevare deres id-reference.
+- andre medarbejderposter
+- kollegers kontaktoplysninger
+- Chef-log
+- rapportdata for andre personer
+- andre medarbejderes tidsregistreringer
 
-## Kalender og opgaver
+Hvis flere medarbejdere er tilknyttet samme opgave, skal serveren kun returnere et `teamSize`/antal. Medarbejderens UI viser **`Flere medarbejdere på opgaven`**, aldrig kollegernes navne. Chef ser fortsat navnene.
 
-- chef kan oprette og arkivere opgaver
-- medarbejder ser kun opgaver, hvor eget id findes via `OpgaveMedarbejdere`
-- vis antal aftaler på hver kalenderdag
-- advar om overlappende bookinger for samme medarbejder
-- historiske opgavers S må aldrig ændres automatisk, hvis kundens S senere ændres
-- demo-id'er må aldrig sendes til regnearket
+## Skriveadgang
 
-## Rapportgenerator
+Alle datahandlinger bortset fra `ping` og `activate` kræver gyldigt device-token.
 
-Rapporter er kun til Chef-rollen. Understøt mindst:
-- Detaljeret tidsrapport
-- Timer for medarbejder
-- Timer hos kunde
-- Samlet timeforbrug pr. kunde
-- Samlet timeforbrug pr. medarbejder
-- Ikke færdige registreringer
-- Kræver opfølgning
+Medarbejder:
+- må kun skrive egne tidsregistreringer
+- serveren skal kontrollere `employeeId === authenticatedEmployeeId`
+- må ikke oprette/redigere medarbejdere, kunder, roller, invitationer, enheder eller opgaver via API
 
-Filtre: Fra dato, Til dato, Kunde, Medarbejder.
+Chef:
+- kan synkronisere normaliserede virksomhedsdata
+- kan oprette invitationer
+- kan se enhedsstatus
+- kan tilbagekalde enheder
 
-Demo-data skal være skjult som standard i rapporter. En lille knap `Vis demo` skal kunne slå fiktive kunder, medarbejdere og registreringer til. Når de vises, skifter knappen til `Skjul demo`. Kunde- og medarbejderrullemenuer, rapportresultater og CSV-eksport skal respektere samme demo-valg.
+Demo-id'er (`demo-...`) skal altid afvises server-side.
 
-Legacy-feltet `Tidsforbrug` i `Formularsvar 1` er decimaltimer. Gamle gruppetimer må aldrig fordeles automatisk på medarbejdere. Kundens historiske timeforbrug må tælles én gang for opgaven, mens medarbejderrapporter kun må bruge entydige medarbejdertimer.
+## Apps Script handlinger 5.7
 
-## Google Regneark
+Offentlige:
+- `ping`: må kun returnere service/version/schema, ikke Sheet-data.
+- `activate`: kræver gyldig ubrugt invitation, ikke udløbet, plus korrekt medarbejdernavn.
 
-Appen fungerer lokalt uden et regneark. Ekstern adgang går gennem en publiceret Apps Script-webapp.
+Autentificerede:
+- `pull`: returnerer Chef-scope eller medarbejder-scope.
+- `sync`: rollevalideret skrivning.
+- `createInvite`: kun Chef.
+- `employeeAccess`: kun Chef.
+- `revokeDevice`: kun Chef.
 
-Produktionsarket er fast identificeret med spreadsheet-id:
+Serverversion: `5.7`.
+SchemaVersion: `5`.
+
+## Google Sheet
+
+Produktionsark-id:
 `1L7cf-mY_RD3UBDTqDSa7MJIweqxaxoFs2QC3pAcUjWI`
 
-Apps Script skal bruge `SpreadsheetApp.openById(...)` til dette ark og må ikke stole på et tilfældigt aktivt/bundet regneark.
+Apps Script bruger altid `SpreadsheetApp.openById(...)`.
 
-### Vigtig synkroniseringsregel fra 5.6
+Faner:
+- Kunder
+- Adresser
+- Medarbejdere
+- Roller
+- MedarbejderRoller
+- Opgaver
+- OpgaveMedarbejdere
+- Tidsregistreringer
+- Arbejdstyper
+- Ændringslog
+- Invitationer
+- Enheder
 
-Læsning og skrivning er adskilt:
+Invitationer:
+`id, employeeId, tokenHash, expiresAt, usedAt, createdAt, createdBy, active`
 
-- `pull` = ren læsning fra Sheetet. Må aldrig skrive eller upserte noget først.
-- `sync` = skriver lokale, ikke-demo ændringer og returnerer derefter de normaliserede data.
-- appstart med konfigureret `/exec` skal bruge `pull`
-- `Test forbindelse` skal bruge `ping` + `pull`, ikke `sync`
-- `sync` må først bruges ved reelle ændringer, der skal gemmes
+Enheder:
+`id, employeeId, tokenHash, deviceLabel, createdAt, lastSeenAt, revokedAt, active, createdFromInviteId`
 
-Dette forhindrer, at lokale eller delvist indlæste data overskriver/forstyrrer første indlæsning fra produktionsarket.
-
-Adapteren skal kunne:
-- teste forbindelsen
-- hente alle normaliserede tabeller med `pull`
-- upserte efter stabilt id med `sync`
-- bevare lokale data ved netværksfejl
-- vise synkroniseringsstatus
-- aldrig sende demo-poster
-
-Regnearket normaliseres i fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog.
-
-Både `pull` og `sync` skal kunne returnere:
-customers, addresses, employees, roles, employeeRoles, orders, orderAssignments, timeEntries, workTypes og audit.
-
-Apps Script serverversion og klientversion skal være synkroniserede. For version 5.6 skal ping svare med version `5.6` og schemaVersion `4`.
+Rå invitationstokens og rå device-tokens må aldrig skrives til Sheet, GitHub, README, log eller audit.
 
 ## Migrationssikkerhed
 
-- Tag altid en fuld kopi af produktionsarket før større strukturændringer.
-- Bevar legacy-fanen `Formularsvar 1` uændret som sporbar historik.
-- Tilføj manglende kolonner uden at forskubbe eksisterende værdier.
-- Apps Script skal selv afvise ethvert id eller relations-id, der begynder med `demo-`.
-- Serverens upserts skal bruge stabile id'er og skrive revisionsspor til `Ændringslog`.
-- Migration skal kunne gentages uden dubletter.
-- Gæt aldrig på tvetydige legacy-værdier som medarbejderidentitet eller timefordeling.
-- Udfyld alle felter, der kan udledes sikkert af kildedata, men lad ukendte felter stå tomme.
+- tag fuld backup før større struktur-/sikkerhedsændringer
+- bevar `Formularsvar 1` uændret
+- stabile id'er og idempotente upserts
+- gæt aldrig på tvetydige legacy-medarbejderrelationer eller timer
+- udfyld kun værdier der kan udledes sikkert
 
-## Kendt migreret legacy-status
+Backup før 5.7 er oprettet 25. august 2026.
 
-- 11 kunder og 10 adresser er migreret med stabile legacy-id'er.
-- 12 historiske opgaver er migreret til `Opgaver`.
-- 5 medarbejderposter findes, hvoraf Lars Wiberg, Nanna og Ronny Kisbye er aktive.
-- sikre opgave-medarbejderrelationer er migreret uden at fordele gruppetimer.
-- entydige enkeltmedarbejder-tidsregistreringer er migreret.
-- `Formularsvar 1` er fortsat uændret.
+## Medarbejder-UI
 
-## Apps Script deployment
+En personlig medarbejderenhed:
+- viser kun egen profil
+- kan ikke åbne profilvælger for andre
+- har ingen Kunder-administration, Medarbejdere, Rapporter, Log eller Indstillinger
+- ser kun egne opgaver og registreringer
+- ser kundedata kun når serveren har sendt dem som nødvendige for egne opgaver/registreringer
+- ser `Flere medarbejdere på opgaven` ved fælles opgaver
 
-Repoets `google-apps-script/Code.gs` er kilden til serverkoden.
+## Chef-UI
 
-Efter ændring af Code.gs skal den eksisterende Apps Script-webapp opdateres:
-1. Google Sheet → Udvidelser → Apps Script.
-2. Erstat Code.gs med repoets aktuelle fil og gem.
-3. Implementer → Administrer implementeringer.
-4. Rediger webapp-implementeringen og vælg ny version.
-5. Bevar samme `/exec`-adresse.
-6. Test forbindelsen fra appens Chef → Indstillinger.
-7. Bekræft ping-version og antal poster fra `pull`.
+Chef kan:
+- administrere medarbejdere og roller
+- oprette/redigere/arkivere kunder og opgaver
+- se rapporter og log
+- bruge `📲 App-adgang` på rigtige medarbejdere
+- oprette nyt 48-timers engangslink
+- sende via SMS/e-mail eller kopiere link
+- se aktive enheder
+- fjerne adgang på en enhed
 
-En GitHub-commit alene opdaterer ikke automatisk Google Apps Script-projektet.
+Demo-medarbejdere må ikke få installationslinks.
 
-## Design
+## Rapporter
 
-- dansk hovedsprog
-- læsbar lys og mørk tilstand
-- store trykflader og tydelig fokusmarkering
-- ingen vandret sideforskydning på mobil
-- én formularkolonne på smalle skærme
-- tydeligt forskellige chef- og medarbejderfunktioner
+Kun Chef. Demo-data skjules som standard og kan slås til med `Vis demo`.
 
-## PWA og offline
+Gamle gruppetimer må tælle én gang i kunderapporter, men må aldrig fordeles kunstigt på medarbejdere. Medarbejderrapporter bruger kun entydigt tilknyttede timer.
 
-Opdatér service worker-cacheversionen ved filændringer. Aktuel cache for version 5.6: `greentime-pro-v36`.
+## Legacy-status
 
-## Kvalitetssikring før GitHub
+- 11 kunder
+- 10 adresser
+- 12 historiske opgaver
+- 5 oprindelige medarbejderposter
+- Lars Wiberg, Nanna og Ronny Kisbye aktive i migreret grunddata
+- `Formularsvar 1` bevaret
 
-1. Kør syntakskontrol på alle ændrede JavaScript-filer og Code.gs.
-2. Test både Medarbejder- og Chef-adgang via `MedarbejderRoller`.
-3. Test rapportgenerator og legacy-data, inklusive at demo er skjult som standard og kan slås til/fra med den lille knap.
-4. Test `ping`, read-only `pull` og skrivende `sync` separat.
-5. Test at `pull` henter 11 kunder og 5 medarbejderposter fra produktionsarket uden at skrive først.
-6. Test at demo-data aldrig sendes til Sheetet.
-7. Test mobil, tema og offlinecache.
-8. Opdatér README, MASTERPROMPT og versionsnummer.
+## Deployment
+
+En GitHub-commit opdaterer ikke Apps Script-deploymenten.
+
+Efter `Code.gs`-ændring:
+1. Sheet → Udvidelser → Apps Script.
+2. Erstat `Code.gs` med repoets aktuelle fil.
+3. Gem.
+4. Implementer → Administrer implementeringer.
+5. Rediger eksisterende webapp → Ny version → Implementer.
+6. Bevar samme `/exec`.
+7. Aktivér Chef-enheden via et personligt engangslink.
+
+## Kvalitetstest før release
+
+1. `node --check` på alle ændrede JS-filer og en `.js`-kopi af `Code.gs`.
+2. Bekræft at `ping` ikke returnerer Sheet-data.
+3. Bekræft at `pull` uden device-token afvises.
+4. Bekræft at ugyldigt/udløbet/brugt invitationstoken afvises.
+5. Bekræft at forkert navn ved aktivering afvises.
+6. Bekræft at invitation kun kan bruges én gang.
+7. Bekræft at medarbejder-`pull` kun indeholder én medarbejderpost.
+8. Bekræft at medarbejder-`sync` ikke kan skrive en anden `employeeId`.
+9. Bekræft at fælles opgave kun viser `Flere medarbejdere på opgaven`.
+10. Bekræft at Chef kan oprette invitation og tilbagekalde enhed.
+11. Bekræft at demo-data aldrig sendes til produktionsarket.
+12. Test rapporter, kalender, tidsregistrering og offlinecache.
 
 ## Vigtig regel
 
-Ødelæg aldrig noget, der allerede virker. Foretag sammenhængende ændringer i relevante moduler, bevar datamigrering, og kontrollér hele brugerrejsen efter hver større ændring.
+Ødelæg aldrig fungerende funktioner for at tilføje ny sikkerhed. Sikkerhedsmigrationer skal være planlagte, reversible via backup og tydeligt dokumenterede.
