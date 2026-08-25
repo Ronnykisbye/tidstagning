@@ -15,7 +15,7 @@
       tr.innerHTML=`<td><strong>${app.escape(employee.name)}</strong></td><td>${app.escape(employee.email)}</td><td>${app.escape(employee.phone)}</td><td><span class="status-pill">${app.escape(roleNames(employee.id))}</span></td><td><button class="icon-btn" data-emp-edit="${employee.id}" aria-label="Rediger">✏️</button><button class="icon-btn danger" data-emp-del="${employee.id}" aria-label="Arkivér">🗑️</button></td>`;body.append(tr);
     });
     body.querySelectorAll('[data-emp-edit]').forEach(b=>b.onclick=()=>open(app.employee(b.dataset.empEdit)));
-    body.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=()=>{const employee=app.employee(b.dataset.empDel);if(employee.id===app.session?.employeeId)return alert('Du kan ikke arkivere den profil, der bruges lige nu.');if(confirm(`Arkivér ${employee.name}?`)){employee.active=false;app.db.employeeRoles.filter(x=>x.employeeId===employee.id).forEach(x=>x.active=false);app.save(`Medarbejder arkiveret: ${employee.name}`);render();}});
+    body.querySelectorAll('[data-emp-del]').forEach(b=>b.onclick=async()=>{const employee=app.employee(b.dataset.empDel);if(employee.id===app.session?.employeeId)return alert('Du kan ikke arkivere den profil, der bruges lige nu.');if(confirm(`Arkivér ${employee.name}?`)){employee.active=false;app.db.employeeRoles.filter(x=>x.employeeId===employee.id).forEach(x=>x.active=false);app.save(`Medarbejder arkiveret: ${employee.name}`);render();try{await app.provider?.syncNow?.();app.toast('Medarbejderen er arkiveret i Sheetet');}catch{app.toast('Arkiveret lokalt · Sheet-synkronisering fejlede');}}});
     app.fillSelects?.();
   }
   function open(employee={}){
@@ -28,19 +28,23 @@
   app.initEmployees=function(){
     document.getElementById('addEmployeeBtn').onclick=()=>open();
     document.getElementById('employeeCancel').onclick=()=>document.getElementById('employeeDialog').close();
-    document.getElementById('employeeForm').onsubmit=event=>{
-      event.preventDefault();const values=Object.fromEntries(new FormData(event.target));let employee=app.employee(values.id);const isNew=!employee;
+    document.getElementById('employeeForm').onsubmit=async event=>{
+      event.preventDefault();const form=event.target,values=Object.fromEntries(new FormData(form));let employee=app.employee(values.id);const isNew=!employee;
       if(employee)Object.assign(employee,{name:values.name,email:values.email,phone:values.phone});
       else {employee={id:app.uid(),name:values.name,email:values.email,phone:values.phone,active:true};app.db.employees.push(employee);}
       if(values.role==='Chef'){
         setRole(employee.id,'role-chef',true);
-        if(isNew)setRole(employee.id,'role-medarbejder',true);
+        setRole(employee.id,'role-medarbejder',true);
       }else{
         setRole(employee.id,'role-medarbejder',true);
         setRole(employee.id,'role-chef',false);
       }
       employee.role=values.role;
-      app.save(`Medarbejder gemt: ${values.name}`);document.getElementById('employeeDialog').close();render();app.applyAccess?.();app.toast('Medarbejderen er gemt');
+      app.save(`Medarbejder gemt: ${values.name}`);document.getElementById('employeeDialog').close();render();app.applyAccess?.();
+      if(app.provider?.mode?.()==='google-sheets'){
+        try{await app.provider.syncNow();app.toast('Medarbejderen er gemt i Sheetet');}
+        catch(error){alert(`Medarbejderen er gemt lokalt, men kunne ikke gemmes i Sheetet: ${error.message}`);}
+      }else app.toast('Medarbejderen er gemt lokalt');
     };
     document.addEventListener('gtp:data',render);render();
   };
