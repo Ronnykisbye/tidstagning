@@ -3,6 +3,39 @@ function gtpStampVersion(){
   document.querySelectorAll('#aboutPage p').forEach(node=>{if(/GreenTime Pro version/i.test(node.textContent||''))node.textContent='GreenTime Pro version 5.7';});
 }
 
+function gtpIdentityDialog(){
+  const dialog=document.getElementById('managerLockDialog');
+  if(!dialog)return null;
+  const title=dialog.querySelector('h2'),text=dialog.querySelector('p'),button=document.getElementById('managerUnlock');
+  if(title)title.textContent='Bekræft din identitet';
+  if(text)text.textContent='Brug Windows Hello, PIN, fingeraftryk, Face ID eller enhedens sikkerhed.';
+  if(button){button.textContent='Godkend';button.hidden=true;}
+  const other=document.getElementById('managerUseEmployee');if(other)other.hidden=true;
+  if(!dialog.open)dialog.showModal();
+  return dialog;
+}
+
+async function gtpVerifyBeforeStart(A){
+  if(!A.provider?.hasDeviceToken?.())return false;
+  const identity=A.provider?.identity?.();
+  if(!identity?.employeeId)throw new Error('Den sikre enhedsidentitet mangler. Bed Chefen sende et nyt installationslink.');
+  const dialog=gtpIdentityDialog();
+  const employee={id:identity.employeeId,name:identity.name||'GreenTime-medarbejder'};
+  try{
+    if(!A.bio?.enrolledFor?.(identity.employeeId)){
+      if(A.bio?.enrolled?.())A.bio.remove();
+      await A.bio.setup(employee);
+    }
+    await A.bio.verify(identity.employeeId);
+    A.deviceVerifiedAtBoot=true;
+    if(dialog?.open)dialog.close();
+    return true;
+  }catch(error){
+    if(dialog?.open)dialog.close();
+    throw error;
+  }
+}
+
 async function gtpActivateInvite(A){
   const params=new URLSearchParams(location.search),invite=params.get('invite');
   if(!invite)return false;
@@ -20,8 +53,12 @@ async function gtpActivateInvite(A){
         if(endpointValue){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpointValue))throw new Error('Apps Script-webadressen er ikke gyldig.');A.provider.configureEndpoint(endpointValue);}
         if(A.provider.mode()!=='google-sheets')throw new Error('Der mangler en Apps Script-webadresse (/exec).');
         const name=data.get('name'),label=navigator.userAgentData?.platform||navigator.platform||'GreenTime-enhed';
-        await A.provider.activate(invite,name,label);statusNode.textContent='Identiteten er godkendt. Henter sikre data…';await A.provider.pull();history.replaceState({},'',location.pathname);dialog.close();dialog.remove();resolve(true);
-      }catch(error){statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
+        await A.provider.activate(invite,name,label);statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
+        dialog.close();dialog.remove();
+        await gtpVerifyBeforeStart(A);
+        statusNode.textContent='Identiteten er godkendt. Henter sikre data…';
+        await A.provider.pull();history.replaceState({},'',location.pathname);resolve(true);
+      }catch(error){if(!dialog.isConnected){reject(error);return;}statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
     };
   });
 }
@@ -29,9 +66,16 @@ async function gtpActivateInvite(A){
 document.addEventListener('DOMContentLoaded',async()=>{
   gtpStampVersion();
   const A=window.GTP;if(!A)return;let activated=false;
-  try{activated=await gtpActivateInvite(A);}catch(error){alert(error.message);}
-  if(!activated&&A.provider?.mode?.()==='google-sheets'&&A.provider?.hasDeviceToken?.()){
-    try{await A.provider.pull();}catch(error){console.warn('Sikker Sheet-hentning kunne ikke gennemføres',error);}
+  try{
+    activated=await gtpActivateInvite(A);
+    if(!activated&&A.provider?.hasDeviceToken?.()){
+      await gtpVerifyBeforeStart(A);
+      if(A.provider?.mode?.()==='google-sheets')await A.provider.pull();
+    }
+  }catch(error){
+    console.error('Sikker opstart kunne ikke gennemføres',error);
+    alert(error.message||'Identiteten kunne ikke godkendes.');
+    return;
   }
   try{A.initNavigation?.();}catch(error){console.error('Navigation kunne ikke starte',error);}
   ['initAccess','initDashboard','initCustomers','initEmployees','initTimer','initCalendar','initReports','initSettings'].forEach(name=>{try{A[name]?.();}catch(error){console.error(name+' kunne ikke starte',error);}});
