@@ -11,7 +11,7 @@
   }
   app.session=parse();
   forceSecureIdentity();
-  app.deviceLocked=secureDevice();
+  app.deviceLocked=secureDevice()&&!app.deviceVerifiedAtBoot;
   app.managerLocked=app.deviceLocked;
   app.isManager=()=>app.session?.mode==='manager'&&!app.deviceLocked&&chefDevice();
   app.currentEmployee=()=>app.employee(app.session?.employeeId);
@@ -58,18 +58,19 @@
     const title=dialog?.querySelector('h2'),text=dialog?.querySelector('p');
     if(title)title.textContent='Bekræft din identitet';
     if(text)text.textContent='Brug Windows Hello, PIN, fingeraftryk, Face ID eller enhedens sikkerhed.';
-    const button=document.getElementById('managerUnlock');if(button)button.textContent='Godkend';
+    const button=document.getElementById('managerUnlock');if(button){button.textContent='Godkend';button.hidden=false;}
     if(dialog&&!dialog.open)dialog.showModal();
   }
   async function ensureVerification(){
     if(!secureDevice())return;
-    const employee=app.currentEmployee();
+    const employee=app.currentEmployee()||deviceIdentity();
     try{
-      if(!app.bio?.enrolledFor?.(employee?.id)){
+      if(!app.bio?.enrolledFor?.(employee?.id||employee?.employeeId)){
         if(app.bio?.enrolled?.())app.bio.remove();
-        await app.bio.setup(employee);
+        const profile=employee?.id?employee:{id:employee.employeeId,name:employee.name||'GreenTime-medarbejder'};
+        await app.bio.setup(profile);
       }
-      await app.bio.verify(employee?.id);
+      await app.bio.verify(employee?.id||employee?.employeeId);
       app.deviceLocked=false;app.managerLocked=false;apply();
       const dialog=lockDialog();if(dialog?.open)dialog.close();
       app.toast('Identitet godkendt');
@@ -81,6 +82,7 @@
   app.lockManager=function(){if(!secureDevice())return;app.deviceLocked=true;app.managerLocked=true;apply();app.showPage?.('dashboardPage',{push:false});openLock();};
   app.initAccess=function(){
     let hiddenAt=0;forceSecureIdentity();
+    if(app.deviceVerifiedAtBoot){app.deviceLocked=false;app.managerLocked=false;}
     document.getElementById('profileButton').onclick=()=>open(false);
     document.getElementById('profileMode').onchange=profileOptions;
     document.getElementById('profileCancel').onclick=()=>{if(app.session?.employeeId)document.getElementById('profileDialog').close();};
@@ -95,8 +97,8 @@
       app.session={mode:values.mode,employeeId:values.employeeId};localStorage.setItem(KEY,JSON.stringify(app.session));document.getElementById('profileDialog').close();apply();app.showPage?.('dashboardPage');app.toast('Profilen er gemt på denne enhed');
     };
     apply();
-    if(secureDevice())setTimeout(ensureVerification,150);
-    else if(!app.currentEmployee())setTimeout(()=>open(true),100);
+    if(secureDevice()&&!app.deviceVerifiedAtBoot)setTimeout(ensureVerification,150);
+    else if(!secureDevice()&&!app.currentEmployee())setTimeout(()=>open(true),100);
     document.addEventListener('visibilitychange',()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>=300000)app.lockManager();});
   };
   app.applyAccess=apply;
