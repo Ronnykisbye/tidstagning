@@ -14,7 +14,11 @@
   app.deviceLocked=secureDevice()&&!app.deviceVerifiedAtBoot;
   app.managerLocked=app.deviceLocked;
   app.isManager=()=>app.session?.mode==='manager'&&!app.deviceLocked&&chefDevice();
-  app.currentEmployee=()=>app.employee(app.session?.employeeId);
+  app.currentEmployee=()=>{
+    const employee=app.employee(app.session?.employeeId);if(employee)return employee;
+    const id=deviceIdentity();
+    return id?.employeeId?{id:id.employeeId,name:id.name||'GreenTime-medarbejder',active:true,role:id.isChef?'Chef':'Medarbejder'}:undefined;
+  };
   app.canSeeEntry=entry=>!app.deviceLocked&&(app.isManager()||(entry.employeeIds||[entry.employeeId]).includes(app.session?.employeeId));
   app.canSeeBooking=booking=>!app.deviceLocked&&(app.isManager()||(booking.employeeIds||[]).includes(app.session?.employeeId));
 
@@ -23,7 +27,7 @@
     const mode=document.getElementById('profileMode').value;
     let people=secureDevice()?[app.currentEmployee()].filter(Boolean):app.activeEmployees();
     if(mode==='manager'){
-      const managers=people.filter(x=>app.hasRole?.(x.id,'role-chef'));
+      const managers=people.filter(x=>secureDevice()?chefDevice():app.hasRole?.(x.id,'role-chef'));
       if(managers.length)people=managers;
     }
     select.innerHTML='<option value="">Vælg navn</option>'+people.map(x=>`<option value="${x.id}">${app.escape(x.name)}</option>`).join('');
@@ -69,6 +73,10 @@
         if(app.bio?.enrolled?.())app.bio.remove();
         const profile=employee?.id?employee:{id:employee.employeeId,name:employee.name||'GreenTime-medarbejder'};
         await app.bio.setup(profile);
+        app.deviceLocked=false;app.managerLocked=false;apply();
+        const dialog=lockDialog();if(dialog?.open)dialog.close();
+        app.toast('Identitet godkendt');
+        return;
       }
       await app.bio.verify(employee?.id||employee?.employeeId);
       app.deviceLocked=false;app.managerLocked=false;apply();
