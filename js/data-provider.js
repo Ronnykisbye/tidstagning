@@ -38,54 +38,19 @@
     app.db.entries.filter(real).forEach(entry=>{
       const employeeIds=(entry.employeeIds||[entry.employeeId]).filter(Boolean).filter(id=>!String(id).startsWith('demo-'));
       employeeIds.forEach(employeeId=>{
-        const row={
-          id:entry.sheetRowIds?.[employeeId]||((entry.employeeIds||[]).length<=1?entry.id:`${entry.id}-${employeeId}`),
-          registrationId:entry.registrationId||entry.id,
-          orderId:entry.orderId||'',
-          customerId:entry.customerId,
-          employeeId,
-          start:entry.start,
-          end:entry.end,
-          breakMinutes:entry.breakMinutes||0,
-          seconds:entry.seconds,
-          workType:entry.workType||'',
-          note:entry.note||'',
-          completion:entry.completion||0,
-          status:entry.status||'',
-          followUp:Boolean(entry.followUp),
-          followUpNote:entry.followUpNote||'',
-          source:entry.source||'local'
-        };
+        const row={id:entry.sheetRowIds?.[employeeId]||((entry.employeeIds||[]).length<=1?entry.id:`${entry.id}-${employeeId}`),registrationId:entry.registrationId||entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,seconds:entry.seconds,workType:entry.workType||'',note:entry.note||'',completion:entry.completion||0,status:entry.status||'',followUp:Boolean(entry.followUp),followUpNote:entry.followUpNote||'',source:entry.source||'local'};
         if(safeReal(row))timeEntries.push(row);
       });
     });
-
     if(app.db.secureScope==='employee')return {version:5,timeEntries};
-
     const customers=app.db.customers.filter(safeReal).map(({address,role,...customer})=>customer);
     const addresses=app.db.addresses.filter(safeReal);
     const employees=app.db.employees.filter(safeReal).map(({role,...employee})=>employee);
     const roles=app.db.roles.filter(safeReal);
     const employeeRoles=app.db.employeeRoles.filter(safeReal);
-    const orders=app.db.bookings.filter(real).map(booking=>({
-      id:booking.id,
-      customerId:booking.customerId,
-      addressId:booking.addressId||app.customerAddress(booking.customerId)?.id||'',
-      date:booking.date,
-      start:booking.start,
-      duration:booking.duration,
-      note:booking.note||'',
-      status:booking.status||'Planlagt',
-      S:Boolean(booking.S),
-      active:booking.active!==false
-    })).filter(safeReal);
+    const orders=app.db.bookings.filter(real).map(booking=>({id:booking.id,customerId:booking.customerId,addressId:booking.addressId||app.customerAddress(booking.customerId)?.id||'',date:booking.date,start:booking.start,duration:booking.duration,note:booking.note||'',status:booking.status||'Planlagt',S:Boolean(booking.S),active:booking.active!==false})).filter(safeReal);
     const orderAssignments=[];
-    app.db.bookings.filter(real).forEach(booking=>{
-      (booking.employeeIds||[]).filter(id=>!String(id).startsWith('demo-')).forEach(employeeId=>{
-        const row={id:`${booking.id}-${employeeId}`,orderId:booking.id,employeeId,active:true};
-        if(safeReal(row))orderAssignments.push(row);
-      });
-    });
+    app.db.bookings.filter(real).forEach(booking=>{(booking.employeeIds||[]).filter(id=>!String(id).startsWith('demo-')).forEach(employeeId=>{const row={id:`${booking.id}-${employeeId}`,orderId:booking.id,employeeId,active:true};if(safeReal(row))orderAssignments.push(row);});});
     const workTypes=WORK_TYPES.map((name,index)=>({id:`work-${index+1}`,name,active:true}));
     const audit=app.db.audit.filter(safeReal).map(item=>({id:item.id,at:item.at,employeeId:item.employeeId||'',action:item.action}));
     return {version:5,customers,addresses,employees,roles,employeeRoles,orders,orderAssignments,timeEntries,workTypes,audit};
@@ -93,15 +58,7 @@
 
   function groupTimeEntries(rows=[]){
     const grouped=new Map();
-    rows.forEach(row=>{
-      const key=String(row.registrationId||row.id||'');if(!key)return;
-      let item=grouped.get(key);
-      if(!item){
-        item={id:key,registrationId:key,orderId:row.orderId||'',customerId:row.customerId||'',employeeIds:[],sheetRowIds:{},start:row.start||'',end:row.end||'',breakMinutes:Number(row.breakMinutes||0),seconds:Number(row.seconds||0),workType:row.workType||'',note:row.note||'',completion:Number(row.completion||0),status:row.status||'',followUp:Boolean(row.followUp),followUpNote:row.followUpNote||'',source:row.source||'google-sheet'};
-        grouped.set(key,item);
-      }
-      if(row.employeeId){if(!item.employeeIds.includes(row.employeeId))item.employeeIds.push(row.employeeId);item.sheetRowIds[row.employeeId]=row.id;}
-    });
+    rows.forEach(row=>{const key=String(row.registrationId||row.id||'');if(!key)return;let item=grouped.get(key);if(!item){item={id:key,registrationId:key,orderId:row.orderId||'',customerId:row.customerId||'',employeeIds:[],sheetRowIds:{},start:row.start||'',end:row.end||'',breakMinutes:Number(row.breakMinutes||0),seconds:Number(row.seconds||0),workType:row.workType||'',note:row.note||'',completion:Number(row.completion||0),status:row.status||'',followUp:Boolean(row.followUp),followUpNote:row.followUpNote||'',source:row.source||'google-sheet'};grouped.set(key,item);}if(row.employeeId){if(!item.employeeIds.includes(row.employeeId))item.employeeIds.push(row.employeeId);item.sheetRowIds[row.employeeId]=row.id;}});
     return [...grouped.values()];
   }
   function mergeKeepingDemo(current=[],remote=[],mapper=x=>x){const byId=new Map(current.filter(demo).map(item=>[String(item.id),item]));remote.map(mapper).forEach(item=>byId.set(String(item.id),item));return [...byId.values()];}
@@ -123,10 +80,28 @@
   async function pull(){if(!endpoint()){setState('Gemt på enheden','local');return null;}if(!deviceToken())throw new Error('Denne enhed skal aktiveres via et installationslink fra Chefen.');setState('Henter sikre data…','working');try{const result=await request('pull');applyRemote(result);persist('Sikre data hentet');setState('Sikker forbindelse aktiv','ok');return result;}catch(error){setState('Adgang kræver ny aktivering','error');throw error;}}
   async function sync(){if(!endpoint())return null;if(!deviceToken())throw new Error('Denne enhed er ikke aktiveret.');setState('Synkroniserer…','working');try{const result=await request('sync',normalizedPayload());applyRemote(result);persist('Synkroniseret');setState('Synkroniseret','ok');return result;}catch(error){setState('Lokalt gemt · synkronisering afventer','error');throw error;}}
   async function syncNow(){clearTimeout(syncTimer);return sync();}
+  async function syncEmployee(employee){
+    if(!employee||!employee.id)throw new Error('Medarbejderen mangler et id.');
+    if(isNaN(0)&&false)return null;
+    clearTimeout(syncTimer);
+    const cleanEmployee=((({role,...rest})=>rest)(employee));
+    const roleRows=app.db.employeeRoles.filter(x=>x.employeeId===employee.id&&!String(x.id||'').startsWith('demo-'));
+    const payload={version:5,employees:[cleanEmployee],employeeRoles:roleRows};
+    setState('Gemmer medarbejder i Sheetet…','working');
+    try{
+      const result=await request('sync',payload,{},30000);
+      applyRemote(result);persist('Medarbejder synkroniseret');setState('Medarbejder gemt i Sheetet','ok');return {ok:true,result};
+    }catch(error){
+      if(!/svarede ikke inden/i.test(String(error.message||''))){setState('Medarbejder kunne ikke gemmes','error');throw error;}
+      await new Promise(resolve=>setTimeout(resolve,1200));
+      try{await request('employeeAccess',{}, {employeeId:employee.id},20000);setState('Medarbejder gemt i Sheetet','ok');return {ok:true,confirmedAfterTimeout:true};}
+      catch(checkError){setState('Medarbejder kunne ikke bekræftes i Sheetet','error');throw error;}
+    }
+  }
   async function activate(inviteToken,name,deviceLabel){const result=await request('activate',{}, {inviteToken,name,deviceLabel},30000);localStorage.setItem(DEVICE_KEY,result.deviceToken);localStorage.setItem(IDENTITY_KEY,JSON.stringify({employeeId:result.employee.id,name:result.employee.name,isChef:Boolean(result.isChef),roles:result.roles||[]}));app.db.secureScope=result.isChef?'chef':'employee';localStorage.setItem('gtp_session_v1',JSON.stringify({mode:result.isChef?'manager':'employee',employeeId:result.employee.id}));return result;}
   async function createInvite(employeeId){return request('createInvite',{}, {employeeId,ttlHours:48});}
   async function employeeAccess(employeeId){return request('employeeAccess',{}, {employeeId});}
   async function revokeDevice(deviceId){return request('revokeDevice',{}, {deviceId});}
   function configureEndpoint(value){app.db.settings.sheetEndpoint=value;localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));}
-  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){if(!deviceToken())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,syncNow,activate,createInvite,employeeAccess,revokeDevice,configureEndpoint,hasDeviceToken:()=>Boolean(deviceToken()),identity,test:()=>request('ping',{}, {},8000),normalizedPayload};
+  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){if(!deviceToken())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,syncNow,syncEmployee,activate,createInvite,employeeAccess,revokeDevice,configureEndpoint,hasDeviceToken:()=>Boolean(deviceToken()),identity,test:()=>request('ping',{}, {},8000),normalizedPayload};
 })(window.GTP);
