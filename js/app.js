@@ -1,3 +1,7 @@
+let gtpDeferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();gtpDeferredInstallPrompt=event;});
+window.addEventListener('appinstalled',()=>{gtpDeferredInstallPrompt=null;const dialog=document.getElementById('gtpInstallDialog');if(dialog?.open)dialog.close();window.GTP?.toast?.('GreenTime Pro er installeret');});
+
 function gtpStampVersion(){
   document.querySelectorAll('.brand small').forEach(node=>{node.textContent='Interaktiv tidsregistrering · v5.7';});
   document.querySelectorAll('#aboutPage p').forEach(node=>{if(/GreenTime Pro version/i.test(node.textContent||''))node.textContent='GreenTime Pro version 5.7';});
@@ -31,6 +35,40 @@ function gtpDataLoadingDialog(){
 function gtpCloseDataLoading(){
   const dialog=document.getElementById('gtpDataLoadingDialog');
   if(dialog?.open)dialog.close();
+}
+
+function gtpIsInstalled(){
+  return window.matchMedia?.('(display-mode: standalone)')?.matches||window.navigator.standalone===true;
+}
+function gtpOfferInstall(A){
+  if(gtpIsInstalled())return;
+  let dialog=document.getElementById('gtpInstallDialog');
+  if(!dialog){
+    dialog=document.createElement('dialog');
+    dialog.id='gtpInstallDialog';
+    dialog.className='dialog-card';
+    dialog.innerHTML='<div style="min-width:min(440px,82vw)"><h2>Installér GreenTime Pro</h2><p>Denne enhed er nu sikkert aktiveret. Installér appen, så GreenTime Pro får sit eget ikon og kan åbnes som en almindelig app.</p><div class="actions"><button id="gtpInstallNow" class="primary" type="button">Installér GreenTime Pro</button><button id="gtpInstallLater" type="button">Senere</button></div><p id="gtpInstallHelp" class="muted"></p></div>';
+    document.body.append(dialog);
+    document.getElementById('gtpInstallLater').onclick=()=>dialog.close();
+    document.getElementById('gtpInstallNow').onclick=async()=>{
+      const button=document.getElementById('gtpInstallNow'),help=document.getElementById('gtpInstallHelp');
+      if(gtpDeferredInstallPrompt){
+        button.disabled=true;
+        try{
+          await gtpDeferredInstallPrompt.prompt();
+          const choice=await gtpDeferredInstallPrompt.userChoice;
+          gtpDeferredInstallPrompt=null;
+          if(choice?.outcome==='accepted'){dialog.close();A?.toast?.('Installationen er startet');}
+          else help.textContent='Installationen blev ikke valgt. Du kan installere senere fra browserens menu.';
+        }finally{button.disabled=false;}
+        return;
+      }
+      help.innerHTML='Browseren viser ikke installationsknappen endnu. Vælg <strong>Installér GreenTime Pro</strong> eller <strong>Apps → Installér dette websted som en app</strong> i browserens menu. Du kan også åbne installationsvejledningen.';
+      let guide=document.getElementById('gtpInstallGuide');
+      if(!guide){guide=document.createElement('a');guide.id='gtpInstallGuide';guide.className='primary install-link';guide.href='install/';guide.textContent='Åbn installationsvejledning';help.after(guide);}
+    };
+  }
+  if(!dialog.open)dialog.showModal();
 }
 
 async function gtpVerifyBeforeStart(A){
@@ -69,7 +107,7 @@ async function gtpActivateInvite(A){
   const api=params.get('api');
   if(api){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(api))throw new Error('Installationslinket indeholder en ugyldig serveradresse.');A.provider.configureEndpoint(api);}
   const needsEndpoint=A.provider.mode()!=='google-sheets';
-  const dialog=document.createElement('dialog');dialog.className='dialog-card';dialog.innerHTML=`<form method="dialog" id="deviceActivationForm"><h2>Aktivér GreenTime Pro</h2><p>Denne invitation er personlig. Skriv dit navn præcis som Chefen har oprettet dig.</p>${needsEndpoint?'<label>Apps Script-webadresse<input name="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" required></label><p class="muted">Serveradressen bruges kun til at forbinde appen til virksomhedens Sheet.</p>':''}<label>Dit navn<input name="name" autocomplete="name" required autofocus></label><p class="muted">Efter aktivering låses denne installation til din medarbejderprofil. Du kan ikke se andre medarbejdere.</p><p class="muted"><strong>Aktiveringen kan tage op til 30 sekunder.</strong> Luk ikke siden og tryk ikke F5 imens.</p><div class="actions"><button class="primary" value="activate">Aktivér appen</button></div><p id="deviceActivationStatus" class="muted"></p><p id="deviceActivationError" role="alert"></p></form>`;document.body.append(dialog);dialog.showModal();
+  const dialog=document.createElement('dialog');dialog.className='dialog-card';dialog.innerHTML=`<form method="dialog" id="deviceActivationForm" autocomplete="off"><h2>Aktivér GreenTime Pro</h2><p>Denne invitation er personlig. Skriv dit navn præcis som Chefen har oprettet dig.</p>${needsEndpoint?'<label>Apps Script-webadresse<input name="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" required autocomplete="off"></label><p class="muted">Serveradressen bruges kun til at forbinde appen til virksomhedens Sheet.</p>':''}<label>Dit navn<input id="gtpActivationName" name="gtpActivationName" type="text" autocomplete="off" autocapitalize="words" autocorrect="off" spellcheck="false" required autofocus></label><p class="muted">Skriv kun navnet, som det står i GreenTime Pro. Browserens egne kontaktforslag bruges ikke.</p><p class="muted">Efter aktivering låses denne installation til din medarbejderprofil. Du kan ikke se andre medarbejdere.</p><p class="muted"><strong>Aktiveringen kan tage op til 30 sekunder.</strong> Luk ikke siden og tryk ikke F5 imens.</p><div class="actions"><button class="primary" value="activate">Aktivér appen</button></div><p id="deviceActivationStatus" class="muted"></p><p id="deviceActivationError" role="alert"></p></form>`;document.body.append(dialog);dialog.showModal();
   return new Promise((resolve,reject)=>{
     const form=dialog.querySelector('form'),errorNode=dialog.querySelector('#deviceActivationError'),statusNode=dialog.querySelector('#deviceActivationStatus');
     dialog.addEventListener('cancel',e=>e.preventDefault());
@@ -79,7 +117,7 @@ async function gtpActivateInvite(A){
         const data=new FormData(form),endpointValue=String(data.get('endpoint')||'').trim();
         if(endpointValue){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpointValue))throw new Error('Apps Script-webadressen er ikke gyldig.');A.provider.configureEndpoint(endpointValue);}
         if(A.provider.mode()!=='google-sheets')throw new Error('Der mangler en Apps Script-webadresse (/exec).');
-        const name=data.get('name'),label=navigator.userAgentData?.platform||navigator.platform||'GreenTime-enhed';
+        const name=String(data.get('gtpActivationName')||'').trim(),label=navigator.userAgentData?.platform||navigator.platform||'GreenTime-enhed';
         await A.provider.activate(invite,name,label);statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
         dialog.close();dialog.remove();
         await gtpVerifyBeforeStart(A);
@@ -109,5 +147,5 @@ document.addEventListener('DOMContentLoaded',async()=>{
   try{A.showPage?.('dashboardPage',{push:false,instant:true});}catch(error){console.error('Startsiden kunne ikke åbnes',error);}
   try{A.applyLanguage?.();}catch(error){console.error('Sprog kunne ikke indlæses',error);}
   document.querySelectorAll('[data-lang]').forEach(button=>button.onclick=()=>A.setLanguage?.(button.dataset.lang));
-  if(activated)A.toast?.('Denne enhed er nu sikkert aktiveret');
+  if(activated){A.toast?.('Denne enhed er nu sikkert aktiveret');setTimeout(()=>gtpOfferInstall(A),500);}
 });
