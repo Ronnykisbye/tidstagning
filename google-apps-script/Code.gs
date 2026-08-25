@@ -1,5 +1,6 @@
-const APP_VERSION = '5.4';
+const APP_VERSION = '5.5';
 const SCHEMA_VERSION = 4;
+const SPREADSHEET_ID = '1L7cf-mY_RD3UBDTqDSa7MJIweqxaxoFs2QC3pAcUjWI';
 
 const TABLES = {
   customers: {sheet:'Kunder', headers:['id','customerNumber','name','phone','email','defaultWorkType','notes','S','active']},
@@ -14,15 +15,19 @@ const TABLES = {
   audit: {sheet:'Ændringslog', headers:['id','at','employeeId','action']}
 };
 
+function workbook_() {
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
+}
+
 function doGet() {
-  return json_({ok:true,service:'GreenTime Pro',version:APP_VERSION,schemaVersion:SCHEMA_VERSION});
+  return json_({ok:true,service:'GreenTime Pro',version:APP_VERSION,schemaVersion:SCHEMA_VERSION,spreadsheetId:SPREADSHEET_ID});
 }
 
 function doPost(event) {
   try {
     const request = JSON.parse((event && event.postData && event.postData.contents) || '{}');
     if (request.action === 'ping') {
-      return json_({ok:true,action:'pong',version:APP_VERSION,schemaVersion:SCHEMA_VERSION,at:new Date().toISOString()});
+      return json_({ok:true,action:'pong',version:APP_VERSION,schemaVersion:SCHEMA_VERSION,spreadsheetId:SPREADSHEET_ID,at:new Date().toISOString()});
     }
     if (request.action !== 'sync') return json_({ok:false,error:'Ukendt handling'});
 
@@ -39,6 +44,7 @@ function doPost(event) {
       ok:true,
       version:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
+      spreadsheetId:SPREADSHEET_ID,
       syncedAt:new Date().toISOString(),
       customers:read_('customers'),
       addresses:read_('addresses'),
@@ -76,7 +82,7 @@ function rejectDemoPayload_(payload) {
 
 function sheet_(key) {
   const config = TABLES[key];
-  const book = SpreadsheetApp.getActiveSpreadsheet();
+  const book = workbook_();
   let sheet = book.getSheetByName(config.sheet);
   if (!sheet) sheet = book.insertSheet(config.sheet);
 
