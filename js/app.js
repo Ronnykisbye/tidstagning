@@ -9,19 +9,19 @@ async function gtpActivateInvite(A){
   const api=params.get('api');
   if(api){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(api))throw new Error('Installationslinket indeholder en ugyldig serveradresse.');A.provider.configureEndpoint(api);}
   const needsEndpoint=A.provider.mode()!=='google-sheets';
-  const dialog=document.createElement('dialog');dialog.className='dialog-card';dialog.innerHTML=`<form method="dialog" id="deviceActivationForm"><h2>Aktivér GreenTime Pro</h2><p>Denne invitation er personlig. Skriv dit navn præcis som Chefen har oprettet dig.</p>${needsEndpoint?'<label>Apps Script-webadresse<input name="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" required></label><p class="muted">Serveradressen bruges kun til at forbinde appen til virksomhedens Sheet.</p>':''}<label>Dit navn<input name="name" autocomplete="name" required autofocus></label><p class="muted">Efter aktivering låses denne installation til din medarbejderprofil. Du kan ikke se andre medarbejdere.</p><div class="actions"><button class="primary" value="activate">Aktivér appen</button></div><p id="deviceActivationError" role="alert"></p></form>`;document.body.append(dialog);dialog.showModal();
+  const dialog=document.createElement('dialog');dialog.className='dialog-card';dialog.innerHTML=`<form method="dialog" id="deviceActivationForm"><h2>Aktivér GreenTime Pro</h2><p>Denne invitation er personlig. Skriv dit navn præcis som Chefen har oprettet dig.</p>${needsEndpoint?'<label>Apps Script-webadresse<input name="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" required></label><p class="muted">Serveradressen bruges kun til at forbinde appen til virksomhedens Sheet.</p>':''}<label>Dit navn<input name="name" autocomplete="name" required autofocus></label><p class="muted">Efter aktivering låses denne installation til din medarbejderprofil. Du kan ikke se andre medarbejdere.</p><p class="muted"><strong>Aktiveringen kan tage op til 30 sekunder.</strong> Luk ikke siden og tryk ikke F5 imens.</p><div class="actions"><button class="primary" value="activate">Aktivér appen</button></div><p id="deviceActivationStatus" class="muted"></p><p id="deviceActivationError" role="alert"></p></form>`;document.body.append(dialog);dialog.showModal();
   return new Promise((resolve,reject)=>{
-    const form=dialog.querySelector('form'),errorNode=dialog.querySelector('#deviceActivationError');
+    const form=dialog.querySelector('form'),errorNode=dialog.querySelector('#deviceActivationError'),statusNode=dialog.querySelector('#deviceActivationStatus');
     dialog.addEventListener('cancel',e=>e.preventDefault());
     form.onsubmit=async event=>{
-      event.preventDefault();const button=form.querySelector('button');button.disabled=true;button.textContent='Aktiverer…';errorNode.textContent='';
+      event.preventDefault();const button=form.querySelector('button');button.disabled=true;button.textContent='Aktiverer…';errorNode.textContent='';statusNode.textContent='Vent venligst. Det kan tage op til 30 sekunder…';
       try{
         const data=new FormData(form),endpointValue=String(data.get('endpoint')||'').trim();
         if(endpointValue){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpointValue))throw new Error('Apps Script-webadressen er ikke gyldig.');A.provider.configureEndpoint(endpointValue);}
         if(A.provider.mode()!=='google-sheets')throw new Error('Der mangler en Apps Script-webadresse (/exec).');
         const name=data.get('name'),label=navigator.userAgentData?.platform||navigator.platform||'GreenTime-enhed';
-        await A.provider.activate(invite,name,label);await A.provider.pull();history.replaceState({},'',location.pathname);dialog.close();dialog.remove();resolve(true);
-      }catch(error){errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
+        await A.provider.activate(invite,name,label);statusNode.textContent='Identiteten er godkendt. Henter sikre data…';await A.provider.pull();history.replaceState({},'',location.pathname);dialog.close();dialog.remove();resolve(true);
+      }catch(error){statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
     };
   });
 }
