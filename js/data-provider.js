@@ -4,6 +4,13 @@
   const DEVICE_KEY='gtp_device_token_v1',IDENTITY_KEY='gtp_device_identity_v1';
   const real=item=>!String(item.id||'').startsWith('demo-');
   const demo=item=>String(item.id||'').startsWith('demo-');
+  const hasDemoRef=value=>{
+    if(typeof value==='string')return value.startsWith('demo-');
+    if(Array.isArray(value))return value.some(hasDemoRef);
+    if(value&&typeof value==='object')return Object.values(value).some(hasDemoRef);
+    return false;
+  };
+  const safeReal=item=>real(item)&&!hasDemoRef(item);
   function endpoint(){return String(app.db.settings?.sheetEndpoint||'').trim();}
   function deviceToken(){return localStorage.getItem(DEVICE_KEY)||'';}
   function identity(){try{return JSON.parse(localStorage.getItem(IDENTITY_KEY))||null;}catch{return null;}}
@@ -16,12 +23,12 @@
     const result=await response.json();if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');return result;
   }
   function normalizedPayload(){
-    const timeEntries=app.db.entries.filter(real).flatMap(entry=>(entry.employeeIds||[entry.employeeId]).filter(Boolean).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:entry.sheetRowIds?.[employeeId]||((entry.employeeIds||[]).length<=1?entry.id:`${entry.id}-${employeeId}`),registrationId:entry.registrationId||entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,seconds:entry.seconds,workType:entry.workType||'',note:entry.note||'',completion:entry.completion||0,status:entry.status||'',followUp:Boolean(entry.followUp),followUpNote:entry.followUpNote||'',source:entry.source||'local'})));
+    const timeEntries=app.db.entries.filter(real).flatMap(entry=>(entry.employeeIds||[entry.employeeId]).filter(Boolean).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:entry.sheetRowIds?.[employeeId]||((entry.employeeIds||[]).length<=1?entry.id:`${entry.id}-${employeeId}`),registrationId:entry.registrationId||entry.id,orderId:entry.orderId||'',customerId:entry.customerId,employeeId,start:entry.start,end:entry.end,breakMinutes:entry.breakMinutes||0,seconds:entry.seconds,workType:entry.workType||'',note:entry.note||'',completion:entry.completion||0,status:entry.status||'',followUp:Boolean(entry.followUp),followUpNote:entry.followUpNote||'',source:entry.source||'local'})).filter(safeReal);
     if(app.db.secureScope==='employee')return {version:5,timeEntries};
-    const customers=app.db.customers.filter(real).map(({address,role,...customer})=>customer),addresses=app.db.addresses.filter(real),employees=app.db.employees.filter(real).map(({role,...employee})=>employee),roles=app.db.roles.filter(real),employeeRoles=app.db.employeeRoles.filter(real);
-    const orders=app.db.bookings.filter(real).map(booking=>({id:booking.id,customerId:booking.customerId,addressId:booking.addressId||app.customerAddress(booking.customerId)?.id||'',date:booking.date,start:booking.start,duration:booking.duration,note:booking.note||'',status:booking.status||'Planlagt',S:Boolean(booking.S),active:booking.active!==false}));
-    const orderAssignments=app.db.bookings.filter(real).flatMap(booking=>(booking.employeeIds||[]).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:`${booking.id}-${employeeId}`,orderId:booking.id,employeeId,active:true})));
-    const workTypes=WORK_TYPES.map((name,index)=>({id:`work-${index+1}`,name,active:true})),audit=app.db.audit.filter(real).map(item=>({id:item.id,at:item.at,employeeId:item.employeeId||'',action:item.action}));
+    const customers=app.db.customers.filter(safeReal).map(({address,role,...customer})=>customer),addresses=app.db.addresses.filter(safeReal),employees=app.db.employees.filter(safeReal).map(({role,...employee})=>employee),roles=app.db.roles.filter(safeReal),employeeRoles=app.db.employeeRoles.filter(safeReal);
+    const orders=app.db.bookings.filter(real).map(booking=>({id:booking.id,customerId:booking.customerId,addressId:booking.addressId||app.customerAddress(booking.customerId)?.id||'',date:booking.date,start:booking.start,duration:booking.duration,note:booking.note||'',status:booking.status||'Planlagt',S:Boolean(booking.S),active:booking.active!==false})).filter(safeReal);
+    const orderAssignments=app.db.bookings.filter(real).flatMap(booking=>(booking.employeeIds||[]).filter(id=>!id.startsWith('demo-')).map(employeeId=>({id:`${booking.id}-${employeeId}`,orderId:booking.id,employeeId,active:true}))).filter(safeReal);
+    const workTypes=WORK_TYPES.map((name,index)=>({id:`work-${index+1}`,name,active:true})),audit=app.db.audit.filter(safeReal).map(item=>({id:item.id,at:item.at,employeeId:item.employeeId||'',action:item.action}));
     return {version:5,customers,addresses,employees,roles,employeeRoles,orders,orderAssignments,timeEntries,workTypes,audit};
   }
   function groupTimeEntries(rows=[]){const grouped=new Map();rows.forEach(row=>{const key=String(row.registrationId||row.id||'');if(!key)return;let item=grouped.get(key);if(!item){item={id:key,registrationId:key,orderId:row.orderId||'',customerId:row.customerId||'',employeeIds:[],sheetRowIds:{},start:row.start||'',end:row.end||'',breakMinutes:Number(row.breakMinutes||0),seconds:Number(row.seconds||0),workType:row.workType||'',note:row.note||'',completion:Number(row.completion||0),status:row.status||'',followUp:Boolean(row.followUp),followUpNote:row.followUpNote||'',source:row.source||'google-sheet'};grouped.set(key,item);}if(row.employeeId){if(!item.employeeIds.includes(row.employeeId))item.employeeIds.push(row.employeeId);item.sheetRowIds[row.employeeId]=row.id;}});return [...grouped.values()];}
