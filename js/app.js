@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded',()=>{
-  const A=window.GTP;
-  if(!A)return;
+  const A=window.GTP;if(!A)return;
   try{A.initNavigation?.();}catch(error){console.error('Navigation kunne ikke starte',error);}
-  const initializers=['initAccess','initDashboard','initCustomers','initEmployees','initTimer','initCalendar','initReports','initSettings'];
-  initializers.forEach(name=>{try{A[name]?.();}catch(error){console.error(name+' kunne ikke starte',error);}});
+  ['initAccess','initDashboard','initCustomers','initEmployees','initTimer','initCalendar','initReports','initSettings'].forEach(name=>{try{A[name]?.();}catch(error){console.error(name+' kunne ikke starte',error);}});
   try{A.showPage?.('dashboardPage',{push:false,instant:true});}catch(error){console.error('Startsiden kunne ikke åbnes',error);}
   try{A.applyLanguage?.();}catch(error){console.error('Sprog kunne ikke indlæses',error);}
   document.querySelectorAll('[data-lang]').forEach(button=>button.onclick=()=>A.setLanguage?.(button.dataset.lang));
-  try{if(A.provider?.mode?.()==='google-sheets')A.provider.sync?.();}catch(error){console.warn('Automatisk Sheet-synkronisering kunne ikke starte',error);}
+  if(A.provider?.mode?.()==='google-sheets')A.provider.pull?.().catch(error=>console.warn('Automatisk Sheet-hentning kunne ikke gennemføres',error));
 });
