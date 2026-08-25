@@ -16,9 +16,10 @@
   function identity(){try{return JSON.parse(localStorage.getItem(IDENTITY_KEY))||null;}catch{return null;}}
   function setState(text,state='local'){const node=document.getElementById('syncState');if(!node)return;node.textContent=text;node.dataset.state=state;}
 
-  async function request(action,payload={},extra={}){
+  async function request(action,payload={},extra={},timeoutMs){
     if(!endpoint())throw new Error('Der er ikke angivet en Apps Script-webadresse.');
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);
+    const waitMs=Number(timeoutMs|| (action==='activate'?30000:(action==='ping'?8000:20000)));
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),waitMs);
     try{
       const body={action,payload,clientVersion:'5.7',deviceToken:deviceToken(),...extra};
       const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),signal:controller.signal});
@@ -27,7 +28,7 @@
       if(result?.ok===false)throw new Error(result.error||'Forbindelsen afviste handlingen.');
       return result;
     }catch(error){
-      if(error?.name==='AbortError')throw new Error('Forbindelsen svarede ikke inden 8 sekunder.');
+      if(error?.name==='AbortError')throw new Error(`Forbindelsen svarede ikke inden ${Math.round(waitMs/1000)} sekunder.`);
       throw error;
     }finally{clearTimeout(timer);}
   }
@@ -122,10 +123,10 @@
   async function pull(){if(!endpoint()){setState('Gemt på enheden','local');return null;}if(!deviceToken())throw new Error('Denne enhed skal aktiveres via et installationslink fra Chefen.');setState('Henter sikre data…','working');try{const result=await request('pull');applyRemote(result);persist('Sikre data hentet');setState('Sikker forbindelse aktiv','ok');return result;}catch(error){setState('Adgang kræver ny aktivering','error');throw error;}}
   async function sync(){if(!endpoint())return null;if(!deviceToken())throw new Error('Denne enhed er ikke aktiveret.');setState('Synkroniserer…','working');try{const result=await request('sync',normalizedPayload());applyRemote(result);persist('Synkroniseret');setState('Synkroniseret','ok');return result;}catch(error){setState('Lokalt gemt · synkronisering afventer','error');throw error;}}
   async function syncNow(){clearTimeout(syncTimer);return sync();}
-  async function activate(inviteToken,name,deviceLabel){const result=await request('activate',{}, {inviteToken,name,deviceLabel});localStorage.setItem(DEVICE_KEY,result.deviceToken);localStorage.setItem(IDENTITY_KEY,JSON.stringify({employeeId:result.employee.id,name:result.employee.name,isChef:Boolean(result.isChef),roles:result.roles||[]}));app.db.secureScope=result.isChef?'chef':'employee';localStorage.setItem('gtp_session_v1',JSON.stringify({mode:result.isChef?'manager':'employee',employeeId:result.employee.id}));return result;}
+  async function activate(inviteToken,name,deviceLabel){const result=await request('activate',{}, {inviteToken,name,deviceLabel},30000);localStorage.setItem(DEVICE_KEY,result.deviceToken);localStorage.setItem(IDENTITY_KEY,JSON.stringify({employeeId:result.employee.id,name:result.employee.name,isChef:Boolean(result.isChef),roles:result.roles||[]}));app.db.secureScope=result.isChef?'chef':'employee';localStorage.setItem('gtp_session_v1',JSON.stringify({mode:result.isChef?'manager':'employee',employeeId:result.employee.id}));return result;}
   async function createInvite(employeeId){return request('createInvite',{}, {employeeId,ttlHours:48});}
   async function employeeAccess(employeeId){return request('employeeAccess',{}, {employeeId});}
   async function revokeDevice(deviceId){return request('revokeDevice',{}, {deviceId});}
   function configureEndpoint(value){app.db.settings.sheetEndpoint=value;localStorage.setItem('gtp_data_v4',JSON.stringify(app.db));}
-  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){if(!deviceToken())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,syncNow,activate,createInvite,employeeAccess,revokeDevice,configureEndpoint,hasDeviceToken:()=>Boolean(deviceToken()),identity,test:()=>request('ping'),normalizedPayload};
+  app.provider={mode:()=>endpoint()?'google-sheets':'local',queueSync(){if(!deviceToken())return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>sync().catch(()=>{}),1200);},pull,sync,syncNow,activate,createInvite,employeeAccess,revokeDevice,configureEndpoint,hasDeviceToken:()=>Boolean(deviceToken()),identity,test:()=>request('ping',{}, {},8000),normalizedPayload};
 })(window.GTP);
