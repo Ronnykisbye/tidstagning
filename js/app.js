@@ -32,14 +32,9 @@ function gtpDataLoadingDialog(){
   if(!dialog.open)dialog.showModal();
   return dialog;
 }
-function gtpCloseDataLoading(){
-  const dialog=document.getElementById('gtpDataLoadingDialog');
-  if(dialog?.open)dialog.close();
-}
+function gtpCloseDataLoading(){const dialog=document.getElementById('gtpDataLoadingDialog');if(dialog?.open)dialog.close();}
 
-function gtpIsInstalled(){
-  return window.matchMedia?.('(display-mode: standalone)')?.matches||window.navigator.standalone===true;
-}
+function gtpIsInstalled(){return window.matchMedia?.('(display-mode: standalone)')?.matches||window.navigator.standalone===true;}
 function gtpOfferInstall(A){
   if(gtpIsInstalled())return;
   let dialog=document.getElementById('gtpInstallDialog');
@@ -52,20 +47,9 @@ function gtpOfferInstall(A){
     document.getElementById('gtpInstallLater').onclick=()=>dialog.close();
     document.getElementById('gtpInstallNow').onclick=async()=>{
       const button=document.getElementById('gtpInstallNow'),help=document.getElementById('gtpInstallHelp');
-      if(gtpDeferredInstallPrompt){
-        button.disabled=true;
-        try{
-          await gtpDeferredInstallPrompt.prompt();
-          const choice=await gtpDeferredInstallPrompt.userChoice;
-          gtpDeferredInstallPrompt=null;
-          if(choice?.outcome==='accepted'){dialog.close();A?.toast?.('Installationen er startet');}
-          else help.textContent='Installationen blev ikke valgt. Du kan installere senere fra browserens menu.';
-        }finally{button.disabled=false;}
-        return;
-      }
-      help.innerHTML='Browseren viser ikke installationsknappen endnu. Vælg <strong>Installér GreenTime Pro</strong> eller <strong>Apps → Installér dette websted som en app</strong> i browserens menu. Du kan også åbne installationsvejledningen.';
-      let guide=document.getElementById('gtpInstallGuide');
-      if(!guide){guide=document.createElement('a');guide.id='gtpInstallGuide';guide.className='primary install-link';guide.href='install/';guide.textContent='Åbn installationsvejledning';help.after(guide);}
+      if(gtpDeferredInstallPrompt){button.disabled=true;try{await gtpDeferredInstallPrompt.prompt();const choice=await gtpDeferredInstallPrompt.userChoice;gtpDeferredInstallPrompt=null;if(choice?.outcome==='accepted'){dialog.close();A?.toast?.('Installationen er startet');}else help.textContent='Installationen blev ikke valgt. Du kan installere senere fra browserens menu.';}finally{button.disabled=false;}return;}
+      help.innerHTML='På iPhone: tryk på <strong>Del</strong> i Safari og vælg <strong>Føj til hjemmeskærm</strong>. I andre browsere kan du vælge Installér app i browserens menu.';
+      let guide=document.getElementById('gtpInstallGuide');if(!guide){guide=document.createElement('a');guide.id='gtpInstallGuide';guide.className='primary install-link';guide.href='install/';guide.textContent='Åbn installationsvejledning';help.after(guide);}
     };
   }
   if(!dialog.open)dialog.showModal();
@@ -78,34 +62,24 @@ async function gtpVerifyBeforeStart(A){
   const dialog=gtpIdentityDialog();
   const employee={id:identity.employeeId,name:identity.name||'GreenTime-medarbejder'};
   try{
-    if(!A.bio?.enrolledFor?.(identity.employeeId)){
-      if(A.bio?.enrolled?.())A.bio.remove();
-      await A.bio.setup(employee);
-      A.deviceVerifiedAtBoot=true;
-      if(dialog?.open)dialog.close();
-      return true;
-    }
-    await A.bio.verify(identity.employeeId);
-    A.deviceVerifiedAtBoot=true;
-    if(dialog?.open)dialog.close();
-    return true;
-  }catch(error){
-    if(dialog?.open)dialog.close();
-    throw error;
-  }
+    if(!A.bio?.enrolledFor?.(identity.employeeId)){if(A.bio?.enrolled?.())A.bio.remove();await A.bio.setup(employee);A.deviceVerifiedAtBoot=true;if(dialog?.open)dialog.close();return true;}
+    await A.bio.verify(identity.employeeId);A.deviceVerifiedAtBoot=true;if(dialog?.open)dialog.close();return true;
+  }catch(error){if(dialog?.open)dialog.close();throw error;}
 }
 
-async function gtpSecurePull(A){
-  gtpDataLoadingDialog();
-  try{return await A.provider.pull();}
-  finally{gtpCloseDataLoading();}
-}
+async function gtpSecurePull(A){gtpDataLoadingDialog();try{return await A.provider.pull();}finally{gtpCloseDataLoading();}}
 
 async function gtpActivateInvite(A){
   const params=new URLSearchParams(location.search),invite=params.get('invite');
   if(!invite)return false;
   const api=params.get('api');
   if(api){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(api))throw new Error('Installationslinket indeholder en ugyldig serveradresse.');A.provider.configureEndpoint(api);}
+  if(A.provider?.hasDeviceToken?.()){
+    history.replaceState({},'',location.pathname);
+    await gtpVerifyBeforeStart(A);
+    if(A.provider?.mode?.()==='google-sheets')await gtpSecurePull(A);
+    return true;
+  }
   const needsEndpoint=A.provider.mode()!=='google-sheets';
   const dialog=document.createElement('dialog');dialog.className='dialog-card';dialog.innerHTML=`<form method="dialog" id="deviceActivationForm" autocomplete="off"><h2>Aktivér GreenTime Pro</h2><p>Denne invitation er personlig. Skriv dit navn præcis som Chefen har oprettet dig.</p>${needsEndpoint?'<label>Apps Script-webadresse<input name="endpoint" type="url" placeholder="https://script.google.com/macros/s/.../exec" required autocomplete="off"></label><p class="muted">Serveradressen bruges kun til at forbinde appen til virksomhedens Sheet.</p>':''}<label>Dit navn<input id="gtpActivationName" name="gtpActivationName" type="text" autocomplete="off" autocapitalize="words" autocorrect="off" spellcheck="false" required autofocus></label><p class="muted">Skriv kun navnet, som det står i GreenTime Pro. Browserens egne kontaktforslag bruges ikke.</p><p class="muted">Efter aktivering låses denne installation til din medarbejderprofil. Du kan ikke se andre medarbejdere.</p><p class="muted"><strong>Aktiveringen kan tage op til 30 sekunder.</strong> Luk ikke siden og tryk ikke F5 imens.</p><div class="actions"><button class="primary" value="activate">Aktivér appen</button></div><p id="deviceActivationStatus" class="muted"></p><p id="deviceActivationError" role="alert"></p></form>`;document.body.append(dialog);dialog.showModal();
   return new Promise((resolve,reject)=>{
@@ -118,10 +92,13 @@ async function gtpActivateInvite(A){
         if(endpointValue){if(!/^https:\/\/script\.google\.com\/macros\/s\//.test(endpointValue))throw new Error('Apps Script-webadressen er ikke gyldig.');A.provider.configureEndpoint(endpointValue);}
         if(A.provider.mode()!=='google-sheets')throw new Error('Der mangler en Apps Script-webadresse (/exec).');
         const name=String(data.get('gtpActivationName')||'').trim(),label=navigator.userAgentData?.platform||navigator.platform||'GreenTime-enhed';
-        await A.provider.activate(invite,name,label);statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
+        await A.provider.activate(invite,name,label);
+        history.replaceState({},'',location.pathname);
+        statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
         dialog.close();dialog.remove();
         await gtpVerifyBeforeStart(A);
-        await gtpSecurePull(A);history.replaceState({},'',location.pathname);resolve(true);
+        await gtpSecurePull(A);
+        resolve(true);
       }catch(error){if(!dialog.isConnected){reject(error);return;}statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
     };
   });
@@ -132,16 +109,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
   const A=window.GTP;if(!A)return;let activated=false;
   try{
     activated=await gtpActivateInvite(A);
-    if(!activated&&A.provider?.hasDeviceToken?.()){
-      await gtpVerifyBeforeStart(A);
-      if(A.provider?.mode?.()==='google-sheets')await gtpSecurePull(A);
-    }
-  }catch(error){
-    gtpCloseDataLoading();
-    console.error('Sikker opstart kunne ikke gennemføres',error);
-    alert(error.message||'Identiteten kunne ikke godkendes.');
-    return;
-  }
+    if(!activated&&A.provider?.hasDeviceToken?.()){await gtpVerifyBeforeStart(A);if(A.provider?.mode?.()==='google-sheets')await gtpSecurePull(A);}
+  }catch(error){gtpCloseDataLoading();console.error('Sikker opstart kunne ikke gennemføres',error);alert(error.message||'Identiteten kunne ikke godkendes.');return;}
   try{A.initNavigation?.();}catch(error){console.error('Navigation kunne ikke starte',error);}
   ['initAccess','initDashboard','initCustomers','initEmployees','initTimer','initCalendar','initReports','initSettings'].forEach(name=>{try{A[name]?.();}catch(error){console.error(name+' kunne ikke starte',error);}});
   try{A.showPage?.('dashboardPage',{push:false,instant:true});}catch(error){console.error('Startsiden kunne ikke åbnes',error);}
