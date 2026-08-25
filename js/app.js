@@ -1,3 +1,8 @@
+function gtpStampVersion(){
+  document.querySelectorAll('.brand small').forEach(node=>{node.textContent='Interaktiv tidsregistrering · v5.7';});
+  document.querySelectorAll('#aboutPage p').forEach(node=>{if(/GreenTime Pro version/i.test(node.textContent||''))node.textContent='GreenTime Pro version 5.7';});
+}
+
 async function gtpActivateInvite(A){
   const params=new URLSearchParams(location.search),invite=params.get('invite');
   if(!invite)return false;
@@ -22,6 +27,7 @@ async function gtpActivateInvite(A){
 }
 
 document.addEventListener('DOMContentLoaded',async()=>{
+  gtpStampVersion();
   const A=window.GTP;if(!A)return;let activated=false;
   try{activated=await gtpActivateInvite(A);}catch(error){alert(error.message);}
   if(!activated&&A.provider?.mode?.()==='google-sheets'&&A.provider?.hasDeviceToken?.()){
