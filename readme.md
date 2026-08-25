@@ -1,96 +1,145 @@
-# GreenTime Pro 5.6
+# GreenTime Pro 5.7
 
-GreenTime Pro er en mobilvenlig PWA til et mindre servicefirma. Den kombinerer tidsregistrering, kundedata, medarbejdere, planlægning og rapporter i én interaktiv app.
+GreenTime Pro er en mobilvenlig PWA til tidsregistrering, kunder, medarbejdere, planlægning og rapporter.
 
 Live app: https://ronnykisbye.github.io/tidstagning/
 
-## Roller og adgang
+## Roller
 
-En person er én medarbejderpost. Rettigheder ligger separat i `MedarbejderRoller`, så samme person kan have flere roller.
+Rettigheder ligger i `MedarbejderRoller`.
 
-- `Medarbejder` giver almindelig adgang til egne opgaver og tidsregistreringer.
-- `Chef` er en ekstra adgangsrolle med administration, rapporter, planlægning, log og indstillinger.
-- Lars Wiberg har Medarbejder + Chef.
-- Ronny Kisbye er kun Medarbejder.
+- `Medarbejder`: egne opgaver og egne tidsregistreringer.
+- `Chef`: ekstra adgang til administration, alle opgaver, medarbejdere, rapporter, log og indstillinger.
+- Lars Wiberg: Medarbejder + Chef.
+- Ronny Kisbye: kun Medarbejder.
 
-## Rapportgenerator
+## Sikker medarbejderinstallation – 5.7
 
-Chef-siden har rapporter for bl.a. medarbejdertimer, kundetimer, samlet timeforbrug pr. kunde/medarbejder, ikke-færdige registreringer og opfølgning.
+En medarbejder vælger ikke længere mellem firmaets medarbejdere på sin egen installation.
 
-Demo-data er skjult som standard i rapporter. En lille knap `Vis demo` kan slå de fiktive kunder, medarbejdere og registreringer til; knappen skifter til `Skjul demo`, når demo-data vises. CSV-eksport følger samme valg.
+Chefen bruger knappen `📲` på Medarbejdere-siden til at:
 
-Legacy-feltet `Tidsforbrug` er decimaltimer. Gamle gruppetimer tælles én gang i kundetotaler, men fordeles aldrig automatisk på medarbejdere.
+1. oprette et personligt engangslink
+2. sende linket via SMS eller e-mail eller kopiere det
+3. se aktive enheder for medarbejderen
+4. tilbagekalde en enhed, fx ved mistet eller udskiftet telefon
 
-## Data og Google Regneark
+Invitationen:
 
-Produktionsarket er:
+- er knyttet til én bestemt medarbejder
+- udløber efter 48 timer
+- kan kun bruges én gang
+- gemmes kun som SHA-256-hash i Sheetet; rå invitationstoken gemmes aldrig
+
+Ved første åbning skriver medarbejderen sit navn. Navnet er kun en ekstra kontrol; selve adgangen kommer fra det personlige invitationstoken. Serveren opretter derefter et langt device-token, gemmer kun tokenets hash i Sheetet og låser installationens session til medarbejderens id.
+
+### Dataminimering
+
+Sikkerheden ligger på serveren, ikke kun i brugerfladen.
+
+En medarbejderenhed får kun sendt:
+
+- medarbejderens egen profil
+- medarbejderens egne opgaver
+- medarbejderens egne tidsregistreringer
+- kunder og adresser, som er nødvendige for de egne opgaver/registreringer
+- relevante arbejdstyper
+
+Serveren sender **ingen liste over andre medarbejdere** til en medarbejderenhed. Profilskift er deaktiveret på en personlig medarbejderenhed.
+
+Hvis flere medarbejdere er på samme opgave, modtager medarbejderen ikke kollegernes navne. Appen viser kun `Flere medarbejdere på opgaven`. Chefen kan fortsat se navnene.
+
+En medarbejder må via `sync` kun skrive tidsregistreringer, hvor `employeeId` er medarbejderens eget id. Serveren afviser forsøg på at skrive andres data.
+
+## Google Sheet
+
+Produktionsark:
 `1L7cf-mY_RD3UBDTqDSa7MJIweqxaxoFs2QC3pAcUjWI`
 
-Apps Script åbner dette ark direkte med `SpreadsheetApp.openById(...)`.
+Normaliserede faner:
 
-Den normaliserede struktur bruger fanerne Kunder, Adresser, Medarbejdere, Roller, MedarbejderRoller, Opgaver, OpgaveMedarbejdere, Tidsregistreringer, Arbejdstyper og Ændringslog.
+- Kunder
+- Adresser
+- Medarbejdere
+- Roller
+- MedarbejderRoller
+- Opgaver
+- OpgaveMedarbejdere
+- Tidsregistreringer
+- Arbejdstyper
+- Ændringslog
+- Invitationer
+- Enheder
 
-### Ny synkroniseringsmodel i 5.6
+`Invitationer` indeholder: `id, employeeId, tokenHash, expiresAt, usedAt, createdAt, createdBy, active`.
 
-Læsning og skrivning er nu adskilt:
+`Enheder` indeholder: `id, employeeId, tokenHash, deviceLabel, createdAt, lastSeenAt, revokedAt, active, createdFromInviteId`.
 
-- `pull` er ren læsning fra Sheetet og skriver ingenting.
-- `sync` bruges til at gemme reelle ændringer og returnerer derefter opdaterede data.
-- appstart bruger `pull`, hvis `/exec` er konfigureret.
-- `Test forbindelse` bruger `ping` + `pull`.
-- demo-id'er afvises både i klienten og serveren.
+Rå invitationstokens og rå device-tokens må aldrig skrives til Sheetet, GitHub eller loggen.
 
-Det betyder, at første indlæsning ikke længere sender lokale eller delvist indlæste data op, før de rigtige Sheet-data er hentet.
+## Apps Script 5.7
+
+`google-apps-script/Code.gs` er serverkilden.
+
+Offentlige handlinger er begrænset til:
+
+- `ping` – kun versionsstatus
+- `activate` – kræver gyldigt, ubrugt og ikke-udløbet invitationstoken samt korrekt medarbejdernavn
+
+Alle datahandlinger kræver herefter et gyldigt device-token.
+
+- `pull`: serverfiltreret efter Chef/Medarbejder
+- `sync`: Chef kan synkronisere normaliserede data; Medarbejder kan kun skrive egne tidsregistreringer
+- `createInvite`: kun Chef
+- `employeeAccess`: kun Chef
+- `revokeDevice`: kun Chef
+
+Apps Script er version `5.7`, `schemaVersion 5`.
+
+## Rapporter
+
+Rapporter er Chef-only. Demo-data er skjult som standard og kan vises med knappen `Vis demo`.
+
+Gamle gruppetimer må aldrig fordeles kunstigt på medarbejdere. De kan tælle én gang i kundetotaler, mens medarbejderrapporter kun bruger entydigt tilknyttede timer.
 
 ## Legacy-data
 
-`Formularsvar 1` bevares som historisk kilde.
+`Formularsvar 1` bevares uændret. Migreret status omfatter 11 kunder, 10 adresser, 12 historiske opgaver og 5 medarbejderposter. Lars Wiberg, Nanna og Ronny Kisbye er aktive i de oprindelige migrerede data.
 
-Migreret status:
-- 11 kunder
-- 10 adresser
-- 12 historiske opgaver
-- 5 medarbejderposter, hvor Lars Wiberg, Nanna og Ronny Kisbye er aktive
-- entydige tidsregistreringer migreret
-- uklare gruppetimer ikke fordelt på personer
+## Deployment
 
-## Apps Script og deployment
+Efter ændring af `Code.gs`:
 
-Repoets serverkode ligger i `google-apps-script/Code.gs` og er version 5.6.
-
-Når serverkoden ændres:
-1. Åbn Google Sheet → Udvidelser → Apps Script.
+1. Google Sheet → Udvidelser → Apps Script.
 2. Erstat `Code.gs` med repoets aktuelle fil.
 3. Gem.
 4. Implementer → Administrer implementeringer.
-5. Rediger eksisterende webapp og vælg ny version.
+5. Rediger eksisterende webapp og vælg Ny version.
 6. Bevar samme `/exec`-adresse.
-7. Test i GreenTime Pro → Chef → Indstillinger → Google Regneark.
+7. Aktivér Chef-enheden via et personligt Chef-invitationslink.
 
-Ping skal svare med version `5.6`, schemaVersion `4`.
-
-Testen viser både antal poster i Sheetet og antal aktive poster, så det bliver tydeligt, om hele datasættet er hentet.
+En GitHub-commit opdaterer ikke Apps Script-deploymenten automatisk.
 
 ## PWA
 
-Aktuel cache: `greentime-pro-v36`.
+Aktuel cache: `greentime-pro-v38`.
 
-## Vigtige filer
+## Vigtige sikkerhedsregler
 
-- `index.html` – sider og formularer
-- `js/storage.js` – lokal datamodel og demo-data
-- `js/access.js` – rollebaseret adgang
-- `js/reports.js` – rapportgenerator og `Vis demo`-knap
-- `js/data-provider.js` – Google Sheets-adapter med `pull` og `sync`
-- `js/settings.js` – forbindelsestest og diagnostik
-- `google-apps-script/Code.gs` – serverdel til Google Regneark
-- `MASTERPROMPT.md` – samlet udviklingsgrundlag
-- `MIGRATION-LEGACY.md` – regler for gamle data
-- `service-worker.js` – offlinecache
+- demo-id'er må aldrig sendes til produktionsarket
+- en medarbejderenhed må aldrig modtage andre medarbejderposter
+- adgang må aldrig baseres på navn alene
+- invitationer er engangslinks med udløb
+- kun token-hashes gemmes server-side
+- en mistet enhed skal kunne tilbagekaldes af Chef
+- `Formularsvar 1` må ikke ændres af sikkerhedsmigrationen
+- tag backup før større sikkerheds- eller strukturændringer
+
+Backup før 5.7 blev oprettet 25. august 2026.
 
 ## Versionshistorik
 
-- 5.6: Ren read-only `pull` fra Sheetet ved opstart og forbindelsestest, fast produktions-Sheet-ID, separat skrivende `sync`, forbedret diagnostik, rapporter skjuler demo-data som standard med en lille `Vis demo`-knap, og cache v36.
-- 5.5: Apps Script blev låst til det konkrete produktions-Sheet-ID.
-- 5.4: Flerrollemodel, rapportgenerator og læsning af migrerede opgaver/tidsregistreringer.
-- 5.3: Sikker Google Sheets-migration, demo-blokering og revisionslog.
+- 5.7: Personlige engangsinvitationer, device-token, server-side rollefiltrering, ingen kollegaliste på medarbejderenheder, `Flere medarbejdere på opgaven`, SMS/e-mail/kopiér installationslink og enhedstilbagekaldelse. Nye Sheet-faner `Invitationer` og `Enheder`. Cache v38.
+- 5.6: Read-only `pull`, separat `sync`, fast produktions-Sheet-ID og forbedret diagnostik.
+- 5.5: Apps Script låst til det konkrete produktions-Sheet-ID.
+- 5.4: Flerrollemodel, rapportgenerator og historiske Sheet-data.
