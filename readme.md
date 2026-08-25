@@ -17,6 +17,8 @@ En person er én medarbejderpost. Rettigheder ligger separat i `MedarbejderRolle
 
 Chef-siden har rapporter for bl.a. medarbejdertimer, kundetimer, samlet timeforbrug pr. kunde/medarbejder, ikke-færdige registreringer og opfølgning.
 
+Demo-data er skjult som standard i rapporter. En lille knap `Vis demo` kan slå de fiktive kunder, medarbejdere og registreringer til; knappen skifter til `Skjul demo`, når demo-data vises. CSV-eksport følger samme valg.
+
 Legacy-feltet `Tidsforbrug` er decimaltimer. Gamle gruppetimer tælles én gang i kundetotaler, men fordeles aldrig automatisk på medarbejdere.
 
 ## Data og Google Regneark
@@ -71,14 +73,14 @@ Testen viser både antal poster i Sheetet og antal aktive poster, så det bliver
 
 ## PWA
 
-Aktuel cache: `greentime-pro-v35`.
+Aktuel cache: `greentime-pro-v36`.
 
 ## Vigtige filer
 
 - `index.html` – sider og formularer
 - `js/storage.js` – lokal datamodel og demo-data
 - `js/access.js` – rollebaseret adgang
-- `js/reports.js` – rapportgenerator
+- `js/reports.js` – rapportgenerator og `Vis demo`-knap
 - `js/data-provider.js` – Google Sheets-adapter med `pull` og `sync`
 - `js/settings.js` – forbindelsestest og diagnostik
 - `google-apps-script/Code.gs` – serverdel til Google Regneark
@@ -88,7 +90,7 @@ Aktuel cache: `greentime-pro-v35`.
 
 ## Versionshistorik
 
-- 5.6: Ren read-only `pull` fra Sheetet ved opstart og forbindelsestest, fast produktions-Sheet-ID, separat skrivende `sync`, forbedret diagnostik og cache v35.
+- 5.6: Ren read-only `pull` fra Sheetet ved opstart og forbindelsestest, fast produktions-Sheet-ID, separat skrivende `sync`, forbedret diagnostik, rapporter skjuler demo-data som standard med en lille `Vis demo`-knap, og cache v36.
 - 5.5: Apps Script blev låst til det konkrete produktions-Sheet-ID.
 - 5.4: Flerrollemodel, rapportgenerator og læsning af migrerede opgaver/tidsregistreringer.
 - 5.3: Sikker Google Sheets-migration, demo-blokering og revisionslog.
