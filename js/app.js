@@ -25,6 +25,9 @@ async function gtpVerifyBeforeStart(A){
     if(!A.bio?.enrolledFor?.(identity.employeeId)){
       if(A.bio?.enrolled?.())A.bio.remove();
       await A.bio.setup(employee);
+      A.deviceVerifiedAtBoot=true;
+      if(dialog?.open)dialog.close();
+      return true;
     }
     await A.bio.verify(identity.employeeId);
     A.deviceVerifiedAtBoot=true;
@@ -56,7 +59,6 @@ async function gtpActivateInvite(A){
         await A.provider.activate(invite,name,label);statusNode.textContent='Enheden er aktiveret. Bekræft nu din identitet…';
         dialog.close();dialog.remove();
         await gtpVerifyBeforeStart(A);
-        statusNode.textContent='Identiteten er godkendt. Henter sikre data…';
         await A.provider.pull();history.replaceState({},'',location.pathname);resolve(true);
       }catch(error){if(!dialog.isConnected){reject(error);return;}statusNode.textContent='';errorNode.textContent=error.message;button.disabled=false;button.textContent='Aktivér appen';}
     };
