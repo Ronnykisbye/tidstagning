@@ -2,6 +2,7 @@
   const hours=value=>(Number(value||0)/3600);
   const fmtHours=value=>Number(value||0).toFixed(2).replace('.',',');
   const isDemo=id=>String(id||'').startsWith('demo-');
+  let showDemo=false;
   const dateOfEntry=entry=>{
     if(entry.start)return String(entry.start).slice(0,10);
     if(entry.orderId)return app.db.bookings.find(x=>x.id===entry.orderId)?.date||'';
@@ -10,6 +11,7 @@
   const historicalOrders=()=>app.db.bookings.filter(x=>String(x.id||'').startsWith('legacy-order-')&&Number(x.duration||0)>0&&x.active!==false);
   const representedOrderIds=()=>new Set(app.db.entries.map(x=>x.orderId).filter(Boolean));
   const periodMatch=(date,from,to)=>(!from||date>=from)&&(!to||date<=to);
+  const rowIsDemo=row=>isDemo(row.id)||isDemo(row.customerId)||(row.employeeIds||[]).some(isDemo);
 
   function ensureReportControls(){
     const filters=document.querySelector('#reportsPage .filters');if(!filters||document.getElementById('reportType'))return;
@@ -17,7 +19,10 @@
     const label=document.createElement('label');
     label.innerHTML='Rapporttype<select id="reportType"><option value="details">Detaljeret tidsrapport</option><option value="employee">Timer for medarbejder</option><option value="customer">Timer hos kunde</option><option value="customer-summary">Samlet timeforbrug pr. kunde</option><option value="employee-summary">Samlet timeforbrug pr. medarbejder</option><option value="unfinished">Ikke færdige registreringer</option><option value="followup">Kræver opfølgning</option></select>';
     filters.insertBefore(label,first);
-    const note=document.createElement('p');note.id='reportDataNote';note.className='wide';note.textContent='Gamle Sheet-data med sikkert tidsforbrug indgår. Gamle gruppetimer fordeles ikke på medarbejdere.';filters.appendChild(note);
+    const demoButton=document.createElement('button');
+    demoButton.id='toggleReportDemo';demoButton.type='button';demoButton.textContent='Vis demo';demoButton.setAttribute('aria-pressed','false');demoButton.title='Vis eller skjul fiktive demo-data i rapporten';
+    filters.appendChild(demoButton);
+    const note=document.createElement('p');note.id='reportDataNote';note.className='wide';note.textContent='Demo-data er skjult. Gamle Sheet-data med sikkert tidsforbrug indgår.';filters.appendChild(note);
   }
 
   function refreshReportSelectors(){
@@ -25,19 +30,13 @@
     const employeeSelect=document.getElementById('reportEmployee');
     if(customerSelect){
       const selected=customerSelect.value;
-      const items=(app.db.customers||[]).filter(x=>x.active!==false).slice().sort((a,b)=>{
-        const demoDiff=Number(isDemo(a.id))-Number(isDemo(b.id));
-        return demoDiff||String(a.name||'').localeCompare(String(b.name||''),'da');
-      });
+      const items=(app.db.customers||[]).filter(x=>x.active!==false&&(showDemo||!isDemo(x.id))).slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'da'));
       customerSelect.innerHTML='<option value="">Alle kunder</option>'+items.map(x=>`<option value="${app.escape(x.id)}">${app.escape(x.name||'Ukendt kunde')}${isDemo(x.id)?' (demo)':''}</option>`).join('');
       if(items.some(x=>x.id===selected))customerSelect.value=selected;
     }
     if(employeeSelect){
       const selected=employeeSelect.value;
-      const items=(app.db.employees||[]).filter(x=>x.active!==false).slice().sort((a,b)=>{
-        const demoDiff=Number(isDemo(a.id))-Number(isDemo(b.id));
-        return demoDiff||String(a.name||'').localeCompare(String(b.name||''),'da');
-      });
+      const items=(app.db.employees||[]).filter(x=>x.active!==false&&(showDemo||!isDemo(x.id))).slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'da'));
       employeeSelect.innerHTML='<option value="">Alle medarbejdere</option>'+items.map(x=>`<option value="${app.escape(x.id)}">${app.escape(x.name||'Ukendt medarbejder')}${isDemo(x.id)?' (demo)':''}</option>`).join('');
       if(items.some(x=>x.id===selected))employeeSelect.value=selected;
     }
@@ -60,6 +59,7 @@
   function filteredRows(){
     const f=filters(),needsEmployee=Boolean(f.employee)||f.type==='employee'||f.type==='employee-summary';
     let rows=allRows(!needsEmployee);
+    if(!showDemo)rows=rows.filter(row=>!rowIsDemo(row));
     rows=rows.filter(row=>periodMatch(row.date,f.from,f.to));
     if(f.customer)rows=rows.filter(row=>row.customerId===f.customer);
     if(f.employee)rows=rows.filter(row=>row.employeeIds.includes(f.employee));
@@ -94,7 +94,11 @@
     } else if(f.type==='customer'&&!f.customer)total=renderGrouped(rows,row=>row.customerId,id=>app.customer(id)?.name||id);
     else total=renderDetails(rows);
     document.getElementById('reportTotal').textContent=`I alt: ${fmtHours(hours(total))} timer`;
-    const note=document.getElementById('reportDataNote');if(note)note.textContent=(f.employee||f.type==='employee'||f.type==='employee-summary')?'Medarbejderrapporter bruger kun timer, der kan knyttes sikkert til en medarbejder. Gamle gruppetimer er udeladt.':'Gamle Sheet-data med sikkert tidsforbrug indgår. Historiske gruppetimer tælles én gang i kundetotaler og samlede detailrapporter.';
+    const note=document.getElementById('reportDataNote');
+    if(note){
+      const demoText=showDemo?'Demo-data vises. ':'Demo-data er skjult. ';
+      note.textContent=demoText+((f.employee||f.type==='employee'||f.type==='employee-summary')?'Medarbejderrapporter bruger kun timer, der kan knyttes sikkert til en medarbejder. Gamle gruppetimer er udeladt.':'Gamle Sheet-data med sikkert tidsforbrug indgår. Historiske gruppetimer tælles én gang i kundetotaler og samlede detailrapporter.');
+    }
     return rows;
   }
   function csvRows(){
@@ -107,6 +111,13 @@
     refreshReportSelectors();
     document.getElementById('runReport').onclick=run;
     document.getElementById('reportType').onchange=run;
+    const demoButton=document.getElementById('toggleReportDemo');
+    if(demoButton)demoButton.onclick=()=>{
+      showDemo=!showDemo;
+      demoButton.textContent=showDemo?'Skjul demo':'Vis demo';
+      demoButton.setAttribute('aria-pressed',String(showDemo));
+      refreshReportSelectors();run();
+    };
     document.getElementById('exportCsv').onclick=()=>{
       run();const header=['Dato','Kunde','Medarbejdere','Status','Færdig procent','Timer','Beskrivelse','Kilde'];
       const csv=[header,...csvRows()].map(row=>row.map(value=>`"${String(value??'').replaceAll('"','""')}"`).join(';')).join('\n'),link=document.createElement('a');
