@@ -1,4 +1,4 @@
-# GreenTime Pro 5.7
+# GreenTime Pro 5.8
 
 GreenTime Pro er en mobilvenlig PWA til tidsregistrering, kunder, medarbejdere, planlægning og rapporter.
 
@@ -139,6 +139,7 @@ Backup før 5.7 blev oprettet 25. august 2026.
 
 ## Versionshistorik
 
+- 5.8: Det almindelige applink er låst for ikke-aktiverede enheder. Adgang kræver et personligt installationslink, og profilknappen er fastlåst på sikre enheder, så en medarbejder ikke kan åbne eller se en liste med andre medarbejdere.
 - 5.7: Personlige engangsinvitationer, device-token, server-side rollefiltrering, ingen kollegaliste på medarbejderenheder, `Flere medarbejdere på opgaven`, SMS/e-mail/kopiér installationslink og enhedstilbagekaldelse. Nye Sheet-faner `Invitationer` og `Enheder`. Cache v38.
 - 5.6: Read-only `pull`, separat `sync`, fast produktions-Sheet-ID og forbedret diagnostik.
 - 5.5: Apps Script låst til det konkrete produktions-Sheet-ID.
