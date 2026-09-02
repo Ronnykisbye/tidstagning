@@ -3,8 +3,22 @@ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();gtp
 window.addEventListener('appinstalled',()=>{gtpDeferredInstallPrompt=null;const dialog=document.getElementById('gtpInstallDialog');if(dialog?.open)dialog.close();window.GTP?.toast?.('GreenTime Pro er installeret');});
 
 function gtpStampVersion(){
-  document.querySelectorAll('.brand small').forEach(node=>{node.textContent='Interaktiv tidsregistrering · v5.7';});
-  document.querySelectorAll('#aboutPage p').forEach(node=>{if(/GreenTime Pro version/i.test(node.textContent||''))node.textContent='GreenTime Pro version 5.7';});
+  document.querySelectorAll('.brand small').forEach(node=>{node.textContent='Interaktiv tidsregistrering · v5.8';});
+  document.querySelectorAll('#aboutPage p').forEach(node=>{if(/GreenTime Pro version/i.test(node.textContent||''))node.textContent='GreenTime Pro version 5.8';});
+}
+
+function gtpRequirePersonalInstallation(){
+  document.body.dataset.role='locked';
+  let dialog=document.getElementById('gtpPersonalInstallationRequired');
+  if(!dialog){
+    dialog=document.createElement('dialog');
+    dialog.id='gtpPersonalInstallationRequired';
+    dialog.className='dialog-card';
+    dialog.innerHTML='<div style="min-width:min(440px,82vw)"><h2>Personlig adgang kræves</h2><p>Denne enhed er ikke aktiveret til GreenTime Pro.</p><p class="muted">Bed Chefen sende dit personlige installationslink. Linket låser appen til din medarbejderprofil, så du kun kan se dit eget navn, dine egne opgaver og dine egne tidsregistreringer.</p><p class="muted"><strong>Det almindelige applink kan ikke bruges til at vælge medarbejder.</strong></p></div>';
+    document.body.append(dialog);
+    dialog.addEventListener('cancel',event=>event.preventDefault());
+  }
+  if(!dialog.open)dialog.showModal();
 }
 
 function gtpIdentityDialog(){
@@ -107,6 +121,11 @@ async function gtpActivateInvite(A){
 document.addEventListener('DOMContentLoaded',async()=>{
   gtpStampVersion();
   const A=window.GTP;if(!A)return;let activated=false;
+  const hasInvite=new URLSearchParams(location.search).has('invite');
+  if(!hasInvite&&!A.provider?.hasDeviceToken?.()){
+    gtpRequirePersonalInstallation();
+    return;
+  }
   try{
     activated=await gtpActivateInvite(A);
     if(!activated&&A.provider?.hasDeviceToken?.()){await gtpVerifyBeforeStart(A);if(A.provider?.mode?.()==='google-sheets')await gtpSecurePull(A);}

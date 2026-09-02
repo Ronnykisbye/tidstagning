@@ -43,6 +43,9 @@
     document.querySelectorAll('[data-role-page="manager"]').forEach(x=>x.setAttribute('aria-hidden',String(!manager)));
     document.getElementById('profileName').textContent=employee?.name||'Vælg bruger';
     document.getElementById('profileInitials').textContent=initials(employee?.name);
+    const profileButton=document.getElementById('profileButton');
+    profileButton.disabled=secureDevice();
+    profileButton.title=secureDevice()?'Denne installation er låst til den godkendte profil':'Skift profil';
     document.getElementById('roleBadge').textContent=locked?'Låst':manager?'Chefversion':'Medarbejderversion';
     document.getElementById('welcomeTitle').textContent=locked?'Appen er låst':employee?`God arbejdsdag, ${employee.name}`:'Velkommen til GreenTime Pro';
     document.getElementById('welcomeText').textContent=locked?'Bekræft din identitet med Windows Hello, PIN, fingeraftryk, Face ID eller enhedens sikkerhed for at fortsætte.':manager?'Her er firmaets samlede overblik. Du kan også selv registrere arbejde.':'Her ser du dine opgaver og kan registrere det udførte arbejde.';

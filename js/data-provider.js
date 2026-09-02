@@ -16,7 +16,7 @@
     const waitMs=Number(timeoutMs||(action==='activate'?30000:(action==='ping'?8000:20000)));
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),waitMs);
     try{
-      const body={action,payload,clientVersion:'5.7',deviceToken:deviceToken(),...extra};
+      const body={action,payload,clientVersion:'5.8',deviceToken:deviceToken(),...extra};
       const response=await fetch(endpoint(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body),signal:controller.signal});
       if(!response.ok)throw new Error(`Forbindelsen svarede med fejl ${response.status}.`);
       const result=await response.json();
